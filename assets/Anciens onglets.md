@@ -70,12 +70,12 @@
 
 ## CLUBS SPORTIFS
 
-Liste des clubs
+* Liste des clubs
 
 ## ASSOCIATIONS
 
-Liste des associations
-Demandes de subvention
+* Liste des associations
+* Demandes de subvention
 
 ## SALLE POLYVALENTE
 
@@ -83,10 +83,10 @@ Demandes de subvention
 
 ## PATRIMOINE
 
-Culture
-Randonnées
-Journées du Patrimoine
-Musée de la Seine-et-Marne
+* Culture
+* Randonnées
+* Journées du Patrimoine
+* Musée de la Seine-et-Marne
 
 ## HÉBERGEMENT
 
