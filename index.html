@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saint-Cyr-sur-Morin — Mairie</title>
+  <link rel="icon" type="image/png" href="assets/img/Blason_Saint-Cyr-sur-Morin-favicon.png">
+  <link rel="apple-touch-icon" href="assets/img/Blason_Saint-Cyr-sur-Morin-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-badge">
+      <img src="assets/img/Blason_Saint-Cyr-sur-Morin.svg" alt="Blason Saint-Cyr-sur-Morin">
+    </div>
+    <div class="nav-logo-text">
+      <strong>Saint-Cyr-sur-Morin</strong>
+      <span>Mairie — 77750</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#actualites">Actualités</a></li>
+    <li><a href="#village">Notre village</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#urbanisme">Urbanisme</a></li>
+    <li><a href="#contact" class="nav-contact">Contact</a></li>
+  </ul>
+  <button class="nav-burger" id="burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ─── MOBILE MENU ─── -->
+<div class="nav-mobile-overlay" id="mobileMenu">
+  <ul>
+    <li><a href="#actualites" class="mobile-link">Actualités</a></li>
+    <li><a href="#village" class="mobile-link">Notre village</a></li>
+    <li><a href="#services" class="mobile-link">Services</a></li>
+    <li><a href="#urbanisme" class="mobile-link">Urbanisme</a></li>
+    <li><a href="#contact" class="mobile-link nav-contact-mobile">Contact</a></li>
+  </ul>
+</div>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-tag">Seine-et-Marne · 77750</span>
+    <h1>Bienvenue à<br /><em>Saint-Cyr-sur-Morin</em></h1>
+    <p class="hero-sub">Un village vivant, au cœur de la Brie verdoyante.</p>
+    <div class="hero-actions">
+      <a href="#actualites" class="btn btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 17H20L18.5 15.5M18.5 15.5A7 7 0 1 0 5 8a7 7 0 0 0 13.5 7.5z"/></svg>
+        Actualités
+      </a>
+      <a href="#services" class="btn btn-outline">Démarches & services</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Défiler</span>
+  </div>
+</section>
+
+<!-- ─── BANDE INFO ─── -->
+<div class="infobande">
+  <div class="infobande-item">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+    <strong>Mairie</strong> — Avenue Daniel Simon
+  </div>
+  <div class="infobande-item">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    <strong>01 60 23 80 24</strong>
+  </div>
+  <div class="infobande-item">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    Lun–Ven : <strong>9h – 12h30 & 14h – 17h</strong>
+  </div>
+  <div class="infobande-item">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    Population : <strong>~1 850 hab.</strong>
+  </div>
+</div>
+
+<!-- ─── ACCÈS RAPIDES ─── -->
+<section class="section" id="services">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Démarches</div>
+      <h2 class="section-title">Accès rapides</h2>
+    </div>
+    <div class="acces-grid reveal">
+      <a href="#" class="acces-card">
+        <div class="acces-icon">
+          <svg width="22" height="22" fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <span class="acces-label">État civil</span>
+      </a>
+      <a href="#" class="acces-card">
+        <div class="acces-icon">
+          <svg width="22" height="22" fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <span class="acces-label">Urbanisme & permis</span>
+      </a>
+      <a href="#" class="acces-card">
+        <div class="acces-icon">
+          <svg width="22" height="22" fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 21V9"/></svg>
+        </div>
+        <span class="acces-label">Conseil municipal</span>
+      </a>
+      <a href="#" class="acces-card">
+        <div class="acces-icon">
+          <svg width="22" height="22" fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <span class="acces-label">Communauté de communes</span>
+      </a>
+      <a href="#" class="acces-card">
+        <div class="acces-icon">
+          <svg width="22" height="22" fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-7 10 7"/><path d="M6 10v8h12v-8"/></svg>
+        </div>
+        <span class="acces-label">Écoles & SIVU</span>
+      </a>
+      <a href="#" class="acces-card">
+        <div class="acces-icon">
+          <svg width="22" height="22" fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <span class="acces-label">Agenda & événements</span>
+      </a>
+      <a href="#" class="acces-card">
+        <div class="acces-icon">
+          <svg width="22" height="22" fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <span class="acces-label">Randonnées</span>
+      </a>
+      <a href="#" class="acces-card">
+        <div class="acces-icon">
+          <svg width="22" height="22" fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <span class="acces-label">Horaires & permanences</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ACTUALITÉS ─── -->
+<section class="section actu-section" id="actualites">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-label">Vie locale</div>
+      <h2 class="section-title">Dernières actualités</h2>
+    </div>
+    <div class="actu-grid reveal">
+      <a href="#" class="actu-main">
+        <div class="actu-main-img"></div>
+        <div class="actu-main-body">
+          <span class="actu-tag">Travaux</span>
+          <div class="actu-main-title">Travaux aux abords de la mairie — point d'avancement</div>
+          <p class="actu-main-text">Suite aux imprévus de fin d'année, les travaux autour de la mairie se poursuivent. Le chantier devrait être achevé avant l'été. Retrouvez le détail des interventions prévues dans cet article.</p>
+          <div class="actu-date">11 janvier 2026</div>
+        </div>
+      </a>
+      <div class="actu-list">
+        <a href="#" class="actu-item">
+          <div class="actu-item-num">01</div>
+          <div class="actu-item-body">
+            <div class="actu-item-title">Guide pratique pour le logement en cas d'inondation</div>
+            <div class="actu-item-date">8 janvier 2026 — Prévention</div>
+          </div>
+        </a>
+        <a href="#" class="actu-item">
+          <div class="actu-item-num">02</div>
+          <div class="actu-item-body">
+            <div class="actu-item-title">Comptes-rendus du conseil municipal — Décembre 2025</div>
+            <div class="actu-item-date">5 janvier 2026 — Conseil municipal</div>
+          </div>
+        </a>
+        <a href="#" class="actu-item">
+          <div class="actu-item-num">03</div>
+          <div class="actu-item-body">
+            <div class="actu-item-title">Bulletin municipal « Trait d'Union » — Novembre 2025</div>
+            <div class="actu-item-date">15 novembre 2025 — Bulletin</div>
+          </div>
+        </a>
+        <a href="#" class="actu-item">
+          <div class="actu-item-num">04</div>
+          <div class="actu-item-body">
+            <div class="actu-item-title">Permanences de la médiathèque — nouveaux horaires</div>
+            <div class="actu-item-date">3 novembre 2025 — Culture</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="actu-footer reveal">
+      <a href="#" class="btn btn-primary actu-footer-btn">Toutes les actualités →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── VILLAGE ─── -->
+<section class="section village-section" id="village">
+  <div class="section-inner">
+    <div class="village-grid">
+      <div class="village-text reveal">
+        <div class="section-label">Notre identité</div>
+        <h2 class="section-title">Un village de<br />caractère en Brie</h2>
+        <p>Niché dans la vallée du Morin, Saint-Cyr-sur-Morin est un village de Seine-et-Marne qui mêle patrimoine rural authentique et cadre de vie paisible à moins d'une heure de Paris.</p>
+        <p>Fontaines sculptées, moulins, randonnées le long du Grand Morin, Musée de la Seine-et-Marne… la commune cultive son identité tout en se tournant vers l'avenir.</p>
+        <a href="#" class="btn-village">Découvrir le village →</a>
+      </div>
+      <div class="village-photos reveal">
+        <div class="village-photo">
+          <img src="assets/img/saint-cyr-sur-morin.webp" alt="Village" />
+        </div>
+        <div class="village-photo">
+          <img src="assets/img/Auberge.jpg" alt="Auberge" />
+        </div>
+        <div class="village-photo">
+          <img src="assets/img/Musée.webp" alt="Musée" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MOT DU MAIRE ─── -->
+<section class="section maire-section">
+  <div class="section-inner">
+    <div class="maire-inner reveal">
+      <img src="assets/img/Maire.jpg" alt="Monsieur le Maire" class="maire-photo" />
+      <div class="maire-content">
+        <div class="section-label">Mot du maire</div>
+        <blockquote>
+          "En cette fin d'année, la commune continue à mettre en œuvre ses projets de travaux. Nous avançons ensemble, avec le souci constant du bien-vivre de toutes les Saint-Cyriennes et de tous les Saint-Cyriens."
+        </blockquote>
+        <div class="maire-sig">
+          <strong>Francis Delarue</strong>
+          Maire de Saint-Cyr-sur-Morin — Novembre 2025
+        </div>
+        <a href="#" class="maire-lire">Lire l'éditorial complet →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer id="contact">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo">
+        <div class="nav-logo-badge">
+          <img src="assets/img/Blason_Saint-Cyr-sur-Morin.svg" alt="Blason Saint-Cyr-sur-Morin">
+        </div>
+        <div class="nav-logo-text">
+          <strong>Saint-Cyr-sur-Morin</strong>
+          <span>Mairie — 77750</span>
+        </div>
+      </div>
+      <p class="footer-desc">Commune de Seine-et-Marne, dans la communauté de communes des Deux Morin.</p>
+      <div class="footer-contact">
+        <p>
+          Avenue Daniel Simon<br />
+          77750 Saint-Cyr-sur-Morin<br />
+          <strong class="footer-tel">01 60 23 80 24</strong><br />
+          <a href="mailto:mairie.stcyrsurmorin@orange.fr">mairie.stcyrsurmorin@orange.fr</a>
+        </p>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Mairie</h4>
+      <ul>
+        <li><a href="#">Conseil municipal</a></li>
+        <li><a href="#">Le mot du maire</a></li>
+        <li><a href="#">Comptes-rendus</a></li>
+        <li><a href="#">Permanences</a></li>
+        <li><a href="#">Arrêtés</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#">État civil</a></li>
+        <li><a href="#">Urbanisme</a></li>
+        <li><a href="#">Écoles</a></li>
+        <li><a href="#">Santé</a></li>
+        <li><a href="#">CCAS</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Découvrir</h4>
+      <ul>
+        <li><a href="#">Tourisme & patrimoine</a></li>
+        <li><a href="#">Randonnées</a></li>
+        <li><a href="#">Associations</a></li>
+        <li><a href="#">Médiathèque</a></li>
+        <li><a href="#">Musée S&amp;M</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 <a href="https://www.linkedin.com/in/gabrielpayet/" target="_blank" rel="noopener noreferrer" class="copyright">Gabriel PAYET</a> — Tous droits réservés</p>
+    <p><a href="#">Plan du site</a> · <a href="#">Accessibilité</a> · <a href="#">Mentions légales</a></p>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Burger menu
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    const open = mobileMenu.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  document.querySelectorAll('.mobile-link').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        e.target.querySelectorAll('.acces-card, .actu-item').forEach((el, i) => {
+          el.style.transitionDelay = `${i * 60}ms`;
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
