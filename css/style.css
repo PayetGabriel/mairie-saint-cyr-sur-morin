@@ -353,6 +353,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   transition: all .22s;
   height: 100%;
   justify-content: center;
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 .reveal.visible .acces-card, .reveal.visible .actu-item {
   transition-delay: 0s !important;
@@ -366,7 +367,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   width: 46px; height: 46px; border-radius: 12px;
   background: var(--vert-pale);
   display: flex; align-items: center; justify-content: center;
-  transition: background .22s;
+  transition: background 0.3s ease;
 }
 .acces-card:hover .acces-icon { background: var(--vert); }
 .acces-card:hover .acces-icon svg { stroke: var(--blanc); }
