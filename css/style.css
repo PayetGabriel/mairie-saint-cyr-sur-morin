@@ -212,7 +212,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   background-image: url("../assets/img/st-cyr-2-scaled.jpg");
   background-size: cover;
   background-position: center;
-  filter: brightness(.8) saturate(.85);
+  filter: brightness(.85) saturate(.85);
 }
 .hero-bg::after {
   content: '';
