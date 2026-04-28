@@ -446,8 +446,13 @@
     document.querySelector('.carousel-next').addEventListener('click', () => goTo(current + 1));
 
     slides[0].classList.add('active');
-    fixHeight();
     resetTimer();
+
+    if (document.readyState === 'complete') {
+      fixHeight();
+    } else {
+      window.addEventListener('load', fixHeight);
+    }
 
     window.addEventListener('resize', fixHeight);
   })();
