@@ -399,6 +399,7 @@
   (function() {
     const slides = document.querySelectorAll('.carousel-slide');
     const dotsContainer = document.querySelector('.carousel-dots');
+    const track = document.querySelector('.carousel-track');
     let current = 0, timer;
 
     // Créer les dots
@@ -409,6 +410,23 @@
       d.addEventListener('click', () => goTo(i));
       dotsContainer.appendChild(d);
     });
+
+    // Calcule et fixe la hauteur max de toutes les slides
+    function fixHeight() {
+      track.style.height = '';
+      slides.forEach(s => {
+        s.style.position = 'relative';
+        s.style.opacity = '1';
+        s.style.pointerEvents = 'auto';
+      });
+      const maxH = Math.max(...Array.from(slides).map(s => s.offsetHeight));
+      track.style.height = maxH + 'px';
+      slides.forEach(s => {
+        s.style.position = '';
+        s.style.opacity = '';
+        s.style.pointerEvents = '';
+      });
+    }
 
     function goTo(n) {
       slides[current].classList.remove('active');
@@ -428,8 +446,11 @@
     document.querySelector('.carousel-next').addEventListener('click', () => goTo(current + 1));
 
     slides[0].classList.add('active');
+    fixHeight();
     resetTimer();
-})();
+
+    window.addEventListener('resize', fixHeight);
+  })();
 </script>
 </body>
 </html>
