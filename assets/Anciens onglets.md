@@ -2,40 +2,40 @@
 
 ## PRATIQUE
 
-Communauté de Communes
-Bulletin municipal "Trait d'Union"
-Arrêtés
+* Communauté de Communes
+* Bulletin municipal "Trait d'Union"
+* Arrêtés
 
 ## CONSEIL MUNICIPAL
 
-Le mot de Monsieur le Maire
-Conseillers et Adjoints
-Permanences
-Comptes-rendus
+* Le mot de Monsieur le Maire
+* Conseillers et Adjoints
+* Permanences
+* Comptes-rendus
 
 ## COMMISSIONS
 
-Commissions
+* Commissions
 
 ## ÉTAT CIVIL
 
-Démarches État-Civil
+* Démarches État-Civil
 
 # **Cadre de vie**
 
 ## SERVICES
 
-Commerçants et Artisans
-Santé
-Services Publics
-Centre Communale d'Action Sociale
+* Commerçants et Artisans
+* Santé
+* Services Publics
+* Centre Communale d'Action Sociale
 
 ## QUOTIDIEN
 
-Bien vivre à St-Cyr
-Les aménagements
-Le ramassage des déchets
-SMITOM
+* Bien vivre à St-Cyr
+* Les aménagements
+* Le ramassage des déchets
+* SMITOM
 
 ## TRANSPORTS
 
@@ -43,20 +43,20 @@ SMITOM
 
 ## EAU-ASSAINISSEMENT
 
-Assainissement individuel
-Assainissement collectif
-Eau
-Bonnes pratiques
+* Assainissement individuel
+* Assainissement collectif
+* Eau
+* Bonnes pratiques
 
 ## PLAN LOCAL d'URBANISME et Risque inondation
 
 ## TRAVAUX-CONSTRUCTIONS
 
-Aides financières
-Demandes d'autorisation
-Règlement de voirie communale
-Guide inondations
-Zonages de protection en forêt privée
+* Aides financières
+* Demandes d'autorisation
+* Règlement de voirie communale
+* Guide inondations
+* Zonages de protection en forêt privée
 
 # **ENFANCE-ÉDUCATION**
 
@@ -70,12 +70,12 @@ Zonages de protection en forêt privée
 
 ## CLUBS SPORTIFS
 
-Liste des clubs
+* Liste des clubs
 
 ## ASSOCIATIONS
 
-Liste des associations
-Demandes de subvention
+* Liste des associations
+* Demandes de subvention
 
 ## SALLE POLYVALENTE
 
@@ -83,10 +83,10 @@ Demandes de subvention
 
 ## PATRIMOINE
 
-Culture
-Randonnées
-Journées du Patrimoine
-Musée de la Seine-et-Marne
+* Culture
+* Randonnées
+* Journées du Patrimoine
+* Musée de la Seine-et-Marne
 
 ## HÉBERGEMENT
 
