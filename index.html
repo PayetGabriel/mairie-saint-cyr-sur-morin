@@ -36,17 +36,6 @@
   </button>
 </nav>
 
-<!-- ─── MOBILE MENU ─── -->
-<div class="nav-mobile-overlay" id="mobileMenu">
-  <ul>
-    <li><a href="#actualites" class="mobile-link">Actualités</a></li>
-    <li><a href="#village" class="mobile-link">Notre village</a></li>
-    <li><a href="#services" class="mobile-link">Services</a></li>
-    <li><a href="#urbanisme" class="mobile-link">Urbanisme</a></li>
-    <li><a href="#contact" class="mobile-link nav-contact-mobile">Contact</a></li>
-  </ul>
-</div>
-
 <!-- ─── HERO ─── -->
 <section class="hero">
   <div class="hero-bg"></div>
@@ -315,17 +304,17 @@
     nav.classList.toggle('scrolled', window.scrollY > 40);
   });
 
-  // Burger menu
+  // Burger menu — toggle .open sur la nav elle-même
   const burger = document.getElementById('burger');
-  const mobileMenu = document.getElementById('mobileMenu');
   burger.addEventListener('click', () => {
-    const open = mobileMenu.classList.toggle('open');
+    const open = nav.classList.toggle('open');
     burger.classList.toggle('open', open);
     document.body.style.overflow = open ? 'hidden' : '';
   });
-  document.querySelectorAll('.mobile-link').forEach(link => {
+  // Fermeture au clic sur un lien
+  document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
-      mobileMenu.classList.remove('open');
+      nav.classList.remove('open');
       burger.classList.remove('open');
       document.body.style.overflow = '';
     });
