@@ -57,6 +57,65 @@
   </div>
 </section>
 
+<!-- ─── CAROUSEL "EN CE MOMENT" ─── -->
+<section class="carousel-section">
+  <div class="carousel-inner">
+    <div class="section-label" style="margin-bottom:1.2rem">En ce moment à Saint-Cyr-sur-Morin</div>
+    <div class="carousel-track-wrapper">
+      <button class="carousel-arrow carousel-prev" aria-label="Précédent">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="carousel-track">
+
+        <div class="carousel-slide">
+          <div class="carousel-text">
+            <span class="actu-tag">Événement</span>
+            <h3>Fête de la Musique 2026</h3>
+            <p>Le 21 juin, la commune organise une soirée musicale sur la place de la mairie. Entrée libre, programme à venir.</p>
+            <a href="#" class="carousel-link">En savoir plus →</a>
+          </div>
+          <div class="carousel-img" style="background-image:url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&q=80')"></div>
+        </div>
+
+        <div class="carousel-slide">
+          <div class="carousel-text">
+            <span class="actu-tag">Bulletin</span>
+            <h3>Trait d'Union — Printemps 2026</h3>
+            <p>Le dernier numéro du bulletin municipal est disponible. Retrouvez toutes les informations de la vie locale.</p>
+            <a href="#" class="carousel-link">Télécharger →</a>
+          </div>
+          <div class="carousel-img" style="background-image:url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80')"></div>
+        </div>
+
+        <div class="carousel-slide">
+          <div class="carousel-text">
+            <span class="actu-tag">Patrimoine</span>
+            <h3>Journées du Patrimoine — Septembre</h3>
+            <p>Découvrez le programme des Journées Européennes du Patrimoine à Saint-Cyr-sur-Morin : visites guidées, expositions.</p>
+            <a href="#" class="carousel-link">Voir le programme →</a>
+          </div>
+          <div class="carousel-img" style="background-image:url('https://images.unsplash.com/photo-1564419320461-6870880221ad?w=800&q=80')"></div>
+        </div>
+
+        <div class="carousel-slide">
+          <div class="carousel-text">
+            <span class="actu-tag">Associations</span>
+            <h3>Clubs & associations locaux</h3>
+            <p>Retrouvez la liste complète des associations sportives et culturelles de la commune et leurs contacts.</p>
+            <a href="#" class="carousel-link">Voir les associations →</a>
+          </div>
+          <div class="carousel-img" style="background-image:url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&q=80')"></div>
+        </div>
+
+      </div>
+      <button class="carousel-arrow carousel-next" aria-label="Suivant">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <div class="carousel-dots"></div>
+  </div>
+</section>
+
 <!-- ─── BANDE INFO ─── -->
 <div class="infobande">
   <div class="infobande-item">
@@ -334,6 +393,42 @@
     });
   }, { threshold: 0.1 });
   reveals.forEach(r => observer.observe(r));
+
+  // Carousel
+  (function() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dotsContainer = document.querySelector('.carousel-dots');
+    let current = 0, timer;
+
+    // Créer les dots
+    slides.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', `Slide ${i + 1}`);
+      d.addEventListener('click', () => goTo(i));
+      dotsContainer.appendChild(d);
+    });
+
+    function goTo(n) {
+      slides[current].classList.remove('active');
+      document.querySelectorAll('.carousel-dot')[current].classList.remove('active');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      document.querySelectorAll('.carousel-dot')[current].classList.add('active');
+      resetTimer();
+    }
+
+    function resetTimer() {
+      clearInterval(timer);
+      timer = setInterval(() => goTo(current + 1), 5000);
+    }
+
+    document.querySelector('.carousel-prev').addEventListener('click', () => goTo(current - 1));
+    document.querySelector('.carousel-next').addEventListener('click', () => goTo(current + 1));
+
+    slides[0].classList.add('active');
+    resetTimer();
+})();
 </script>
 </body>
 </html>
