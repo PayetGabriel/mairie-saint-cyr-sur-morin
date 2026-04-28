@@ -354,6 +354,9 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   height: 100%;
   justify-content: center;
 }
+.reveal.visible .acces-card, .reveal.visible .actu-item {
+  transition-delay: 0s !important;
+}
 .acces-card:hover {
   border-color: var(--vert);
   transform: translateY(-3px);
@@ -573,6 +576,20 @@ footer {
 
 
 /* ─── RESPONSIVE ──────────────────────────── */
+
+@media (max-width: 992px) { /* On cible aussi les tablettes */
+  .infobande {
+    gap: 1.5rem; /* Espace vertical et horizontal plus cohérent */
+    padding: 1.2rem;
+    justify-content: space-evenly; /* Distribue l'espace de façon égale autour des items */
+  }
+  
+  .infobande-item {
+    flex: 0 1 auto; /* L'item prend juste la place dont il a besoin */
+    min-width: 200px; /* Force un peu de largeur pour éviter que tout soit collé */
+    justify-content: center; /* Centre le contenu à l'intérieur de l'item */
+  }
+}
 
 @media (max-width: 900px) {
   .footer-inner { grid-template-columns: 1fr 1fr; }
