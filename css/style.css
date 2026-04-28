@@ -110,7 +110,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   display: inline-block;
   vertical-align: middle;
   margin-top: 3px;
-  margin-left: -.2rem;
+  margin-left: -.3rem;
   line-height: 1;
   transition: all .2s;
 }
