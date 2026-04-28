@@ -408,11 +408,19 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   }
   .carousel-img { min-height: 200px; order: -1; }
   .carousel-text { padding: 1.5rem; }
-  .carousel-track-wrapper { gap: .5rem; }
-  .carousel-arrow { width: 34px; height: 34px; }
-  .carousel-track-wrapper { gap: .5rem; margin: 0 -.2rem; }
-  .carousel-section { padding: 2.5rem 1rem; }
+  .carousel-track-wrapper {
+    gap: 0;
+    flex-direction: column;
+  }
+  .carousel-arrows-row {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: .8rem;
+  }
+  .carousel-arrow { width: 38px; height: 38px; }
 }
+
 /* ─── SECTIONS ────────────────────────────── */
 
 .section { padding: 5rem 2.5rem; }

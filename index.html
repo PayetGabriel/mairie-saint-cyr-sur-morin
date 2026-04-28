@@ -418,6 +418,7 @@
         s.style.position = 'relative';
         s.style.opacity = '1';
         s.style.pointerEvents = 'auto';
+        s.style.height = 'auto';
       });
       const maxH = Math.max(...Array.from(slides).map(s => s.offsetHeight));
       track.style.height = maxH + 'px';
@@ -425,6 +426,7 @@
         s.style.position = '';
         s.style.opacity = '';
         s.style.pointerEvents = '';
+        s.style.height = maxH + 'px';
       });
     }
 
