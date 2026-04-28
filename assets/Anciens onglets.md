@@ -2,7 +2,7 @@
 
 ## PRATIQUE
 
-Communauté de Communes
+* Communauté de Communes
 Bulletin municipal "Trait d'Union"
 Arrêtés
 
