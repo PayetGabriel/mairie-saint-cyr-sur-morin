@@ -25,11 +25,67 @@
     </div>
   </a>
   <ul class="nav-links">
-    <li><a href="#village">La commune</a></li>
-    <li><a href="#services">Services & vie pratique</a></li>
-    <li><a href="#urbanisme">Urbanisme</a></li>
-    <li><a href="#actualites">Enfance & loisirs</a></li>
-    <li><a href="#actualites">Découvrir</a></li>
+    <li class="has-sub">
+      <a href="#village">La commune</a>
+      <ul class="nav-sub">
+        <div class="nav-sub-inner">
+          <li><a href="#">Mairie</a></li>
+          <li><a href="#">Conseil municipal</a></li>
+          <li><a href="#">Trait d'Union</a></li>
+          <li><a href="#">Arrêtés</a></li>
+          <li><a href="#">Mot du maire</a></li>
+        </div>
+      </ul>
+    </li>
+    <li class="has-sub">
+      <a href="#services">Services &amp; vie pratique</a>
+      <ul class="nav-sub">
+        <div class="nav-sub-inner">
+          <li><a href="#">État civil</a></li>
+          <li><a href="#">Déchets</a></li>
+          <li><a href="#">Transports</a></li>
+          <li><a href="#">Commerces</a></li>
+          <li><a href="#">Santé</a></li>
+          <li><a href="#">CCAS</a></li>
+        </div>
+      </ul>
+    </li>
+    <li class="has-sub">
+      <a href="#urbanisme">Urbanisme</a>
+      <ul class="nav-sub">
+        <div class="nav-sub-inner">
+          <li><a href="#">Permis</a></li>
+          <li><a href="#">PLU</a></li>
+          <li><a href="#">Eau</a></li>
+          <li><a href="#">Assainissement</a></li>
+          <li><a href="#">Inondations</a></li>
+        </div>
+      </ul>
+    </li>
+    <li class="has-sub">
+      <a href="#actualites">Enfance &amp; loisirs</a>
+      <ul class="nav-sub">
+        <div class="nav-sub-inner">
+          <li><a href="#">Écoles</a></li>
+          <li><a href="#">SIVU</a></li>
+          <li><a href="#">Clubs</a></li>
+          <li><a href="#">Associations</a></li>
+          <li><a href="#">Salle polyvalente</a></li>
+        </div>
+      </ul>
+    </li>
+    <li class="has-sub">
+      <a href="#">Découvrir</a>
+      <ul class="nav-sub">
+        <div class="nav-sub-inner">
+          <li><a href="#">Tourisme</a></li>
+          <li><a href="#">Patrimoine</a></li>
+          <li><a href="#">Randonnées</a></li>
+          <li><a href="#">Médiathèque</a></li>
+          <li><a href="#">Hébergement</a></li>
+        </div>
+      </ul>
+    </li>
     <li><a href="#contact" class="nav-contact">Contact</a></li>
   </ul>
   <button class="nav-burger" id="burger" aria-label="Menu">
@@ -369,19 +425,43 @@
     nav.classList.toggle('scrolled', window.scrollY > 40);
   });
 
-  // Burger menu — toggle .open sur la nav elle-même
+  // Burger menu
   const burger = document.getElementById('burger');
   burger.addEventListener('click', () => {
     const open = nav.classList.toggle('open');
     burger.classList.toggle('open', open);
     document.body.style.overflow = open ? 'hidden' : '';
   });
-  // Fermeture au clic sur un lien
-  document.querySelectorAll('.nav-links a').forEach(link => {
+
+  // Fermeture au clic sur lien feuille
+  document.querySelectorAll('.nav-sub a').forEach(link => {
     link.addEventListener('click', () => {
       nav.classList.remove('open');
       burger.classList.remove('open');
       document.body.style.overflow = '';
+    });
+  });
+
+  // Dépliants burger
+  document.querySelectorAll('.has-sub > a').forEach(link => {
+    // Injecte le chevron SVG une seule fois
+    const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    chevron.setAttribute('class', 'nav-chevron');
+    chevron.setAttribute('width', '14'); chevron.setAttribute('height', '14');
+    chevron.setAttribute('viewBox', '0 0 24 24');
+    chevron.setAttribute('fill', 'none');
+    chevron.setAttribute('stroke', 'currentColor');
+    chevron.setAttribute('stroke-width', '2');
+    chevron.innerHTML = '<polyline points="6 9 12 15 18 9"/>';
+    link.appendChild(chevron);
+
+    link.addEventListener('click', function(e) {
+      if (!nav.classList.contains('open')) return;
+      e.preventDefault();
+      const li = this.closest('.has-sub');
+      const wasOpen = li.classList.contains('open');
+      document.querySelectorAll('.has-sub').forEach(d => d.classList.remove('open'));
+      if (!wasOpen) li.classList.add('open');
     });
   });
 
