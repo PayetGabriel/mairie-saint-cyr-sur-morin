@@ -140,7 +140,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 
 /* ─── RESPONSIVE NAVBAR ───────────────────── */
 
-@media (max-width: 820px) {
+@media (max-width: 1050px) {
   .nav-burger { display: flex; }
 
   /* En mobile, la nav s'étend pour couvrir l'écran quand .open */
@@ -235,7 +235,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   position: relative; z-index: 2;
   height: 100%; display: flex; flex-direction: column;
   justify-content: flex-end; padding: 0 2.5rem 5rem;
-  max-width: 820px;
+  max-width: 1050px;
 }
 .hero-tag {
   display: inline-block;
