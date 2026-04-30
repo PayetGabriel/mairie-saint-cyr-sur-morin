@@ -169,9 +169,15 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 }
 .nav-sub a {
   display: block;
-  padding: .5rem .9rem;
+  /* On réduit le bas et on augmente le haut pour "pousser" le texte vers le haut */
+  padding-top: .4rem;    
+  padding-bottom: .6rem; 
+  
+  text-align: center; /* Pour centrer le texte comme demandé */
+  
   border-radius: 8px;
-  font-size: .82rem; color: var(--texte);
+  font-size: .82rem; 
+  color: var(--texte);
   white-space: nowrap;
   text-decoration: none;
   transition: background .15s, color .15s;
