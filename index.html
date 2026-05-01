@@ -466,9 +466,8 @@
     });
   });
 
-  // Dépliants burger
+  // On garde ton système de chevrons intact
   document.querySelectorAll('.has-sub > a').forEach(link => {
-    // Injecte le chevron SVG une seule fois
     const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     chevron.setAttribute('class', 'nav-chevron');
     chevron.setAttribute('width', '14'); chevron.setAttribute('height', '14');
@@ -482,13 +481,19 @@
     link.addEventListener('click', function(e) {
       if (!nav.classList.contains('open')) return;
       e.preventDefault();
+      
       const li = this.closest('.has-sub');
       const wasOpen = li.classList.contains('open');
+
+      // On ferme les autres pour déclencher l'effet CSS "focus" sur le seul li.open
       document.querySelectorAll('.has-sub').forEach(d => d.classList.remove('open'));
-      if (!wasOpen) li.classList.add('open');
+      
+      if (!wasOpen) {
+        li.classList.add('open');
+      }
     });
   });
-
+  
   // Reveal on scroll
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
