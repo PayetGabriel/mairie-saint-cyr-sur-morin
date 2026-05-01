@@ -8,14 +8,22 @@
   --vert:        #3a5a40;
   --vert-clair:  #6a9469;
   --vert-pale:   #eef3ec;
+  --rouge:       #8c3a3a;
+  --rouge-clair: #c46a6a;
+  --rouge-pale:  #f7ecec;
   --pierre:      #c8bfb0;
   --pierre-dark: #7a6f63;
   --bois:        #9c6f3e;
   --creme:       #f7f4ef;
+  --rouge-pierre:     #d3b4ae;
+  --rouge-pierre-dark:#8a6a65;
+  --rouge-bois:       #a04a32;
+  --rouge-creme:      #f8f1ef
   --texte:       #2a2520;
   --gris:        #888078;
   --blanc:       #ffffff;
 }
+
 
 html { scroll-behavior: smooth; }
 
