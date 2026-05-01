@@ -99,6 +99,18 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 }
 .nav-links a:not(.nav-contact):hover::after { width: 100%; }
 
+.nav-sub-header {
+  padding: 12px 15px 5px 15px;
+  font-size: 0.75rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: var(--vert); /* On reprend ton vert signature */
+  opacity: 0.6;
+  pointer-events: none; /* Pour que ce ne soit pas cliquable */
+}
+
 /* Bouton Contact — fix pilule alignement (ta correction préservée) */
 .nav-contact {
   background: var(--vert);
@@ -284,6 +296,21 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   .has-sub > a::after { display: none !important; }
 
   /* Flèche chevron SVG injectée via le JS — pas de pseudo-élément */
+
+  .nav-sub-header {
+    font-size: 0.9rem; /* Un peu plus grand pour être lisible sur mobile */
+    color: var(--vert);
+    
+    padding: 2rem 0 0.8rem 0; /* Plus d'espace au-dessus pour bien séparer les blocs */
+    border-bottom: 1px solid rgba(58, 90, 64, 0.1); /* Ligne très fine pour souligner le titre */
+    margin: 0 2rem 0.5rem 2rem; /* Marges pour ne pas coller aux bords */
+    text-align: center;
+  }
+
+  /* On ajuste un peu l'espacement du premier header pour ne pas qu'il soit trop loin du titre principal */
+  .nav-sub-inner .nav-sub-header:first-child {
+    padding-top: 1rem;
+  }
 
   /* Sous-menu burger dépliant */
   .nav-sub {
