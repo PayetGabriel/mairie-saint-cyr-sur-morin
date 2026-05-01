@@ -688,6 +688,30 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 }
 .village-text .btn-village:hover { background: var(--vert-clair); }
 
+/* Structure commune pour l'alignement */
+.btn-village, 
+.actu-footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px; /* Espace entre le texte et la flèche */
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+/* Style spécifique du SVG */
+.btn-village svg, 
+.actu-footer-btn svg {
+  transition: transform 0.2s ease-in-out;
+  flex-shrink: 0; /* Empêche le SVG de s'écraser si le texte est long */
+  transform: translateY(0.25px); /* Légère translation verticale pour un meilleur alignement visuel */
+}
+
+/* L'animation au survol : la flèche glisse de 3px vers la droite */
+.btn-village:hover svg, 
+.actu-footer-btn:hover svg {
+  transform: translateX(3px) translateY(0.25px); /* Combine la translation horizontale et la légère translation verticale pour maintenir l'alignement */
+}
+
 /* Grille photos : grande en haut sur 2 cols, 2 petites en dessous */
 .village-photos {
   display: grid;
