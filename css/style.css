@@ -8,20 +8,50 @@
   --vert:        #3a5a40;
   --vert-clair:  #6a9469;
   --vert-pale:   #eef3ec;
-  --rouge:       #8c3a3a;
-  --rouge-clair: #c46a6a;
-  --rouge-pale:  #f7ecec;
   --pierre:      #c8bfb0;
   --pierre-dark: #7a6f63;
   --bois:        #9c6f3e;
   --creme:       #f7f4ef;
-  --rouge-pierre:     #d3b4ae;
-  --rouge-pierre-dark:#8a6a65;
-  --rouge-bois:       #a04a32;
-  --rouge-creme:      #f8f1ef
   --texte:       #2a2520;
   --gris:        #888078;
   --blanc:       #ffffff;
+
+  /* Palette secondaire pour les accents de couleur sur les sections ou éléments spécifiques */
+  /* ROUGE */
+  --rouge:       #8c3a3a;
+  --rouge-clair: #c46a6a;
+  --rouge-pale:  #f7ecec;
+  --rouge-pierre:     #d3b4ae;
+  --rouge-pierre-dark:#8a6a65;
+  --rouge-bois:       #a04a32;
+  --rouge-creme:      #f8f1ef;
+
+  /* BLEU */
+  --bleu: #2f4a63;
+  --bleu-clair: #5f7f9b;
+  --bleu-pale: #e8eef3;
+  --bleu-pierre: #c3ccd4;
+  --bleu-pierre-dark: #6b7680;
+  --bleu-bois: #3d5a72;
+  --bleu-creme: #f4f7fa;
+
+  /* JAUNE */
+  --jaune: #b38a2e;
+  --jaune-clair: #d8b866;
+  --jaune-pale: #f7f2e3;
+  --jaune-pierre: #e3d4b6;
+  --jaune-pierre-dark: #8c7a55;
+  --jaune-bois: #a67c3a;
+  --jaune-creme: #faf6ed;
+
+  /* VIOLET */
+  --violet: #5a3a63;
+  --violet-clair: #8a6a92;
+  --violet-pale: #f2eaf4;
+  --violet-pierre: #d7c6d9;
+  --violet-pierre-dark: #7a687c;
+  --violet-bois: #744a7a;
+  --violet-creme: #faf5fa;
 }
 
 
