@@ -457,9 +457,17 @@
   // Burger menu
   const burger = document.getElementById('burger');
   burger.addEventListener('click', () => {
+    const isOpening = !nav.classList.contains('open');
     const open = nav.classList.toggle('open');
     burger.classList.toggle('open', open);
     document.body.style.overflow = open ? 'hidden' : '';
+
+    // CORE DU FIX : Si on ferme le burger, on replie tous les sous-menus
+    if (!open) {
+      document.querySelectorAll('.has-sub').forEach(li => {
+        li.classList.remove('open');
+      });
+    }
   });
 
   // Fermeture au clic sur lien feuille
