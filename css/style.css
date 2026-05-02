@@ -103,7 +103,9 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   border-radius: 10px;
   transition: background .2s;
 }
-.nav-logo:hover { background: rgba(58,90,64,.08); }
+.nav-logo:hover { 
+    background: color-mix(in srgb, var(--vert), transparent 92%); 
+}
 
 .nav-logo-badge {
   display: flex;

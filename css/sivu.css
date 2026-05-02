@@ -200,8 +200,10 @@
 
 .tarif-item {
   display: flex;
-  align-items: baseline;
-  gap: 1rem;
+  /* On repasse sur center pour que le prix soit au milieu du bloc, 
+     peu importe le nombre de lignes à droite */
+  align-items: center; 
+  gap: 1.5rem; /* Un peu plus d'espace aide à la lisibilité */
   padding: 1rem 0;
   border-bottom: 1px solid rgba(58,90,64,0.15);
 }
@@ -215,13 +217,20 @@
   font-size: 1.8rem;
   color: var(--vert);
   font-weight: 600;
-  min-width: 80px;
+  min-width: 90px;
+  flex-shrink: 0;
+  
+  /* LA MAGIE EST ICI : 
+     On remonte légèrement le prix pour compenser le décalage visuel 
+     propre à la Playfair Display */
+  line-height: 1;
+  margin-top: -0.7rem; 
 }
 
 .tarif-item span {
   font-size: 0.95rem;
   color: var(--texte);
-  line-height: 1.5;
+  line-height: 1.3; /* Un interlignage plus serré aide à l'alignement visuel */
 }
 
 
