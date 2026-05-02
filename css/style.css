@@ -25,6 +25,7 @@
   --rouge-pierre-dark:#8a6a65;
   --rouge-bois:       #a04a32;
   --rouge-creme:      #f8f1ef;
+  --rouge-texte: #2c1f1f;
 
   /* BLEU */
   --bleu: #2f4a63;
@@ -34,6 +35,7 @@
   --bleu-pierre-dark: #6b7680;
   --bleu-bois: #3d5a72;
   --bleu-creme: #f4f7fa;
+  --bleu-texte: #22272d;
 
   /* JAUNE */
   --jaune: #b38a2e;
@@ -43,6 +45,7 @@
   --jaune-pierre-dark: #8c7a55;
   --jaune-bois: #a67c3a;
   --jaune-creme: #faf6ed;
+  --jaune-texte: #2d281c;
 
   /* VIOLET */
   --violet: #5a3a63;
@@ -52,6 +55,7 @@
   --violet-pierre-dark: #7a687c;
   --violet-bois: #744a7a;
   --violet-creme: #faf5fa;
+  --violet-texte: #261f29;
 }
 
 body.theme-ecole {
@@ -62,6 +66,7 @@ body.theme-ecole {
   --pierre-dark: #7a687c;
   --bois:        #744a7a;
   --creme:       #faf5fa;
+  --texte:       #261f29;
 }
 
 html { scroll-behavior: smooth; }
