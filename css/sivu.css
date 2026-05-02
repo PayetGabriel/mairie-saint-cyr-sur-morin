@@ -115,7 +115,7 @@
 
 .doc-card {
   display: flex;
-  align-items: flex-start;
+  align-items: center; /* On remplace flex-start par center */
   gap: 1rem;
   padding: 1.2rem;
   background: var(--creme);
@@ -134,7 +134,7 @@
 
 .doc-card svg {
   flex-shrink: 0;
-  margin-top: 0.2rem;
+  margin-top: 0;
 }
 
 .doc-info {
@@ -154,6 +154,12 @@
   font-size: 0.8rem;
   color: var(--gris);
   line-height: 1.4;
+}
+
+@media (max-width: 472px) {
+  .acces-card.sivu {
+    flex-direction: row;
+  }
 }
 
 
