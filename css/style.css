@@ -311,7 +311,6 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   nav.open .nav-links { display: flex; justify-content: center; min-height: 50vh; }
 
   .has-sub.open > a {
-    border-bottom: 1px solid var(--vert-pale);
     margin-bottom: 0.5rem !important;
     padding-bottom: 1rem !important;
   }
