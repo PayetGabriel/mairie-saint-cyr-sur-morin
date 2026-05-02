@@ -509,6 +509,11 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   border: 1.5px solid rgba(255,255,255,.6);
 }
 .btn-outline:hover { background: rgba(255,255,255,.12); transform: translateY(-1px); }
+.btn-secondary {
+  background: var(--blanc); color: var(--texte);
+  border: 1.5px solid var(--vert-clair);
+}
+.btn-secondary:hover { background: var(--vert); color: var(--blanc); border: 1.5px solid var(--vert); transform: translateY(-1px); }
 
 /* ─── BANDE INFO ──────────────────────────── */
 
