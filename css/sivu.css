@@ -378,6 +378,9 @@
   padding: 1.5rem;
   text-align: center;
   transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centre le contenu verticalement si la carte grandit */
 }
 
 .personnel-card:hover {
