@@ -54,6 +54,15 @@
   --violet-creme: #faf5fa;
 }
 
+body.theme-ecole {
+  --vert:        #5a3a63;
+  --vert-clair:  #8a6a92;
+  --vert-pale:   #f2eaf4;
+  --pierre:      #d7c6d9;
+  --pierre-dark: #7a687c;
+  --bois:        #744a7a;
+  --creme:       #faf5fa;
+}
 
 html { scroll-behavior: smooth; }
 
