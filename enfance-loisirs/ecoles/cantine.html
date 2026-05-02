@@ -165,66 +165,16 @@
   </div>
 </section>
 
-<footer id="contact">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="nav-logo">
-        <div class="nav-logo-badge">
-          <img src="/assets/img/logoSaintCyr_2020.png" alt="Blason Saint-Cyr-sur-Morin">
-        </div>
-        <div class="nav-logo-text">
-          <strong>Saint-Cyr-sur-Morin</strong>
-          <span>Mairie — 77750</span>
-        </div>
-      </div>
-      <p class="footer-desc">Commune de Seine-et-Marne, dans la communauté de communes des Deux Morin.</p>
-      <div class="footer-contact">
-        <p>
-          Avenue Daniel Simon<br />
-          77750 Saint-Cyr-sur-Morin<br />
-          <strong class="footer-tel">01 60 23 80 24</strong><br />
-          <a href="mailto:mairie.stcyrsurmorin@orange.fr">mairie.stcyrsurmorin@orange.fr</a>
-        </p>
-      </div>
-    </div>
-    <div class="footer-col">
-      <h4>Mairie</h4>
-      <ul>
-        <li><a href="#">Conseil municipal</a></li>
-        <li><a href="#">Le mot du maire</a></li>
-        <li><a href="#">Comptes-rendus</a></li>
-        <li><a href="#">Permanences</a></li>
-        <li><a href="#">Arrêtés</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Services</h4>
-      <ul>
-        <li><a href="#">État civil</a></li>
-        <li><a href="#">Urbanisme</a></li>
-        <li><a href="#">Écoles</a></li>
-        <li><a href="#">Santé</a></li>
-        <li><a href="#">CCAS</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Découvrir</h4>
-      <ul>
-        <li><a href="#">Tourisme & patrimoine</a></li>
-        <li><a href="#">Randonnées</a></li>
-        <li><a href="#">Associations</a></li>
-        <li><a href="#">Médiathèque</a></li>
-        <li><a href="#">Musée S&M</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2026 <a href="https://www.linkedin.com/in/gabrielpayet/" target="_blank" rel="noopener noreferrer" class="copyright">Gabriel PAYET</a> — Tous droits réservés</p>
-    <p><a href="#">Plan du site</a> · <a href="#">Accessibilité</a> · <a href="#">Mentions légales</a></p>
-  </div>
-</footer>
+<div id="footer-placeholder"></div>
 
 <script src="../../components/navbar.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-placeholder').innerHTML = data;
+    });
+</script>
 <script>
   // Reveal on scroll
   const reveals = document.querySelectorAll('.reveal');
