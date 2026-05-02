@@ -37,88 +37,7 @@
 <body>
 
 <!-- ─── NAVBAR ─── -->
-<nav id="navbar">
-  <a href="/" class="nav-logo">
-    <div class="nav-logo-badge">
-      <img src="assets/img/logoSaintCyr_2020.png" alt="Blason Saint-Cyr-sur-Morin">
-    </div>
-    <div class="nav-logo-text">
-      <strong>Saint-Cyr-sur-Morin</strong>
-      <span>Mairie — 77750</span>
-    </div>
-  </a>
-  <ul class="nav-links">
-    <li class="has-sub">
-      <a href="#village">La commune</a>
-      <ul class="nav-sub">
-        <div class="nav-sub-inner">
-          <li><a href="#">Mairie</a></li>
-          <li><a href="#">Conseil municipal</a></li>
-          <li><a href="#">Trait d'Union</a></li>
-          <li><a href="#">Arrêtés</a></li>
-          <li><a href="#">Mot du maire</a></li>
-        </div>
-      </ul>
-    </li>
-    <li class="has-sub">
-      <a href="#services">Services &amp; vie pratique</a>
-      <ul class="nav-sub">
-        <div class="nav-sub-inner">
-          <li><a href="#">État civil</a></li>
-          <li><a href="#">Déchets</a></li>
-          <li><a href="#">Transports</a></li>
-          <li><a href="#">Commerces</a></li>
-          <li><a href="#">Santé</a></li>
-          <li><a href="#">CCAS</a></li>
-        </div>
-      </ul>
-    </li>
-    <li class="has-sub">
-      <a href="#urbanisme">Urbanisme</a>
-      <ul class="nav-sub">
-        <div class="nav-sub-inner">
-          <li><a href="#">Permis</a></li>
-          <li><a href="#">PLU</a></li>
-          <li><a href="#">Eau</a></li>
-          <li><a href="#">Assainissement</a></li>
-          <li><a href="#">Inondations</a></li>
-        </div>
-      </ul>
-    </li>
-    <li class="has-sub">
-      <a href="#actualites">Enfance &amp; loisirs</a>
-      <ul class="nav-sub">
-        <div class="nav-sub-inner">
-          <li class="nav-sub-header">Services Scolaires (SIVU)</li>
-          <li><a href="/enfance-loisirs/ecoles/cantine.html">Cantine & Menus</a></li>
-          <li><a href="#">Transports & Études</a></li>
-          <li><a href="#">Inscriptions scolaires</a></li>
-          <li><a href="#">SIVU (Infos syndicat)</a></li>
-          
-          <li class="nav-sub-header">Vie Locale</li>
-          <li><a href="#">Associations & Clubs</a></li>
-          <li><a href="#">Salle polyvalente</a></li>
-        </div>
-      </ul>
-    </li>
-    <li class="has-sub">
-      <a href="#">Découvrir</a>
-      <ul class="nav-sub">
-        <div class="nav-sub-inner">
-          <li><a href="#">Tourisme</a></li>
-          <li><a href="#">Patrimoine</a></li>
-          <li><a href="#">Randonnées</a></li>
-          <li><a href="#">Médiathèque</a></li>
-          <li><a href="#">Hébergement</a></li>
-        </div>
-      </ul>
-    </li>
-    <li><a href="#contact" class="nav-contact">Contact</a></li>
-  </ul>
-  <button class="nav-burger" id="burger" aria-label="Menu">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
+
 
 <!-- ─── HERO ─── -->
 <section class="hero">
@@ -256,7 +175,7 @@
         </div>
         <span class="acces-label">Communauté de communes</span>
       </a>
-      <a href="/enfance-loisirs/ecoles/index.html" class="acces-card">
+      <a href="/enfance-loisirs/ecoles/sivu.html" class="acces-card">
         <div class="acces-icon">
           <svg width="22" height="22" fill="none" stroke="var(--vert)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/>
           </svg>
@@ -451,80 +370,9 @@
   </div>
 </footer>
 
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
 <script>
-  // Navbar scroll
-  const nav = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 40);
-  });
-
-  // Burger menu
-  const burger = document.getElementById('burger');
-  burger.addEventListener('click', () => {
-    const isOpening = !nav.classList.contains('open');
-    const open = nav.classList.toggle('open');
-    burger.classList.toggle('open', open);
-    document.body.style.overflow = open ? 'hidden' : '';
-
-    // CORE DU FIX : Si on ferme le burger, on replie tous les sous-menus
-    if (!open) {
-      document.querySelectorAll('.has-sub').forEach(li => {
-        li.classList.remove('open');
-      });
-    }
-  });
-
-  // Fermeture au clic sur lien feuille
-  document.querySelectorAll('.nav-sub a').forEach(link => {
-    link.addEventListener('click', () => {
-      nav.classList.remove('open');
-      burger.classList.remove('open');
-      document.body.style.overflow = '';
-    });
-  });
-
-  // On garde ton système de chevrons intact
-  document.querySelectorAll('.has-sub > a').forEach(link => {
-    const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    chevron.setAttribute('class', 'nav-chevron');
-    chevron.setAttribute('width', '14'); chevron.setAttribute('height', '14');
-    chevron.setAttribute('viewBox', '0 0 24 24');
-    chevron.setAttribute('fill', 'none');
-    chevron.setAttribute('stroke', 'currentColor');
-    chevron.setAttribute('stroke-width', '2');
-    chevron.innerHTML = '<polyline points="6 9 12 15 18 9"/>';
-    link.appendChild(chevron);
-
-    link.addEventListener('click', function(e) {
-      if (!nav.classList.contains('open')) return;
-      e.preventDefault();
-      
-      const li = this.closest('.has-sub');
-      const wasOpen = li.classList.contains('open');
-
-      // On ferme les autres pour déclencher l'effet CSS "focus" sur le seul li.open
-      document.querySelectorAll('.has-sub').forEach(d => d.classList.remove('open'));
-      
-      if (!wasOpen) {
-        li.classList.add('open');
-      }
-    });
-  });
-  
-  // Reveal on scroll
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        e.target.querySelectorAll('.acces-card, .actu-item').forEach((el, i) => {
-          el.style.transitionDelay = `${i * 60}ms`;
-        });
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(r => observer.observe(r));
-
   // Carousel
   (function() {
     const slides = document.querySelectorAll('.carousel-slide');
