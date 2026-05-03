@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Maintenance — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Le site de la mairie de Saint-Cyr-sur-Morin est en cours de maintenance. Nous vous remercions pour votre patience." />
+  <meta name="author" content="Gabriel PAYET" />
+
+  <!-- Pour les sites de communes, préciser la localisation aide Google Maps -->
+  <meta name="geo.region" content="FR-77" />
+  <meta name="geo.placename" content="Saint-Cyr-sur-Morin" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Maintenance — Saint-Cyr-sur-Morin" />
+  <meta property="og:description" content="Le site de la mairie de Saint-Cyr-sur-Morin est en cours de maintenance. Nous vous remercions pour votre patience." />
+  <meta property="og:image" content="https://mairie-saint-cyr-sur-morin.vercel.app/assets/img/logoSaintCyr_2020_web.png" />
+  <meta property="og:image:width" content="984" />
+  <meta property="og:image:height" content="1200" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="assets/img/logoSaintCyr_2020-favicon.png">
+  <link rel="apple-touch-icon" href="assets/img/logoSaintCyr_2020-favicon.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    
+  <style>
+    body.theme-construction {
+      --vert:        #2f4a63;
+      --vert-clair:  #5f7f9b;
+      --vert-pale:   #e8eef3;
+      --pierre:      #c3ccd4;
+      --pierre-dark: #6b7680;
+      --bois:        #3d5a72;
+      --creme:       #f4f7fa;
+      --texte:       #22272d;
+    }
+    /* On crée une section qui se comporte comme ton Hero de l'index */
+    .maintenance-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      
+      /* Prend toute la hauteur de l'écran moins la barre de navigation */
+      min-height: 100vh; 
+      min-height: 100dvh; 
+      
+      /* Padding-top égal à la hauteur de ta nav (68px) pour ne pas être "bouffé" */
+      padding: 68px 1.4rem 2rem; 
+      
+      background-color: var(--creme); /* Couleur de fond de ton site */
+      text-align: center;
+    }
+
+    /* Boite d'icône inspirée par .acces-icon de ton style.css */
+    .maint-icon-large {
+      width: 140px;
+      height: 140px;
+      background: var(--vert-pale);
+      border-radius: 20px; /* Un peu plus que tes cartes pour l'échelle */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+      border: 1px solid rgba(200,191,176,0.5);
+      color: var(--vert);
+      transition: transform 0.3s ease;
+    }
+    
+    .maint-icon-large:hover {
+        transform: scale(1.05);
+        background: var(--vert);
+        color: var(--blanc);
+    }
+
+    .maint-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      color: var(--texte);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .maint-text p {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--gris);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.6;
+    }
+
+    /* Animation subtile pour le SVG */
+    .maint-icon-large svg {
+        filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
+    }
+  </style>
+</head>
+<body class="theme-construction">
+
+<!-- Chargement automatique de la Navbar -->
+<script src="/components/navbar.js"></script>
+
+<main class="maintenance-hero">
+  <!-- Icône Marteau & Clé croisés -->
+  <div class="maint-icon-large">
+    <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+    </svg>
+  </div>
+
+  <div class="maint-text">
+    <h1>Page en cours de<br><em>construction</em></h1>
+    <p>Nous travaillons actuellement sur cette section pour vous offrir une meilleure expérience. Merci de votre patience, nous revenons très vite !</p>
+    
+    <a href="/" class="btn btn-primary" style="border: 1px solid var(--pierre);">
+      Retour à l'accueil
+    </a>
+  </div>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script>
+  // Ton système d'injection de footer
+  fetch('/components/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-placeholder').innerHTML = data;
+    });
+</script>
+
+</body>
+</html>
