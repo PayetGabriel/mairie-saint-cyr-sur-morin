@@ -172,7 +172,7 @@
 
 .bullet-list li {
   position: relative;
-  padding-left: 1.5rem;
+  padding-left: 2rem;
   margin-bottom: 0.7rem;
   line-height: 1.7;
 }
@@ -180,12 +180,27 @@
 .bullet-list li::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 0.7em;
+  left: 0.5rem; 
+  top: 0.65em;
   width: 6px;
   height: 6px;
   background: var(--vert);
   border-radius: 50%;
+}
+
+.info-note {
+    background-color: var(--vert-pale); /* Ta couleur vert clair */
+    border-left: 4px solid var(--vert); /* Ton vert foncé */
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: var(--texte);
+}
+.info-note strong {
+    color: var(--vert);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 
