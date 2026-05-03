@@ -291,7 +291,7 @@
 </section>
 
 <!-- ─── MOT DU MAIRE ─── -->
-<section class="section maire-section">
+<section class="section maire-section" id="mot-du-maire">
   <div class="section-inner">
     <div class="maire-inner reveal">
       <img src="assets/img/Maire.jpg" alt="Monsieur le Maire" class="maire-photo" />
@@ -322,6 +322,19 @@
     });
 </script>
 <script>
+  // Scroll reveal, utile pour ancre (#actualites, #services…) afin d'attendre que les éléments soient révélés avant de scroller dessus
+  window.addEventListener('load', () => {
+    if (window.location.hash) {
+      const target = document.querySelector(window.location.hash);
+      if (target) {
+        // On attend un micro-instant que le layout soit stable
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  });
+
   // Carousel
   (function() {
     const slides = document.querySelectorAll('.carousel-slide');

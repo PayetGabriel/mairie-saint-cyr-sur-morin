@@ -847,7 +847,9 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   text-decoration: none; font-weight: 500;
 }
 .maire-lire:hover { color: var(--vert-clair); }
-
+#mot-du-maire {
+    scroll-margin-top: 90px; /* 68px de navbar + 22px de confort */
+}
 
 /* ─── FOOTER ──────────────────────────────── */
 
