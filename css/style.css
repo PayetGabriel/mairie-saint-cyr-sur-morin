@@ -248,6 +248,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   white-space: nowrap;
   text-decoration: none;
   transition: background .15s, color .15s;
+  user-select: none;
 }
 .nav-sub a:hover { background: var(--vert-pale); color: var(--vert); }
 
@@ -257,6 +258,8 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 .has-sub > a {
   padding-bottom: 2px;
   position: relative;
+  cursor: pointer;
+  user-select: none;
 }
 .has-sub > a::after {
   content: '' !important;
