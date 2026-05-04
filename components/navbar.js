@@ -41,6 +41,16 @@ function initNavbarLogic() {
         }
     });
 
+    // Ajoute juste ça sous le bloc du burger.addEventListener
+    window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1050) { // Ajuste 768 selon ton CSS
+            document.body.style.overflow = '';
+            nav.classList.remove('open');
+            burger.classList.remove('open');
+            document.querySelectorAll('.has-sub').forEach(li => li.classList.remove('open'));
+        }
+    });
+
     // ... (Reste de ton code de chevrons inchangé) ...
     document.querySelectorAll('.has-sub > a').forEach(link => {
         const chevron = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
