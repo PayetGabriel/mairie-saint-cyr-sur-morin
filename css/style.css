@@ -259,7 +259,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
         flex: 1;
     }
 
-    /* On ajoute un padding au body pour ne pas que le footer soit caché par la barre */
+    /* On ajoute un padding au body pour ne pas que le footer soit caché par la barre */ 
     body {
         padding-bottom: 65px;
     }
