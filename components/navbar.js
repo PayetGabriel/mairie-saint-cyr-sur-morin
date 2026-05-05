@@ -1,33 +1,22 @@
 // components/navbar.js
 async function loadNavbar() {
     try {
-        // CORRECTION DU CHEMIN : on ajoute /components/
         const response = await fetch('/components/navbar.html');
-        
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP : ${response.status} (Vérifiez le chemin du fichier)`);
-        }
-        
+        if (!response.ok) throw new Error(`Erreur HTTP : ${response.status}`);
         const data = await response.text();
         document.body.insertAdjacentHTML('afterbegin', data);
-
-        // On ne lance la logique QUE si l'injection a réussi
         initNavbarLogic();
-        
     } catch (error) {
-        console.error("Erreur lors du chargement de la navbar:", error);
+        console.error("Erreur navbar:", error);
     }
 }
 
 function initNavbarLogic() {
     const nav = document.getElementById('navbar');
     const burger = document.getElementById('burger');
+    if (!nav || !burger) return;
 
-    if (!nav || !burger) {
-        console.warn("Éléments de la navbar introuvables dans le DOM.");
-        return;
-    }
-
+    // --- INJECTION SÉCURISÉE DES ACCÈS RAPIDES ---
     if (!document.getElementById('fixed-quick-access')) {
         const quickAccessHTML = `
             <div id="fixed-quick-access" class="quick-access">
@@ -62,18 +51,15 @@ function initNavbarLogic() {
         const open = nav.classList.toggle('open');
         burger.classList.toggle('open', open);
         document.body.style.overflow = open ? 'hidden' : '';
-        if (!open) {
-            document.querySelectorAll('.has-sub').forEach(li => li.classList.remove('open'));
-        }
+        if (quickAccess) quickAccess.style.visibility = open ? 'hidden' : 'visible';
     });
 
-    // Ajoute juste ça sous le bloc du burger.addEventListener
     window.addEventListener('resize', () => {
-        if (window.innerWidth >= 1050) { // Ajuste 768 selon ton CSS
+        if (window.innerWidth >= 1050) {
             document.body.style.overflow = '';
             nav.classList.remove('open');
             burger.classList.remove('open');
-            document.querySelectorAll('.has-sub').forEach(li => li.classList.remove('open'));
+            if (quickAccess) quickAccess.style.visibility = 'visible';
         }
     });
 
