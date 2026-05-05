@@ -187,6 +187,86 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 .nav-contact::after { content: none !important; }
 
 
+/* ─── BARRE ACCÈS RAPIDES (GLOBAL) ─── */
+.quick-access {
+    position: fixed;
+    z-index: 90; /* Juste en dessous de la navbar */
+    display: flex;
+    background: var(--blanc);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+}
+
+.qa-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--texte);
+    transition: all 0.2s;
+}
+
+.qa-item svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--vert);
+}
+
+.qa-item span {
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin-top: 4px;
+}
+
+/* 💻 VERSION DESKTOP : Sidebar à droite */
+@media (min-width: 1051px) {
+    .quick-access {
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        flex-direction: column;
+        padding: 10px;
+        border-radius: 12px 0 0 12px;
+        gap: 15px;
+        border: 1px solid rgba(200,191,176,0.4);
+        border-right: none;
+    }
+    
+    .qa-item:hover {
+        transform: translateX(-5px);
+        color: var(--vert);
+    }
+    
+    /* On peut cacher le texte sur ordi pour plus de discrétion, ou le laisser */
+    .qa-item span { display: block; } 
+}
+
+/* 📱 VERSION MOBILE : Bottom Bar fixe */
+@media (max-width: 1050px) {
+    .quick-access {
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 65px;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 5px 0;
+        border-top: 1px solid rgba(200,191,176,0.4);
+        border-radius: 0;
+    }
+
+    .qa-item {
+        flex: 1;
+    }
+
+    /* On ajoute un padding au body pour ne pas que le footer soit caché par la barre */
+    body {
+        padding-bottom: 65px;
+    }
+}
+
+
 /* ─── HAMBURGER ───────────────────────────── */
 
 .nav-burger {
