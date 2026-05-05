@@ -186,7 +186,6 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 .nav-contact:hover { background: var(--vert-clair) !important; transform: translateY(-1px); }
 .nav-contact::after { content: none !important; }
 
-
 /* ─── BARRE ACCÈS RAPIDES (GLOBAL) ─── */
 .quick-access {
     position: fixed;
@@ -265,7 +264,6 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
         padding-bottom: 65px;
     }
 }
-
 
 /* ─── HAMBURGER ───────────────────────────── */
 
