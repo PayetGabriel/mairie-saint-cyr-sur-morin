@@ -186,16 +186,22 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 .nav-contact:hover { background: var(--vert-clair) !important; transform: translateY(-1px); }
 .nav-contact::after { content: none !important; }
 
-/* ─── BARRE ACCÈS RAPIDES (GLOBAL) ─── */
+/* ─── BARRE ACCÈS RAPIDES (FIX OPACITÉ & FLOU) ─── */
 .quick-access {
     position: fixed;
-    z-index: 90; /* Juste en dessous de la navbar */
+    z-index: 90;
     display: flex;
-    background: var(--blanc);
+    
+    /* On copie exactement les propriétés de la NAV du fichier style_2.css */
+    background: rgba(247, 244, 239, 0.92); /* */
+    backdrop-filter: blur(12px);           /*[cite: 4] */
+    -webkit-backdrop-filter: blur(12px);    /* INDISPENSABLE pour le rendu mobile */
+    
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     transition: all 0.3s ease;
 }
 
+/* On ne touche à rien d'autre comme demandé */
 .qa-item {
     display: flex;
     flex-direction: column;
@@ -217,7 +223,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
     margin-top: 4px;
 }
 
-/* 💻 VERSION DESKTOP : Sidebar à droite */
+/* 💻 VERSION DESKTOP */
 @media (min-width: 1051px) {
     .quick-access {
         right: 0;
@@ -227,20 +233,13 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
         padding: 10px;
         border-radius: 12px 0 0 12px;
         gap: 15px;
-        border: 1px solid rgba(200,191,176,0.4);
+        border: 1px solid rgba(200,191,176,0.4); /*[cite: 4] */
         border-right: none;
     }
-    
-    .qa-item:hover {
-        transform: translateX(-5px);
-        color: var(--vert);
-    }
-    
-    /* On peut cacher le texte sur ordi pour plus de discrétion, ou le laisser */
-    .qa-item span { display: block; } 
+    .qa-item:hover { transform: translateX(-5px); color: var(--vert); }
 }
 
-/* 📱 VERSION MOBILE : Bottom Bar fixe */
+/* 📱 VERSION MOBILE */
 @media (max-width: 1050px) {
     .quick-access {
         bottom: 0;
@@ -251,18 +250,12 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
         justify-content: space-around;
         align-items: center;
         padding: 5px 0;
-        border-top: 1px solid rgba(200,191,176,0.4);
+        /* On utilise la bordure de la navbar pour la séparation haute */
+        border-top: 1px solid rgba(200,191,176,0.4); /*[cite: 4] */
         border-radius: 0;
     }
-
-    .qa-item {
-        flex: 1;
-    }
-
-    /* On ajoute un padding au body pour ne pas que le footer soit caché par la barre */
-    body {
-        padding-bottom: 65px;
-    }
+    .qa-item { flex: 1; }
+    body { padding-bottom: 65px; }
 }
 
 /* ─── HAMBURGER ───────────────────────────── */
