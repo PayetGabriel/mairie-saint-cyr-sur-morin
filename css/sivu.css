@@ -295,6 +295,11 @@
   margin: 0;
 }
 
+.alert-box span {
+  font-weight: bold;
+  color: var(--texte);
+}
+
 .alert-box.primary {
     background: var(--vert);
     color: var(--blanc) !important;
