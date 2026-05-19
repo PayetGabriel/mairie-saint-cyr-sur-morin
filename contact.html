@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Contact — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Contactez la mairie de Saint-Cyr-sur-Morin. Formulaire de contact, horaires d'ouverture et coordonnées." />
+  <meta name="author" content="Gabriel PAYET" />
+
+  <meta name="geo.region" content="FR-77" />
+  <meta name="geo.placename" content="Saint-Cyr-sur-Morin" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Contact — Saint-Cyr-sur-Morin" />
+  <meta property="og:description" content="Contactez votre mairie. Coordonnées et formulaire de contact." />
+  <meta property="og:image" content="https://mairie-saint-cyr-sur-morin.vercel.app/assets/img/logoSaintCyr_2020_web.png" />
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="assets/img/logoSaintCyr_2020-favicon.png">
+  <link rel="apple-touch-icon" href="assets/img/logoSaintCyr_2020-favicon.png">
+
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="robots" content="index, follow" />
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+</head>
+
+<style>
+/* ─── FORMULAIRE DE CONTACT ───────────────── */
+
+.contact-form {
+  background: var(--blanc);
+  border: 1px solid rgba(200,191,176,0.4);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--texte);
+  margin-bottom: 0.5rem;
+}
+
+.form-group .required {
+  color: var(--vert);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--texte);
+  background: var(--creme);
+  border: 1.5px solid rgba(200,191,176,0.4);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--vert);
+  background: var(--blanc);
+  box-shadow: 0 0 0 3px rgba(58,90,64,0.08);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.form-group select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%233a5a40' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.form-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 0.15rem;
+  cursor: pointer;
+  accent-color: var(--vert);
+}
+
+.form-checkbox label {
+  font-size: 0.85rem;
+  color: var(--gris);
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.form-checkbox label a {
+  color: var(--vert);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-checkbox label a:hover {
+  text-decoration: underline;
+}
+
+/* Bouton submit */
+.contact-form button[type="submit"] {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Réponses formulaire */
+.form-response {
+  margin-top: 1.5rem;
+}
+
+.form-loading {
+  padding: 1rem 1.5rem;
+  background: var(--vert-pale);
+  border-left: 3px solid var(--vert);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--texte);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.form-success {
+  padding: 1.5rem;
+  background: #e8f5e9;
+  border-left: 3px solid #4caf50;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.form-success svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  stroke: #4caf50;
+}
+
+.form-success strong {
+  display: block;
+  font-size: 1rem;
+  color: #2e7d32;
+  margin-bottom: 0.3rem;
+}
+
+.form-success p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0;
+}
+
+.form-error {
+  padding: 1.5rem;
+  background: #ffebee;
+  border-left: 3px solid #f44336;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.form-error svg {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  stroke: #f44336;
+}
+
+.form-error strong {
+  display: block;
+  font-size: 1rem;
+  color: #c62828;
+  margin-bottom: 0.3rem;
+}
+
+.form-error p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .contact-form {
+    padding: 1.5rem;
+  }
+}
+</style>
+
+<body>
+
+<!-- ─── NAVBAR (chargée automatiquement) ─── -->
+
+<!-- ─── PAGE HEADER ─── -->
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Nous contacter</h1>
+    <p class="page-intro">Une question, une démarche ? L'équipe municipale est à votre écoute.</p>
+  </div>
+</header>
+
+<!-- ─── SECTION CONTACT ─── -->
+<section class="section">
+  <div class="section-inner">
+    
+    <!-- Alert Box pour horaires -->
+    <div class="alert-box primary" style="margin-bottom: 3rem; background: var(--vert-clair); border: none;">
+      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 6v6l4 2"/>
+      </svg>
+      <div>
+        <strong>Horaires d'ouverture</strong>
+        <p>La mairie est ouverte du lundi au vendredi de <span>9h à 12h30</span> et de <span>14h à 17h</span>. Fermée les week-ends et jours fériés.</p>
+      </div>
+    </div>
+
+    <!-- Grid Contact + Formulaire -->
+    <div class="sivu-contact">
+      
+      <!-- Coordonnées -->
+      <div>
+        <h2 class="section-title" style="margin-bottom: 2rem;">Coordonnées</h2>
+        
+        <div class="contact-card" style="margin-bottom: 1.5rem;">
+          <h3>
+            <svg width="20" height="20" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            Adresse
+          </h3>
+          <p>
+            <strong>Mairie de Saint-Cyr-sur-Morin</strong><br />
+            Avenue Daniel Simon<br />
+            77750 Saint-Cyr-sur-Morin
+          </p>
+        </div>
+
+        <div class="contact-card" style="margin-bottom: 1.5rem;">
+          <h3>
+            <svg width="20" height="20" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            Téléphone
+          </h3>
+          <p>
+            <a href="tel:+33160238024">01 60 23 80 24</a>
+          </p>
+        </div>
+
+        <div class="contact-card">
+          <h3>
+            <svg width="20" height="20" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            Email
+          </h3>
+          <p>
+            <a href="mailto:mairie@saint-cyr-sur-morin.fr">mairie@saint-cyr-sur-morin.fr</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Formulaire -->
+      <div>
+        <h2 class="section-title" style="margin-bottom: 2rem;">Formulaire de contact</h2>
+        
+        <form id="contact-form" class="contact-form">
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="prenom">Prénom <span class="required">*</span></label>
+              <input type="text" id="prenom" name="prenom" required />
+            </div>
+            
+            <div class="form-group">
+              <label for="nom">Nom <span class="required">*</span></label>
+              <input type="text" id="nom" name="nom" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Adresse email <span class="required">*</span></label>
+            <input type="email" id="email" name="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="telephone">Téléphone</label>
+            <input type="tel" id="telephone" name="telephone" />
+          </div>
+
+          <div class="form-group">
+            <label for="sujet">Sujet <span class="required">*</span></label>
+            <select id="sujet" name="sujet" required>
+              <option value="">-- Choisissez un sujet --</option>
+              <option value="etat-civil">État civil</option>
+              <option value="urbanisme">Urbanisme & travaux</option>
+              <option value="conseil">Conseil municipal</option>
+              <option value="ecole">Écoles & enfance</option>
+              <option value="culture">Culture & associations</option>
+              <option value="autre">Autre demande</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Votre message <span class="required">*</span></label>
+            <textarea id="message" name="message" rows="6" required></textarea>
+          </div>
+
+          <div class="form-checkbox">
+            <input type="checkbox" id="rgpd" name="rgpd" required />
+            <label for="rgpd">
+              J'accepte que mes données soient utilisées dans le cadre de ma demande. <a href="#">En savoir plus</a>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 2L11 13"/>
+              <path d="M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+            Envoyer le message
+          </button>
+
+          <div id="form-response" class="form-response"></div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── SECTION AUTRES CONTACTS ─── -->
+<section class="section" style="background: var(--blanc); padding: 4rem 2.5rem;">
+  <div class="section-inner">
+    <div class="section-label" style="text-align: center; margin-bottom: 1rem;">Services annexes</div>
+    <h2 class="section-title" style="text-align: center; margin-bottom: 3rem;">Autres contacts utiles</h2>
+    
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h3>Service technique</h3>
+        <p>
+          Pour toute demande concernant les travaux, l'entretien de la voirie ou la gestion des espaces verts.<br />
+          <a href="tel:+33160238025">01 60 23 80 25</a>
+        </p>
+      </div>
+
+      <div class="contact-card">
+        <h3>Services scolaires</h3>
+        <p>
+          Inscriptions, cantine, activités périscolaires et questions relatives aux écoles.<br />
+          <a href="tel:+33160238026">01 60 23 80 26</a>
+        </p>
+      </div>
+
+      <div class="contact-card">
+        <h3>SIVU du canton</h3>
+        <p>
+          Pour les questions relatives à l'eau, l'assainissement et les déchets.<br />
+          <a href="tel:+33160238030">01 60 23 80 30</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER (chargé automatiquement) ─── -->
+<div id="footer-placeholder"></div>
+
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  // Chargement du footer
+  fetch('/components/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-placeholder').innerHTML = data;
+    });
+
+  // Gestion du formulaire de contact
+  document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const responseDiv = document.getElementById('form-response');
+    const formData = new FormData(this);
+    
+    // Simulation d'envoi (remplacer par votre endpoint)
+    responseDiv.innerHTML = '<div class="form-loading">Envoi en cours...</div>';
+    
+    setTimeout(() => {
+      // Succès
+      responseDiv.innerHTML = `
+        <div class="form-success">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+          <strong>Message envoyé !</strong>
+          <p>Nous vous répondrons dans les plus brefs délais.</p>
+        </div>
+      `;
+      
+      // Réinitialiser le formulaire
+      this.reset();
+      
+      // Masquer le message après 5 secondes
+      setTimeout(() => {
+        responseDiv.innerHTML = '';
+      }, 5000);
+    }, 1500);
+    
+    /* Pour un vrai envoi, utiliser :
+    fetch('/api/contact', {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        responseDiv.innerHTML = '... message de succès ...';
+      } else {
+        responseDiv.innerHTML = '... message d\'erreur ...';
+      }
+    })
+    .catch(error => {
+      responseDiv.innerHTML = '... message d\'erreur ...';
+    });
+    */
+  });
+</script>
+
+</body>
+</html>
