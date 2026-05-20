@@ -32,205 +32,6 @@
   <link rel="stylesheet" href="/css/sivu.css" />
 </head>
 
-<style>
-/* ─── FORMULAIRE DE CONTACT ───────────────── */
-
-.contact-form {
-  background: var(--blanc);
-  border: 1px solid rgba(200,191,176,0.4);
-  border-radius: 16px;
-  padding: 2rem;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--texte);
-  margin-bottom: 0.5rem;
-}
-
-.form-group .required {
-  color: var(--vert);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-  width: 100%;
-  padding: 0.85rem 1rem;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.95rem;
-  color: var(--texte);
-  background: var(--creme);
-  border: 1.5px solid rgba(200,191,176,0.4);
-  border-radius: 8px;
-  transition: all 0.2s;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--vert);
-  background: var(--blanc);
-  box-shadow: 0 0 0 3px rgba(58,90,64,0.08);
-}
-
-.form-group textarea {
-  resize: vertical;
-  min-height: 120px;
-  line-height: 1.6;
-}
-
-.form-group select {
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%233a5a40' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  padding-right: 2.5rem;
-}
-
-.form-checkbox {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.7rem;
-  margin-bottom: 1.5rem;
-}
-
-.form-checkbox input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  margin-top: 0.15rem;
-  cursor: pointer;
-  accent-color: var(--vert);
-}
-
-.form-checkbox label {
-  font-size: 0.85rem;
-  color: var(--gris);
-  line-height: 1.5;
-  cursor: pointer;
-}
-
-.form-checkbox label a {
-  color: var(--vert);
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.form-checkbox label a:hover {
-  text-decoration: underline;
-}
-
-/* Bouton submit */
-.contact-form button[type="submit"] {
-  width: 100%;
-  justify-content: center;
-}
-
-/* Réponses formulaire */
-.form-response {
-  margin-top: 1.5rem;
-}
-
-.form-loading {
-  padding: 1rem 1.5rem;
-  background: var(--vert-pale);
-  border-left: 3px solid var(--vert);
-  border-radius: 8px;
-  font-size: 0.95rem;
-  color: var(--texte);
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
-}
-
-.form-success {
-  padding: 1.5rem;
-  background: #e8f5e9;
-  border-left: 3px solid #4caf50;
-  border-radius: 8px;
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.form-success svg {
-  flex-shrink: 0;
-  margin-top: 0.15rem;
-  stroke: #4caf50;
-}
-
-.form-success strong {
-  display: block;
-  font-size: 1rem;
-  color: #2e7d32;
-  margin-bottom: 0.3rem;
-}
-
-.form-success p {
-  font-size: 0.9rem;
-  color: #555;
-  margin: 0;
-}
-
-.form-error {
-  padding: 1.5rem;
-  background: #ffebee;
-  border-left: 3px solid #f44336;
-  border-radius: 8px;
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.form-error svg {
-  flex-shrink: 0;
-  margin-top: 0.15rem;
-  stroke: #f44336;
-}
-
-.form-error strong {
-  display: block;
-  font-size: 1rem;
-  color: #c62828;
-  margin-bottom: 0.3rem;
-}
-
-.form-error p {
-  font-size: 0.9rem;
-  color: #555;
-  margin: 0;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .contact-form {
-    padding: 1.5rem;
-  }
-}
-</style>
-
 <body>
 
 <!-- ─── NAVBAR (chargée automatiquement) ─── -->
@@ -337,15 +138,26 @@
 
           <div class="form-group">
             <label for="sujet">Sujet <span class="required">*</span></label>
-            <select id="sujet" name="sujet" required>
-              <option value="">-- Choisissez un sujet --</option>
-              <option value="etat-civil">État civil</option>
-              <option value="urbanisme">Urbanisme & travaux</option>
-              <option value="conseil">Conseil municipal</option>
-              <option value="ecole">Écoles & enfance</option>
-              <option value="culture">Culture & associations</option>
-              <option value="autre">Autre demande</option>
-            </select>
+            <div class="custom-select-container">
+                <select id="sujet" name="sujet" required>
+                    <option value="" disabled selected>Sélectionnez l'objet de votre demande</option>
+                    <optgroup label="Administratif">
+                        <option value="etat-civil">État Civil (Actes, mariages, naissance)</option>
+                        <option value="urbanisme">Urbanisme (PLU, permis de construire)</option>
+                        <option value="elections">Élections & Recensement</option>
+                    </optgroup>
+                    <optgroup label="Scolaire & Enfance (SIVU)">
+                        <option value="cantine">Cantine & Menus</option>
+                        <option value="inscriptions">Inscriptions scolaires / Périscolaire</option>
+                    </optgroup>
+                    <optgroup label="Vie Locale">
+                        <option value="associations">Associations & Clubs</option>
+                        <option value="evenements">Événements & Culture</option>
+                        <option value="voirie">Voirie & Propreté</option>
+                    </optgroup>
+                    <option value="autre">Autre demande / Monsieur le Maire</option>
+                </select>
+            </div>
           </div>
 
           <div class="form-group">
@@ -472,6 +284,55 @@
     });
     */
   });
+  document.querySelectorAll('.custom-select-container').forEach(container => {
+        const select = container.querySelector('select');
+        const options = select.querySelectorAll('option, optgroup');
+        
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('custom-select-wrapper');
+        
+        const trigger = document.createElement('div');
+        trigger.classList.add('custom-select-trigger');
+        trigger.textContent = select.querySelector('option[selected]').textContent;
+        
+        const customOptions = document.createElement('div');
+        customOptions.classList.add('custom-options');
+
+        select.querySelectorAll('*').forEach(el => {
+            if (el.tagName === 'OPTGROUP') {
+                const label = document.createElement('div');
+                label.classList.add('custom-group-label');
+                label.textContent = el.label;
+                customOptions.appendChild(label);
+            } else if (el.tagName === 'OPTION') {
+                const opt = document.createElement('div');
+                opt.classList.add('custom-option');
+                if (el.disabled) opt.style.display = 'none';
+                opt.textContent = el.textContent;
+                opt.dataset.value = el.value;
+                
+                opt.addEventListener('click', () => {
+                    select.value = opt.dataset.value;
+                    trigger.textContent = opt.textContent;
+                    wrapper.classList.remove('open');
+                });
+                customOptions.appendChild(opt);
+            }
+        });
+
+        wrapper.appendChild(trigger);
+        wrapper.appendChild(customOptions);
+        container.appendChild(wrapper);
+
+        trigger.addEventListener('click', () => {
+            wrapper.classList.toggle('open');
+        });
+
+        // Fermer si on clique ailleurs
+        window.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) wrapper.classList.remove('open');
+        });
+    });
 </script>
 
 </body>
