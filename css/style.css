@@ -859,6 +859,24 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 
 
 /* ─── FORMULAIRE DE CONTACT ───────────────── */
+.contact-card h3 {
+  display: flex;
+  align-items: center; /* Aligne l'icône et le texte sur le même axe central */
+  gap: 0.5rem;         /* Remplace le margin-right du SVG */
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+  color: var(--vert);
+}
+
+.contact-card h3 svg {
+  /* On descend l'icône de 1 ou 2 pixels pour l'équilibrer à l'œil */
+  transform: translateY(1px); 
+  
+  /* On s'assure qu'il n'y a pas de marges parasites */
+  margin: 0;
+  flex-shrink: 0;
+}
+
 .contact-form {
   background: var(--blanc);
   border: 1px solid rgba(200,191,176,0.4);
