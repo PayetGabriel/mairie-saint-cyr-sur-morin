@@ -546,17 +546,6 @@
   margin-top: 0.5rem;
 }
 
-.nav-sub-header {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--pierre-dark);
-  font-weight: 600;
-  padding: 0.8rem 0 0.4rem;
-  margin-top: 0.5rem;
-  list-style: none;
-}
-
 
 /* ─── RESPONSIVE PAGES INTERNES ───────────── */
 
