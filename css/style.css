@@ -476,7 +476,19 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   text-shadow: 0 2px 20px rgba(0,0,0,.35);
   animation: fadeUp .8s ease .15s both;
 }
-.hero h1 em { font-style: italic; color: rgba(255,255,255,.82); }
+.hero h1 em { 
+  font-style: italic; 
+  color: rgba(255,255,255,.82);
+  
+  /* On force un interlignage plus serré pour le retour à la ligne interne */
+  display: inline-block; /* On change en inline-block pour pouvoir contrôler précisément le bloc */
+  line-height: 0.9;      /* On resserre très fort l'espace entre "Saint-Cyr" et "Ouen" */
+  vertical-align: top;
+  margin-top: 0.8rem; 
+  
+  /* Optionnel : assure-toi qu'il prend bien toute la largeur pour bien forcer le bloc */
+  width: 100%;
+}
 .hero-sub {
   color: rgba(255,255,255,.88); font-size: 1.05rem; font-weight: 300;
   margin-top: .9rem; max-width: 460px;
