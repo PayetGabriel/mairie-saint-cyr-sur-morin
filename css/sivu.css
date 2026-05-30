@@ -10,7 +10,7 @@
 
 .page-header {
   background: linear-gradient(135deg, var(--vert) 0%, var(--vert-clair) 100%);
-  padding: calc(4rem + 68px) 2.5rem 4rem;
+  padding: calc(4.5rem + 68px) 2.5rem 4rem;
   position: relative;
 }
 
@@ -580,7 +580,7 @@
     /* 1. On garde le padding bottom à 4rem (le même que sur ordi) */
     /* 2. On règle le padding top à (4rem + 68px de navbar) */
     /* Cela garantit que visuellement, il y a 4rem de vide en haut ET en bas */
-    padding-top: calc(4rem + 68px) !important;
+    padding-top: calc(3.5rem + 68px) !important;
     padding-bottom: 4rem !important;
     padding-left: 1.4rem;
     padding-right: 1.4rem;
