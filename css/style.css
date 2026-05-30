@@ -479,7 +479,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 .hero h1 em { 
   font-style: italic; 
   color: rgba(255,255,255,.82);
-  
+
   /* On force un interlignage plus serré pour le retour à la ligne interne */
   display: inline-block; /* On change en inline-block pour pouvoir contrôler précisément le bloc */
   line-height: 0.9;      /* On resserre très fort l'espace entre "Saint-Cyr" et "Ouen" */
@@ -867,6 +867,116 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 .maire-lire:hover { color: var(--vert-clair); }
 #mot-du-maire {
     scroll-margin-top: 90px; /* 68px de navbar + 22px de confort */
+}
+
+
+/* ─── CONTACT HEADER ──────────────────────── */
+.contact-header {
+    text-align: center;
+    padding-bottom: 6rem !important; /* On laisse de la place pour le bandeau */
+}
+
+/* ─── INFO BAR ────────────────────────────── */
+/* Alignement de l'horloge et du texte */
+.info-item {
+    display: flex;
+    align-items: center; /* Aligne verticalement au centre */
+    gap: 0.85rem;        /* Un peu plus d'espace avec l'icône */
+    font-size: 0.95rem;
+    color: var(--texte);
+}
+
+.info-item svg {
+    flex-shrink: 0;
+}
+
+/* Le badge en forme de pilule */
+.status-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.35rem 0.85rem;
+    border-radius: 100px; /* Forme pilule */
+    transition: all 0.3s ease;
+}
+
+/* Couleurs dynamiques pour le badge (utilisées par le JS) */
+.status-badge.open {
+    background: var(--vert-pale);
+    color: var(--vert);
+}
+
+.status-badge.closed {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.schedule-dropdown {
+    background: var(--blanc);
+    max-width: 600px; /* Plus étroit pour l'effet menu */
+    margin: -30px auto 3rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(58,90,64,0.12);
+    border: 1px solid var(--vert-pale);
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+}
+
+.dropdown-trigger {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.dropdown-trigger:hover { background: var(--creme); }
+
+.trigger-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.arrow-icon { transition: transform 0.3s; }
+.schedule-dropdown.open .arrow-icon { transform: rotate(180deg); }
+
+/* Contenu dépliant */
+.dropdown-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: var(--blanc);
+}
+
+.schedule-dropdown.open .dropdown-content {
+    max-height: 400px;
+    border-top: 1px solid var(--vert-pale);
+}
+
+.schedule-list {
+    list-style: none;
+    padding: 1rem 1.5rem;
+}
+
+.schedule-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    font-size: 0.9rem;
+    border-bottom: 1px dashed var(--vert-pale);
+}
+
+.schedule-list li:last-child { border: none; }
+.schedule-list li.is-today { 
+    color: var(--vert); 
+    font-weight: 600;
+    background: var(--vert-pale);
+    margin: 0 -1.5rem;
+    padding: 0.6rem 1.5rem;
 }
 
 

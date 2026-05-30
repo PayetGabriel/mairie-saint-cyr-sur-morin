@@ -37,10 +37,11 @@
 <!-- ─── NAVBAR (chargée automatiquement) ─── -->
 
 <!-- ─── PAGE HEADER ─── -->
-<header class="page-header" style="background: var(--vert);">
+<header class="page-header contact-header">
   <div class="page-header-inner">
+    <div class="section-label" style="color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.3); margin: 0 auto 1.5rem auto;">Contact</div>
     <h1>Nous contacter</h1>
-    <p class="page-intro">Une question, une démarche ? L'équipe municipale est à votre écoute.</p>
+    <p class="page-intro" style="margin-left: auto; margin-right: auto; text-align: center;">Une question, une démarche ? L'équipe municipale est à votre écoute.</p>
   </div>
 </header>
 
@@ -49,17 +50,39 @@
   <div class="section-inner">
     
     <!-- Alert Box pour horaires -->
-    <div class="alert-box primary" style="margin-bottom: 3rem; background: var(--vert-clair); border: none;">
-      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M12 6v6l4 2"/>
-      </svg>
-      <div>
-        <strong>Horaires d'ouverture</strong>
-        <p>La mairie est ouverte du lundi au vendredi de <span>9h à 12h30</span> et de <span>14h à 17h</span>. Fermée les week-ends et jours fériés.</p>
+    <div class="info-bar-container">
+      <div class="schedule-dropdown" id="scheduleDropdown">
+        
+        <div class="dropdown-trigger" onclick="toggleSchedule()">
+          <div class="info-item">
+            <svg width="20" height="20" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+            <span id="today-text">Chargement des horaires...</span>
+          </div>
+          
+          <div class="trigger-actions">
+            <span class="status-badge">...</span>
+            <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="dropdown-content">
+          <ul class="schedule-list">
+            <li data-day="1"><span>Lundi</span> <strong>09:00–12:30 / 14:00–17:30</strong></li>
+            <li data-day="2"><span>Mardi</span> <strong>09:00–12:30 / 14:00–17:30</strong></li>
+            <li data-day="3"><span>Mercredi</span> <strong>08:30–12:30</strong></li>
+            <li data-day="4"><span>Jeudi</span> <strong>09:00–12:30 / 14:00–17:30</strong></li>
+            <li data-day="5"><span>Vendredi</span> <strong>09:00–12:30</strong></li>
+            <li data-day="6"><span>Samedi</span> <strong>08:30–12:30</strong></li>
+            <li data-day="0"><span>Dimanche</span> <strong>Fermé</strong></li>
+          </ul>
+        </div>
       </div>
     </div>
-
+    
     <!-- Grid Contact + Formulaire -->
     <div class="sivu-contact">
       
@@ -234,6 +257,57 @@
     .then(data => {
       document.getElementById('footer-placeholder').innerHTML = data;
     });
+
+  function toggleSchedule() {
+      document.getElementById('scheduleDropdown').classList.toggle('open');
+  }
+
+  function updateMairieStatus() {
+      const now = new Date();
+      const day = now.getDay();
+      const hour = now.getHours();
+      const min = now.getMinutes();
+      const currentTime = hour + min / 60;
+
+      const statusBadge = document.querySelector('.status-badge');
+      const todayText = document.getElementById('today-text');
+      
+      // Définition des horaires (pour le texte dynamique)
+      const schedules = {
+          1: "Lun: 09:00–12:30 / 14:00–17:30",
+          2: "Mar: 09:00–12:30 / 14:00–17:30",
+          3: "Mer: 08:30–12:30",
+          4: "Jeu: 09:00–12:30 / 14:00–17:30",
+          5: "Ven: 09:00–12:30",
+          6: "Sam: 08:30–12:30",
+          0: "Dimanche: Fermé"
+      };
+
+      // Mise à jour du texte de la barre
+      todayText.innerHTML = `<strong>Aujourd'hui :</strong> ${schedules[day]}`;
+
+      // Surligner le jour dans la liste
+      const listItems = document.querySelectorAll('.schedule-list li');
+      listItems.forEach(li => {
+          if(parseInt(li.getAttribute('data-day')) === day) li.classList.add('is-today');
+      });
+
+      // Logique d'ouverture (réutilisée de l'étape précédente)
+      let isOpen = false;
+      if ([1, 2, 4].includes(day)) isOpen = (currentTime >= 9 && currentTime < 12.5) || (currentTime >= 14 && currentTime < 17.5);
+      else if ([3, 6].includes(day)) isOpen = (currentTime >= 8.5 && currentTime < 12.5);
+      else if (day === 5) isOpen = (currentTime >= 9 && currentTime < 12.5);
+
+      if (isOpen) {
+        statusBadge.textContent = "Ouvert";
+        statusBadge.className = "status-badge open"; // Applique le style pilule verte
+      } else {
+          statusBadge.textContent = "Fermé";
+          statusBadge.className = "status-badge closed"; // Applique le style pilule rouge
+      }
+  }
+
+  document.addEventListener('DOMContentLoaded', updateMairieStatus);
 
   // Gestion du formulaire de contact
   document.getElementById('contact-form').addEventListener('submit', function(e) {
