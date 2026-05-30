@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Associations & Clubs — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Découvrez les associations et clubs sportifs de Saint-Cyr-sur-Morin. 13 associations et 7 clubs sportifs vous attendent." />
+
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── ONGLETS ─────────────────────────────── */
+
+    .tabs-bar {
+      display: flex;
+      gap: 0.375rem;
+      background: var(--creme);
+      border: 1px solid rgba(200,191,176,0.45);
+      border-radius: 14px;
+      padding: 0.375rem;
+      width: fit-content;
+      margin-bottom: 2.5rem;
+    }
+
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.4rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--gris);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn svg { stroke: currentColor; flex-shrink: 0; }
+
+    .tab-btn:hover {
+      color: var(--texte);
+      background: rgba(200,191,176,0.25);
+    }
+
+    .tab-btn.active {
+      background: var(--blanc);
+      color: var(--vert);
+      box-shadow: 0 1px 6px rgba(42,37,32,0.08);
+    }
+
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+
+    /* ── COMPTEUR ────────────────────────────── */
+
+    .count-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .count-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--vert-pale);
+      color: var(--vert);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 0.85rem;
+      border-radius: 100px;
+    }
+
+
+    /* ── GRILLE ASSOCIATIONS ─────────────────── */
+
+    .asso-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .asso-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 16px;
+      padding: 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .asso-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--vert), var(--vert-clair));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .asso-card:hover {
+      border-color: rgba(58,90,64,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(42,37,32,0.07);
+    }
+
+    .asso-card:hover::after { transform: scaleX(1); }
+
+    .asso-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .asso-letter {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: var(--vert-pale);
+      color: var(--vert);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    /* Couleurs variées pour les avatars lettres */
+    .asso-card:nth-child(3n+1) .asso-letter { background: var(--vert-pale); color: var(--vert); }
+    .asso-card:nth-child(3n+2) .asso-letter { background: var(--jaune-pale); color: var(--jaune-bois); }
+    .asso-card:nth-child(3n+3) .asso-letter { background: var(--bleu-pale); color: var(--bleu); }
+
+    .asso-title-block { flex: 1; min-width: 0; }
+
+    .asso-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.3;
+      margin-bottom: 0.2rem;
+    }
+
+    .asso-fullname {
+      font-size: 0.78rem;
+      color: var(--gris);
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    .asso-desc {
+      font-size: 0.88rem;
+      color: var(--texte);
+      line-height: 1.7;
+      background: var(--creme);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+    }
+
+    .asso-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .asso-contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.83rem;
+      color: var(--gris);
+    }
+
+    .asso-contact-item svg { stroke: var(--pierre-dark); flex-shrink: 0; }
+
+    .asso-contact-item a {
+      color: var(--vert);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+      word-break: break-all;
+    }
+
+    .asso-contact-item a:hover { color: var(--vert-clair); }
+
+    .asso-horaire {
+      font-size: 0.82rem;
+      color: var(--pierre-dark);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .asso-horaire svg { stroke: var(--pierre-dark); flex-shrink: 0; margin-top: 0.1rem; }
+
+
+    /* ── SÉPARATEUR DE SECTION ───────────────── */
+
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 2.5rem 0 1.75rem;
+    }
+
+    .section-divider span {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      color: var(--pierre-dark);
+      white-space: nowrap;
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(200,191,176,0.5);
+    }
+
+
+    /* ── ACTIVITÉS EXTRAS ────────────────────── */
+
+    .extras-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .extra-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+      transition: all 0.2s;
+    }
+
+    .extra-card:hover {
+      border-color: var(--vert);
+      box-shadow: 0 4px 16px rgba(58,90,64,0.08);
+    }
+
+    .extra-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .extra-icon svg { stroke: var(--vert); }
+
+    .extra-content strong {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.3rem;
+    }
+
+    .extra-content p {
+      font-size: 0.82rem;
+      color: var(--gris);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .extra-content a {
+      color: var(--vert);
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+
+    /* ── SUBVENTIONS ─────────────────────────── */
+
+    .subv-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .subv-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .subv-step {
+      display: flex;
+      gap: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .subv-step-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--vert);
+      color: var(--blanc);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; /* Légèrement agrandi pour le style */
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      line-height: 0;
+      padding-bottom: 5px;
+    }
+
+    .subv-step:nth-child(3) .subv-step-num {
+      padding-bottom: 7px; /* Ajustement pour centrer visuellement le chiffre */
+    }
+    .subv-step:nth-child(4) .subv-step-num {
+      padding-bottom: 8px; /* On remonte un peu plus en augmentant le padding bas */
+    }
+
+    .subv-step-text strong {
+      display: block;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.2rem;
+    }
+
+    .subv-step-text p {
+      font-size: 0.85rem;
+      color: var(--gris);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .subv-doc-card {
+      background: var(--vert-pale);
+      border: 1px solid rgba(58,90,64,0.15);
+      border-radius: 16px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .subv-doc-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--vert);
+      font-weight: 600;
+    }
+
+    .subv-doc-card p {
+      font-size: 0.88rem;
+      color: var(--texte);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .subv-deadline {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--bois);
+      background: rgba(156,111,62,0.1);
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+    }
+
+    .subv-deadline svg { stroke: var(--bois); flex-shrink: 0; }
+
+    @media (max-width: 768px) {
+      .asso-grid { grid-template-columns: 1fr; }
+      .extras-grid { grid-template-columns: 1fr 1fr; }
+      .subv-layout { grid-template-columns: 1fr; }
+      .tabs-bar {
+        width: 100%;
+        justify-content: flex-start; /* On ne cherche plus à étirer */
+        overflow-x: auto;            /* Active le scroll horizontal */
+        white-space: nowrap;         /* Empêche le retour à la ligne */
+        padding: 0.5rem;
+        
+        /* Cache la barre de scroll pour un look plus propre (optionnel) */
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+      }
+      
+      .tabs-bar::-webkit-scrollbar { display: none; } /* Cache scroll Chrome/Safari */
+
+      .tab-btn {
+        flex: 0 0 auto; /* Empêche les boutons de rétrécir */
+        padding: 0.65rem 1.1rem; /* On réduit un peu le padding */
+      }
+    }
+
+    @media (max-width: 480px) {
+      .extras-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<div id="navbar-placeholder"></div>
+
+<!-- ─── PAGE HEADER ─── -->
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <nav class="breadcrumb">
+      <a href="/">Accueil</a>
+      <span>/</span>
+      <a href="#">Enfance & loisirs</a>
+      <span>/</span>
+      <span>Associations & clubs</span>
+    </nav>
+    <h1>Associations & clubs</h1>
+    <p class="page-intro">Envie de participer, de vous investir, de partager ? Saint-Cyr-sur-Morin vous attend.</p>
+  </div>
+</header>
+
+<!-- ─── SECTION PRINCIPALE ─── -->
+<section class="section">
+  <div class="section-inner">
+
+    <!-- Onglets -->
+    <div class="tabs-bar" role="tablist">
+      <button class="tab-btn active" data-tab="associations" role="tab">
+        <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        Associations
+      </button>
+      <button class="tab-btn" data-tab="clubs" role="tab">
+        <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 8v4l3 3"/>
+        </svg>
+        Clubs sportifs
+      </button>
+      <button class="tab-btn" data-tab="activites" role="tab">
+        <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        Autres activités
+      </button>
+      <button class="tab-btn" data-tab="subventions" role="tab">
+        <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+        Subventions
+      </button>
+    </div>
+
+
+    <!-- ──────────────────────────────────── -->
+    <!-- ONGLET ASSOCIATIONS                  -->
+    <!-- ──────────────────────────────────── -->
+    <div class="tab-pane active" id="tab-associations">
+
+      <div class="count-row">
+        <div class="count-pill">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+          </svg>
+          13 associations
+        </div>
+        <span style="font-size: 0.8rem; color: var(--gris);">Mis à jour le 3 février 2026</span>
+      </div>
+
+      <div class="asso-grid">
+
+        <!-- AAPPMA -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">A</div>
+            <div class="asso-title-block">
+              <div class="asso-name">AAPPMA — Pêche</div>
+              <div class="asso-fullname">Association agréée de pêche et de protection du milieu aquatique</div>
+            </div>
+          </div>
+          <div class="asso-desc">Pêche et protection du milieu aquatique sur les cours d'eau de la commune.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              SAINT-HILAIRE Didier
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:aappmadupetitmorin@gmail.com">aappmadupetitmorin@gmail.com</a>
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0608341950">06 08 34 19 50</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ADSENE -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">A</div>
+            <div class="asso-title-block">
+              <div class="asso-name">ADSENE</div>
+              <div class="asso-fullname">Association Défense Santé Eau Nature Environnement</div>
+            </div>
+          </div>
+          <div class="asso-desc">Promouvoir la défense de l'eau, de la nature, de l'environnement et de la santé publique.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Dexter Raynaud — 21 Av. Ferté-sous-Jouarre
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:adsene.france@gmail.com">adsene.france@gmail.com</a>
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0780030792">07 80 03 07 92</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Annie Patch -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">A</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Annie Patch</div>
+              <div class="asso-fullname">Patchwork & couture créative</div>
+            </div>
+          </div>
+          <div class="asso-desc">Divers travaux de couture et de patchwork — à la Maison Guibert.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              EVRARD France
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:mcjf-rigny@orange.fr">mcjf-rigny@orange.fr</a>
+            </div>
+            <div class="asso-horaire">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Jeudis de 10h à 17h — Maison Guibert
+            </div>
+          </div>
+        </div>
+
+        <!-- CCA -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">C</div>
+            <div class="asso-title-block">
+              <div class="asso-name">CCA</div>
+              <div class="asso-fullname">Comité Communal Animation</div>
+            </div>
+          </div>
+          <div class="asso-desc">Fête aux Fleurs, Brocante, Fête de la Musique, 14 juillet, soirée Beaujolais, marché de Noël…</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              HUBERT André
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0676890769">06 76 89 07 69</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cercle des anciens -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">C</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Cercle des Anciens</div>
+              <div class="asso-fullname">Animations & convivialité pour les séniors</div>
+            </div>
+          </div>
+          <div class="asso-desc">Réunions à la Maison Guibert, pétanque, brocante, repas et sorties.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              ALLARD Martine
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:cercledesanciens262@gmail.com">cercledesanciens262@gmail.com</a>
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0698671852">06 98 67 18 52</a>
+            </div>
+            <div class="asso-horaire">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Mardis 14h–18h — Maison Guibert
+            </div>
+          </div>
+        </div>
+
+        <!-- Croquons les savoirs -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">C</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Croquons les Savoirs</div>
+              <div class="asso-fullname">Université populaire</div>
+            </div>
+          </div>
+          <div class="asso-desc">Dentelles, fil à tisser, broderies anciennes, informatique.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              DUSSOURD Marie-Paule
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:mariepaule.dussourd@wanadoo.fr">mariepaule.dussourd@wanadoo.fr</a>
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0671206518">06 71 20 65 18</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Familles Rurales -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">F</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Familles Rurales</div>
+              <div class="asso-fullname">Activités & services pour les familles</div>
+            </div>
+          </div>
+          <div class="asso-desc">Informatique, couture, tricot, cours de français, théâtre, sorties jeunes & familles, animations village, défense du consommateur, écrivain public.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              LOISON Isabelle
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:stcyr77@orange.fr">stcyr77@orange.fr</a>
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0160238195">01 60 23 81 95</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- La Boîte à Musiques -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">B</div>
+            <div class="asso-title-block">
+              <div class="asso-name">La Boîte à Musiques</div>
+              <div class="asso-fullname">École de musique — CC2M</div>
+            </div>
+          </div>
+          <div class="asso-desc">Cours d'instruments (guitare, piano, saxophone, trompette…), ensembles collectifs, théorie et solfège. Cours dispensés à Saint-Cyr et sur tout le territoire de la CC2M.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              SLAMKA Valéry — pôle Saint-Cyr
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:stcyr@boiteamusiques.com">stcyr@boiteamusiques.com</a>
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0607180177">06 07 18 01 77</a>
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <a href="https://boiteamusiques.com" target="_blank" rel="noopener">boiteamusiques.com</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Les Amis Sainte Julitte -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">A</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Les Amis Sainte Julitte</div>
+              <div class="asso-fullname">Patrimoine religieux</div>
+            </div>
+          </div>
+          <div class="asso-desc">Sauvegarde et restauration de l'église de Saint-Cyr-sur-Morin.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              DELARUE Francis
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:lesamisdestejulitte@laposte.net">lesamisdestejulitte@laposte.net</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mangeux d'Ane -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">M</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Mangeux d'Âne</div>
+              <div class="asso-fullname">Animation du hameau de Biercy</div>
+            </div>
+          </div>
+          <div class="asso-desc">Fête de Biercy et sa brocante — Fête autour du sapin de Noël.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              SCHOTT Laurent — Rue de la Ferme, Biercy
+            </div>
+          </div>
+        </div>
+
+        <!-- TERROIRS -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">T</div>
+            <div class="asso-title-block">
+              <div class="asso-name">TERROIRS</div>
+              <div class="asso-fullname">Travailler Ensemble à la Réalisation et la Rédaction d'Objets, d'Images et de Recherches sur nos Sites</div>
+            </div>
+          </div>
+          <div class="asso-desc">Recherche sur la mémoire, les savoirs et les richesses culturelles et écologiques de Saint-Cyr et Saint-Ouen-sur-Morin.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              ROUSSEAUX Catherine, présidente
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:contact.terroirs@gmail.com">contact.terroirs@gmail.com</a>
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0678747961">06 78 74 79 61</a>
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <a href="https://terroirs77.fr" target="_blank" rel="noopener">terroirs77.fr</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Usages de Biercy -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">U</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Usages de Biercy</div>
+              <div class="asso-fullname">Hameau de Biercy</div>
+            </div>
+          </div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              BOURNICHE François — Rue du Gouffre, Biercy
+            </div>
+          </div>
+        </div>
+
+        <!-- Usages de Monthomé -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter">U</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Usages de Monthomé</div>
+              <div class="asso-fullname">Hameau de Monthomé</div>
+            </div>
+          </div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              LAMBERT Philippe — 1 rue Guyot, Monthomé
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /asso-grid -->
+    </div><!-- /tab-associations -->
+
+
+    <!-- ──────────────────────────────────── -->
+    <!-- ONGLET CLUBS SPORTIFS                -->
+    <!-- ──────────────────────────────────── -->
+    <div class="tab-pane" id="tab-clubs">
+
+      <div class="count-row">
+        <div class="count-pill">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+          </svg>
+          7 clubs sportifs
+        </div>
+        <span style="font-size: 0.8rem; color: var(--gris);">Mis à jour le 26 février 2024</span>
+      </div>
+
+      <div class="asso-grid">
+
+        <!-- ASELPM -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter" style="background: var(--rouge-pale); color: var(--rouge);">A</div>
+            <div class="asso-title-block">
+              <div class="asso-name">ASELPM</div>
+              <div class="asso-fullname">Gym, Yoga & Jeux de société</div>
+            </div>
+          </div>
+          <div class="asso-desc">Gym, Yoga Hatha, Jeux de Société. Salle Polyvalente av. Daniel Simon et Saint-Ouen-sur-Morin.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Mme LOISEAU
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0635949851">06 35 94 98 51</a> / <a href="tel:0633571123">06 33 57 11 23</a>
+            </div>
+            <div class="asso-horaire">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Gym : Lun 14h–15h / Mer 19h–21h / Jeu 18h30–19h30 / Ven 14h–15h<br/>
+              Yoga : Sam 9h–10h30 (St-Ouen) · Jeux : Jeu 14h–18h (St-Ouen)
+            </div>
+          </div>
+        </div>
+
+        <!-- Canoë-Kayak -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter" style="background: var(--bleu-pale); color: var(--bleu);">C</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Club des Meulières</div>
+              <div class="asso-fullname">Canoë-Kayak</div>
+            </div>
+          </div>
+          <div class="asso-desc">Canoë-Kayak en période scolaire sur le Petit Morin, le Grand Morin ou la Marne.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              EVRARD Fabrice
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <a href="mailto:ckdesmeulieres@wanadoo.fr">ckdesmeulieres@wanadoo.fr</a>
+            </div>
+            <div class="asso-horaire">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Principalement le samedi après-midi en période scolaire
+            </div>
+          </div>
+        </div>
+
+        <!-- Tennis -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter" style="background: var(--jaune-pale); color: var(--jaune-bois);">T</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Club Tennis</div>
+              <div class="asso-fullname">Tennis adultes & enfants</div>
+            </div>
+          </div>
+          <div class="asso-desc">Cours de tennis adultes et enfants.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              GUEGAN Karine
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0682054797">06 82 05 47 97</a>
+            </div>
+            <div class="asso-horaire">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Adultes : samedi journée · Enfants : samedi matin
+            </div>
+          </div>
+        </div>
+
+        <!-- Judo -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter" style="background: var(--vert-pale); color: var(--vert);">J</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Judo Club</div>
+              <div class="asso-fullname">Judo & Éveil judo enfants</div>
+            </div>
+          </div>
+          <div class="asso-desc">Éveil judo pour les enfants de 4-5 ans et cours de judo pour les 6-9 ans.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              DELL'ANGELO Vanessa
+            </div>
+            <div class="asso-horaire">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Éveil Judo (4-5 ans) : Mer 13h–14h<br/>
+              Judo enfants (6-9 ans) : Mer 14h–15h
+            </div>
+          </div>
+        </div>
+
+        <!-- TBDM -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter" style="background: var(--rouge-pale); color: var(--rouge);">T</div>
+            <div class="asso-title-block">
+              <div class="asso-name">TBDM</div>
+              <div class="asso-fullname">Trail, Randonnée & Running</div>
+            </div>
+          </div>
+          <div class="asso-desc">Marches nordiques, randonnées, courses sur route, préparations à l'ultra trail.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              MONTICO Stéphanie
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0679781203">06 79 78 12 03</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Les Félines -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter" style="background: var(--violet-pale); color: var(--violet);">F</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Les Félines</div>
+              <div class="asso-fullname">Majorettes</div>
+            </div>
+          </div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Mme LIMASSET
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0667255183">06 67 25 51 83</a>
+            </div>
+            <div class="asso-horaire">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Mercredis & vendredis — Salle Polyvalente
+            </div>
+          </div>
+        </div>
+
+        <!-- Yoga de Geneviève -->
+        <div class="asso-card reveal">
+          <div class="asso-card-head">
+            <div class="asso-letter" style="background: var(--jaune-pale); color: var(--jaune-bois);">Y</div>
+            <div class="asso-title-block">
+              <div class="asso-name">Yoga de Geneviève</div>
+              <div class="asso-fullname">Yoga & relaxation</div>
+            </div>
+          </div>
+          <div class="asso-desc">Yoga et relaxation pour tous niveaux.</div>
+          <div class="asso-contact">
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              LEGRON Geneviève
+            </div>
+            <div class="asso-contact-item">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0164030261">01 64 03 02 61</a> / <a href="tel:0625122377">06 25 12 23 77</a>
+            </div>
+            <div class="asso-horaire">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Mercredis 18h–19h30 — Maison Guibert (hors vacances scolaires)
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /asso-grid clubs -->
+    </div><!-- /tab-clubs -->
+
+
+    <!-- ──────────────────────────────────── -->
+    <!-- ONGLET AUTRES ACTIVITÉS              -->
+    <!-- ──────────────────────────────────── -->
+    <div class="tab-pane" id="tab-activites">
+
+      <div class="info-note" style="margin-bottom: 2rem;">
+        <strong>Bon à savoir</strong> — Saint-Cyr-sur-Morin et ses environs offrent de nombreuses activités de plein air accessibles à tous.
+      </div>
+
+      <div class="section-divider"><span>Nature & plein air</span></div>
+
+      <div class="extras-grid">
+        <div class="extra-card reveal">
+          <div class="extra-icon">
+            <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 3-6 4 10"/><path d="M3 17h18"/></svg>
+          </div>
+          <div class="extra-content">
+            <strong>Randonnées pédestres</strong>
+            <p>Plusieurs parcours répertoriés dans les guides GR. Un sentier balisé sur Saint-Cyr-sur-Morin est en cours de réalisation.</p>
+          </div>
+        </div>
+
+        <div class="extra-card reveal">
+          <div class="extra-icon">
+            <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <div class="extra-content">
+            <strong>Vélo — Vallée du Petit Morin</strong>
+            <p>La CC2M met en place un circuit cyclable au départ de Saint-Cyr-sur-Morin dans la Vallée du Petit Morin.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-divider" style="margin-top: 2.5rem;"><span>Piscines & bases nautiques</span></div>
+
+      <div class="extras-grid">
+        <div class="extra-card reveal">
+          <div class="extra-icon">
+            <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M2 12h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2a2 2 0 0 1 2-2h2"/><path d="M6 12V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"/></svg>
+          </div>
+          <div class="extra-content">
+            <strong>Piscine — La Ferté-sous-Jouarre</strong>
+            <p>À 6 km de Saint-Cyr-sur-Morin.</p>
+            <a href="tel:0899106269">08 99 10 62 69</a>
+          </div>
+        </div>
+
+        <div class="extra-card reveal">
+          <div class="extra-icon">
+            <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M2 12h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-2a2 2 0 0 1 2-2h2"/><path d="M6 12V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8"/></svg>
+          </div>
+          <div class="extra-content">
+            <strong>Piscine découverte — Bellot</strong>
+            <p>À 12 km. Ouverte de mai à septembre.</p>
+            <a href="tel:0899102602">08 99 10 26 02</a>
+          </div>
+        </div>
+
+        <div class="extra-card reveal">
+          <div class="extra-icon">
+            <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M2 20 Q6 16 10 20 Q14 24 18 20 L22 16"/><path d="M2 14 Q6 10 10 14 Q14 18 18 14 L22 10"/></svg>
+          </div>
+          <div class="extra-content">
+            <strong>Base Canoë-Kayak — Verdelot</strong>
+            <p>À 15 km de Saint-Cyr-sur-Morin.</p>
+            <a href="tel:0164048792">01 64 04 87 92</a>
+          </div>
+        </div>
+
+        <div class="extra-card reveal">
+          <div class="extra-icon">
+            <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M19 9V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v3"/><path d="M3 16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-1 0V11a2 2 0 0 0-4 0v1.5a.5.5 0 0 1-1 0V11a2 2 0 0 0-4 0z"/></svg>
+          </div>
+          <div class="extra-content">
+            <strong>Poney Club le Cheyenne</strong>
+            <p>Loisirs équestres à Charnesseuil.</p>
+            <a href="tel:0619846035">06 19 84 60 35</a>
+          </div>
+        </div>
+      </div>
+    </div><!-- /tab-activites -->
+
+
+    <!-- ──────────────────────────────────── -->
+    <!-- ONGLET SUBVENTIONS                   -->
+    <!-- ──────────────────────────────────── -->
+    <div class="tab-pane" id="tab-subventions">
+
+      <div class="subv-layout">
+        <div>
+          <h2 class="section-title" style="margin-bottom: 1.75rem;">Comment déposer votre dossier</h2>
+
+          <div class="subv-steps">
+            <div class="subv-step reveal">
+              <div class="subv-step-num">1</div>
+              <div class="subv-step-text">
+                <strong>Téléchargez le dossier</strong>
+                <p>Le formulaire de demande de subvention est disponible ci-contre en PDF. Imprimez-le et remplissez-le à la main.</p>
+              </div>
+            </div>
+            <div class="subv-step reveal">
+              <div class="subv-step-num">2</div>
+              <div class="subv-step-text">
+                <strong>Complétez le dossier</strong>
+                <p>Joignez les pièces justificatives demandées : bilan de l'année précédente, liste des membres du bureau, relevé d'identité bancaire.</p>
+              </div>
+            </div>
+            <div class="subv-step reveal">
+              <div class="subv-step-num">3</div>
+              <div class="subv-step-text">
+                <strong>Déposez en mairie</strong>
+                <p>Remettez votre dossier complet à l'accueil de la mairie avant la date limite.</p>
+              </div>
+            </div>
+            <div class="subv-step reveal">
+              <div class="subv-step-num">4</div>
+              <div class="subv-step-text">
+                <strong>Examen par le conseil</strong>
+                <p>Les dossiers sont étudiés par le conseil municipal qui statue sur l'attribution des subventions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="subv-doc-card reveal">
+            <h3>Dossier de demande de subvention</h3>
+            <p>Ce dossier est destiné aux associations de la commune souhaitant solliciter une aide financière de la mairie pour l'année en cours.</p>
+
+            <div class="subv-deadline">
+              <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Date limite : 3 février (chaque année)
+            </div>
+
+            <a href="/assets/docs/subvention-associations.pdf" class="btn btn-primary" download style="justify-content: center; margin-top: 0.5rem;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Télécharger le dossier (PDF)
+            </a>
+
+            <p style="font-size: 0.8rem; color: var(--gris); margin-top: 0.5rem;">
+              Pour toute question, contactez la mairie au <a href="tel:0160238024" style="color: var(--vert); font-weight: 500;">01 60 23 80 24</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div><!-- /tab-subventions -->
+
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<div id="footer-placeholder"></div>
+
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+
+  // Onglets
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabPanes.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + target).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

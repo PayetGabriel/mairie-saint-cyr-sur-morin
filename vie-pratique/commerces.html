@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Commerces & Artisans — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Découvrez les commerces et artisans de Saint-Cyr-sur-Morin. Boulangerie, supérette, coiffure, restaurants et artisans locaux à votre service." />
+
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <link rel="apple-touch-icon" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+    /* ── GRILLE COMMERCES ─────────────────────── */
+    .commerces-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .commerce-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 16px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .commerce-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--vert);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .commerce-card:hover {
+      border-color: rgba(58,90,64,0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(42,37,32,0.08);
+    }
+
+    .commerce-card:hover::before {
+      opacity: 1;
+    }
+
+    .commerce-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .commerce-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .commerce-icon svg {
+      stroke: var(--vert);
+    }
+
+    .commerce-title-block {
+      flex: 1;
+    }
+
+    .commerce-category {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--vert);
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .commerce-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.3;
+    }
+
+    .commerce-address {
+      font-size: 0.85rem;
+      color: var(--gris);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .commerce-address svg {
+      flex-shrink: 0;
+      stroke: var(--pierre-dark);
+    }
+
+    .commerce-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .commerce-horaires {
+      font-size: 0.85rem;
+      color: var(--texte);
+      line-height: 1.6;
+      background: var(--creme);
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+    }
+
+    .commerce-horaires .label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gris);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .commerce-closed {
+      font-size: 0.8rem;
+      color: var(--rouge-clair);
+      font-weight: 500;
+    }
+
+    .commerce-tel a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.88rem;
+      color: var(--vert);
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .commerce-tel a:hover {
+      color: var(--vert-clair);
+    }
+
+    .commerce-tel a svg {
+      stroke: currentColor;
+    }
+
+    .commerce-email a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--vert);
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .commerce-email a:hover {
+      color: var(--vert-clair);
+    }
+
+    /* ── SECTION ARTISANS ─────────────────────── */
+    .artisans-banner {
+      background: var(--texte);
+      border-radius: 20px;
+      padding: 2.5rem 3rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .artisans-banner-text h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--blanc);
+      margin-bottom: 0.6rem;
+    }
+
+    .artisans-banner-text p {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      max-width: 480px;
+    }
+
+    .artisans-banner .btn {
+      background: var(--vert);
+      color: var(--blanc);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .artisans-banner .btn:hover {
+      background: var(--vert-clair);
+    }
+
+    /* ── FILTRE CATÉGORIES ───────────────────── */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .filter-btn {
+      padding: 0.5rem 1.1rem;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1.5px solid rgba(200,191,176,0.5);
+      background: var(--blanc);
+      color: var(--texte);
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--vert);
+      color: var(--blanc);
+      border-color: var(--vert);
+    }
+
+    /* ── MISE À JOUR DATE ─────────────────────── */
+    .update-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--gris);
+      background: var(--creme);
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      border: 1px solid rgba(200,191,176,0.4);
+      margin-top: 0.75rem;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────── */
+    @media (max-width: 768px) {
+      .commerces-grid {
+        grid-template-columns: 1fr;
+      }
+      .artisans-banner {
+        flex-direction: column;
+        padding: 2rem;
+        text-align: center;
+      }
+      .artisans-banner-text p {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .filter-bar {
+        gap: 0.4rem;
+      }
+      .filter-btn {
+        font-size: 0.78rem;
+        padding: 0.45rem 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<div id="navbar-placeholder"></div>
+
+<!-- ─── PAGE HEADER ─── -->
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <nav class="breadcrumb">
+      <a href="/">Accueil</a>
+      <span>/</span>
+      <a href="#">Services & vie pratique</a>
+      <span>/</span>
+      <span>Commerces & artisans</span>
+    </nav>
+    <h1>Commerces & artisans</h1>
+    <p class="page-intro">À deux pas de chez vous, de nombreux commerçants et artisans à votre service.</p>
+    <div class="update-badge">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+      </svg>
+      Mis à jour le 14 novembre 2025
+    </div>
+  </div>
+</header>
+
+<!-- ─── SECTION PRINCIPALE ─── -->
+<section class="section">
+  <div class="section-inner">
+
+    <!-- Filtre -->
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" data-cat="all">Tous</button>
+      <button class="filter-btn" data-cat="alimentation">Alimentation</button>
+      <button class="filter-btn" data-cat="restaurant">Restaurants</button>
+      <button class="filter-btn" data-cat="service">Services</button>
+      <button class="filter-btn" data-cat="sante">Santé & beauté</button>
+    </div>
+
+    <!-- Grille des commerces -->
+    <div class="commerces-grid" id="commerces-grid">
+
+      <!-- Boulangerie -->
+      <div class="commerce-card reveal" data-cat="alimentation">
+        <div class="commerce-header">
+          <div class="commerce-icon">
+            <svg width="22" height="22" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+              <line x1="6" y1="1" x2="6" y2="4"/>
+              <line x1="10" y1="1" x2="10" y2="4"/>
+              <line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+          </div>
+          <div class="commerce-title-block">
+            <div class="commerce-category">Boulangerie</div>
+            <div class="commerce-name">Boulangerie</div>
+          </div>
+        </div>
+        <div class="commerce-address">
+          <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          8 place de l'Église
+        </div>
+        <div class="commerce-meta">
+          <div class="commerce-horaires">
+            <span class="label">Horaires</span>
+            Lun, Mar, Jeu, Ven, Sam : 7h – 13h / 16h – 19h30
+            <div class="commerce-closed">Fermé le mercredi</div>
+          </div>
+          <div class="commerce-tel">
+            <a href="tel:0160238066">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              01 60 23 80 66
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Supérette -->
+      <div class="commerce-card reveal" data-cat="alimentation">
+        <div class="commerce-header">
+          <div class="commerce-icon">
+            <svg width="22" height="22" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </div>
+          <div class="commerce-title-block">
+            <div class="commerce-category">Alimentation</div>
+            <div class="commerce-name">Supérette</div>
+          </div>
+        </div>
+        <div class="commerce-address">
+          <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          Rue Eugène Daumont
+        </div>
+        <div class="commerce-meta">
+          <div class="commerce-horaires">
+            <span class="label">Horaires</span>
+            Lun, Mar, Jeu, Ven, Sam : 8h – 13h / 15h30 – 20h30
+            <div class="commerce-closed">Fermé le mercredi</div>
+          </div>
+          <div class="commerce-tel">
+            <a href="tel:0160238475">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              01 60 23 84 75
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bar Tabac -->
+      <div class="commerce-card reveal" data-cat="service">
+        <div class="commerce-header">
+          <div class="commerce-icon">
+            <svg width="22" height="22" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/><line x1="6" y1="2" x2="6" y2="8"/><line x1="10" y1="2" x2="10" y2="8"/>
+            </svg>
+          </div>
+          <div class="commerce-title-block">
+            <div class="commerce-category">Bar · Tabac · Presse</div>
+            <div class="commerce-name">Le Saint-Cyr-sur-Morin</div>
+          </div>
+        </div>
+        <div class="commerce-address">
+          <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          Place de l'Église
+        </div>
+        <div class="commerce-meta">
+          <div class="commerce-horaires">
+            <span class="label">Horaires</span>
+            Lun, Mar, Jeu, Ven : 7h – 19h30<br />
+            Samedi : 8h – 19h30 · Dimanche : 8h – 13h
+          </div>
+          <div class="commerce-tel">
+            <a href="tel:0160238027">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              01 60 23 80 27
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Look Coiffure -->
+      <div class="commerce-card reveal" data-cat="sante">
+        <div class="commerce-header">
+          <div class="commerce-icon">
+            <svg width="22" height="22" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.04"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.04"/>
+            </svg>
+          </div>
+          <div class="commerce-title-block">
+            <div class="commerce-category">Coiffure</div>
+            <div class="commerce-name">Look Coiffure</div>
+          </div>
+        </div>
+        <div class="commerce-address">
+          <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          6 avenue de La Ferté-sous-Jouarre
+        </div>
+        <div class="commerce-meta">
+          <div class="commerce-horaires">
+            <span class="label">Horaires</span>
+            Mar – Jeu : 9h – 12h / 14h – 18h30<br />
+            Vendredi : 10h – 20h · Samedi : 9h – 18h
+            <div class="commerce-closed">Fermé le lundi</div>
+          </div>
+          <div class="commerce-tel">
+            <a href="tel:0160238313">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              01 60 23 83 13
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Garage du chemin -->
+      <div class="commerce-card reveal" data-cat="service">
+        <div class="commerce-header">
+          <div class="commerce-icon">
+            <svg width="22" height="22" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+              <rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <div class="commerce-title-block">
+            <div class="commerce-category">Automobile</div>
+            <div class="commerce-name">Garage du Chemin</div>
+          </div>
+        </div>
+        <div class="commerce-address">
+          <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          21 avenue Daniel Simon
+        </div>
+        <div class="commerce-meta">
+          <div class="commerce-tel">
+            <a href="tel:0160448470">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              01 60 44 84 70
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cantine de l'Œuf dur -->
+      <div class="commerce-card reveal" data-cat="restaurant">
+        <div class="commerce-header">
+          <div class="commerce-icon">
+            <svg width="22" height="22" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+          </div>
+          <div class="commerce-title-block">
+            <div class="commerce-category">Restaurant</div>
+            <div class="commerce-name">Cantine de l'Œuf Dur</div>
+          </div>
+        </div>
+        <div class="commerce-address">
+          <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          11 promenade Pierre Mac Orlan
+        </div>
+        <div class="commerce-meta">
+          <div class="commerce-horaires">
+            <span class="label">À propos</span>
+            Restaurant joyeux et convivial — plats cuisinés avec amour
+          </div>
+          <div class="commerce-tel">
+            <a href="tel:0769798506">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              07 69 79 85 06
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- La Kuisine de Karine -->
+      <div class="commerce-card reveal" data-cat="restaurant">
+        <div class="commerce-header">
+          <div class="commerce-icon">
+            <svg width="22" height="22" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M3 11l19-9-9 19-2-8-8-2z"/>
+            </svg>
+          </div>
+          <div class="commerce-title-block">
+            <div class="commerce-category">Traiteur</div>
+            <div class="commerce-name">La Kuisine de Karine</div>
+          </div>
+        </div>
+        <div class="commerce-meta">
+          <div class="commerce-tel">
+            <a href="tel:0681332799">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              06 81 33 27 99
+            </a>
+          </div>
+          <div class="commerce-email">
+            <a href="mailto:lacuisinedekarine@gmail.com">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+              </svg>
+              lacuisinedekarine@gmail.com
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Restaurant l'Hermitière -->
+      <div class="commerce-card reveal" data-cat="restaurant">
+        <div class="commerce-header">
+          <div class="commerce-icon">
+            <svg width="22" height="22" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+          </div>
+          <div class="commerce-title-block">
+            <div class="commerce-category">Restaurant</div>
+            <div class="commerce-name">L'Hermitière</div>
+          </div>
+        </div>
+        <div class="commerce-address">
+          <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+          </svg>
+          Rue des Meulières — Hameau de l'Hermitière
+        </div>
+        <div class="commerce-meta">
+          <div class="commerce-tel">
+            <a href="tel:0160238001">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              01 60 23 80 01
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /commerces-grid -->
+
+    <!-- Bannière artisans -->
+    <div class="artisans-banner reveal">
+      <div class="artisans-banner-text">
+        <h3>Vous cherchez un artisan ?</h3>
+        <p>De nombreux artisans travaillent sur notre commune : plombiers, chauffagistes, maçons, électriciens, espaces verts… La mairie recense toutes les activités et peut vous communiquer leurs coordonnées.</p>
+      </div>
+      <a href="/contact.html" class="btn">
+        Contacter la mairie
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<div id="footer-placeholder"></div>
+
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  // Chargement footer
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+
+  // Filtre catégories
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.commerce-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cat = btn.dataset.cat;
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
