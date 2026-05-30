@@ -4,6 +4,9 @@
 
 
 /* ─── HERO PAGES INTERNES ─────────────────── */
+.hero-bg {
+  background-image: url("../assets/img/Ecole.jpg");
+}
 
 .page-header {
   background: linear-gradient(135deg, var(--vert) 0%, var(--vert-clair) 100%);
