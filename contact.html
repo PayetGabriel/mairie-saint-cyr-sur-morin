@@ -407,31 +407,6 @@
             if (!wrapper.contains(e.target)) wrapper.classList.remove('open');
         });
     });
-
-    window.addEventListener('DOMContentLoaded', () => {
-      // 1. Vérifie si l'URL contient #horaires
-      if (window.location.hash === '#horaires') {
-        
-        // 2. Trouve l'élément déclencheur
-        const trigger = document.querySelector('.dropdown-trigger');
-        
-        // 3. Déclenche la fonction si l'élément existe
-        if (trigger) {
-          toggleSchedule();
-
-          // On attend que le menu se déplie (si c'est une transition CSS)
-          setTimeout(() => {
-            const elementPosition = trigger.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - 100; // -100px de marge en haut
-
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: "smooth"
-            });
-          }, 300); // 300ms correspond au temps de ton animation CSS
-        }
-      }
-    });
 </script>
 
 </body>
