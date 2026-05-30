@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Salle polyvalente — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Réservez la salle polyvalente de Saint-Cyr-sur-Morin pour vos fêtes, mariages, banquets et concerts. Tarifs et informations pratiques." />
+
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── CHIFFRES CLÉS ───────────────────────── */
+
+    .key-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .key-stat {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .key-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: var(--vert);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .key-stat-label {
+      font-size: 0.82rem;
+      color: var(--gris);
+      line-height: 1.4;
+    }
+
+
+    /* ── SAISONS ─────────────────────────────── */
+
+    .saison-tabs {
+      display: flex;
+      gap: 0.375rem;
+      background: var(--creme);
+      border: 1px solid rgba(200,191,176,0.45);
+      border-radius: 14px;
+      padding: 0.375rem;
+      width: fit-content;
+      margin-bottom: 2rem;
+    }
+
+    .saison-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.4rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--gris);
+      transition: all 0.2s;
+    }
+
+    .saison-btn.active {
+      background: var(--blanc);
+      color: var(--vert);
+      box-shadow: 0 1px 6px rgba(42,37,32,0.08);
+    }
+
+    .saison-btn:hover:not(.active) {
+      color: var(--texte);
+      background: rgba(200,191,176,0.2);
+    }
+
+    .saison-pane { display: none; }
+    .saison-pane.active { display: block; }
+
+
+    /* ── TABLEAU TARIFS ──────────────────────── */
+
+    .tarifs-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .tarif-bloc {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(200,191,176,0.35);
+    }
+
+    .tarif-bloc-head {
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .tarif-bloc-head svg { flex-shrink: 0; }
+
+    .tarif-bloc-head span {
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    /* Commune */
+    .tarif-bloc.commune .tarif-bloc-head {
+      background: var(--vert-pale);
+    }
+
+    .tarif-bloc.commune .tarif-bloc-head svg { stroke: var(--vert); }
+    .tarif-bloc.commune .tarif-bloc-head span { color: var(--vert); }
+
+    /* Extérieur */
+    .tarif-bloc.exterieur .tarif-bloc-head {
+      background: var(--jaune-pale);
+    }
+
+    .tarif-bloc.exterieur .tarif-bloc-head svg { stroke: var(--jaune-bois); }
+    .tarif-bloc.exterieur .tarif-bloc-head span { color: var(--jaune-bois); }
+
+    /* Tableau */
+    .tarif-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--blanc);
+    }
+
+    .tarif-table thead tr {
+      background: var(--creme);
+    }
+
+    .tarif-table th {
+      padding: 0.65rem 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--pierre-dark);
+      text-align: right;
+    }
+
+    .tarif-table th:first-child { text-align: left; }
+
+    .tarif-table td {
+      padding: 0.8rem 1rem;
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(200,191,176,0.2);
+      text-align: right;
+      color: var(--texte);
+    }
+
+    .tarif-table td:first-child {
+      text-align: left;
+      font-weight: 500;
+    }
+
+    .tarif-table .price-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--vert);
+    }
+
+    .tarif-bloc.exterieur .tarif-table .price-main {
+      color: var(--jaune-bois);
+    }
+
+    .tarif-table .price-sub {
+      font-size: 0.82rem;
+      color: var(--gris);
+    }
+
+    .tarif-table tr:hover td {
+      background: rgba(200,191,176,0.06);
+    }
+
+
+    /* ── CONDITIONS ──────────────────────────── */
+
+    .conditions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .condition-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .condition-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .condition-icon svg { stroke: var(--vert); }
+
+    .condition-card strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.3rem;
+    }
+
+    .condition-card p {
+      font-size: 0.82rem;
+      color: var(--gris);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+
+    /* ── RESPONSIVE ──────────────────────────── */
+
+    @media (max-width: 860px) {
+      .tarifs-section {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .key-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+      .key-stats .key-stat:last-child {
+        grid-column: span 2;
+      }
+      .saison-tabs {
+        width: 100%;
+      }
+      .saison-btn {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<div id="navbar-placeholder"></div>
+
+<!-- ─── PAGE HEADER ─── -->
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <nav class="breadcrumb">
+      <a href="/">Accueil</a>
+      <span>/</span>
+      <a href="#">Enfance & loisirs</a>
+      <span>/</span>
+      <span>Salle polyvalente</span>
+    </nav>
+    <h1>Salle polyvalente</h1>
+    <p class="page-intro">Organisez vos fêtes, mariages, concerts et banquets dans notre salle au cœur du village.</p>
+  </div>
+</header>
+
+<!-- ─── SECTION PRINCIPALE ─── -->
+<section class="section">
+  <div class="section-inner">
+
+    <!-- Chiffres clés -->
+    <div class="key-stats reveal">
+      <div class="key-stat">
+        <div class="key-stat-num">200</div>
+        <div class="key-stat-label">personnes debout<br>(concert)</div>
+      </div>
+      <div class="key-stat">
+        <div class="key-stat-num">120</div>
+        <div class="key-stat-label">personnes assises<br>(repas dansant)</div>
+      </div>
+      <div class="key-stat">
+        <div class="key-stat-num">2</div>
+        <div class="key-stat-label">saisons tarifaires<br>mai–sept. / oct.–avril</div>
+      </div>
+    </div>
+
+    <!-- Présentation + réservation -->
+    <div class="content-grid reveal" style="margin-bottom: 3rem;">
+      <div class="content-block">
+        <p>Située <strong>avenue Daniel Simon</strong>, à côté de la Mairie, la salle polyvalente est attribuée aux particuliers et aux associations de la commune comme aux organisateurs extérieurs.</p>
+        <p>Que ce soit pour un mariage, un anniversaire, un banquet ou un concert, la salle s'adapte à vos besoins avec une capacité maximale de 200 personnes debout ou 120 personnes assises.</p>
+      </div>
+      <div>
+        <div class="alert-box primary">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <div>
+            <strong>Réserver la salle</strong>
+            <p>Les réservations se font auprès du secrétariat de mairie et sont validées par Madame le Maire.</p>
+            <p style="margin-top: 0.6rem;">
+              <a href="tel:0160238024" style="color: var(--blanc); font-weight: 600;">01 60 23 80 24</a><br>
+              <a href="mailto:mairie.stcyrsurmorin@orange.fr" style="color: rgba(255,255,255,0.8); font-size: 0.85rem;">mairie.stcyrsurmorin@orange.fr</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tarifs -->
+    <div class="section-label" style="margin-bottom: 0.75rem;">Tarifs</div>
+    <h2 class="section-title" style="margin-bottom: 0.5rem;">Tableau des tarifs</h2>
+    <p style="font-size: 0.85rem; color: var(--gris); margin-bottom: 2rem;">
+      Applicables à partir du 1<sup>er</sup> janvier 2023, sous réserve de modifications ultérieures.
+    </p>
+
+    <!-- Toggle saisons -->
+    <div class="saison-tabs" role="tablist">
+      <button class="saison-btn active" data-saison="ete">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        1er mai — 30 septembre
+      </button>
+      <button class="saison-btn" data-saison="hiver">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"/>
+        </svg>
+        1er octobre — 30 avril
+      </button>
+    </div>
+
+    <!-- Tarifs ÉTÉ -->
+    <div class="saison-pane active" id="saison-ete">
+      <div class="tarifs-section">
+
+        <div class="tarif-bloc commune reveal">
+          <div class="tarif-bloc-head">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span>Habitants de la commune</span>
+          </div>
+          <table class="tarif-table">
+            <thead>
+              <tr>
+                <th>Formule</th>
+                <th>Tarif</th>
+                <th>Arrhes (¼)</th>
+                <th>Solde</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vin d'honneur</td>
+                <td class="price-main">180 €</td>
+                <td class="price-sub">45 €</td>
+                <td class="price-sub">135 €</td>
+              </tr>
+              <tr>
+                <td>1 journée</td>
+                <td class="price-main">230 €</td>
+                <td class="price-sub">57,50 €</td>
+                <td class="price-sub">172,50 €</td>
+              </tr>
+              <tr>
+                <td>2 journées</td>
+                <td class="price-main">330 €</td>
+                <td class="price-sub">82,50 €</td>
+                <td class="price-sub">247,50 €</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tarif-bloc exterieur reveal">
+          <div class="tarif-bloc-head">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <span>Extérieurs à la commune</span>
+          </div>
+          <table class="tarif-table">
+            <thead>
+              <tr>
+                <th>Formule</th>
+                <th>Tarif</th>
+                <th>Arrhes (¼)</th>
+                <th>Solde</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vin d'honneur</td>
+                <td class="price-main">330 €</td>
+                <td class="price-sub">82,50 €</td>
+                <td class="price-sub">247,50 €</td>
+              </tr>
+              <tr>
+                <td>1 journée</td>
+                <td class="price-main">480 €</td>
+                <td class="price-sub">120 €</td>
+                <td class="price-sub">360 €</td>
+              </tr>
+              <tr>
+                <td>2 journées</td>
+                <td class="price-main">630 €</td>
+                <td class="price-sub">157,50 €</td>
+                <td class="price-sub">472,50 €</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Tarifs HIVER -->
+    <div class="saison-pane" id="saison-hiver">
+      <div class="tarifs-section">
+
+        <div class="tarif-bloc commune reveal">
+          <div class="tarif-bloc-head">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            <span>Habitants de la commune</span>
+          </div>
+          <table class="tarif-table">
+            <thead>
+              <tr>
+                <th>Formule</th>
+                <th>Tarif</th>
+                <th>Arrhes (¼)</th>
+                <th>Solde</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vin d'honneur</td>
+                <td class="price-main">220 €</td>
+                <td class="price-sub">55 €</td>
+                <td class="price-sub">165 €</td>
+              </tr>
+              <tr>
+                <td>1 journée</td>
+                <td class="price-main">290 €</td>
+                <td class="price-sub">72,50 €</td>
+                <td class="price-sub">217,50 €</td>
+              </tr>
+              <tr>
+                <td>2 journées</td>
+                <td class="price-main">400 €</td>
+                <td class="price-sub">100 €</td>
+                <td class="price-sub">300 €</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tarif-bloc exterieur reveal">
+          <div class="tarif-bloc-head">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <span>Extérieurs à la commune</span>
+          </div>
+          <table class="tarif-table">
+            <thead>
+              <tr>
+                <th>Formule</th>
+                <th>Tarif</th>
+                <th>Arrhes (¼)</th>
+                <th>Solde</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Vin d'honneur</td>
+                <td class="price-main">370 €</td>
+                <td class="price-sub">92,50 €</td>
+                <td class="price-sub">277,50 €</td>
+              </tr>
+              <tr>
+                <td>1 journée</td>
+                <td class="price-main">540 €</td>
+                <td class="price-sub">135 €</td>
+                <td class="price-sub">405 €</td>
+              </tr>
+              <tr>
+                <td>2 journées</td>
+                <td class="price-main">700 €</td>
+                <td class="price-sub">175 €</td>
+                <td class="price-sub">525 €</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Note arrhes -->
+    <div class="info-note reveal">
+      <strong>Arrhes</strong> — Un quart du montant total est demandé pour confirmer la réservation. Les arrhes sont encaissées immédiatement et ne sont pas remboursables, quel que soit le motif d'annulation.
+    </div>
+
+    <!-- Conditions retrait des clés -->
+    <h2 class="section-title" style="margin: 3rem 0 1.5rem;">Le jour de la location</h2>
+
+    <div class="conditions-grid">
+
+      <div class="condition-card reveal">
+        <div class="condition-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Caution ménage</strong>
+          <p>Chèque de caution de <strong style="color: var(--texte);">250 €</strong> à remettre lors du retrait des clés.</p>
+        </div>
+      </div>
+
+      <div class="condition-card reveal">
+        <div class="condition-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <polyline points="21 8 21 21 3 21 3 8"/>
+            <rect x="1" y="3" width="22" height="5"/>
+            <line x1="10" y1="12" x2="14" y2="12"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Caution matériel</strong>
+          <p>Chèque de caution de <strong style="color: var(--texte);">500 €</strong> à remettre lors du retrait des clés.</p>
+        </div>
+      </div>
+
+      <div class="condition-card reveal">
+        <div class="condition-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Attestation d'assurance</strong>
+          <p>Obligatoire lors du retrait des clés, le jour de la location.</p>
+        </div>
+      </div>
+
+      <div class="condition-card reveal">
+        <div class="condition-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Règlement du solde</strong>
+          <p>Le solde de la location est à régler le jour du retrait des clés.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<div id="footer-placeholder"></div>
+
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+
+  // Onglets saisons
+  document.querySelectorAll('.saison-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.saison-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.saison-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('saison-' + btn.dataset.saison).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
