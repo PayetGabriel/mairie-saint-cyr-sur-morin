@@ -569,7 +569,7 @@
     /* 1. On garde le padding bottom à 4rem (le même que sur ordi) */
     /* 2. On règle le padding top à (4rem + 68px de navbar) */
     /* Cela garantit que visuellement, il y a 4rem de vide en haut ET en bas */
-    padding-top: calc(3.5rem + 68px) !important;
+    padding-top: calc(3rem + 68px) !important;
     padding-bottom: 4rem !important;
     padding-left: 1.4rem;
     padding-right: 1.4rem;
@@ -584,5 +584,12 @@
   .maintenance-icon {
     width: 90px;
     height: 90px;
+  }
+
+  .page-header {
+    padding-top: calc(3.5rem + 68px) !important;
+    padding-bottom: 4rem !important;
+    padding-left: 1.4rem;
+    padding-right: 1.4rem;
   }
 }
