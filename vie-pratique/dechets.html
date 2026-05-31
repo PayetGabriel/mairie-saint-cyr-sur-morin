@@ -1,11 +1,397 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestion des déchets — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Collecte et tri des déchets à Saint-Cyr-sur-Morin. Calendrier de collecte, fiches pratiques Covaltri, SMITOM." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── FICHES DÉCHET ───────────────────────── */
+
+    .fiches-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .fiche-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--texte);
+      transition: all 0.25s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .fiche-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(42,37,32,0.09);
+      border-color: rgba(58,90,64,0.25);
+    }
+
+    .fiche-preview {
+        width: 100%;
+        aspect-ratio: 3/2;
+        object-fit: cover;
+        object-position: top;
+        display: block;
+        background: var(--creme);
+        
+        /* Force un rendu plus net */
+        image-rendering: -webkit-optimize-contrast; /* Pour Chrome/Safari */
+        image-rendering: high-quality;
+    }
+
+    .fiche-preview-absent {
+      width: 100%;
+      aspect-ratio: 3/2;
+      background: var(--creme);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fiche-preview-absent svg { stroke: var(--pierre-dark); opacity: 0.35; }
+
+    .fiche-card img {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        transform: translateZ(0); /* Force l'accélération matérielle en restant net */
+    }
+
+    .fiche-body {
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      flex: 1;
+    }
+
+    .fiche-color-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .fiche-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .fiche-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--texte);
+    }
+
+    .fiche-desc {
+      font-size: 0.82rem;
+      color: var(--gris);
+      line-height: 1.6;
+    }
+
+    .fiche-dl {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--vert);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: auto;
+      padding-top: 0.5rem;
+    }
+
+    .fiche-dl svg { stroke: var(--vert); }
+
+    /* Couleurs par type de déchet */
+    .dot-gris   { background: #888; }
+    .dot-jaune  { background: #e8b84b; }
+    .dot-vert   { background: var(--vert); }
+    .dot-marron { background: #8B5E3C; }
+
+
+    /* ── CALENDRIER ──────────────────────────── */
+
+    .calendrier-card {
+        background: var(--blanc);
+        border: 1px solid rgba(200,191,176,0.4);
+        border-radius: 20px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+    }
+
+    .calendrier-preview-col {
+        border-right: 1px solid rgba(200,191,176,0.35);
+        background: var(--creme); /* Fond de secours pendant le chargement */
+    }
+
+    .calendrier-preview-col img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top;
+        display: block;
+
+        /* Amélioration de la netteté pour les images HD redimensionnées */
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: high-quality;
+        
+        /* Stabilité du rendu lors du scroll */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        transform: translateZ(0);
+    }
+
+    .calendrier-info-col {
+        padding: 2.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 1.25rem;
+    }
+
+    .calendrier-info-col h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--texte);
+    }
+
+    .calendrier-info-col p {
+        font-size: 0.88rem;
+        color: var(--gris);
+        line-height: 1.7;
+    }
+
+
+    /* ── ORGANISMES ──────────────────────────── */
+
+    .organismes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .organisme-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 16px;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .organisme-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--texte);
+    }
+
+    .organisme-card p {
+      font-size: 0.88rem;
+      color: var(--gris);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .organisme-card a {
+      color: var(--vert);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .organisme-card a:hover { text-decoration: underline; }
+
+
+    /* ── RESPONSIVE ──────────────────────────── */
+
+    @media (max-width: 768px) {
+      .calendrier-card { grid-template-columns: 1fr; }
+      .calendrier-preview-col { border-right: none; border-bottom: 1px solid rgba(200,191,176,0.35); max-height: 200px; overflow: hidden; }
+      .organismes-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .fiches-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Gestion des déchets</h1>
+    <p class="page-intro">Collecte, tri et valorisation des déchets sur la commune de Saint-Cyr-sur-Morin.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- Calendrier de collecte -->
+    <div class="section-label" style="margin-bottom: 0.75rem;">Collecte</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Calendrier de collecte 2026</h2>
+
+    <div class="calendrier-card reveal" style="margin-bottom: 3rem;">
+      <div class="calendrier-preview-col">
+        <img src="/assets/docs/dechets/calendrier-saint-cyr-sur-morin/calendrier-saint-cyr-sur-morin-1.png"
+             alt="Aperçu du calendrier de collecte des déchets Saint-Cyr-sur-Morin" />
+      </div>
+      <div class="calendrier-info-col">
+        <h3>Calendrier de collecte<br>Saint-Cyr-sur-Morin</h3>
+        <p>Retrouvez toutes les dates de passage pour la collecte des ordures ménagères, des emballages, des végétaux et des encombrants sur votre commune.</p>
+        <a href="/assets/docs/dechets/calendrier-saint-cyr-sur-morin.pdf" class="btn btn-primary" target="_blank">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Télécharger le calendrier (PDF)
+        </a>
+      </div>
+    </div>
+
+    <!-- Fiches pratiques -->
+    <div class="section-label" style="margin-bottom: 0.75rem;">Tri sélectif</div>
+    <h2 class="section-title" style="margin-bottom: 0.5rem;">Que mettre dans quel bac ?</h2>
+    <p style="font-size: 0.88rem; color: var(--gris); margin-bottom: 2rem;">Fiches pratiques Covaltri — cliquez pour télécharger.</p>
+
+    <div class="fiches-grid" style="margin-bottom: 3rem;">
+
+      <a href="/assets/docs/dechets/fiche-dechet-om.pdf" class="fiche-card reveal" target="_blank">
+        <img src="/assets/docs/dechets/fiche-dechet-om/fiche-dechet-om-1.png"
+             alt="Aperçu fiche ordures ménagères Covaltri" class="fiche-preview" />
+        <div class="fiche-body">
+          <div class="fiche-header">
+            <div class="fiche-color-dot dot-gris"></div>
+            <div class="fiche-name">Ordures ménagères</div>
+          </div>
+          <div class="fiche-desc">Déchets non dangereux produits par les ménages — bac gris.</div>
+          <div class="fiche-dl">
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Fiche PDF
+          </div>
+        </div>
+      </a>
+
+      <a href="/assets/docs/dechets/fiche-dechet-cs.pdf" class="fiche-card reveal" target="_blank">
+        <img src="/assets/docs/dechets/fiche-dechet-cs/fiche-dechet-cs-1.png"
+             alt="Aperçu fiche emballages Covaltri" class="fiche-preview" />
+        <div class="fiche-body">
+          <div class="fiche-header">
+            <div class="fiche-color-dot dot-jaune"></div>
+            <div class="fiche-name">Emballages</div>
+          </div>
+          <div class="fiche-desc">Emballages et papiers entièrement vidés de leur contenu.</div>
+          <div class="fiche-dl">
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Fiche PDF
+          </div>
+        </div>
+      </a>
+
+      <a href="/assets/docs/dechets/fiche-dechet-dv.pdf" class="fiche-card reveal" target="_blank">
+        <img src="/assets/docs/dechets/fiche-dechet-dv/fiche-dechet-dv-1.png"
+             alt="Aperçu fiche végétaux Covaltri" class="fiche-preview" />
+        <div class="fiche-body">
+          <div class="fiche-header">
+            <div class="fiche-color-dot dot-vert"></div>
+            <div class="fiche-name">Végétaux</div>
+          </div>
+          <div class="fiche-desc">Tontes, tailles et feuilles — déchets verts.</div>
+          <div class="fiche-dl">
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Fiche PDF
+          </div>
+        </div>
+      </a>
+
+      <a href="/assets/docs/dechets/fiche-dechet-encombrants.pdf" class="fiche-card reveal" target="_blank">
+        <img src="/assets/docs/dechets/fiche-dechet-encombrants/fiche-dechet-encombrants-1.png"
+             alt="Aperçu fiche encombrants Covaltri" class="fiche-preview" />
+        <div class="fiche-body">
+          <div class="fiche-header">
+            <div class="fiche-color-dot dot-marron"></div>
+            <div class="fiche-name">Encombrants</div>
+          </div>
+          <div class="fiche-desc">Déchets volumineux et exceptionnels : literie, matelas, canapés, bois.</div>
+          <div class="fiche-dl">
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Fiche PDF
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Organismes -->
+    <div class="section-label" style="margin-bottom: 0.75rem;">Organismes</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Qui gère vos déchets ?</h2>
+
+    <div class="organismes-grid reveal">
+
+      <div class="organisme-card">
+        <h3>COVALTRI 77</h3>
+        <p>Votre service public de collecte et de traitement des déchets sur le territoire. Covaltri assure la collecte en porte-à-porte et la gestion des déchetteries.</p>
+        <a href="https://covaltri77.fr" target="_blank" rel="noopener">covaltri77.fr →</a>
+      </div>
+
+      <div class="organisme-card">
+        <h3>SMITOM Nord Seine-et-Marne</h3>
+        <p>Le SMITOM est le syndicat intercommunal en charge du traitement et de la valorisation des déchets ménagers des 167 communes adhérentes du nord du département.</p>
+        <a href="https://www.smitom-nord77.fr" target="_blank" rel="noopener">smitom-nord77.fr →</a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
 </body>
 </html>

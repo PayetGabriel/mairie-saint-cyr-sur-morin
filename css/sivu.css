@@ -206,6 +206,21 @@
     letter-spacing: 0.05em;
 }
 
+/* Cas spécifique : Alerte / Rouge */
+.info-note.alert {
+    background-color: var(--rouge-pale);
+    border-left: 4px solid var(--rouge);
+    font-size: 0.85rem; /* Taille réduite comme demandé */
+}
+
+.info-note.alert strong {
+    color: var(--rouge);
+}
+
+.info-note.alert p {
+    color: var(--rouge-texte);
+}
+
 
 /* ─── TARIFS BOX ──────────────────────────── */
 
