@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Découvrir Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Explorez Saint-Cyr-sur-Morin : son tourisme, son riche patrimoine, ses chemins de randonnées et sa médiathèque municipale." />
+  <meta name="author" content="Gabriel PAYET" />
+
+  <!-- Localisation SEO -->
+  <meta name="geo.region" content="FR-77" />
+  <meta name="geo.placename" content="Saint-Cyr-sur-Morin" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Découvrir Saint-Cyr-sur-Morin" />
+  <meta property="og:description" content="Explorez Saint-Cyr-sur-Morin : son tourisme, son riche patrimoine, ses chemins de randonnées et sa médiathèque municipale." />
+  <meta property="og:image" content="https://mairie-saint-cyr-sur-morin.vercel.app/assets/img/logoSaintCyr_2020_web.png" />
+  <meta property="og:image:width" content="984" />
+  <meta property="og:image:height" content="1200" />
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <link rel="apple-touch-icon" href="/assets/img/logoSaintCyr_2020-favicon.png">
+
+  <!-- Fonts & Styles -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+    
+  <style>
+    /* Structure globale calquée sur ton ancienne maintenance */
+    .hub-hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      
+      /* Prend tout l'écran sans masquer la nav */
+      min-height: 100vh; 
+      min-height: 100dvh; 
+      
+      padding: 90px 1.4rem 4rem; /* Ajusté pour donner de l'air sous la barre de nav */
+      background-color: var(--creme);
+      text-align: center;
+    }
+
+    .hub-header {
+      margin-bottom: 3rem;
+      max-width: 700px;
+    }
+
+    .hub-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      color: var(--texte);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .hub-header p {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--gris);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* Grille adaptée spécifiquement pour 4 grandes cartes */
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 900px; /* Idéal pour l'alignement sur écran large */
+      margin: 0 auto;
+    }
+
+    /* Media queries pour la réactivité de la grille */
+    @media (min-width: 480px) {
+      .hub-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 768px) {
+      .hub-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    /* Cartes d'accès rapide boostées à l'échelle du Hero */
+    .hub-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,.5);
+      border-radius: 20px; /* Plus grand pour le côté premium */
+      padding: 2rem 1.5rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--texte);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      height: 100%;
+      box-shadow: 0 4px 10px rgba(42, 37, 32, 0.02);
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .hub-card:hover {
+      border-color: var(--vert);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(58,90,64,.15);
+    }
+
+    /* Icône agrandie par rapport aux accès rapides standards */
+    .hub-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+
+    .hub-icon svg {
+      width: 28px;
+      height: 28px;
+      transition: stroke 0.3s ease;
+    }
+
+    .hub-card:hover .hub-icon { 
+      background: var(--vert); 
+    }
+    
+    .hub-card:hover .hub-icon svg { 
+      stroke: var(--blanc); 
+    }
+
+    .hub-label { 
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; 
+      font-weight: 500; 
+      line-height: 1.4; 
+    }
+  </style>
+</head>
+<body>
+
+<!-- Injection automatique de la Navbar -->
+<script src="/components/navbar.js"></script>
+
+<main class="hub-hero">
+  <div class="hub-header">
+    <h1>Découvrir notre <em>commune</em></h1>
+    <p>Sélectionnez une section ci-dessous pour explorer l'histoire, la culture, les activités de plein air et les espaces de vie de Saint-Cyr-sur-Morin.</p>
+  </div>
+
+  <div class="hub-grid">
+    <!-- Card 1 : Tourisme & Hébergement -->
+    <a href="/decouvrir/tourisme-hebergement.html" class="hub-card">
+      <div class="hub-icon">
+        <!-- Icône Lit / Hôtel -->
+        <svg fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24">
+          <path d="M2 4v16M2 11h20M22 4v16M11 4H2v7h9V4zM22 11h-8V4h8v7z"/>
+        </svg>
+      </div>
+      <span class="hub-label">Tourisme &<br>Hébergement</span>
+    </a>
+
+    <!-- Card 2 : Patrimoine & Culture -->
+    <a href="/decouvrir/patrimoine-culture.html" class="hub-card">
+      <div class="hub-icon">
+        <!-- Icône Monument / Musée -->
+        <svg fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24">
+          <path d="M4 22V10l8-6 8 6v12M6 22V12h12v10M12 2v2M9 22v-4h6v4"/>
+        </svg>
+      </div>
+      <span class="hub-label">Patrimoine &<br>Culture</span>
+    </a>
+
+    <!-- Card 3 : Randonnées -->
+    <a href="/decouvrir/randonnees.html" class="hub-card">
+      <div class="hub-icon">
+        <!-- Icône Localisation / Boussole / Sentier (reprise de ton index) -->
+        <svg fill="none" stroke="var(--vert)" stroke-width="1.8" viewBox="0 0 24 24">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+      <span class="hub-label">Sentiers de<br>Randonnées</span>
+    </a>
+
+    <!-- Card 4 : Médiathèque -->
+    <a href="/decouvrir/mediatheque.html" class="hub-card">
+      <div class="hub-icon">
+        <!-- Icône Livres -->
+        <svg fill="none" stroke="var(--vert)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          <line x1="8" y1="6" x2="16" y2="6"/>
+          <line x1="8" y1="10" x2="16" y2="10"/>
+        </svg>
+      </div>
+      <span class="hub-label">Médiathèque<br>Municipale</span>
+    </a>
+  </div>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script>
+  // Système d'injection du footer
+  fetch('/components/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-placeholder').innerHTML = data;
+    });
+</script>
+
+</body>
+</html>
