@@ -1,11 +1,747 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>La Mairie — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Le mot du Maire de Saint-Cyr-sur-Morin et les informations sur la Communauté de Communes des 2 Morin." />
+
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── MOT DU MAIRE ────────────────────────── */
+
+    .maire-section {
+      background: var(--blanc);
+    }
+
+    .maire-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    /* Portrait */
+    .maire-portrait {
+      position: sticky;
+      top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .maire-photo-wrap {
+      position: relative;
+    }
+
+    .maire-photo-wrap img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: top;
+      border-radius: 20px;
+      display: block;
+    }
+
+    /* Décoration géométrique derrière la photo */
+    .maire-photo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -10px -10px 10px 10px;
+      border: 2px solid var(--vert);
+      border-radius: 20px;
+      opacity: 0.2;
+      z-index: 0;
+    }
+
+    .maire-photo-wrap img {
+      position: relative;
+      z-index: 1;
+    }
+
+    .maire-id {
+      background: var(--vert-pale);
+      border-radius: 14px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+
+    .maire-id-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.3rem;
+    }
+
+    .maire-id-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      color: var(--vert);
+    }
+
+    /* Lettre */
+    .maire-lettre {
+      padding-top: 0.5rem;
+    }
+
+    .maire-lettre-header {
+      margin-bottom: 2rem;
+    }
+
+    .maire-lettre-header .section-label {
+      margin-bottom: 0.5rem;
+    }
+
+    .maire-lettre-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.25;
+    }
+
+    .lettre-salutation {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--vert);
+      margin-bottom: 1.75rem;
+    }
+
+    .lettre-corps p {
+      font-size: 0.97rem;
+      line-height: 1.9;
+      color: var(--texte);
+      margin-bottom: 1.25rem;
+    }
+
+    .lettre-corps p:last-child { margin-bottom: 0; }
+
+    /* Paragraphe mis en exergue */
+    .lettre-highlight {
+      border-left: 3px solid var(--vert);
+      padding: 0.25rem 0 0.25rem 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .lettre-highlight p {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem !important;
+      color: var(--texte);
+      line-height: 1.7 !important;
+    }
+
+    .lettre-signature {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(200,191,176,0.4);
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .lettre-signature-bar {
+      width: 40px;
+      height: 3px;
+      background: var(--vert);
+      border-radius: 2px;
+    }
+
+    .lettre-signature-text strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--texte);
+    }
+
+    .lettre-signature-text span {
+      font-size: 0.8rem;
+      color: var(--gris);
+    }
+
+
+    /* ── COMMUNAUTÉ DE COMMUNES ──────────────── */
+
+    .cc2m-section {
+      background: var(--creme);
+    }
+
+    .cc2m-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .cc2m-header img {
+      height: 56px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .cc2m-header-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.3rem;
+    }
+
+    .cc2m-header-text p {
+      font-size: 0.88rem;
+      color: var(--gris);
+    }
+
+    /* Fiche identité CC2M */
+    .cc2m-fiche {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .cc2m-fiche-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .cc2m-fiche-card h4 {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 700;
+      color: var(--vert);
+      margin-bottom: 0.75rem;
+    }
+
+    .cc2m-fiche-card p,
+    .cc2m-fiche-card a {
+      font-size: 0.9rem;
+      color: var(--texte);
+      line-height: 1.7;
+      text-decoration: none;
+    }
+
+    .cc2m-fiche-card a {
+      color: var(--vert);
+      font-weight: 500;
+    }
+
+    .cc2m-fiche-card a:hover { text-decoration: underline; }
+
+    .cc2m-stat-row {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .cc2m-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cc2m-stat strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--vert);
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+
+    .cc2m-stat span {
+      font-size: 0.78rem;
+      color: var(--gris);
+    }
+
+    /* Contexte fusion */
+    .cc2m-context {
+      background: var(--blanc);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      font-size: 0.88rem;
+      color: var(--texte);
+      line-height: 1.7;
+      border-left: 3px solid var(--vert);
+      margin-bottom: 3rem;
+    }
+
+    /* Grille compétences */
+    .competences-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .competence-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: all 0.2s;
+    }
+
+    .competence-card:hover {
+      border-color: var(--vert);
+      box-shadow: 0 4px 16px rgba(58,90,64,0.08);
+    }
+
+    .competence-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .competence-icon svg { stroke: var(--vert); }
+
+    .competence-card strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.3rem;
+    }
+
+    .competence-card p {
+      font-size: 0.8rem;
+      color: var(--gris);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .competence-card p a {
+      color: var(--vert);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .competence-card.a-venir {
+      border-style: dashed;
+      opacity: 0.7;
+    }
+
+    .competence-card.a-venir .competence-icon {
+      background: var(--creme);
+    }
+
+    .competence-card.a-venir .competence-icon svg {
+      stroke: var(--pierre-dark);
+    }
+
+    .badge-avenir {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--pierre-dark);
+      background: var(--creme);
+      border: 1px solid rgba(200,191,176,0.5);
+      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    /* Gendarmeries */
+    .gendarmeries-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .gendarmerie-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .gendarmerie-card svg { stroke: var(--vert); flex-shrink: 0; }
+
+    .gendarmerie-card strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.15rem;
+    }
+
+    .gendarmerie-card p {
+      font-size: 0.8rem;
+      color: var(--gris);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .gendarmerie-card a {
+      color: var(--vert);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+
+    /* ── RESPONSIVE ──────────────────────────── */
+
+    @media (max-width: 900px) {
+      .maire-layout {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .maire-portrait {
+        position: static;
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 1.5rem;
+        align-items: center;
+      }
+      .maire-photo-wrap { grid-row: span 1; }
+      .cc2m-fiche { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .maire-portrait {
+        grid-template-columns: 1fr;
+      }
+      .maire-photo-wrap img { aspect-ratio: 1/1; }
+      .cc2m-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .gendarmeries-row { grid-template-columns: 1fr; }
+      .competences-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<!-- ─── PAGE HEADER ─── -->
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>La Mairie</h1>
+    <p class="page-intro">Le mot du maire et les informations sur votre intercommunalité.</p>
+  </div>
+</header>
+
+
+<!-- ─── MOT DU MAIRE ─── -->
+<section class="section maire-section" id="mot-du-maire">
+  <div class="section-inner">
+
+    <div class="maire-layout">
+
+      <!-- Portrait & identité -->
+      <div class="maire-portrait reveal">
+        <div class="maire-photo-wrap">
+          <img src="/assets/img/Maire.jpg" alt="Francis Delarue, Maire de Saint-Cyr-sur-Morin" />
+        </div>
+        <div class="maire-id">
+          <div class="maire-id-name">Francis Delarue</div>
+          <div class="maire-id-title">Maire de Saint-Cyr-sur-Morin</div>
+        </div>
+      </div>
+
+      <!-- Lettre -->
+      <div class="maire-lettre reveal">
+        <div class="maire-lettre-header">
+          <div class="section-label">Message</div>
+          <h2>Le mot du Maire</h2>
+        </div>
+
+        <div class="lettre-salutation">Chères Saint-Cyriennes, chers Saint-Cyriens,</div>
+
+        <div class="lettre-corps">
+
+          <p>Vous habitez une commune qui a une histoire originale et riche ; une commune qui bénéficie d'un environnement naturel relativement préservé. La main de l'homme y est pour beaucoup, et tous les Saint-Cyriens qui nous ont précédés y ont participé tout au long des siècles. Nous avons le devoir de préserver, de valoriser et de développer ce qui fait sa qualité de vie et son charme.</p>
+
+          <div class="lettre-highlight">
+            <p>Nous sommes une commune rurale encore très agricole. C'est l'activité de nos cultivateurs, de nos éleveurs, de nos artisans qui a façonné nos paysages et qui encore l'entretient.</p>
+          </div>
+
+          <p>Les nombreux chemins qui sillonnent la commune attestent de cette vie rurale active où l'on se déplaçait à pied ou en charrette. Tous ces chemins relient les hameaux au bourg. Ils sont encore très utiles. Depuis l'été 2017, des panneaux vous indiquent les noms de chaque chemin. Il ne tient qu'à nous, avec votre concours, que ces chemins et sentes restent accessibles, agréables et propres.</p>
+
+          <p>Nous sommes une commune qui a la chance d'avoir encore quelques commerces dynamiques et de nombreux services et artisans qui valorisent notre village et qui répondent aux besoins de ses habitants. Pensez à les fréquenter régulièrement : vous participerez ainsi au maintien d'emplois locaux et serez acteurs de la vitalité locale. Depuis le printemps 2017, un marché de campagne se tient tous les premiers samedis du mois avec des produits locaux de qualité.</p>
+
+          <p>Nos rues n'ont pas été conçues pour accueillir les nombreux véhicules qui les empruntent et qui y stationnent. Dans la mesure du possible, garez vos véhicules sur votre propriété et surtout pensez aux piétons — enfants et adultes — qui ont besoin de se déplacer en toute sécurité aussi bien dans les hameaux qu'en centre-bourg et aux abords des écoles.</p>
+
+          <p>Votre équipe municipale est soucieuse de soutenir et de favoriser le développement économique, touristique et culturel de la commune, et de favoriser la convivialité et la solidarité de proximité. Elle accompagne les projets et les initiatives de nos associations qui contribuent largement à animer la commune et à faciliter la vie des familles, des jeunes, et des moins jeunes. Elle s'efforce d'apporter les moyens nécessaires à nos écoles pour qu'elles soient accueillantes et de mieux en mieux équipées.</p>
+
+          <p>Elle a la volonté de faire de Saint-Cyr-sur-Morin un village inscrit dans son temps, moderne et économe, mais aussi soucieux de préserver et réhabiliter son patrimoine architectural et naturel. Votre équipe municipale est à l'écoute de chacun, de ses besoins et de ses suggestions pour améliorer notre cadre de vie commun.</p>
+
+          <p>La mairie vous est largement ouverte. Nous avons besoin de votre concours pour faire vivre le climat de convivialité, de sécurité et de bienveillance que nous espérons vous trouverez à Saint-Cyr-sur-Morin. Si vous le pouvez, n'hésitez pas à prendre un peu de votre temps pour la vie des écoles, l'animation du village, pour la mise en valeur de son patrimoine, de ses chemins, pour l'embellissement de ses rues et de ses façades.</p>
+
+          <p>Bienvenue dans notre commune où, nous l'espérons, vous vous sentirez rapidement chez vous.</p>
+        </div>
+
+        <div class="lettre-signature">
+          <div class="lettre-signature-bar"></div>
+          <div class="lettre-signature-text">
+            <strong>Francis Delarue</strong>
+            <span>Maire de Saint-Cyr-sur-Morin</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ─── COMMUNAUTÉ DE COMMUNES ─── -->
+<section class="section cc2m-section" id="communaute-de-communes">
+  <div class="section-inner">
+
+    <!-- En-tête CC2M -->
+    <div class="cc2m-header reveal">
+      <img src="/assets/img/Logo-cc2m2.png" alt="Logo Communauté de Communes des 2 Morin" />
+      <div class="cc2m-header-text">
+        <h2>Communauté de Communes des 2 Morin</h2>
+        <p>Intercommunalité regroupant 31 communes de Seine-et-Marne</p>
+      </div>
+    </div>
+
+    <!-- Chiffres & contacts -->
+    <div class="cc2m-fiche reveal">
+      <div class="cc2m-fiche-card">
+        <h4>En chiffres</h4>
+        <div class="cc2m-stat-row">
+          <div class="cc2m-stat">
+            <strong>31</strong>
+            <span>communes</span>
+          </div>
+          <div class="cc2m-stat">
+            <strong>26 342</strong>
+            <span>habitants</span>
+          </div>
+        </div>
+      </div>
+      <div class="cc2m-fiche-card">
+        <h4>Contact & accès</h4>
+        <p>
+          1, rue Robert Legraverend<br>
+          77 320 La Ferté-Gaucher<br>
+          <a href="tel:0164032580">01 64 03 25 80</a><br>
+          Président : Jean-François DELESALLE, Maire de Doue<br>
+          <a href="https://www.cc2morin.fr" target="_blank" rel="noopener">www.cc2morin.fr</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Contexte fusion -->
+    <div class="cc2m-context reveal">
+      Depuis le <strong>1er janvier 2017</strong>, la Communauté de Communes la Brie des Morin (21 communes) a fusionné avec la Communauté de Communes Cœur de Brie (10 communes) pour former la Communauté de Communes des 2 Morin.
+    </div>
+
+    <!-- Compétences -->
+    <div class="section-label" style="margin-bottom: 0.75rem;">Compétences</div>
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; color: var(--texte); margin-bottom: 1.75rem;">Ses responsabilités sur votre territoire</h3>
+
+    <div class="competences-grid">
+
+      <div class="competence-card reveal">
+        <div class="competence-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Assainissement non collectif</strong>
+          <p>En cas de non-conformité lors d'une vente, l'acquéreur dispose d'un an pour se mettre aux normes. Suivi par le SIANE — <a href="tel:0164045245">01 64 04 52 45</a>.</p>
+        </div>
+      </div>
+
+      <div class="competence-card reveal">
+        <div class="competence-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Ordures ménagères & encombrants</strong>
+          <p>Collecte et gestion des déchets, tri sélectif sur l'ensemble du territoire. Voir la <a href="/vie-pratique/dechets.html">rubrique déchets</a>.</p>
+        </div>
+      </div>
+
+      <div class="competence-card reveal">
+        <div class="competence-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Développement économique & finances</strong>
+          <p>Soutien aux entreprises et projets économiques locaux, gestion financière intercommunale.</p>
+        </div>
+      </div>
+
+      <div class="competence-card reveal">
+        <div class="competence-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Tourisme</strong>
+          <p>Promotion et développement touristique de la Vallée des deux Morin.</p>
+        </div>
+      </div>
+
+      <div class="competence-card reveal">
+        <div class="competence-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="1" y="3" width="15" height="13" rx="2"/>
+            <path d="M16 8h4l3 3v5h-7V8z"/>
+            <circle cx="5.5" cy="18.5" r="2.5"/>
+            <circle cx="18.5" cy="18.5" r="2.5"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Transports</strong>
+          <p>TAD (transport à la demande) pour la santé, démarches, emploi, achats et loisirs. Tarif unique 2 €. Rens. <a href="tel:0800066066">0800 066 066</a>. Transport scolaire : voir <a href="/enfance-loisirs/ecoles/transports.html">la page dédiée</a>.</p>
+        </div>
+      </div>
+
+      <div class="competence-card reveal">
+        <div class="competence-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Service à la personne</strong>
+          <p>Petite enfance, RAM (Relais Assistantes Maternelles), séniors, handicap, santé, LAEP, Halte-Garderie. Familles Rurales à Saint-Cyr : <a href="tel:0160238195">01 60 23 81 95</a>.</p>
+        </div>
+      </div>
+
+      <div class="competence-card reveal">
+        <div class="competence-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Jeunesse, Sport & Culture</strong>
+          <p>Animation du territoire, soutien aux équipements sportifs et culturels, réseau des médiathèques Biblio' 2 Morin.</p>
+        </div>
+      </div>
+
+      <div class="competence-card reveal">
+        <div class="competence-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 17l4-8 4 4 3-6 4 10"/>
+            <path d="M3 17h18"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Environnement & aménagement</strong>
+          <p>Préservation des espaces naturels, aménagement du territoire intercommunal.</p>
+        </div>
+      </div>
+
+      <div class="competence-card a-venir reveal">
+        <div class="competence-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M12 8v4l3 3"/>
+          </svg>
+        </div>
+        <div>
+          <div class="badge-avenir">À venir</div>
+          <strong>Eau & Assainissement</strong>
+          <p>Reprise de la compétence eau potable et assainissement collectif prévue.</p>
+        </div>
+      </div>
+
+      <div class="competence-card a-venir reveal">
+        <div class="competence-icon">
+          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <div>
+          <div class="badge-avenir">À venir</div>
+          <strong>ALSH</strong>
+          <p>Accueil de Loisirs Sans Hébergement — reprise de compétence prévue.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Gendarmeries -->
+    <div class="section-label" style="margin-top: 3rem; margin-bottom: 0.75rem;">Sécurité</div>
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--texte); margin-bottom: 1.25rem;">Gendarmeries du secteur</h3>
+
+    <div class="gendarmeries-row reveal">
+      <div class="gendarmerie-card">
+        <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <div>
+          <strong>Gendarmerie de La Ferté-Gaucher</strong>
+          <p>21, rue du Docteur Cochot<br><a href="tel:0164040009">01 64 04 00 09</a></p>
+        </div>
+      </div>
+      <div class="gendarmerie-card">
+        <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <div>
+          <strong>Gendarmerie de Rebais</strong>
+          <p>Avenue Jean de la Fontaine<br><a href="tel:0164758210">01 64 75 82 10</a></p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ─── FOOTER ─── -->
+<div id="footer-placeholder"></div>
+
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
+
 </body>
 </html>
