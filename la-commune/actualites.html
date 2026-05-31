@@ -1,11 +1,519 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Actualités — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Toutes les actualités de la commune de Saint-Cyr-sur-Morin : travaux, événements, conseil municipal, vie locale." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── FILTRES ─────────────────────────────── */
+
+    .actu-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .actu-filter-btn {
+      padding: 0.5rem 1.1rem;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1.5px solid rgba(200,191,176,0.5);
+      background: var(--blanc);
+      color: var(--texte);
+      transition: all 0.2s;
+    }
+
+    .actu-filter-btn:hover,
+    .actu-filter-btn.active {
+      background: var(--vert);
+      color: var(--blanc);
+      border-color: var(--vert);
+    }
+
+
+    /* ── ARTICLE À LA UNE ────────────────────── */
+
+    .actu-une {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 0;
+      background: var(--vert-pale);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 3rem;
+      text-decoration: none;
+      color: var(--texte);
+      transition: all 0.25s;
+    }
+
+    .actu-une:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 36px rgba(42,37,32,0.1);
+    }
+
+    .actu-une-img {
+      height: 100%;
+      min-height: 300px;
+      background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80') center/cover;
+    }
+
+    .actu-une-body {
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .actu-une-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .actu-tag {
+      display: inline-block;
+      background: var(--vert);
+      color: var(--blanc);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.7rem;
+      border-radius: 100px;
+    }
+
+    .actu-une-date {
+      font-size: 0.78rem;
+      color: var(--pierre-dark);
+    }
+
+    .actu-une-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--texte);
+    }
+
+    .actu-une-text {
+      font-size: 0.88rem;
+      color: var(--gris);
+      line-height: 1.7;
+    }
+
+    .actu-une-lire {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--vert);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .actu-une-lire svg { stroke: var(--vert); }
+
+
+    /* ── GRILLE ARTICLES ─────────────────────── */
+
+    .actu-page-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .actu-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 16px;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--texte);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s;
+    }
+
+    .actu-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(42,37,32,0.08);
+      border-color: rgba(58,90,64,0.2);
+    }
+
+    .actu-card-img {
+      height: 160px;
+      background: var(--creme);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .actu-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .actu-card:hover .actu-card-img img {
+      transform: scale(1.04);
+    }
+
+    .actu-card-img-placeholder {
+      width: 100%;
+      height: 100%;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .actu-card-img-placeholder svg { stroke: var(--vert); opacity: 0.3; }
+
+    .actu-card-body {
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      flex: 1;
+    }
+
+    .actu-card-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .actu-card-date {
+      font-size: 0.73rem;
+      color: var(--pierre-dark);
+    }
+
+    .actu-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: var(--texte);
+      flex: 1;
+    }
+
+    .actu-card-excerpt {
+      font-size: 0.82rem;
+      color: var(--gris);
+      line-height: 1.65;
+    }
+
+
+    /* ── PAGINATION ──────────────────────────── */
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 3rem;
+    }
+
+    .page-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1.5px solid rgba(200,191,176,0.5);
+      background: var(--blanc);
+      color: var(--texte);
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .page-btn:hover,
+    .page-btn.active {
+      background: var(--vert);
+      color: var(--blanc);
+      border-color: var(--vert);
+    }
+
+    .page-btn svg { stroke: currentColor; }
+
+
+    /* ── RESPONSIVE ──────────────────────────── */
+
+    @media (max-width: 960px) {
+      .actu-page-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .actu-une {
+        grid-template-columns: 1fr;
+      }
+      .actu-une-img { min-height: 200px; height: 200px; }
+    }
+
+    @media (max-width: 520px) {
+      .actu-page-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Actualités</h1>
+    <p class="page-intro">La vie de la commune au fil des semaines — travaux, événements, conseil municipal et vie locale.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- Filtres -->
+    <div class="actu-filters">
+      <button class="actu-filter-btn active" data-cat="all">Tout</button>
+      <button class="actu-filter-btn" data-cat="travaux">Travaux</button>
+      <button class="actu-filter-btn" data-cat="conseil">Conseil municipal</button>
+      <button class="actu-filter-btn" data-cat="evenement">Événements</button>
+      <button class="actu-filter-btn" data-cat="culture">Culture</button>
+      <button class="actu-filter-btn" data-cat="prevention">Prévention</button>
+      <button class="actu-filter-btn" data-cat="bulletin">Bulletin</button>
+    </div>
+
+    <!-- Article à la une -->
+    <a href="#" class="actu-une reveal" data-cat="travaux">
+      <div class="actu-une-img"></div>
+      <div class="actu-une-body">
+        <div class="actu-une-meta">
+          <span class="actu-tag">Travaux</span>
+          <span class="actu-une-date">11 janvier 2026</span>
+        </div>
+        <div class="actu-une-title">Travaux aux abords de la mairie — point d'avancement</div>
+        <div class="actu-une-text">Suite aux imprévus de fin d'année, les travaux autour de la mairie se poursuivent. Le chantier devrait être achevé avant l'été. Retrouvez le détail des interventions prévues dans cet article.</div>
+        <div class="actu-une-lire">
+          Lire l'article
+          <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </a>
+
+    <!-- Grille articles -->
+    <div class="actu-page-grid" id="actu-grid">
+
+      <a href="#" class="actu-card reveal" data-cat="prevention">
+        <div class="actu-card-img">
+          <div class="actu-card-img-placeholder">
+            <svg width="32" height="32" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="actu-card-body">
+          <div class="actu-card-meta">
+            <span class="actu-tag">Prévention</span>
+            <span class="actu-card-date">8 janvier 2026</span>
+          </div>
+          <div class="actu-card-title">Guide pratique pour le logement en cas d'inondation</div>
+          <div class="actu-card-excerpt">La commune met à disposition un guide pratique pour préparer et protéger votre logement face aux risques d'inondation du Petit Morin.</div>
+        </div>
+      </a>
+
+      <a href="#" class="actu-card reveal" data-cat="conseil">
+        <div class="actu-card-img">
+          <div class="actu-card-img-placeholder">
+            <svg width="32" height="32" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="actu-card-body">
+          <div class="actu-card-meta">
+            <span class="actu-tag">Conseil municipal</span>
+            <span class="actu-card-date">5 janvier 2026</span>
+          </div>
+          <div class="actu-card-title">Comptes-rendus du conseil municipal — Décembre 2025</div>
+          <div class="actu-card-excerpt">Retrouvez le compte-rendu de la séance du conseil municipal du mois de décembre 2025 : budget, projets en cours et délibérations.</div>
+        </div>
+      </a>
+
+      <a href="#" class="actu-card reveal" data-cat="bulletin">
+        <div class="actu-card-img">
+          <div class="actu-card-img-placeholder">
+            <svg width="32" height="32" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="actu-card-body">
+          <div class="actu-card-meta">
+            <span class="actu-tag">Bulletin</span>
+            <span class="actu-card-date">15 novembre 2025</span>
+          </div>
+          <div class="actu-card-title">Bulletin municipal « Trait d'Union » — Automne 2025</div>
+          <div class="actu-card-excerpt">Le numéro d'automne du Trait d'Union est disponible. Au programme : bilan des travaux, vie associative et agenda de fin d'année.</div>
+        </div>
+      </a>
+
+      <a href="#" class="actu-card reveal" data-cat="culture">
+        <div class="actu-card-img">
+          <div class="actu-card-img-placeholder">
+            <svg width="32" height="32" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="actu-card-body">
+          <div class="actu-card-meta">
+            <span class="actu-tag">Culture</span>
+            <span class="actu-card-date">3 novembre 2025</span>
+          </div>
+          <div class="actu-card-title">Médiathèque — nouveaux horaires d'ouverture</div>
+          <div class="actu-card-excerpt">La médiathèque Au Moulin de Terwagne adapte ses horaires pour la saison hivernale. Consultez les nouveaux créneaux d'ouverture.</div>
+        </div>
+      </a>
+
+      <a href="#" class="actu-card reveal" data-cat="evenement">
+        <div class="actu-card-img">
+          <div class="actu-card-img-placeholder">
+            <svg width="32" height="32" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="actu-card-body">
+          <div class="actu-card-meta">
+            <span class="actu-tag">Événement</span>
+            <span class="actu-card-date">18 octobre 2025</span>
+          </div>
+          <div class="actu-card-title">Marché de Noël — samedi 13 décembre 2025</div>
+          <div class="actu-card-excerpt">Le marché de Noël revient place de l'Église avec ses producteurs locaux, artisans et animations pour petits et grands. Entrée libre.</div>
+        </div>
+      </a>
+
+      <a href="#" class="actu-card reveal" data-cat="conseil">
+        <div class="actu-card-img">
+          <div class="actu-card-img-placeholder">
+            <svg width="32" height="32" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="actu-card-body">
+          <div class="actu-card-meta">
+            <span class="actu-tag">Conseil municipal</span>
+            <span class="actu-card-date">2 octobre 2025</span>
+          </div>
+          <div class="actu-card-title">Comptes-rendus du conseil municipal — Septembre 2025</div>
+          <div class="actu-card-excerpt">Séance du 25 septembre 2025 : point sur le Plan Local d'Urbanisme, tarification de la salle polyvalente et questions diverses.</div>
+        </div>
+      </a>
+
+      <a href="#" class="actu-card reveal" data-cat="travaux">
+        <div class="actu-card-img">
+          <div class="actu-card-img-placeholder">
+            <svg width="32" height="32" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="actu-card-body">
+          <div class="actu-card-meta">
+            <span class="actu-tag">Travaux</span>
+            <span class="actu-card-date">22 septembre 2025</span>
+          </div>
+          <div class="actu-card-title">Réfection de la voirie — rue Eugène Daumont</div>
+          <div class="actu-card-excerpt">Les travaux de réfection de la chaussée débutent semaine 41. La rue sera partiellement fermée à la circulation pendant une semaine.</div>
+        </div>
+      </a>
+
+      <a href="#" class="actu-card reveal" data-cat="evenement">
+        <div class="actu-card-img">
+          <div class="actu-card-img-placeholder">
+            <svg width="32" height="32" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="actu-card-body">
+          <div class="actu-card-meta">
+            <span class="actu-tag">Événement</span>
+            <span class="actu-card-date">15 septembre 2025</span>
+          </div>
+          <div class="actu-card-title">Journées Européennes du Patrimoine 2025 — programme</div>
+          <div class="actu-card-excerpt">Les 20 et 21 septembre, Saint-Cyr-sur-Morin ouvre ses portes. Visites guidées, expositions, animations et spectacle au programme.</div>
+        </div>
+      </a>
+
+      <a href="#" class="actu-card reveal" data-cat="prevention">
+        <div class="actu-card-img">
+          <div class="actu-card-img-placeholder">
+            <svg width="32" height="32" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          </div>
+        </div>
+        <div class="actu-card-body">
+          <div class="actu-card-meta">
+            <span class="actu-tag">Prévention</span>
+            <span class="actu-card-date">4 juillet 2025</span>
+          </div>
+          <div class="actu-card-title">Canicule : les bons réflexes pour protéger les personnes vulnérables</div>
+          <div class="actu-card-excerpt">En période de forte chaleur, la mairie rappelle les consignes essentielles et les ressources disponibles pour les seniors et personnes fragiles.</div>
+        </div>
+      </a>
+
+    </div><!-- /actu-grid -->
+
+    <!-- Pagination -->
+    <div class="pagination reveal">
+      <a href="#" class="page-btn active">1</a>
+      <a href="#" class="page-btn">2</a>
+      <a href="#" class="page-btn">3</a>
+      <span style="color: var(--gris); font-size: 0.85rem; padding: 0 0.25rem;">…</span>
+      <a href="#" class="page-btn">
+        <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+
+  // Filtres
+  const filterBtns = document.querySelectorAll('.actu-filter-btn');
+  const cards = document.querySelectorAll('#actu-grid .actu-card');
+  const une = document.querySelector('.actu-une');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+
+      // Une
+      if (cat === 'all' || une.dataset.cat === cat) {
+        une.style.display = '';
+      } else {
+        une.style.display = 'none';
+      }
+
+      cards.forEach(card => {
+        if (cat === 'all' || card.dataset.cat === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>

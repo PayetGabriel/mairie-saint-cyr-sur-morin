@@ -1,11 +1,813 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Randonnées — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="5 circuits de randonnée balisés à Saint-Cyr-sur-Morin. Parcours faciles et sportifs entre prairies, bois et cultures de la Brie." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── CHIFFRES CLÉS ───────────────────────── */
+
+    .rando-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .rando-stat {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .rando-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: var(--vert);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .rando-stat-label {
+      font-size: 0.82rem;
+      color: var(--gris);
+      line-height: 1.4;
+    }
+
+
+    /* ── FILTRE DIFFICULTÉ ───────────────────── */
+
+    .diff-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .diff-btn {
+      padding: 0.5rem 1.1rem;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1.5px solid rgba(200,191,176,0.5);
+      background: var(--blanc);
+      color: var(--texte);
+      transition: all 0.2s;
+    }
+
+    .diff-btn:hover, .diff-btn.active {
+      background: var(--vert);
+      color: var(--blanc);
+      border-color: var(--vert);
+    }
+
+
+    /* ── CIRCUIT CARD ────────────────────────── */
+
+    .circuit-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+      transition: box-shadow 0.25s;
+    }
+
+    .circuit-card:last-of-type { margin-bottom: 0; }
+
+    .circuit-card:hover {
+      box-shadow: 0 8px 32px rgba(42,37,32,0.08);
+    }
+
+    .circuit-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 0;
+    }
+
+    /* Preview PDF */
+    .circuit-preview {
+      position: relative;
+      background: var(--creme);
+      overflow: hidden;
+    }
+
+    .circuit-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+
+    .circuit-preview-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background: var(--vert-pale);
+    }
+
+    .circuit-preview-placeholder svg { stroke: var(--vert); opacity: 0.4; }
+    .circuit-preview-placeholder span { font-size: 0.75rem; color: var(--gris); font-style: italic; }
+
+    .circuit-num-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--vert);
+      color: var(--blanc);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      padding-bottom: 5px; /* Ajustement pour centrer visuellement le chiffre */
+    }
+
+    /* Pour le chiffre 1 (souvent trop haut, on baisse un peu) */
+    .circuit-card:nth-of-type(1) .circuit-num-badge {
+        padding-top: 2px;
+    }
+
+    /* Pour le chiffre 3 (souvent trop bas, on remonte) */
+    .circuit-card:nth-of-type(3) .circuit-num-badge {
+        padding-bottom: 4px;
+    }
+
+    /* Pour le chiffre 4 (souvent celui qui descend le plus bas) */
+    .circuit-card:nth-of-type(4) .circuit-num-badge {
+        padding-bottom: 5px;
+    }
+
+    .circuit-card:nth-of-type(5) .circuit-num-badge {
+        padding-bottom: 5px;
+    }
+
+    /* Contenu */
+    .circuit-content {
+      padding: 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .circuit-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .circuit-title-block {}
+
+    .circuit-sous-titre {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 700;
+      color: var(--vert);
+      margin-bottom: 0.4rem;
+    }
+
+    .circuit-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.25;
+    }
+
+    /* Badges infos */
+    .circuit-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .circuit-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+      border: 1px solid rgba(200,191,176,0.5);
+      background: var(--creme);
+      color: var(--texte);
+      white-space: nowrap;
+    }
+
+    .circuit-badge svg { stroke: var(--vert); flex-shrink: 0; }
+
+    .circuit-badge.facile { background: #e8f5e9; border-color: #a5d6a7; color: #2e7d32; }
+    .circuit-badge.facile svg { stroke: #2e7d32; }
+    .circuit-badge.sportif { background: #fff3e0; border-color: #ffcc80; color: #e65100; }
+    .circuit-badge.sportif svg { stroke: #e65100; }
+
+    /* Itinéraire — liste numérotée */
+    .circuit-itineraire {
+      position: relative;
+    }
+
+    .circuit-itineraire summary {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--vert);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      user-select: none;
+      list-style: none;
+      padding: 0.75rem 1rem;
+      background: var(--vert-pale);
+      border-radius: 10px;
+      transition: background 0.2s;
+    }
+
+    .circuit-itineraire summary:hover { background: rgba(58,90,64,0.12); }
+
+    .circuit-itineraire summary::marker,
+    .circuit-itineraire summary::-webkit-details-marker { display: none; }
+
+    .circuit-itineraire[open] summary .chevron { transform: rotate(90deg); }
+
+    .chevron {
+      transition: transform 0.2s;
+    }
+
+    .itineraire-steps {
+      padding: 1.25rem 1rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .step {
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--vert);
+      color: var(--blanc);
+      font-size: 0.72rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .step-text {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--texte);
+    }
+
+    /* Variante */
+    .variante-bloc {
+      background: var(--creme);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-top: 0.5rem;
+      border-left: 3px solid var(--pierre);
+    }
+
+    .variante-bloc h5 {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--pierre-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .variante-bloc p {
+      font-size: 0.83rem;
+      line-height: 1.7;
+      color: var(--gris);
+      margin: 0;
+    }
+
+    /* Départ */
+    .circuit-depart {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--gris);
+    }
+
+    .circuit-depart svg { stroke: var(--vert); }
+
+    /* Actions */
+    .circuit-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(200,191,176,0.3);
+    }
+
+
+    /* ── RESPONSIVE ──────────────────────────── */
+
+    @media (max-width: 860px) {
+      .circuit-layout {
+        grid-template-columns: 1fr;
+      }
+      .circuit-preview {
+        height: 220px;
+      }
+      .circuit-preview-placeholder {
+        min-height: 220px;
+      }
+      .circuit-content {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .rando-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+      .rando-stats .rando-stat:last-child {
+        grid-column: span 2;
+      }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Randonnées</h1>
+    <p class="page-intro">Cinq circuits balisés pour explorer les prairies, les bois et les hameaux de Saint-Cyr-sur-Morin à votre rythme.</p>
+    <div style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.78rem; color:rgba(255,255,255,0.65); margin-top:0.75rem;">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Mis à jour le 4 mars 2025
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- Stats -->
+    <div class="rando-stats reveal">
+      <div class="rando-stat">
+        <div class="rando-stat-num">5</div>
+        <div class="rando-stat-label">circuits balisés</div>
+      </div>
+      <div class="rando-stat">
+        <div class="rando-stat-num">34</div>
+        <div class="rando-stat-label">km de sentiers au total</div>
+      </div>
+      <div class="rando-stat">
+        <div class="rando-stat-num">3</div>
+        <div class="rando-stat-label">circuits accessibles à tous</div>
+      </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="diff-filters">
+      <button class="diff-btn active" data-diff="all">Tous les circuits</button>
+      <button class="diff-btn" data-diff="facile">Faciles</button>
+      <button class="diff-btn" data-diff="sportif">Sportifs</button>
+    </div>
+
+    <!-- ── CIRCUIT N°1 ─── -->
+    <div class="circuit-card reveal" data-diff="facile">
+      <div class="circuit-layout">
+        <div class="circuit-preview">
+          <div class="circuit-num-badge">1</div>
+          <img src="/assets/docs/randonnees/Rando_circuit_N1-1.png" alt="Aperçu fiche circuit N°1" />
+        </div>
+        <div class="circuit-content">
+          <div class="circuit-head">
+            <div class="circuit-title-block">
+              <div class="circuit-sous-titre">Circuit N°1</div>
+              <div class="circuit-title">Entre prairies et zones humides</div>
+            </div>
+          </div>
+
+          <div class="circuit-badges">
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 3-6 4 10"/></svg>
+              6 km
+            </span>
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              ~2 heures
+            </span>
+            <span class="circuit-badge facile">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Facile
+            </span>
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M6.5 8a2 2 0 0 0-1.905 1.46L2 17h6.5l1 4h5l1-4H21l-2.596-7.54A2 2 0 0 0 16.5 8z"/></svg>
+              Balisage bleu &amp; jaune
+            </span>
+          </div>
+
+          <div class="circuit-depart">
+            <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Départ : Parking du Bourg — Traverser l'Avenue Daniel Simon vers le panneau d'informations
+          </div>
+
+          <details class="circuit-itineraire">
+            <summary>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" class="chevron"><path d="M9 18l6-6-6-6"/></svg>
+              Voir l'itinéraire détaillé
+            </summary>
+            <div class="itineraire-steps">
+              <div class="step"><div class="step-num">1</div><div class="step-text">Traverser l'Avenue Daniel Simon vers le panneau d'informations. Franchir les deux passerelles derrière la mairie. Traverser tout droit le terrain de football.</div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-text">Prendre le Chemin des Rosettes sur la gauche et le poursuivre jusqu'au hameau des Archets.</div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-text">Au croisement, prendre à gauche. <em>(Hors circuit : à 100 m tout droit, Maison Pierre Mac Orlan.)</em> Traverser le pont (vue sur le moulin) et passer devant l'Auberge de l'Œuf Dur.</div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-text">Prendre à droite le Chemin de la Fontaine aux Chevaliers jusqu'au Chemin des Marois (zone très humide), le suivre à gauche jusqu'au Chemin des Petits Regains que vous prendrez à gauche.</div></div>
+              <div class="step"><div class="step-num">5</div><div class="step-text">Traverser la D31 au niveau de l'abri bus et prendre la sente piétonne à droite pour arriver Rue Jean-Pierre Chabrol à Courcelles-La-Roue. Prendre à gauche, passer devant le lavoir.</div></div>
+              <div class="step"><div class="step-num">6</div><div class="step-text">Bifurquer à droite sur le Chemin de Doue, monter jusqu'au Chemin du Tacot (ancienne voie ferrée). L'emprunter à gauche.</div></div>
+              <div class="step"><div class="step-num">7</div><div class="step-text">Poursuivre jusqu'à une bifurcation à gauche qui dévale le long de la prairie avant de virer à droite dans un chemin débouchant sur une petite rue.</div></div>
+              <div class="step"><div class="step-num">8</div><div class="step-text">Grimper l'escalier, traverser la D37 (prudence !) et la suivre à gauche jusqu'au Musée de la Seine-et-Marne.</div></div>
+              <div class="step"><div class="step-num">9</div><div class="step-text">Emprunter la petite rue à droite devant le Musée. Elle débouche Place Montmartre. Descendre la Rue Eugène Daumont à gauche, traverser devant l'Église pour retrouver le point de départ.</div></div>
+            </div>
+            <div style="padding: 0 1rem 1rem;">
+              <div class="variante-bloc">
+                <h5>Variante A — extension par les Louvières</h5>
+                <p>Prendre en face la Rue des Petits Champs. Au bout, virer à gauche sur le Chemin du Choisel au Gouffre puis à droite sur le Chemin du Choisel qui monte jusqu'au Chemin du Moulin. Descendre à gauche, franchir la passerelle, prendre le Chemin du Ru-de-Vrou à droite, traverser la D204 (prudence !). Continuer, puis prendre le Chemin de la Chapelle de Busserolles à gauche. Traverser Louvières, rejoindre la D204 (prudence !) et descendre le Chemin des Louvières. Rejoindre le Chemin du Tacot à droite — vous retrouvez le Circuit N°1 au point 7.</p>
+              </div>
+              <div class="variante-bloc" style="margin-top: 0.75rem;">
+                <h5>Variante B — par la Maison des Têtes</h5>
+                <p>En haut des escaliers, prendre à droite sans traverser la D37. Devant la Maison des Têtes, traverser pour rejoindre le Chemin du Tacot. Continuer jusqu'à un carrefour de chemins, prendre à gauche jusqu'à une sente à gauche qui monte jusqu'à la Sente de la Garenne. Prendre à droite pour arriver Rue des Forges. Tourner à droite pour rejoindre la Rue Eugène Daumont et descendre jusqu'à la Place Montmartre.</p>
+              </div>
+            </div>
+          </details>
+
+          <div class="circuit-actions">
+            <a href="/assets/docs/randonnees/Rando_circuit_N1.pdf" target="_blank" class="btn btn-primary">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              Fiche PDF du circuit N°1
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ── CIRCUIT N°2 ─── -->
+    <div class="circuit-card reveal" data-diff="sportif">
+      <div class="circuit-layout">
+        <div class="circuit-preview">
+          <div class="circuit-num-badge">2</div>
+          <img src="/assets/docs/randonnees/Rando_circuit_N2_003-1.png" alt="Aperçu fiche circuit N°2" />
+        </div>
+        <div class="circuit-content">
+          <div class="circuit-head">
+            <div class="circuit-title-block">
+              <div class="circuit-sous-titre">Circuit N°2</div>
+              <div class="circuit-title">Entre bois et cultures</div>
+            </div>
+          </div>
+
+          <div class="circuit-badges">
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 3-6 4 10"/></svg>
+              11 km
+            </span>
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              ~3 heures
+            </span>
+            <span class="circuit-badge sportif">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Sportif
+            </span>
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M6.5 8a2 2 0 0 0-1.905 1.46L2 17h6.5l1 4h5l1-4H21l-2.596-7.54A2 2 0 0 0 16.5 8z"/></svg>
+              Balisage bleu &amp; jaune
+            </span>
+            <span class="circuit-badge" style="border-color: var(--pierre); color: var(--pierre-dark);">+ Variante C (3 km)</span>
+          </div>
+
+          <div class="circuit-depart">
+            <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Départ : Parking du Bourg
+          </div>
+
+          <details class="circuit-itineraire">
+            <summary>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" class="chevron"><path d="M9 18l6-6-6-6"/></svg>
+              Voir l'itinéraire détaillé
+            </summary>
+            <div class="itineraire-steps">
+              <div class="step"><div class="step-num">1</div><div class="step-text">Traverser l'Avenue Daniel Simon vers le panneau d'informations.</div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-text">Franchir les deux passerelles derrière la mairie. Traverser le terrain de football et prendre le Chemin des Rosettes à gauche vers le hameau des Archets.</div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-text">Prendre la route en face puis monter à droite dans le chemin des Archets à la Méresse (montée raide). Traverser la Route des Vieilles Vignes pour retrouver le chemin.</div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-text">Au croisement en sortie de bois, prendre à droite vers le Chemin du Gué de la Nouette. Prendre à gauche, passer devant la mare de la Méresse. Laisser la variante C à droite, prendre le chemin face au portail.</div></div>
+              <div class="step"><div class="step-num">5</div><div class="step-text">Emprunter le chemin à gauche jusqu'au pylône, prendre à gauche le Chemin des Collinettes. Traverser une voie communale et descendre jusqu'à Biercy.</div></div>
+              <div class="step"><div class="step-num">6</div><div class="step-text">Emprunter la route à gauche sur 50 m, prendre la Sente des Murets à droite et tourner à gauche pour rejoindre Champeaux.</div></div>
+              <div class="step"><div class="step-num">7</div><div class="step-text">Traverser le hameau. Prendre la Rue des Jardins à droite. Continuer par le Chemin des Vignes. Tout droit au premier croisement (longue montée en bois), longer une grande prairie puis tourner à gauche vers Vanry.</div></div>
+              <div class="step"><div class="step-num">8</div><div class="step-text">Prendre la Rue de Biercy à gauche, longeant une peupleraie jusqu'à Champeaux.</div></div>
+              <div class="step"><div class="step-num">9</div><div class="step-text">Prendre la Rue d'Auray à droite, puis à gauche et tout de suite à droite dans la Rue de la Ferme. Continuer en chemin entre champs jusqu'au hameau des Archets.</div></div>
+              <div class="step"><div class="step-num">10</div><div class="step-text">Prendre à droite, passer devant la Maison Pierre Mac Orlan, franchir le pont des Archets, passer devant l'Auberge de l'Œuf Dur. Traverser la départementale, monter la Rue Verte. Grimper les escaliers, traverser la D37 (prudence !) et suivre à gauche jusqu'au Musée de la Seine-et-Marne.</div></div>
+              <div class="step"><div class="step-num">11</div><div class="step-text">Emprunter la petite rue à droite avant le musée. Déboucher Place Montmartre. Descendre la Rue Eugène Daumont à gauche, traverser devant l'Église pour retrouver le point de départ.</div></div>
+            </div>
+          </details>
+
+          <div class="circuit-actions">
+            <a href="/assets/docs/randonnees/Rando_circuit_N2_003.pdf" target="_blank" class="btn btn-primary">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              Fiche PDF du circuit N°2
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ── CIRCUIT N°3 ─── -->
+    <div class="circuit-card reveal" data-diff="facile">
+      <div class="circuit-layout">
+        <div class="circuit-preview">
+          <div class="circuit-num-badge">3</div>
+          <img src="/assets/docs/randonnees/Rando_circuit_N3www-1.png" alt="Aperçu fiche circuit N°3" />
+        </div>
+        <div class="circuit-content">
+          <div class="circuit-head">
+            <div class="circuit-title-block">
+              <div class="circuit-sous-titre">Circuit N°3</div>
+              <div class="circuit-title">Montmartre à la campagne avec Boronali</div>
+            </div>
+          </div>
+
+          <div class="circuit-badges">
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 3-6 4 10"/></svg>
+              3 km
+            </span>
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              ~1 heure
+            </span>
+            <span class="circuit-badge facile">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Facile
+            </span>
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M6.5 8a2 2 0 0 0-1.905 1.46L2 17h6.5l1 4h5l1-4H21l-2.596-7.54A2 2 0 0 0 16.5 8z"/></svg>
+              Balisage bleu &amp; jaune
+            </span>
+          </div>
+
+          <div class="circuit-depart">
+            <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Départ : Parking du Bourg
+          </div>
+
+          <details class="circuit-itineraire">
+            <summary>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" class="chevron"><path d="M9 18l6-6-6-6"/></svg>
+              Voir l'itinéraire détaillé
+            </summary>
+            <div class="itineraire-steps">
+              <div class="step"><div class="step-num">1</div><div class="step-text">Traverser l'Avenue Daniel Simon vers le panneau d'informations.</div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-text">Franchir les deux passerelles derrière la mairie. Traverser le terrain de football et prendre le Chemin des Rosettes à gauche vers le hameau des Archets.</div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-text">Prendre la route en face puis monter à droite dans le chemin des Archets à la Méresse.</div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-text">À 50 m sur la gauche, prendre la sente de la jachère et bifurquer à gauche pour arriver dans la sente de la Cocharde, à emprunter à droite.</div></div>
+              <div class="step"><div class="step-num">5</div><div class="step-text">Arriver sur la Route des Vieilles Vignes, prendre à gauche pour passer devant la maison de Frédé et la tombe de Boronali.</div></div>
+              <div class="step"><div class="step-num">6</div><div class="step-text">Emprunter la route à gauche sur 50 m, prendre la Sente des Murets à droite et tourner à gauche pour rejoindre Champeaux. Rejoindre le point 3 pour reprendre le Chemin des Rosettes jusqu'au point de départ.</div></div>
+            </div>
+            <div style="padding: 0 1rem 1rem;">
+              <div class="variante-bloc">
+                <h5>Hors circuit</h5>
+                <p>Au pont d'Archets, vous pouvez continuer à droite pour rejoindre le centre-bourg en passant devant le Musée de la Seine-et-Marne.</p>
+              </div>
+            </div>
+          </details>
+
+          <div class="circuit-actions">
+            <a href="/assets/docs/randonnees/Rando_circuit_N3www.pdf" target="_blank" class="btn btn-primary">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              Fiche PDF du circuit N°3
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ── CIRCUIT N°4 ─── -->
+    <div class="circuit-card reveal" data-diff="sportif">
+      <div class="circuit-layout">
+        <div class="circuit-preview">
+          <div class="circuit-num-badge">4</div>
+          <img src="/assets/docs/randonnees/Rando_circuit_N4-1.png" alt="Aperçu fiche circuit N°4" />
+        </div>
+        <div class="circuit-content">
+          <div class="circuit-head">
+            <div class="circuit-title-block">
+              <div class="circuit-sous-titre">Circuit N°4</div>
+              <div class="circuit-title">Autour de la meulière</div>
+            </div>
+          </div>
+
+          <div class="circuit-badges">
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 3-6 4 10"/></svg>
+              6 km
+            </span>
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              ~2 heures
+            </span>
+            <span class="circuit-badge sportif">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Sportif
+            </span>
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M6.5 8a2 2 0 0 0-1.905 1.46L2 17h6.5l1 4h5l1-4H21l-2.596-7.54A2 2 0 0 0 16.5 8z"/></svg>
+              Balisage bleu &amp; jaune
+            </span>
+            <span class="circuit-badge" style="border-color: var(--pierre); color: var(--pierre-dark);">+ Variante C (3 km)</span>
+          </div>
+
+          <div class="circuit-depart">
+            <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Départ : Parking du Bourg
+          </div>
+
+          <details class="circuit-itineraire">
+            <summary>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" class="chevron"><path d="M9 18l6-6-6-6"/></svg>
+              Voir l'itinéraire détaillé
+            </summary>
+            <div class="itineraire-steps">
+              <div class="step"><div class="step-num">1</div><div class="step-text">Traverser l'Avenue Daniel Simon vers le panneau d'informations.</div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-text">Franchir les deux passerelles derrière la mairie. Traverser le terrain de football et prendre le Chemin des Rosettes à gauche vers le hameau des Archets.</div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-text">Prendre la route en face puis monter à droite dans le chemin des Archets à la Méresse (montée raide). Traverser la Route des Vieilles Vignes pour retrouver le chemin.</div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-text">Au croisement en sortie de bois, prendre à droite vers le Chemin du Gué de la Nouette. Prendre à gauche, passer devant la mare de la Méresse. Laisser la variante C à droite, prendre le chemin face au portail.</div></div>
+              <div class="step"><div class="step-num">5</div><div class="step-text">Emprunter le chemin à gauche jusqu'au pylône, prendre à gauche le Chemin des Collinettes. Traverser une voie communale et descendre jusqu'à Biercy.</div></div>
+              <div class="step"><div class="step-num">6</div><div class="step-text">Emprunter la route à gauche sur 50 m, prendre la Sente des Murets à droite et tourner à gauche vers Champeaux.</div></div>
+              <div class="step"><div class="step-num">7</div><div class="step-text">Traverser le hameau. Prendre la Rue des Jardins à droite. Continuer par le Chemin des Vignes. Tout droit au premier croisement (longue montée en bois), longer une grande prairie puis tourner à gauche vers Vanry.</div></div>
+              <div class="step"><div class="step-num">8</div><div class="step-text">Prendre la Rue de Biercy à gauche, longeant une peupleraie jusqu'à Champeaux.</div></div>
+              <div class="step"><div class="step-num">9</div><div class="step-text">Prendre la Rue d'Auray à droite, puis à gauche et tout de suite à droite dans la Rue de la Ferme. Continuer en chemin entre champs jusqu'au hameau des Archets.</div></div>
+              <div class="step"><div class="step-num">10</div><div class="step-text">Prendre à droite, passer devant la Maison Pierre Mac Orlan, franchir le pont des Archets, passer devant l'Auberge de l'Œuf Dur. Traverser la départementale, monter la Rue Verte. Grimper les escaliers, traverser la D37 (prudence !) et suivre à gauche jusqu'au Musée.</div></div>
+              <div class="step"><div class="step-num">11</div><div class="step-text">Emprunter la petite rue à droite avant le musée. Déboucher Place Montmartre. Descendre la Rue Eugène Daumont à gauche, traverser devant l'Église pour retrouver le point de départ.</div></div>
+            </div>
+          </details>
+
+          <div class="circuit-actions">
+            <a href="/assets/docs/randonnees/Rando_circuit_N4.pdf" target="_blank" class="btn btn-primary">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              Fiche PDF du circuit N°4
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ── CIRCUIT N°5 ─── -->
+    <div class="circuit-card reveal" data-diff="facile">
+      <div class="circuit-layout">
+        <div class="circuit-preview">
+          <div class="circuit-num-badge">5</div>
+          <div class="circuit-preview-placeholder">
+            <svg width="36" height="36" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <span>Fiche bientôt disponible</span>
+          </div>
+        </div>
+        <div class="circuit-content">
+          <div class="circuit-head">
+            <div class="circuit-title-block">
+              <div class="circuit-sous-titre">Circuit N°5</div>
+              <div class="circuit-title">Boucle des sentes du Bourg</div>
+            </div>
+          </div>
+
+          <div class="circuit-badges">
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 3-6 4 10"/></svg>
+              3 km
+            </span>
+            <span class="circuit-badge">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              ~45 min
+            </span>
+            <span class="circuit-badge facile">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              Facile
+            </span>
+            <span class="circuit-badge">Panneaux numérotés</span>
+          </div>
+
+          <div class="circuit-depart">
+            <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Départ : Parking du Bourg — Emprunter la passerelle qui enjambe le Petit Morin pour passer devant l'église
+          </div>
+
+          <details class="circuit-itineraire">
+            <summary>
+              <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" class="chevron"><path d="M9 18l6-6-6-6"/></svg>
+              Voir l'itinéraire détaillé
+            </summary>
+            <div class="itineraire-steps">
+              <div class="step"><div class="step-num">1</div><div class="step-text">Traverser pour arriver devant la boulangerie. Prendre à gauche de la boulangerie la Rue de Chavigny. Laisser les 2 premières sentes à droite et prendre la 3ème : la <strong>Sente de la Garenne</strong>.</div></div>
+              <div class="step"><div class="step-num">2</div><div class="step-text">En haut, emprunter la <strong>Sente du Plaqué</strong> à gauche. Vous passez sous une arcade en pierres.</div></div>
+              <div class="step"><div class="step-num">3</div><div class="step-text">Continuer tout droit pour accéder à la <strong>Sente du Clos aux Ânes</strong> et poursuivre dans le bois.</div></div>
+              <div class="step"><div class="step-num">4</div><div class="step-text">Bifurquer à droite juste avant le ru pour arriver sur le <strong>Chemin du Tacot</strong>, à prendre à droite.</div></div>
+              <div class="step"><div class="step-num">5</div><div class="step-text">Continuer tout droit jusqu'à la <strong>Sente de l'Enfer</strong> sur votre gauche, monter les escaliers en terre et continuer dans les bois.</div></div>
+              <div class="step"><div class="step-num">6</div><div class="step-text">Déboucher sur la <strong>Sente du Champ Renard</strong>, poursuivre à gauche dans le sous-bois jusqu'à la départementale (attention !) à descendre à droite.</div></div>
+              <div class="step"><div class="step-num">7</div><div class="step-text">Prendre le <strong>Chemin du Tacot</strong> à droite avant la maison des Têtes. Continuer tout droit.</div></div>
+              <div class="step"><div class="step-num">8</div><div class="step-text">Au carrefour de la <strong>Sente de l'Enfer</strong>, descendre à gauche. Au bout, tourner immédiatement à gauche pour retrouver la Sente du Plaqué. Continuer tout droit dans la Rue des Forges. Tourner à droite et descendre jusqu'à l'église, puis retrouver le parking après le pont.</div></div>
+            </div>
+          </details>
+
+          <div class="circuit-actions">
+            <span class="btn" style="background: var(--creme); color: var(--gris); border: 1.5px solid rgba(200,191,176,0.5); cursor: default;">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+              </svg>
+              Fiche PDF bientôt disponible
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+
+  // Filtres difficulté
+  document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const diff = btn.dataset.diff;
+      document.querySelectorAll('.circuit-card').forEach(card => {
+        card.style.display = (diff === 'all' || card.dataset.diff === diff) ? '' : 'none';
+      });
+    });
+  });
+</script>
 </body>
 </html>
