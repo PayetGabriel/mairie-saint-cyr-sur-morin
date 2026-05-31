@@ -82,18 +82,58 @@
     /* Media queries pour la réactivité de la grille */
     /* Ajustements optionnels pour les petits écrans */
     @media (max-width: 480px) {
+        /* On réduit l'espace au-dessus du hub pour remonter le tout */
+        .hub-hero {
+            padding: 75px 0.75rem 2rem;
+        }
+
+        /* On réduit l'en-tête */
+        .hub-header {
+            margin-bottom: 1.75rem;
+        }
+        
+        .hub-header h1 {
+            font-size: clamp(1.8rem, 7vw, 2.2rem); /* Titre plus compact */
+            margin-bottom: 0.5rem;
+        }
+
+        .hub-header p {
+            font-size: 0.95rem; /* Descriptif moins imposant */
+            line-height: 1.4;
+            padding: 0 5px;
+        }
+
+        /* La grille respire mieux avec moins d'écart */
+        .hub-grid {
+            gap: 0.75rem; 
+        }
+
+        /* Les cartes deviennent plus denses */
         .hub-card {
-            padding: 1.5rem 1rem; /* Moins de vide interne */
-            gap: 0.8rem;
+            padding: 1.25rem 0.75rem;
+            gap: 0.6rem;
+            border-radius: 14px; /* Arrondis ajustés à la taille */
         }
+
+        /* Les icônes passent en mode discret */
         .hub-icon {
-            width: 54px;   /* Icône un poil plus petite */
-            height: 54px;
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
         }
+
+        .hub-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Le texte des boutons */
         .hub-label {
-            font-size: 0.85rem; /* Évite que les longs mots coupent mal */
+            font-size: 0.8rem;
+            line-height: 1.2;
         }
     }
+
     @media (min-width: 768px) {
         .hub-grid { 
             grid-template-columns: repeat(4, 1fr); 
