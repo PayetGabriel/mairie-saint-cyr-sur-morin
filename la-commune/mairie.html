@@ -259,6 +259,13 @@
       flex-direction: column;
     }
 
+    .cc2m-stat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem 1rem; /* Espace vertical et horizontal */
+        margin-top: 0.5rem;
+    }
+
     .cc2m-stat strong {
       font-family: 'Playfair Display', serif;
       font-size: 1.8rem;
@@ -438,6 +445,18 @@
       .gendarmeries-row { grid-template-columns: 1fr; }
       .competences-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── AJUSTEMENT DU DEFILEMENT DES ANCRES ── */
+
+    #mot-du-maire {
+        /* On décale de la hauteur de la nav (68px) + un bonus pour laisser respirer le titre */
+        scroll-margin-top: 68px; 
+    }
+
+    #communaute-de-communes {
+        /* On décale un tout petit peu moins pour que la rupture de couleur crème s'aligne pile sous la nav */
+        scroll-margin-top: 68px; 
+    }
   </style>
 </head>
 <body>
@@ -530,18 +549,26 @@
     <!-- Chiffres & contacts -->
     <div class="cc2m-fiche reveal">
       <div class="cc2m-fiche-card">
-        <h4>En chiffres</h4>
-        <div class="cc2m-stat-row">
-          <div class="cc2m-stat">
-            <strong>31</strong>
-            <span>communes</span>
-          </div>
-          <div class="cc2m-stat">
-            <strong>26 342</strong>
-            <span>habitants</span>
-          </div>
+        <h4>La CC2M en chiffres</h4>
+        <div class="cc2m-stat-grid">
+            <div class="cc2m-stat">
+                <strong>31</strong>
+                <span>communes</span>
+            </div>
+            <div class="cc2m-stat">
+                <strong>26 500</strong>
+                <span>habitants</span>
+            </div>
+            <div class="cc2m-stat">
+                <strong>394,2 km²</strong>
+                <span>de superficie</span>
+            </div>
+            <div class="cc2m-stat">
+                <strong>1</strong>
+                <span>territoire rural</span>
+            </div>
         </div>
-      </div>
+        </div>
       <div class="cc2m-fiche-card">
         <h4>Contact & accès</h4>
         <p>
