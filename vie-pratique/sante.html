@@ -1,11 +1,504 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Santé — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Les professionnels de santé de Saint-Cyr-sur-Morin : médecin, infirmières, dentiste, kinésithérapeute, ostéopathe et vétérinaire." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── GRILLE PRATICIENS ───────────────────── */
+
+    .sante-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .sante-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+
+    .sante-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(42,37,32,0.08);
+      border-color: rgba(58,90,64,0.2);
+    }
+
+    /* Bandeau couleur en haut de la carte */
+    .sante-card-accent {
+      height: 4px;
+      background: var(--vert);
+    }
+
+    .sante-card-accent.orange  { background: #e8955a; }
+    .sante-card-accent.bleu    { background: #5a89c4; }
+    .sante-card-accent.violet  { background: #9b72b0; }
+    .sante-card-accent.teal    { background: #5aada4; }
+    .sante-card-accent.rouge   { background: #c4605a; }
+
+    .sante-card-body {
+      padding: 1.5rem;
+    }
+
+    /* En-tête : icône + spécialité */
+    .sante-card-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .sante-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 11px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sante-icon svg { stroke: var(--vert); }
+    .sante-icon.orange  { background: rgba(232,149,90,0.12); }
+    .sante-icon.orange svg { stroke: #c47040; }
+    .sante-icon.bleu    { background: rgba(90,137,196,0.12); }
+    .sante-icon.bleu svg { stroke: #4070b0; }
+    .sante-icon.violet  { background: rgba(155,114,176,0.12); }
+    .sante-icon.violet svg { stroke: #7850a0; }
+    .sante-icon.teal    { background: rgba(90,173,164,0.12); }
+    .sante-icon.teal svg { stroke: #3a8880; }
+    .sante-icon.rouge   { background: rgba(196,96,90,0.12); }
+    .sante-icon.rouge svg { stroke: #a04040; }
+
+    .sante-specialite {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 700;
+      color: var(--vert);
+      margin-bottom: 0.3rem;
+    }
+
+    .sante-specialite.orange { color: #c47040; }
+    .sante-specialite.bleu   { color: #4070b0; }
+    .sante-specialite.violet { color: #7850a0; }
+    .sante-specialite.teal   { color: #3a8880; }
+    .sante-specialite.rouge  { color: #a04040; }
+
+    .sante-lieu {
+      font-size: 0.78rem;
+      color: var(--gris);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.35rem;
+      line-height: 1.5;
+    }
+
+    .sante-lieu svg { stroke: var(--pierre-dark); flex-shrink: 0; margin-top: 0.1rem; }
+
+    /* Liste praticiens */
+    .praticiens-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .praticien-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.7rem 0.9rem;
+      background: var(--creme);
+      border-radius: 9px;
+      flex-wrap: wrap;
+    }
+
+    .praticien-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--texte);
+      line-height: 1.4;
+    }
+
+    .praticien-contact {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .praticien-tel {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--vert);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .praticien-tel:hover { color: var(--vert-clair); }
+    .praticien-tel svg { stroke: currentColor; }
+
+    .praticien-doctolib {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #fff;
+      background: #3da5d9;
+      padding: 0.25rem 0.65rem;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .praticien-doctolib:hover { opacity: 0.85; }
+
+    /* Section vétérinaire */
+    .veto-divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 3rem 0 2rem;
+    }
+
+    .veto-divider span {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      color: var(--pierre-dark);
+      white-space: nowrap;
+    }
+
+    .veto-divider::before,
+    .veto-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(200,191,176,0.5);
+    }
+
+    @media (max-width: 600px) {
+      .sante-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Santé</h1>
+    <p class="page-intro">Les professionnels de santé présents sur la commune de Saint-Cyr-sur-Morin.</p>
+    <div style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.78rem; color:rgba(255,255,255,0.65); margin-top:0.75rem;">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Mis à jour le 9 janvier 2024
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <div class="section-label" style="margin-bottom: 0.75rem;">Professionnels de santé</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Dans votre commune</h2>
+
+    <div class="sante-grid">
+
+      <!-- Médecin -->
+      <div class="sante-card reveal">
+        <div class="sante-card-accent"></div>
+        <div class="sante-card-body">
+          <div class="sante-card-head">
+            <div class="sante-icon">
+              <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              </svg>
+            </div>
+            <div>
+              <div class="sante-specialite">Médecin généraliste</div>
+              <div class="sante-lieu">
+                <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Cabinet Médical — 19 A, avenue de La Ferté-sous-Jouarre
+              </div>
+            </div>
+          </div>
+          <div class="praticiens-list">
+            <div class="praticien-item">
+              <div class="praticien-name">Dr LECOQ Nathalie</div>
+              <div class="praticien-contact">
+                <a href="tel:0160248359" class="praticien-tel">
+                  <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  01 60 24 83 59
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Infirmières cabinet -->
+      <div class="sante-card reveal">
+        <div class="sante-card-accent teal"></div>
+        <div class="sante-card-body">
+          <div class="sante-card-head">
+            <div class="sante-icon teal">
+              <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="sante-specialite teal">Infirmières</div>
+              <div class="sante-lieu">
+                <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Cabinet Médical — 19 A, avenue de La Ferté-sous-Jouarre
+              </div>
+            </div>
+          </div>
+          <div class="praticiens-list">
+            <div class="praticien-item">
+              <div class="praticien-name">NION Isabelle</div>
+              <div class="praticien-contact">
+                <a href="tel:0617470685" class="praticien-tel">
+                  <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  06 17 47 06 85
+                </a>
+              </div>
+            </div>
+            <div class="praticien-item">
+              <div class="praticien-name">SCAGLIOLA Anouck</div>
+              <div class="praticien-contact">
+                <a href="tel:0614294644" class="praticien-tel">
+                  <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  06 14 29 46 44
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Infirmière libérale -->
+      <div class="sante-card reveal">
+        <div class="sante-card-accent teal"></div>
+        <div class="sante-card-body">
+          <div class="sante-card-head">
+            <div class="sante-icon teal">
+              <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="sante-specialite teal">Infirmière libérale</div>
+            </div>
+          </div>
+          <div class="praticiens-list">
+            <div class="praticien-item">
+              <div class="praticien-name">DA ROCHA Géraldine</div>
+              <div class="praticien-contact">
+                <a href="tel:0676045693" class="praticien-tel">
+                  <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  06 76 04 56 93
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ostéopathe -->
+      <div class="sante-card reveal">
+        <div class="sante-card-accent violet"></div>
+        <div class="sante-card-body">
+          <div class="sante-card-head">
+            <div class="sante-icon violet">
+              <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M12 12v10M8 22h8"/>
+              </svg>
+            </div>
+            <div>
+              <div class="sante-specialite violet">Ostéopathe</div>
+            </div>
+          </div>
+          <div class="praticiens-list">
+            <div class="praticien-item">
+              <div class="praticien-name">GAUTHIER Caroline</div>
+              <div class="praticien-contact">
+                <a href="tel:0643924641" class="praticien-tel">
+                  <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  06 43 92 46 41
+                </a>
+                <a href="https://www.doctolib.fr" target="_blank" rel="noopener" class="praticien-doctolib">Doctolib</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pédicure-Podologue -->
+      <div class="sante-card reveal">
+        <div class="sante-card-accent orange"></div>
+        <div class="sante-card-body">
+          <div class="sante-card-head">
+            <div class="sante-icon orange">
+              <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M12 22V12M12 12C12 12 7 9 7 5a5 5 0 0 1 10 0c0 4-5 7-5 7z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="sante-specialite orange">Pédicure-Podologue</div>
+            </div>
+          </div>
+          <div class="praticiens-list">
+            <div class="praticien-item">
+              <div class="praticien-name">LUCAS Eloïse</div>
+              <div class="praticien-contact">
+                <a href="https://www.doctolib.fr" target="_blank" rel="noopener" class="praticien-doctolib">RDV Doctolib</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chirurgien-dentiste -->
+      <div class="sante-card reveal">
+        <div class="sante-card-accent bleu"></div>
+        <div class="sante-card-body">
+          <div class="sante-card-head">
+            <div class="sante-icon bleu">
+              <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M12 2C8 2 5 5 5 9c0 3 1.5 5.5 3 7l1 6h6l1-6c1.5-1.5 3-4 3-7 0-4-3-7-7-7z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="sante-specialite bleu">Chirurgiens-dentistes</div>
+              <div class="sante-lieu">
+                <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                31 bis avenue de la Ferté-sous-Jouarre
+              </div>
+            </div>
+          </div>
+          <div class="praticiens-list">
+            <div class="praticien-item">
+              <div class="praticien-name">Dr DUPUIS Hugo &amp; Dr COMBES Guillaume</div>
+              <div class="praticien-contact">
+                <a href="tel:0160238157" class="praticien-tel">
+                  <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  01 60 23 81 57
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kinésithérapeute -->
+      <div class="sante-card reveal">
+        <div class="sante-card-accent"></div>
+        <div class="sante-card-body">
+          <div class="sante-card-head">
+            <div class="sante-icon">
+              <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M6 4v6a6 6 0 0 0 12 0V4"/>
+                <line x1="12" y1="16" x2="12" y2="20"/>
+                <line x1="8" y1="20" x2="16" y2="20"/>
+              </svg>
+            </div>
+            <div>
+              <div class="sante-specialite">Kinésithérapeute</div>
+              <div class="sante-lieu">
+                <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Hameau des Louvières — La Croix Blanche
+              </div>
+            </div>
+          </div>
+          <div class="praticiens-list">
+            <div class="praticien-item">
+              <div class="praticien-name">GUICHETEAU Emilien</div>
+              <div class="praticien-contact">
+                <a href="tel:0777858369" class="praticien-tel">
+                  <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  07 77 85 83 69
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Vétérinaire -->
+    <div class="veto-divider reveal">
+      <span>Pour vos animaux</span>
+    </div>
+
+    <div class="sante-grid">
+      <div class="sante-card reveal">
+        <div class="sante-card-accent rouge"></div>
+        <div class="sante-card-body">
+          <div class="sante-card-head">
+            <div class="sante-icon rouge">
+              <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+                <path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703.202 1.358.796 1.9C4.785 13.2 7.195 14 8 14c.523 0 2.909-.38 3.098-1.287"/>
+                <path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-.202 1.358-.796 1.9-.489 1.3-2.9 2.1-3.704 2.1-.523 0-2.909-.38-3.098-1.287"/>
+                <path d="M8 14v3.333C8 19.284 9.641 21 12 21s4-1.716 4-3.667V14"/>
+                <ellipse cx="12" cy="14" rx="4" ry="2"/>
+              </svg>
+            </div>
+            <div>
+              <div class="sante-specialite rouge">Vétérinaire</div>
+              <div class="sante-lieu">
+                <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                6 avenue de la Ferté-sous-Jouarre
+              </div>
+            </div>
+          </div>
+          <div class="praticiens-list">
+            <div class="praticien-item">
+              <div class="praticien-name">DONZEAUX Véronique</div>
+              <div class="praticien-contact">
+                <a href="tel:0164345661" class="praticien-tel">
+                  <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  01 64 34 56 61
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
 </body>
 </html>

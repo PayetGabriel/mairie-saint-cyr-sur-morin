@@ -259,6 +259,11 @@
       document.getElementById('footer-placeholder').innerHTML = data;
     });
 
+  document.addEventListener('DOMContentLoaded', () => {
+     // On utilise l'ID qui existe déjà dans ton HTML !
+     updateStatus('scheduleDropdown', 'mairie');
+  });
+
   function toggleSchedule() {
       document.getElementById('scheduleDropdown').classList.toggle('open');
   }
