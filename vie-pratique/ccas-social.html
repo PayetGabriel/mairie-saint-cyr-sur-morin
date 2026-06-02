@@ -1,11 +1,438 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CCAS & Social — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Le Centre Communal d'Action Sociale de Saint-Cyr-sur-Morin, Habitat et Humanisme et les services sociaux de proximité." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── DOMAINES CCAS ───────────────────────── */
+
+    .domaines-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .domaine-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .domaine-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .domaine-icon svg { stroke: var(--vert); }
+
+    .domaine-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.3;
+    }
+
+    .domaine-card p {
+      font-size: 0.82rem;
+      color: var(--gris);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ── ACTIVITÉS PROPOSÉES ─────────────────── */
+
+    .activites-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .activite-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.85rem;
+      background: var(--vert-pale);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      color: var(--vert);
+      font-weight: 500;
+    }
+
+    .activite-pill svg { stroke: var(--vert); }
+
+    /* ── POINTS D'ACCÈS ──────────────────────── */
+
+    .acces-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .acces-point {
+      background: var(--creme);
+      border-radius: 12px;
+      padding: 1.25rem;
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+    }
+
+    .acces-point svg { stroke: var(--vert); flex-shrink: 0; margin-top: 0.1rem; }
+
+    .acces-point strong {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.3rem;
+    }
+
+    .acces-point p {
+      font-size: 0.8rem;
+      color: var(--gris);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .acces-point a {
+      color: var(--vert);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* ── HABITAT ET HUMANISME ────────────────── */
+
+    .hh-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .hh-body p {
+      font-size: 0.93rem;
+      line-height: 1.85;
+      color: var(--texte);
+      margin-bottom: 1rem;
+    }
+
+    .hh-benevoles {
+      background: var(--vert-pale);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .hh-benevoles h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--vert);
+      margin-bottom: 1rem;
+    }
+
+    .hh-benevoles ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .hh-benevoles li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.83rem;
+      color: var(--texte);
+      line-height: 1.5;
+    }
+
+    .hh-benevoles li::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--vert);
+      flex-shrink: 0;
+      margin-top: 0.45em;
+    }
+
+    .hh-contact {
+      border-top: 1px solid rgba(58,90,64,0.15);
+      padding-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .hh-contact a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+      color: var(--vert);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .hh-contact a svg { stroke: var(--vert); }
+
+    /* ── AUTRES SERVICES ─────────────────────── */
+
+    .services-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .service-item {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .service-item svg { stroke: var(--vert); flex-shrink: 0; }
+
+    .service-item strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.2rem;
+    }
+
+    .service-item p {
+      font-size: 0.8rem;
+      color: var(--gris);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    .service-item a {
+      color: var(--vert);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    @media (max-width: 860px) {
+      .hh-layout { grid-template-columns: 1fr; }
+      .domaines-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .acces-grid { grid-template-columns: 1fr; }
+      .services-list { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>CCAS & Social</h1>
+    <p class="page-intro">Le Centre Communal d'Action Sociale et les services de solidarité pour vous aider et vous accompagner.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- CCAS -->
+    <div class="section-label" style="margin-bottom: 0.75rem;">Action sociale</div>
+    <h2 class="section-title" style="margin-bottom: 1rem;">Centre Communal d'Action Sociale</h2>
+
+    <div class="content-grid reveal" style="margin-bottom: 2rem;">
+      <div class="content-block">
+        <p>Le Centre Communal d'Action Sociale (CCAS) est là pour vous aider et vous accompagner ponctuellement en cas de difficultés. Il est composé de <strong>6 élus et 6 bénévoles</strong>, sous la présidence du Maire, et dispose de son propre règlement intérieur.</p>
+        <p>Le Centre Social est à la disposition de chacun, quel que soit son âge. Il bénéficie d'une subvention de la mairie et de quelques dons.</p>
+      </div>
+      <div class="info-note" style="align-self: start;">
+        <strong>Contact</strong> — Pour toute demande, prenez contact avec la mairie au <a href="tel:0160238024" style="color: var(--vert); font-weight: 600;">01 60 23 80 24</a> qui vous orientera vers le bon interlocuteur du CCAS.
+      </div>
+    </div>
+
+    <!-- 3 domaines -->
+    <div class="domaines-grid reveal">
+      <div class="domaine-card">
+        <div class="domaine-icon">
+          <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+        </div>
+        <h4>Action sociale légale</h4>
+        <p>Accompagnement des ayants droit pour l'obtention des attributions légales (RSA, APL…).</p>
+      </div>
+      <div class="domaine-card">
+        <div class="domaine-icon">
+          <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h4>Action sociale locale</h4>
+        <p>Identification et accompagnement des personnes en détresse ou isolées, selon la politique sociale des élus locaux.</p>
+      </div>
+      <div class="domaine-card">
+        <div class="domaine-icon">
+          <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <h4>Animation sociale</h4>
+        <p>Organisation d'activités sociales pour tisser du lien et favoriser la convivialité à tous les âges.</p>
+      </div>
+    </div>
+
+    <!-- Activités proposées -->
+    <div class="reveal" style="margin-bottom: 3rem;">
+      <p style="font-size: 0.88rem; color: var(--gris); margin-bottom: 0.5rem;">Activités organisées par le CCAS</p>
+      <div class="activites-list">
+        <div class="activite-pill">
+          <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Révision du Code de la route
+        </div>
+        <div class="activite-pill">
+          <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Prévention des risques ménagers
+        </div>
+        <div class="activite-pill">
+          <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Découvertes du Patrimoine saint-cyrien
+        </div>
+        <div class="activite-pill">
+          <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          Moments de partage et d'échanges
+        </div>
+      </div>
+    </div>
+
+    <!-- Points d'accès aux droits -->
+    <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">Points d'accès aux droits</h3>
+    <p style="font-size: 0.88rem; color: var(--gris); margin-bottom: 0.5rem;">Pour vous accompagner dans vos démarches administratives</p>
+
+    <div class="acces-grid reveal">
+      <div class="acces-point">
+        <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div>
+          <strong>Coulommiers</strong>
+          <p>22, rue du Palais de Justice — 77120 Coulommiers<br>
+          <a href="tel:0164658860">01 64 65 88 60</a><br>
+          Du lundi au vendredi : 9h–12h / 14h–17h30</p>
+        </div>
+      </div>
+      <div class="acces-point">
+        <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div>
+          <strong>La Ferté-sous-Jouarre</strong>
+          <p>34–36, rue des Pelletiers — Espace Citoyen — 77260<br>
+          <a href="tel:0160222563">01 60 22 25 63</a><br>
+          Lundi : 9h–12h / 14h–17h30<br>
+          Mardi, Jeudi, Vendredi : 9h–12h</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HABITAT ET HUMANISME -->
+<section class="section" style="background: var(--blanc);">
+  <div class="section-inner">
+    <div class="section-label" style="margin-bottom: 0.75rem;">Logement solidaire</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Habitat et Humanisme Seine-et-Marne</h2>
+
+    <div class="hh-layout reveal">
+      <div class="hh-body">
+        <p>L'objectif d'Habitat et Humanisme est de favoriser l'insertion par le logement, en permettant à des familles ou à des personnes isolées en difficultés d'accéder à un logement de qualité à faible loyer et de bénéficier d'un accompagnement de proximité qui favorise la création de liens sociaux et une insertion durable.</p>
+        <p>L'antenne Seine-et-Marne gère <strong>8 logements en secteur rural</strong> (Boissy-le-Châtel et Saint-Cyr-sur-Morin). À Saint-Cyr-sur-Morin, l'association intervient dans une résidence comprenant <strong>5 logements</strong> de 2 et 3 pièces. Cinq familles sont logées de manière pérenne ou dans l'attente d'un logement social, et bénéficient d'un accompagnement.</p>
+      </div>
+
+      <div class="hh-benevoles">
+        <h4>Rejoignez les bénévoles</h4>
+        <ul>
+          <li>Faciliter l'intégration des locataires</li>
+          <li>Accompagner dans les démarches administratives</li>
+          <li>Réaliser de petits travaux d'entretien (bricolage, jardinage)</li>
+        </ul>
+        <p style="font-size: 0.78rem; color: var(--gris); margin-bottom: 1rem;">Quel que soit votre profil et le temps dont vous disposez, votre aide est bienvenue.</p>
+        <div class="hh-contact">
+          <a href="mailto:c.lebras@habitat-humanisme.org">
+            <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            c.lebras@habitat-humanisme.org
+          </a>
+          <a href="tel:0675342041">
+            <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Christiane LE BRAS — 06 75 34 20 41
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- AUTRES SERVICES SOCIAUX -->
+<section class="section" style="background: var(--creme);">
+  <div class="section-inner">
+    <div class="section-label" style="margin-bottom: 0.75rem;">Proximité</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Autres services de solidarité</h2>
+
+    <div class="services-list reveal">
+      <div class="service-item">
+        <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <div>
+          <strong>Maison des Solidarités</strong>
+          <p>26/28 rue du Palais de Justice, Coulommiers<br><a href="tel:0164755820">01 64 75 58 20</a></p>
+        </div>
+      </div>
+      <div class="service-item">
+        <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <div>
+          <strong>Secours Populaire</strong>
+          <p>33 rue de Condé, La Ferté-sous-Jouarre<br><a href="tel:0160226712">01 60 22 67 12</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
 </body>
 </html>

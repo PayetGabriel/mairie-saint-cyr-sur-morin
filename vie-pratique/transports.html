@@ -1,11 +1,516 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transports — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Transports en commun, Transport à la Demande et navette séniors à Saint-Cyr-sur-Morin et sur le territoire de la CC2M." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── LIGNES DE BUS ───────────────────────── */
+
+    .lignes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .ligne-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.22s;
+    }
+
+    .ligne-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(42,37,32,0.08);
+      border-color: rgba(58,90,64,0.2);
+    }
+
+    .ligne-head {
+      padding: 1rem 1.25rem;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .ligne-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--vert);
+      line-height: 1;
+      min-width: 60px;
+    }
+
+    .ligne-head-text {}
+
+    .ligne-head-text strong {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.2rem;
+      line-height: 1.2;
+    }
+
+    .ligne-head-text span {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--gris);
+      line-height: 1.3;
+    }
+
+    .ligne-badge {
+      margin-left: auto;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 100px;
+    }
+
+    .ligne-badge.reguliere { background: #e8f5e9; color: #2e7d32; }
+    .ligne-badge.scolaire  { background: #fff3e0; color: #e65100; }
+    .ligne-badge.reservation { background: rgba(90,137,196,0.12); color: #4070b0; }
+
+    .ligne-plan {
+      width: 100%;
+      display: block;
+      border-top: 1px solid rgba(200,191,176,0.3);
+    }
+
+    .ligne-plan img {
+      width: 100%;
+      display: block;
+      max-height: 160px;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .ligne-footer {
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .ligne-footer a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--vert);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .ligne-footer a:hover { color: var(--vert-clair); }
+    .ligne-footer a svg { stroke: currentColor; }
+
+    /* ── TAD ─────────────────────────────────── */
+
+    .tad-layout {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .tad-body p {
+      font-size: 0.93rem;
+      line-height: 1.85;
+      color: var(--texte);
+      margin-bottom: 1rem;
+    }
+
+    .tad-body p:last-child { margin-bottom: 0; }
+
+    .tad-contact-card {
+      background: var(--vert);
+      border-radius: 16px;
+      padding: 2rem;
+      color: var(--blanc);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .tad-contact-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--blanc);
+    }
+
+    .tad-tel {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--blanc);
+      line-height: 1;
+    }
+
+    .tad-contact-card p {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .tad-arrêts {
+      background: var(--creme);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-top: 1.25rem;
+    }
+
+    .tad-arrêts h5 {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 700;
+      color: var(--vert);
+      margin-bottom: 0.75rem;
+    }
+
+    .tad-arrêts-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tad-arrêt-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--texte);
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+    }
+
+    .tad-arrêt-pill svg { stroke: var(--vert); }
+
+    /* ── MOBILITÉS SÉNIORS ───────────────────── */
+
+    .seniors-banner {
+      background: var(--texte);
+      border-radius: 20px;
+      padding: 2.5rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .seniors-banner h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--blanc);
+      margin-bottom: 0.5rem;
+    }
+
+    .seniors-banner p {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      max-width: 500px;
+    }
+
+    .seniors-tel-block {
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .seniors-tel-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--blanc);
+      white-space: nowrap;
+    }
+
+    .seniors-tel-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      margin-top: 0.3rem;
+    }
+
+    .seniors-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .seniors-detail-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.3rem;
+      display: flex;
+      gap: 0.9rem;
+      align-items: flex-start;
+    }
+
+    .seniors-detail-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .seniors-detail-icon svg { stroke: var(--vert); }
+
+    .seniors-detail-card strong {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.25rem;
+    }
+
+    .seniors-detail-card p {
+      font-size: 0.8rem;
+      color: var(--gris);
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    @media (max-width: 860px) {
+      .tad-layout { grid-template-columns: 1fr; }
+      .seniors-banner { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .lignes-grid { grid-template-columns: 1fr; }
+      .seniors-banner { padding: 2rem; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Transports</h1>
+    <p class="page-intro">Lignes de bus, transport à la demande et navette séniors pour se déplacer depuis Saint-Cyr-sur-Morin.</p>
+  </div>
+</header>
+
+<!-- ─── LIGNES DE BUS ─── -->
+<section class="section">
+  <div class="section-inner">
+
+    <div class="section-label" style="margin-bottom: 0.75rem;">Réseau Transdev Brie &amp; 2 Morin</div>
+    <h2 class="section-title" style="margin-bottom: 0.5rem;">Lignes desservant la commune</h2>
+    <p style="font-size: 0.88rem; color: var(--gris); margin-bottom: 2rem;">
+      Pour les horaires à jour, consultez <a href="https://www.iledefrance-mobilites.fr" target="_blank" rel="noopener" style="color: var(--vert); font-weight: 500;">Île-de-France Mobilités</a> ou <a href="https://www.bonjour-ratp.fr" target="_blank" rel="noopener" style="color: var(--vert); font-weight: 500;">Bonjour RATP</a>.
+    </p>
+
+    <div class="lignes-grid">
+
+      <!-- Ligne 2404 -->
+      <div class="ligne-card reveal">
+        <div class="ligne-head">
+          <div class="ligne-num">2404</div>
+          <div class="ligne-head-text">
+            <strong>Verdelot — La Ferté-sous-Jouarre</strong>
+            <span>Dessert Saint-Cyr-sur-Morin</span>
+          </div>
+          <span class="ligne-badge reguliere">Régulière</span>
+        </div>
+        <div class="ligne-plan">
+          <img src="/assets/img/2404.png" alt="Plan de la ligne 2404" />
+        </div>
+        <div class="ligne-footer">
+          <a href="https://www.bonjour-ratp.fr/lignes-bus/transdev-brie-et-2-morin-ligne-2404-c00924/" target="_blank" rel="noopener">
+            Horaires &amp; plan
+            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Ligne 2421 -->
+      <div class="ligne-card reveal">
+        <div class="ligne-head">
+          <div class="ligne-num">2421</div>
+          <div class="ligne-head-text">
+            <strong>Hondevilliers — La Ferté-sous-Jouarre</strong>
+            <span>Dessert Saint-Cyr-sur-Morin</span>
+          </div>
+          <span class="ligne-badge reguliere">Régulière</span>
+        </div>
+        <div class="ligne-plan">
+          <img src="/assets/img/2421.png" alt="Plan de la ligne 2421" />
+        </div>
+        <div class="ligne-footer">
+          <a href="https://www.bonjour-ratp.fr/lignes-bus/transdev-brie-et-2-morin-ligne-2421-c00923/" target="_blank" rel="noopener">
+            Horaires &amp; plan
+            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Ligne 2464 -->
+      <div class="ligne-card reveal">
+        <div class="ligne-head">
+          <div class="ligne-num">2464</div>
+          <div class="ligne-head-text">
+            <strong>Verdelot — Coulommiers</strong>
+            <span>Période scolaire uniquement</span>
+          </div>
+          <span class="ligne-badge scolaire">Scolaire</span>
+        </div>
+        <div class="ligne-plan">
+          <img src="/assets/img/2464.png" alt="Plan de la ligne 2464" />
+        </div>
+        <div class="ligne-footer">
+          <a href="https://www.bonjour-ratp.fr/lignes-bus/transdev-brie-et-2-morin-ligne-2464-c01047/" target="_blank" rel="noopener">
+            Horaires &amp; plan
+            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── TRANSPORT À LA DEMANDE ─── -->
+<section class="section" style="background: var(--blanc);">
+  <div class="section-inner">
+
+    <div class="section-label" style="margin-bottom: 0.75rem;">CC2M</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Transport à la Demande (Proxi'bus)</h2>
+
+    <div class="tad-layout">
+      <div class="tad-body">
+        <p>La Communauté de Communes des 2 Morin propose un service de transport à la demande opérationnel depuis le 1er juin 2015. Le Proxi'bus répond aux besoins liés à la santé, aux démarches administratives, aux achats et aux loisirs.</p>
+        <p>Le service est ouvert à tous. Les usagers de moins de 14 ans doivent être accompagnés d'un adulte. Il fonctionne du lundi après-midi au samedi après-midi, hors jours fériés.</p>
+        <p>Les titres habituels de transport Île-de-France sont acceptés (ticket t+, carte Navigo, Imagin'R, Améthyste…). Il est également possible d'acheter un titre à bord. Les personnes à mobilité réduite peuvent utiliser le service — le préciser lors de la réservation, le véhicule est adapté.</p>
+        <p><strong>Annulation :</strong> appelez la centrale dès que possible. Au-delà de trois absences injustifiées, le droit d'utilisation du service peut être retiré.</p>
+
+        <div class="tad-arrêts">
+          <h5>Arrêts à Saint-Cyr-sur-Morin</h5>
+          <div class="tad-arrêts-list">
+            <span class="tad-arrêt-pill"><svg width="10" height="10" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Biercy</span>
+            <span class="tad-arrêt-pill"><svg width="10" height="10" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Courcelles la Roue</span>
+            <span class="tad-arrêt-pill"><svg width="10" height="10" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>L'Hermitière</span>
+            <span class="tad-arrêt-pill"><svg width="10" height="10" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Les Montgoins</span>
+            <span class="tad-arrêt-pill"><svg width="10" height="10" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Église</span>
+            <span class="tad-arrêt-pill"><svg width="10" height="10" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Le Chemin</span>
+            <span class="tad-arrêt-pill"><svg width="10" height="10" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Route d'Arche</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tad-contact-card reveal">
+        <h4>Réservation Proxi'bus</h4>
+        <div class="tad-tel">0800 066 066</div>
+        <p>Gratuit — du lundi au vendredi<br>8h30–12h30 / 13h30–17h</p>
+        <p>Réservez <strong>au plus tard la veille</strong> avant 17h et au plus tôt un mois avant votre déplacement.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── MOBILITÉS SÉNIORS ─── -->
+<section class="section" style="background: var(--creme);">
+  <div class="section-inner">
+
+    <div class="section-label" style="margin-bottom: 0.75rem;">Pour les + de 70 ans</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Navette Mobilités Séniors</h2>
+
+    <div class="seniors-banner reveal">
+      <div>
+        <h3>Un service entièrement gratuit</h3>
+        <p>Réservé aux personnes de plus de 70 ans habitant une commune de la CC2M, ce service de navette fonctionne sur réservation. Il vous conduit à vos rendez-vous médicaux, courses, rendez-vous chez le coiffeur, visites à un proche — sur tout le territoire CC2M et dans les communes voisines (Coulommiers, Château-Thierry, Boissy-le-Châtel, Montmirail).</p>
+      </div>
+      <div class="seniors-tel-block">
+        <div class="seniors-tel-num">01 64 20 54 72</div>
+        <div class="seniors-tel-label">Réservation — 48h à l'avance</div>
+      </div>
+    </div>
+
+    <div class="seniors-details reveal">
+
+      <div class="seniors-detail-card">
+        <div class="seniors-detail-icon">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <div>
+          <strong>Horaires de réservation</strong>
+          <p>Lundi au vendredi — 8h30–12h / 13h30–17h<br>Appelez 48h avant votre trajet.</p>
+        </div>
+      </div>
+
+      <div class="seniors-detail-card">
+        <div class="seniors-detail-icon">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div>
+          <strong>Horaires du service</strong>
+          <p>Lundi au vendredi — 9h30–12h / 14h–16h30<br>Ne circule pas les derniers vendredis du mois, samedis, dimanches ni jours fériés.</p>
+        </div>
+      </div>
+
+      <div class="seniors-detail-card">
+        <div class="seniors-detail-icon">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div>
+          <strong>Prise en charge à domicile</strong>
+          <p>La navette vient vous chercher chez vous et vous ramène selon votre réservation. Présentez-vous 5 minutes avant l'heure prévue.</p>
+        </div>
+      </div>
+
+      <div class="seniors-detail-card">
+        <div class="seniors-detail-icon">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        </div>
+        <div>
+          <strong>Annulation</strong>
+          <p>Prévenez la CC2M au plus tard la veille pour libérer le service. En cas d'absence répétée non justifiée, le service peut être suspendu.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
 </body>
 </html>

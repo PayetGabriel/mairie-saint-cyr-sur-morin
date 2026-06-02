@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vie quotidienne — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Services publics, coordonnées utiles, réglementations locales et aménagements de Saint-Cyr-sur-Morin." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── SERVICES PUBLICS ────────────────────── */
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .service-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.22s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 22px rgba(42,37,32,0.08);
+      border-color: rgba(58,90,64,0.2);
+    }
+
+    .service-card-head {
+      background: var(--vert-pale);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .service-card-head svg { stroke: var(--vert); }
+
+    .service-card-head span {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 700;
+      color: var(--vert);
+    }
+
+    .service-card-body { padding: 1.25rem; }
+
+    .service-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card-body p {
+      font-size: 0.83rem;
+      color: var(--gris);
+      line-height: 1.65;
+      margin: 0 0 0.5rem;
+    }
+
+    .service-card-body a {
+      color: var(--vert);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .service-card-body a:hover { text-decoration: underline; }
+
+    .horaires-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+    }
+
+    .horaires-table td {
+      font-size: 0.78rem;
+      padding: 0.3rem 0;
+      color: var(--texte);
+    }
+
+    .horaires-table td:first-child {
+      font-weight: 600;
+      color: var(--vert);
+      width: 95px;
+    }
+
+    .horaires-table tr.fermé td { color: var(--gris); font-style: italic; }
+
+    .badge-maj {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.68rem;
+      color: #e65100;
+      background: rgba(230,81,0,0.07);
+      border: 1px solid rgba(230,81,0,0.2);
+      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+
+    /* ── COORDONNÉES UTILES ──────────────────── */
+
+    .coords-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+
+    .coord-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.65rem 1rem;
+      background: var(--blanc);
+      border-radius: 9px;
+      border: 1px solid rgba(200,191,176,0.3);
+      flex-wrap: wrap;
+    }
+
+    .coord-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--texte);
+    }
+
+    .coord-tel {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--vert);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .coord-tel:hover { text-decoration: underline; }
+
+    .coord-item.urgence { background: rgba(196,80,60,0.05); border-color: rgba(196,80,60,0.2); }
+    .coord-item.urgence .coord-tel { color: #C4503C; }
+
+
+    /* ── VILLAGE DE CARACTÈRE ────────────────── */
+
+    .vc-layout {
+        display: grid;
+        /* On passe de 200px à 600px pour laisser respirer la photo paysage */
+        grid-template-columns: 600px 1fr; 
+        gap: 3rem;
+        /* On aligne en haut pour éviter l'effet "flottement" au milieu du texte */
+        align-items: start; 
+    }
+
+    .vc-logo {
+        width: 100%;
+        border-radius: 16px;
+        overflow: hidden;
+        /* Optionnel : ajoute une ombre légère pour décoller la photo du fond blanc */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); 
+    }
+
+    .vc-logo img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    .vc-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.75rem;
+    }
+
+    .vc-body p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--texte);
+      margin-bottom: 1rem;
+    }
+
+    .vc-criteres {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .vc-critere {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      color: var(--texte);
+      line-height: 1.5;
+    }
+
+    .vc-critere::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--vert);
+      flex-shrink: 0;
+      margin-top: 0.45em;
+    }
+
+
+    /* ── RÉGLEMENTATIONS ─────────────────────── */
+
+    .reglem-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .reglem-item {
+      border-bottom: 1px solid rgba(200,191,176,0.25);
+    }
+
+    .reglem-item:last-child { border-bottom: none; }
+
+    .reglem-summary {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 0;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+
+    .reglem-summary::-webkit-details-marker { display: none; }
+
+    .reglem-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .reglem-icon svg { stroke: var(--vert); }
+
+    .reglem-title {
+      flex: 1;
+      font-size: 0.93rem;
+      font-weight: 600;
+      color: var(--texte);
+    }
+
+    .reglem-chevron {
+      stroke: var(--gris);
+      transition: transform 0.2s;
+    }
+
+    details[open] .reglem-chevron { transform: rotate(90deg); }
+
+    .reglem-body {
+      padding: 0 0 1.25rem 3.25rem;
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--texte);
+    }
+
+    .reglem-body p { margin-bottom: 0.75rem; }
+    .reglem-body p:last-child { margin-bottom: 0; }
+
+    .reglem-body ul {
+      list-style: none;
+      padding: 0;
+      margin: 0.5rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .reglem-body li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      line-height: 1.6;
+    }
+
+    .reglem-body li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--vert);
+      flex-shrink: 0;
+      margin-top: 0.5em;
+    }
+
+    .reglem-horaire {
+      background: var(--vert-pale);
+      border-radius: 8px;
+      padding: 0.65rem 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--texte);
+    }
+
+
+    /* ── AMÉNAGEMENTS PLACE ──────────────────── */
+
+    .timeline {
+        position: relative;
+        max-width: 900px;
+        margin: 4rem auto;
+        padding: 2rem 0;
+    }
+
+    /* La ligne centrale */
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: var(--vert); /* Utilise ta variable dorée/verte */
+        opacity: 0.3;
+        transform: translateX(-50%);
+    }
+
+    .timeline-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 4rem;
+        width: 100%;
+    }
+
+    .timeline-item:nth-child(even) {
+        flex-direction: row-reverse;
+    }
+
+    .timeline-date {
+        width: 45%;
+        font-family: 'Playfair Display', serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--vert);
+        text-align: right;
+        padding-top: 1rem;
+    }
+
+    .timeline-item:nth-child(even) .timeline-date {
+        text-align: left;
+    }
+
+    .timeline-content {
+        width: 45%;
+        background: var(--blanc);
+        padding: 1rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .timeline-content img {
+        width: 100%;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .timeline-content p {
+        font-size: 0.85rem;
+        color: var(--gris);
+        line-height: 1.5;
+    }
+
+    /* Style spécial pour la version finale */
+    .timeline-item.today .timeline-content {
+        background: #fdfaf3; /* Un fond légèrement différent */
+        border: 1px solid var(--vert);
+    }
+
+    .timeline-sub-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    /* Responsive : On passe tout sur une colonne sur mobile */
+    @media (max-width: 768px) {
+        .timeline::before { left: 20px; }
+        .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; }
+        .timeline-date { 
+            width: 100%; 
+            text-align: left !important; 
+            padding-left: 45px; 
+            margin-bottom: 1rem;
+        }
+        .timeline-content { 
+            width: calc(100% - 45px); 
+            margin-left: 45px; 
+        }
+    }
+
+    /* ── FONTAINES ───────────────────────────── */
+
+    .fontaines-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .fontaine-img {
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .fontaine-img img {
+      width: 100%;
+      display: block;
+    }
+
+    .fontaine-body p {
+      font-size: 0.93rem;
+      line-height: 1.85;
+      color: var(--texte);
+      margin-bottom: 1rem;
+    }
+
+    .fontaine-body p:last-child { margin-bottom: 0; }
+
+    @media (max-width: 860px) {
+      .vc-layout { grid-template-columns: 1fr; }
+      .fontaines-layout { grid-template-columns: 1fr; }
+      .place-gallery { grid-template-columns: 1fr 1fr; }
+      .place-gallery-item.main { grid-column: span 2; }
+    }
+
+    @media (max-width: 600px) {
+      .coords-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+      .place-gallery { grid-template-columns: 1fr; }
+      .place-gallery-item.main { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Vie quotidienne</h1>
+    <p class="page-intro">Services publics, coordonnées utiles, réglementations locales et aménagements du village.</p>
+  </div>
+</header>
+
+<!-- ─── SERVICES PUBLICS ─── -->
+<section class="section">
+  <div class="section-inner">
+
+    <div class="section-label" style="margin-bottom: 0.75rem;">Sur place</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Services publics</h2>
+
+    <div class="services-grid">
+
+      <!-- Agence postale -->
+      <div class="service-card reveal">
+        <div class="service-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <span>La Poste</span>
+        </div>
+        <div class="service-card-body">
+          <div class="badge-maj">⚠ Nouveaux horaires au 15 juin 2026</div>
+          <div class="service-card-name">Agence Postale</div>
+          <p>Place de l'Église — <a href="tel:0160255636">01 60 25 56 36</a></p>
+          <table class="horaires-table">
+            <tr class="fermé"><td>Lundi</td><td>Fermé</td></tr>
+            <tr><td>Mar – Jeu</td><td>9h – 12h</td></tr>
+            <tr><td>Vendredi</td><td>9h – 12h / 16h – 19h30</td></tr>
+            <tr><td>Samedi</td><td>9h – 12h</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <!-- Médiathèque -->
+      <div class="service-card reveal">
+        <div class="service-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span>Culture</span>
+        </div>
+        <div class="service-card-body">
+          <div class="service-card-name">Médiathèque Au Moulin de Terwagne</div>
+          <p>Pour les horaires actualisés, consultez la <a href="/decouvrir/mediatheque.html">page médiathèque</a>.</p>
+          <p>
+            <a href="tel:0160016425">01 60 01 64 25</a><br>
+            <a href="mailto:mediatheque.mairiesaintcyr@orange.fr">mediatheque.mairiesaintcyr@orange.fr</a><br>
+            <a href="https://www.facebook.com/mediathequestcyrsurmorin" target="_blank" rel="noopener">Page Facebook</a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Notaire -->
+      <div class="service-card reveal">
+        <div class="service-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Juridique</span>
+        </div>
+        <div class="service-card-body">
+          <div class="service-card-name">Notaire</div>
+          <p>Maître DIDRY Agnès<br>33, avenue Daniel Simon<br><a href="tel:0160238004">01 60 23 80 04</a></p>
+        </div>
+      </div>
+
+      <!-- CAF -->
+      <div class="service-card reveal">
+        <div class="service-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <span>Prestations familiales</span>
+        </div>
+        <div class="service-card-body">
+          <div class="service-card-name">Permanence CAF</div>
+          <p>Sur rendez-vous uniquement à Meaux ou Coulommiers.<br><a href="tel:0810257710">08 10 25 77 10</a></p>
+        </div>
+      </div>
+
+      <!-- Pôle Emploi -->
+      <div class="service-card reveal">
+        <div class="service-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          <span>Emploi</span>
+        </div>
+        <div class="service-card-body">
+          <div class="service-card-name">France Travail (Pôle Emploi)</div>
+          <p>8, rue de la Gare, La Ferté-sous-Jouarre<br><a href="tel:3949">3949</a></p>
+        </div>
+      </div>
+
+      <!-- Office de tourisme -->
+      <div class="service-card reveal">
+        <div class="service-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span>Tourisme</span>
+        </div>
+        <div class="service-card-body">
+          <div class="service-card-name">Office de Tourisme</div>
+          <p>9, place du Marché, Rebais<br><a href="tel:0164654744">01 64 65 47 44</a></p>
+        </div>
+      </div>
+
+      <!-- Services religieux -->
+      <div class="service-card reveal">
+        <div class="service-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+          <span>Services religieux</span>
+        </div>
+        <div class="service-card-body">
+          <div class="service-card-name">Paroisse</div>
+          <p>Mariages, baptêmes, décès :<br>Père Robert COLY — <a href="tel:0160220281">01 60 22 02 81</a></p>
+          <p>Messe : tous les 1ers samedis du mois à 18h30.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── VILLAGE DE CARACTÈRE ─── -->
+<section class="section" style="background: var(--blanc);">
+  <div class="section-inner">
+    <div class="section-label" style="margin-bottom: 0.75rem;">Label national</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Saint-Cyr-sur-Morin, « Village de caractère »</h2>
+
+    <div class="vc-layout reveal">
+      <div class="vc-body">
+        <h3>Un label obtenu en novembre 2019</h3>
+        <p>Le label <em>Villages et cités de caractère</em> est un label national officiel créé en 1996, attribué par le Comité Départemental du Tourisme aux communes rurales de moins de 2 000 habitants présentant un patrimoine architectural et paysager remarquable.</p>
+        <p>En 2019, le Département a remis ce label à six communes : Noisy-sur-École, Boulancourt, Carnetin, Moisenay, Saint-Loup-de-Naud et Saint-Cyr-sur-Morin. La Seine-et-Marne compte désormais 32 « Villages de caractère ».</p>
+        <div class="vc-criteres">
+          <div class="vc-critere">Commune rurale de moins de 2 000 habitants</div>
+          <div class="vc-critere">Patrimoine architectural remarquable (sites et monuments classés ou inscrits)</div>
+          <div class="vc-critere">Paysages remarquables mis en valeur</div>
+          <div class="vc-critere">Accueil de qualité : restauration, hébergement, information touristique</div>
+          <div class="vc-critere">Animations et événements culturels tout au long de l'année</div>
+          <div class="vc-critere">Amélioration du cadre de vie et préservation de l'environnement</div>
+        </div>
+      </div>
+      <div class="vc-logo">
+        <img src="/assets/img/Village_de_caractere_prix.jpg" alt="Label Village de caractère — Saint-Cyr-sur-Morin" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── COORDONNÉES UTILES ─── -->
+<section class="section" style="background: var(--creme);">
+  <div class="section-inner">
+    <div class="section-label" style="margin-bottom: 0.75rem;">Bien vivre à Saint-Cyr</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Coordonnées utiles</h2>
+
+    <div class="coords-grid reveal">
+      <div class="coord-item"><span class="coord-label">Mairie</span><a href="tel:0160238024" class="coord-tel">01 60 23 80 24</a></div>
+      <div class="coord-item"><span class="coord-label">École Primaire</span><a href="tel:0160238195" class="coord-tel">01 60 23 81 95</a></div>
+      <div class="coord-item"><span class="coord-label">École Maternelle</span><a href="tel:0160238936" class="coord-tel">01 60 23 89 36</a></div>
+      <div class="coord-item"><span class="coord-label">Syndicat des Eaux</span><a href="tel:0164045137" class="coord-tel">01 64 04 51 37</a></div>
+      <div class="coord-item"><span class="coord-label">Dépannage ERDF</span><a href="tel:0972675044" class="coord-tel">09 72 67 50 44</a></div>
+      <div class="coord-item"><span class="coord-label">Dépannage GRDF</span><a href="tel:0800473333" class="coord-tel">0800 473 333</a></div>
+      <div class="coord-item"><span class="coord-label">CC2M Encombrants</span><a href="tel:0164652151" class="coord-tel">01 64 65 21 51</a></div>
+      <div class="coord-item"><span class="coord-label">Pharmacie de Garde</span><a href="tel:3237" class="coord-tel">3237</a></div>
+      <div class="coord-item"><span class="coord-label">Gendarmerie Rebais</span><a href="tel:0164758210" class="coord-tel">01 64 75 82 10</a></div>
+      <div class="coord-item urgence"><span class="coord-label">Urgence européenne</span><a href="tel:112" class="coord-tel">112</a></div>
+      <div class="coord-item urgence"><span class="coord-label">SAMU</span><a href="tel:15" class="coord-tel">15</a></div>
+      <div class="coord-item urgence"><span class="coord-label">Pompiers</span><a href="tel:18" class="coord-tel">18</a></div>
+      <div class="coord-item urgence"><span class="coord-label">Police</span><a href="tel:17" class="coord-tel">17</a></div>
+      <div class="coord-item"><span class="coord-label">Centre anti-poison (Paris)</span><a href="tel:0140054848" class="coord-tel">01 40 05 48 48</a></div>
+      <div class="coord-item"><span class="coord-label">Urgences Vétérinaires</span><a href="tel:0170389177" class="coord-tel">01 70 38 91 77</a></div>
+      <div class="coord-item"><span class="coord-label">Cancer Info Service</span><a href="tel:0810810821" class="coord-tel">0810 810 821</a></div>
+      <div class="coord-item"><span class="coord-label">Femmes victimes de violence</span><a href="tel:3919" class="coord-tel">3919</a></div>
+      <div class="coord-item"><span class="coord-label">Violences familiales</span><a href="tel:0144730127" class="coord-tel">01 44 73 01 27</a></div>
+      <div class="coord-item"><span class="coord-label">Enfance maltraitée</span><a href="tel:119" class="coord-tel">119</a></div>
+      <div class="coord-item"><span class="coord-label">Accueil sans abri</span><a href="tel:115" class="coord-tel">115</a></div>
+      <div class="coord-item"><span class="coord-label">Prévention radicalisation</span><a href="tel:0800005696" class="coord-tel">0800 005 696</a></div>
+      <div class="coord-item"><span class="coord-label">Alcooliques Anonymes</span><a href="tel:0820326883" class="coord-tel">08 20 32 68 83</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── RÉGLEMENTATIONS LOCALES ─── -->
+<section class="section">
+  <div class="section-inner">
+    <div class="section-label" style="margin-bottom: 0.75rem;">Soyons bons citoyens</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Réglementations locales</h2>
+
+    <div class="reglem-list reveal">
+
+      <details class="reglem-item">
+        <summary class="reglem-summary">
+          <div class="reglem-icon"><svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <span class="reglem-title">Divagation des chiens</span>
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="reglem-chevron"><path d="M9 18l6-6-6-6"/></svg>
+        </summary>
+        <div class="reglem-body"><p>Il est interdit de laisser divaguer les chiens, seuls et sans maître ou gardien sur la voie publique communale.</p></div>
+      </details>
+
+      <details class="reglem-item">
+        <summary class="reglem-summary">
+          <div class="reglem-icon"><svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></div>
+          <span class="reglem-title">Bruits de voisinage</span>
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="reglem-chevron"><path d="M9 18l6-6-6-6"/></svg>
+        </summary>
+        <div class="reglem-body">
+          <p>Les occupants et utilisateurs de locaux privés doivent prendre toutes les précautions pour éviter de gêner le voisinage. Les travaux nécessitant l'utilisation d'appareils à moteur (perceuses, tondeuses, tronçonneuses…) ne sont autorisés qu'aux horaires suivants :</p>
+          <div class="reglem-horaire">
+            Lundi au samedi : 8h–12h / 14h–20h<br>
+            Dimanche et jours fériés : 10h–12h
+          </div>
+        </div>
+      </details>
+
+      <details class="reglem-item">
+        <summary class="reglem-summary">
+          <div class="reglem-icon"><svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2c0-3.32-2.67-7.25-8-11.8z"/></svg></div>
+          <span class="reglem-title">Brûlage des déchets verts</span>
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="reglem-chevron"><path d="M9 18l6-6-6-6"/></svg>
+        </summary>
+        <div class="reglem-body"><p>Le brûlage est désormais <strong>interdit sur tout le territoire de la Seine-et-Marne</strong>. Un service de broyage des tailles est mis en place par la commune. Renseignements et inscriptions en mairie au <a href="tel:0160238024" class="coord-tel">01 60 23 80 24</a>.</p></div>
+      </details>
+
+      <details class="reglem-item">
+        <summary class="reglem-summary">
+          <div class="reglem-icon"><svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 3-6 4 10"/><path d="M3 17h18"/></svg></div>
+          <span class="reglem-title">Élagage des arbres et des haies</span>
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="reglem-chevron"><path d="M9 18l6-6-6-6"/></svg>
+        </summary>
+        <div class="reglem-body"><p>Les arbres, branches et racines qui débordent sur les voies communales doivent être coupés à l'aplomb de leurs limites, à la diligence des propriétaires. Les haies doivent être taillées de façon à ne faire aucune saillie sur la voie. Le domaine public routier communal ne doit pas être encombré lors des opérations d'abattage, d'ébranchage ou de débitage.</p></div>
+      </details>
+
+      <details class="reglem-item">
+        <summary class="reglem-summary">
+          <div class="reglem-icon"><svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <span class="reglem-title">Déneigement</span>
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="reglem-chevron"><path d="M9 18l6-6-6-6"/></svg>
+        </summary>
+        <div class="reglem-body"><p>Les agents techniques assurent le déneigement des voiries communales. Il appartient aux riverains de déneiger les parties communes situées devant chez eux. Pour permettre un déneigement efficace, laissez les rues libres pour les engins. Du sel peut être mis à disposition — renseignements en mairie au <a href="tel:0160238024">01 60 23 80 24</a>.</p></div>
+      </details>
+
+      <details class="reglem-item">
+        <summary class="reglem-summary">
+          <div class="reglem-icon"><svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <span class="reglem-title">Frelon asiatique</span>
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="reglem-chevron"><path d="M9 18l6-6-6-6"/></svg>
+        </summary>
+        <div class="reglem-body">
+          <p>Le frelon asiatique (20 à 30 mm, dominante noire, bande jaune-orange sur l'abdomen, pattes jaunes aux extrémités) est une espèce invasive à fort impact sur les abeilles et la biodiversité locale.</p>
+          <p><strong>En présence d'un nid :</strong></p>
+          <ul>
+            <li>Ne vous approchez pas à moins de 5 m</li>
+            <li>Ne détruisez pas le nid vous-même — faites appel à des professionnels (domaine privé) ou aux pompiers (domaine public, risque pour des tiers)</li>
+            <li>Un nid découvert en automne n'est pas urgent : les fondatrices fécondées ont déjà quitté le nid</li>
+            <li>La destruction en hiver (à partir de novembre) est inutile</li>
+            <li>Le nid non détruit ne sera pas réinvesti l'année suivante et se dégradera naturellement</li>
+          </ul>
+          <p style="font-size:0.82rem; color: var(--gris); margin-top: 0.75rem;">Signalement possible sur <a href="http://inpn.mnhn.fr/espece/signalement/vespa" target="_blank" rel="noopener">inpn.mnhn.fr</a></p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── AMÉNAGEMENTS ─── -->
+<section class="section" style="background: var(--blanc);">
+  <div class="section-inner">
+    <div class="section-label" style="margin-bottom: 0.75rem;">Patrimoine & aménagements</div>
+    <h2 class="section-title" style="margin-bottom: 0.5rem;">La place de l'Église</h2>
+    <div class="badge-maj" style="margin-bottom: 2rem;">Mis à jour : 14 mars 2021</div>
+
+    <!-- ÉTAPE 1 : Le Constat (2014) -->
+    <div class="content-block reveal" style="margin-bottom: 2.5rem;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--texte); margin-bottom: 0.75rem;">2014 : Le lancement de la réflexion</h3>
+      <p>Les projets de rénovation de la place remontent à 2014. Quelques premiers échanges avec les commerçants et les riverains dès octobre 2014 nous ont confortés dans l’idée qu’il fallait entamer rapidement une réflexion sur des aménagements qui rendent plus conviviaux la place d’une part, mais aussi l’ensemble de l’espace compris entre le Morin et la mairie.</p>
+      <p>Nous avons donc contacté le <strong>CAUE</strong> comme conseil et adressé un questionnaire à l’ensemble des riverains du centre bourg afin de recueillir des témoignages, expériences et idées.</p>
+    </div>
+
+    <!-- ÉTAPE 2 : La Concertation (2015) -->
+    <div class="content-block reveal" style="margin-bottom: 2.5rem;">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--texte); margin-bottom: 0.75rem;">Mercredi 28 Octobre 2015 : Rencontre avec les habitants</h3>
+      <p>La deuxième étape s’est déroulée lors d’une rencontre publique réunissant une trentaine d’habitants ainsi que M. Deladerriere (architecte-urbaniste-environnement du CAUE) autour de plusieurs thèmes clés :</p>
+      <ul style="margin: 1rem 0 1.5rem 1.25rem; padding: 0; display: flex; flex-direction: column; gap: 0.4rem;">
+        <li style="list-style-type: disc; font-size: 0.9rem; color: var(--texte);">L’activité commerciale et sa pérennisation ;</li>
+        <li style="list-style-type: disc; font-size: 0.9rem; color: var(--texte);">La circulation et le stationnement ;</li>
+        <li style="list-style-type: disc; font-size: 0.9rem; color: var(--texte);">Les espaces piétons et la sécurité ;</li>
+        <li style="list-style-type: disc; font-size: 0.9rem; color: var(--texte);">L’architecture environnante et l’embellissement des lieux ;</li>
+        <li style="list-style-type: disc; font-size: 0.9rem; color: var(--texte);">L’information et l’accueil des visiteurs.</li>
+      </ul>
+      
+      <p>Il est ressorti de ces échanges nourris que <strong>la question du stationnement était prégnante</strong> : les voitures ventouses (notamment le week-end) et un arrêt de bus mal placé constituaient une gêne majeure pour le commerce local, la sécurité et la convivialité.</p>
+      <p>Plusieurs pistes de réflexion ont alors été dégagées : le déplacement de l’arrêt de bus vers la mairie, la limitation de la circulation aux seuls riverains dans la rue Eugène Daumont, le manque de signalétique pour les randonneurs, l'absence de toilettes publiques (avec l'idée de transformer le local technique près du Morin), l'amélioration des trottoirs, l'accueil des camping-cars et la gestion des déjections canines.</p>
+    </div>
+
+    <!-- ÉTAPE 3 : L'Histoire en images -->
+    <div class="content-block reveal">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">L'évolution de la place au fil du temps</h3>
+      <p style="font-size: 0.9rem; color: var(--gris); margin-bottom: 1.5rem;">D'hier à aujourd'hui : découvrez le déroulé historique et les travaux achevés en 2021.</p>
+    </div>
+
+    <!-- GRILLE CHRONOLOGIQUE RÉORGANISÉE -->
+    <div class="timeline reveal">
+        <div class="timeline-item">
+            <div class="timeline-date">Autrefois</div>
+            <div class="timeline-content">
+            <img src="/assets/img/place/longtemps.jpg" alt="La place autrefois" />
+            <p>Une place de village traditionnelle, cœur battant du commerce historique.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-date">1960</div>
+            <div class="timeline-content">
+            <img src="/assets/img/place/1960.jpg" alt="La place en 1960" />
+            <p>L'arrivée de l'automobile commence à transformer l'espace public.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-date">2011</div>
+            <div class="timeline-content">
+            <img src="/assets/img/place/2011.jpg" alt="La place en 2011" />
+            <p>Le constat d'un besoin de modernisation et de sécurisation des piétons.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-date">2018-2020</div>
+            <div class="timeline-content">
+            <img src="/assets/img/place/travaux.jpg" alt="Pendant les travaux" />
+            <p>Phase de restructuration complète, réseaux et pavage.</p>
+            </div>
+        </div>
+
+        <div class="timeline-item today">
+            <div class="timeline-date">2021</div>
+            <div class="timeline-content">
+            <img src="/assets/img/place/today-1.jpg" alt="La place aujourd'hui" />
+            <h3>L'aboutissement</h3>
+            <p>Une place conviviale, un stationnement réorganisé et une mise en valeur du patrimoine environnant.</p>
+            <div class="timeline-sub-grid">
+                <img src="/assets/img/place/today-2.jpg" alt="Détail 1" />
+                <img src="/assets/img/place/today-3.jpg" alt="Détail 2" />
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fontaines -->
+    <div style="margin-top: 4rem;">
+      <h2 class="section-title" style="margin-bottom: 2rem;">Remise en valeur des fontaines</h2>
+      <div class="fontaines-layout reveal">
+        <div class="fontaine-img">
+          <img src="/assets/img/fontaine-1.jpg" alt="Fontaine du lavoir des Armenats" />
+        </div>
+        <div class="fontaine-body">
+          <p>À la fontaine du lavoir des Armenats, sur la route de l'Hermitière, comme à celle de la route des Montgoins, les têtes de lion qui ornaient autrefois les fontaines ont retrouvé leur place. Ces représentations, héritées d'une longue tradition remontant à l'ancienne Égypte, avaient disparu au fil du temps — abîmées ou volées pour leur valeur décorative.</p>
+          <p>Au lavoir des usages de Biercy, c'est une <strong>tête de grenouille</strong> — clin d'œil au batracien de nos campagnes — qui a remplacé le royal félin des savanes.</p>
+          <p>Les têtes de lion sont l'œuvre de <strong>Marc Antoine Lion</strong>, enfant du pays issu de la famille Delorme-Thouzé. La tête de grenouille est de <strong>Clément Poma</strong>, tous deux sculpteurs. Ce sont des dons de Pierre Poma et de l'association TERROIRS à la commune.</p>
+        </div>
+      </div>
+      <div class="fontaines-layout reveal" style="margin-top: 1.5rem;">
+        <div>
+          <img src="/assets/img/fontaine-2.jpg" alt="Fontaine de Biercy" style="width: 100%; border-radius: 16px; display: block;" />
+        </div>
+        <div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
+</body>
+</html>
