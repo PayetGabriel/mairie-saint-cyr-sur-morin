@@ -320,6 +320,61 @@
 
 
     /* ── AMÉNAGEMENTS PLACE ──────────────────── */
+    .section-label {
+        margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+        margin-bottom: 0.5rem;
+    }
+
+    .badge-maj {
+        margin-bottom: 2rem;
+    }
+
+    /* Blocs de contenu */
+    .content-block {
+        margin-bottom: 2.5rem;
+    }
+
+    .content-block:last-child {
+        margin-bottom: 0;
+    }
+
+    /* Titres d'étapes (H3) */
+    .step-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--texte);
+        margin-bottom: 0.75rem;
+    }
+
+    .step-title.subtitle {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Intro et textes grisés */
+    .step-intro {
+        font-size: 0.9rem;
+        color: var(--gris);
+        margin-bottom: 1.5rem;
+    }
+
+    /* Listes à puces */
+    .step-list {
+        margin: 1rem 0 1.5rem 1.25rem;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .step-list li {
+        list-style-type: disc;
+        font-size: 0.9rem;
+        color: var(--texte);
+    }
 
     .timeline {
         position: relative;
@@ -724,37 +779,38 @@
 <!-- ─── AMÉNAGEMENTS ─── -->
 <section class="section" style="background: var(--blanc);">
   <div class="section-inner">
-    <div class="section-label" style="margin-bottom: 0.75rem;">Patrimoine & aménagements</div>
-    <h2 class="section-title" style="margin-bottom: 0.5rem;">La place de l'Église</h2>
-    <div class="badge-maj" style="margin-bottom: 2rem;">Mis à jour : 14 mars 2021</div>
+    <div class="section-label">Patrimoine & aménagements</div>
+    <h2 class="section-title">La place de l'Église</h2>
+    <div class="badge-maj">Mis à jour : 14 mars 2021</div>
 
     <!-- ÉTAPE 1 : Le Constat (2014) -->
-    <div class="content-block reveal" style="margin-bottom: 2.5rem;">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--texte); margin-bottom: 0.75rem;">2014 : Le lancement de la réflexion</h3>
-      <p>Les projets de rénovation de la place remontent à 2014. Quelques premiers échanges avec les commerçants et les riverains dès octobre 2014 nous ont confortés dans l’idée qu’il fallait entamer rapidement une réflexion sur des aménagements qui rendent plus conviviaux la place d’une part, mais aussi l’ensemble de l’espace compris entre le Morin et la mairie.</p>
-      <p>Nous avons donc contacté le <strong>CAUE</strong> comme conseil et adressé un questionnaire à l’ensemble des riverains du centre bourg afin de recueillir des témoignages, expériences et idées.</p>
+    <div class="content-block reveal">
+        <h3 class="step-title">2014 : Le lancement de la réflexion</h3>
+        <p>Les projets de rénovation de la place remontent à 2014. Quelques premiers échanges avec les commerçants et les riverains dès octobre 2014 nous ont confortés dans l’idée qu’il fallait entamer rapidement une réflexion sur des aménagements qui rendent plus conviviaux la place d’une part, mais aussi l’ensemble de l’espace compris entre le Morin et la mairie.</p>
+        <p>Nous avons donc contacté le <strong>CAUE</strong> comme conseil et adressé un questionnaire à l’ensemble des riverains du centre bourg afin de recueillir des témoignages, expériences et idées.</p>
     </div>
 
     <!-- ÉTAPE 2 : La Concertation (2015) -->
-    <div class="content-block reveal" style="margin-bottom: 2.5rem;">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--texte); margin-bottom: 0.75rem;">Mercredi 28 Octobre 2015 : Rencontre avec les habitants</h3>
-      <p>La deuxième étape s’est déroulée lors d’une rencontre publique réunissant une trentaine d’habitants ainsi que M. Deladerriere (architecte-urbaniste-environnement du CAUE) autour de plusieurs thèmes clés :</p>
-      <ul style="margin: 1rem 0 1.5rem 1.25rem; padding: 0; display: flex; flex-direction: column; gap: 0.4rem;">
-        <li style="list-style-type: disc; font-size: 0.9rem; color: var(--texte);">L’activité commerciale et sa pérennisation ;</li>
-        <li style="list-style-type: disc; font-size: 0.9rem; color: var(--texte);">La circulation et le stationnement ;</li>
-        <li style="list-style-type: disc; font-size: 0.9rem; color: var(--texte);">Les espaces piétons et la sécurité ;</li>
-        <li style="list-style-type: disc; font-size: 0.9rem; color: var(--texte);">L’architecture environnante et l’embellissement des lieux ;</li>
-        <li style="list-style-type: disc; font-size: 0.9rem; color: var(--texte);">L’information et l’accueil des visiteurs.</li>
-      </ul>
-      
-      <p>Il est ressorti de ces échanges nourris que <strong>la question du stationnement était prégnante</strong> : les voitures ventouses (notamment le week-end) et un arrêt de bus mal placé constituaient une gêne majeure pour le commerce local, la sécurité et la convivialité.</p>
-      <p>Plusieurs pistes de réflexion ont alors été dégagées : le déplacement de l’arrêt de bus vers la mairie, la limitation de la circulation aux seuls riverains dans la rue Eugène Daumont, le manque de signalétique pour les randonneurs, l'absence de toilettes publiques (avec l'idée de transformer le local technique près du Morin), l'amélioration des trottoirs, l'accueil des camping-cars et la gestion des déjections canines.</p>
+    <div class="content-block reveal">
+        <h3 class="step-title">Mercredi 28 Octobre 2015 : Rencontre avec les habitants</h3>
+        <p>La deuxième étape s’est déroulée lors d’une rencontre publique réunissant une trentaine d’habitants ainsi que M. Deladerriere (architecte-urbaniste-environnement du CAUE) autour de plusieurs thèmes clés :</p>
+        
+        <ul class="step-list">
+            <li>L’activité commerciale et sa pérennisation ;</li>
+            <li>La circulation et le stationnement ;</li>
+            <li>Les espaces piétons et la sécurité ;</li>
+            <li>L’architecture environnante et l’embellissement des lieux ;</li>
+            <li>L’information et l’accueil des visiteurs.</li>
+        </ul>
+        
+        <p>Il est ressorti de ces échanges nourris que <strong>la question du stationnement était prégnante</strong> : les voitures ventouses (notamment le week-end) et un arrêt de bus mal placé constituaient une gêne majeure pour le commerce local, la sécurité et la convivialité.</p>
+        <p>Plusieurs pistes de réflexion ont alors été dégagées : le déplacement de l’arrêt de bus vers la mairie, la limitation de la circulation aux seuls riverains dans la rue Eugène Daumont, le manque de signalétique pour les randonneurs, l'absence de toilettes publiques (avec l'idée de transformer le local technique près du Morin), l'amélioration des trottoirs, l'accueil des camping-cars et la gestion des déjections canines.</p>
     </div>
 
     <!-- ÉTAPE 3 : L'Histoire en images -->
     <div class="content-block reveal">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">L'évolution de la place au fil du temps</h3>
-      <p style="font-size: 0.9rem; color: var(--gris); margin-bottom: 1.5rem;">D'hier à aujourd'hui : découvrez le déroulé historique et les travaux achevés en 2021.</p>
+        <h3 class="step-title subtitle">L'évolution de la place au fil du temps</h3>
+        <p class="step-intro">D'hier à aujourd'hui : découvrez le déroulé historique et les travaux achevés en 2021.</p>
     </div>
 
     <!-- GRILLE CHRONOLOGIQUE RÉORGANISÉE -->
