@@ -1,11 +1,180 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arrêtés municipaux — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Arrêtés municipaux en vigueur et archives à Saint-Cyr-sur-Morin." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--creme);
+      border: 2px dashed rgba(200,191,176,0.6);
+      border-radius: 20px;
+    }
+
+    .empty-state > svg { stroke: var(--pierre-dark); opacity: 0.3; margin-bottom: 1.25rem; }
+
+    .empty-state h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.6rem;
+    }
+
+    .empty-state p {
+      font-size: 0.88rem;
+      color: var(--gris);
+      max-width: 400px;
+      margin: 0 auto 1.5rem;
+      line-height: 1.7;
+    }
+
+    /* Arrêté card (à activer quand il y en a) */
+    .arrete-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.4rem 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      transition: all 0.22s;
+      text-decoration: none;
+      color: var(--texte);
+    }
+
+    .arrete-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(42,37,32,0.08);
+      border-color: rgba(58,90,64,0.2);
+    }
+
+    .arrete-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--vert);
+      flex-shrink: 0;
+      min-width: 80px;
+    }
+
+    .arrete-info { flex: 1; }
+
+    .arrete-title {
+      font-size: 0.93rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.2rem;
+    }
+
+    .arrete-date {
+      font-size: 0.78rem;
+      color: var(--gris);
+    }
+
+    .arrete-pdf {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--vert);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+
+    .arrete-pdf svg { stroke: var(--vert); }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease; /* Transition pour le bouton lui-même */
+    }
+
+    .btn-outline svg {
+      display: block; /* Enlève les espaces résiduels sous le SVG */
+      transition: transform 0.2s ease-in-out; /* LA clé pour la fluidité */
+    }
+
+    .btn-outline:hover svg {
+      transform: translateX(3px); /* Seul le chevron bouge au survol */
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Arrêtés municipaux</h1>
+    <p class="page-intro">Les arrêtés en vigueur pris par le Maire de Saint-Cyr-sur-Morin.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">En vigueur</div>
+    <h2 class="section-title reveal" style="margin-bottom: 2rem;">Arrêtés actuels</h2>
+
+    <!-- État vide — à remplacer par les .arrete-card quand il y a du contenu -->
+    <div class="empty-state reveal">
+      <svg width="48" height="48" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+      <h3>Aucun arrêté en vigueur</h3>
+      <p>Il n'y a pas d'arrêté municipal en vigueur actuellement. Cette page sera mise à jour lors de la publication de nouveaux arrêtés.</p>
+      <a href="/contact.html" class="btn btn-outline">
+        Contacter la mairie
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Exemple d'arrêté (commenté — à décommenter et adapter) -->
+    <!--
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <a href="/assets/docs/arretes/arrete-2026-001.pdf" target="_blank" class="arrete-card">
+        <div class="arrete-num">2026-001</div>
+        <div class="arrete-info">
+          <div class="arrete-title">Arrêté portant réglementation de la circulation rue Eugène Daumont</div>
+          <div class="arrete-date">Pris le 15 janvier 2026 — En vigueur jusqu'au 30 mars 2026</div>
+        </div>
+        <div class="arrete-pdf">
+          <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Consulter
+        </div>
+      </a>
+    </div>
+    -->
+
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
 </body>
 </html>

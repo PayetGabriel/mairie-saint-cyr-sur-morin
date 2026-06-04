@@ -1,11 +1,970 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Conseil municipal — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Conseillers municipaux, permanences, comptes-rendus et commissions de la mairie de Saint-Cyr-sur-Morin." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── ONGLETS ─────────────────────────────── */
+
+    .cm-tabs {
+      display: flex;
+      gap: 0.375rem;
+      background: var(--creme);
+      border: 1px solid rgba(200,191,176,0.45);
+      border-radius: 14px;
+      padding: 0.375rem;
+      width: fit-content;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .cm-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--gris);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .cm-tab svg { stroke: currentColor; }
+
+    .cm-tab:hover { color: var(--texte); background: rgba(200,191,176,0.2); }
+
+    .cm-tab.active {
+      background: var(--blanc);
+      color: var(--vert);
+      box-shadow: 0 1px 6px rgba(42,37,32,0.08);
+    }
+
+    .cm-pane { display: none; }
+    .cm-pane.active { display: block; }
+
+
+    /* ── CARTE ÉLU ───────────────────────────── */
+
+    .elus-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+
+    .elu-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: all 0.22s;
+    }
+
+    .elu-card:hover {
+      border-color: rgba(58,90,64,0.2);
+      box-shadow: 0 4px 16px rgba(42,37,32,0.07);
+    }
+
+    .elu-card.maire {
+      border-color: var(--vert);
+      background: var(--vert-pale);
+    }
+
+    .elu-card.adjoint { border-left: 3px solid var(--vert); }
+
+    .elu-card.delegue { border-left: 3px solid var(--jaune-bois); }
+
+    .elu-role {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      margin-bottom: 0.1rem;
+    }
+
+    .elu-role.maire-label { color: var(--vert); }
+    .elu-role.adjoint-label { color: var(--vert); }
+    .elu-role.delegue-label { color: var(--jaune-bois); }
+    .elu-role.conseiller-label { color: var(--pierre-dark); }
+
+    .elu-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.2;
+    }
+
+    .elu-delegations {
+      font-size: 0.8rem;
+      color: var(--texte);
+      line-height: 1.65;
+    }
+
+    .elu-cc2m {
+      font-size: 0.78rem;
+      color: var(--pierre-dark);
+      line-height: 1.55;
+      background: rgba(200,191,176,0.2);
+      border-radius: 7px;
+      padding: 0.5rem 0.75rem;
+      font-style: italic;
+    }
+
+    /* Séparateur section élus */
+    .elus-section-head {
+      margin: 2rem 0 1.25rem;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      color: var(--pierre-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .elus-section-head::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(200,191,176,0.4);
+    }
+
+    /* Glossaire */
+    .glossaire {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .glossaire-item {
+      background: var(--creme);
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.8rem;
+      color: var(--texte);
+      line-height: 1.5;
+    }
+
+    .glossaire-item strong {
+      color: var(--vert);
+      font-weight: 700;
+    }
+
+    .glossaire-details summary::-webkit-details-marker { display: none; }
+    .glossaire-details summary { list-style: none; }
+
+
+    /* ── PERMANENCES ─────────────────────────── */
+
+    .permanences-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+
+    .perm-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .perm-card-head {
+      background: var(--vert-pale);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .perm-card-head svg { stroke: var(--vert); }
+
+    .perm-card-head span {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--vert);
+    }
+
+    .perm-card-body { padding: 1.25rem; }
+
+    .perm-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.75rem;
+    }
+
+    .perm-horaires {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .perm-horaire-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+    }
+
+    .perm-day {
+      font-weight: 600;
+      color: var(--vert);
+      min-width: 90px;
+      flex-shrink: 0;
+    }
+
+    .perm-hours { color: var(--texte); }
+
+    .perm-note {
+      font-size: 0.78rem;
+      color: var(--gris);
+      font-style: italic;
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(200,191,176,0.3);
+    }
+
+
+    /* ── COMPTES-RENDUS ──────────────────────── */
+
+    .cr-annee-bloc { margin-bottom: 2rem; }
+
+    .cr-annee-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--texte);
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--vert-pale);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .cr-annee-label span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gris);
+      background: var(--creme);
+      padding: 0.2rem 0.65rem;
+      border-radius: 100px;
+    }
+
+    .cr-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.6rem;
+    }
+
+    .cr-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cr-card:hover {
+      border-color: var(--vert);
+      background: var(--vert-pale);
+    }
+
+    .cr-card svg { stroke: var(--vert); flex-shrink: 0; }
+
+    .cr-card-text { flex: 1; }
+
+    .cr-card-date {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.3;
+    }
+
+    .cr-card-label {
+      font-size: 0.72rem;
+      color: var(--gris);
+      margin-top: 0.1rem;
+    }
+
+    .cr-card.featured {
+      background: var(--vert-pale);
+      border-color: rgba(58,90,64,0.2);
+    }
+
+    .cr-cover {
+      width: 44px;
+      height: 56px;
+      border-radius: 6px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .cr-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+
+
+    /* ── COMMISSIONS ─────────────────────────── */
+
+    .comm-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .comm-item {
+      border-bottom: 1px solid rgba(200,191,176,0.25);
+    }
+
+    .comm-item:last-child { border-bottom: none; }
+
+    .comm-summary {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+
+    .comm-summary::-webkit-details-marker { display: none; }
+
+    .comm-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .comm-icon svg { stroke: var(--vert); }
+
+    .comm-name {
+      flex: 1;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--texte);
+    }
+
+    .comm-chevron {
+      stroke: var(--gris);
+      transition: transform 0.2s;
+    }
+
+    details[open] .comm-chevron { transform: rotate(90deg); }
+
+    .comm-body {
+      padding: 0 0 1rem 2.9rem;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: var(--texte);
+    }
+
+    .comm-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .comm-row strong {
+      min-width: 90px;
+      flex-shrink: 0;
+      color: var(--vert);
+      font-weight: 600;
+    }
+
+
+    /* ── RESPONSIVE ──────────────────────────── */
+
+    @media (max-width: 768px) {
+      .cm-tabs { width: 100%; }
+      .cm-tab { flex: 1; justify-content: center; font-size: 0.78rem; padding: 0.6rem 0.75rem; }
+      .elus-grid { grid-template-columns: 1fr; }
+      .cr-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .cr-grid { grid-template-columns: 1fr; }
+      .permanences-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Conseil municipal</h1>
+    <p class="page-intro">Les élus, les permanences, les comptes-rendus et les commissions de Saint-Cyr-sur-Morin.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- Onglets -->
+    <div class="cm-tabs" role="tablist">
+      <button class="cm-tab active" data-pane="elus">
+        <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Élus & délégations
+      </button>
+      <button class="cm-tab" data-pane="permanences">
+        <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Permanences
+      </button>
+      <button class="cm-tab" data-pane="cr">
+        <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Comptes-rendus
+      </button>
+      <button class="cm-tab" data-pane="commissions">
+        <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Commissions
+      </button>
+    </div>
+
+
+    <!-- ── ÉLUS ─── -->
+    <div class="cm-pane active" id="pane-elus">
+
+      <div class="info-note reveal" style="margin-bottom: 2rem;">
+        <strong>Mandature 2026–2032</strong> — Suite aux élections municipales de mars 2026. Les délégations en italique concernent les mandats à la Communauté de Communes des 2 Morin (CC2M).
+      </div>
+
+      <!-- Maire -->
+      <div class="elus-section-head reveal">Maire</div>
+      <div class="elus-grid reveal" style="margin-bottom: 1.5rem;">
+        <div class="elu-card maire">
+          <div class="elu-role maire-label">Maire</div>
+          <div class="elu-name">Francis DELARUE</div>
+          <div class="elu-delegations">Président des commissions municipales et du Bureau — Président du CCAS et du SIVU des écoles — Membre du comité de suivi de l'ENS — Membre du comité de pilotage du PCS</div>
+          <div class="elu-cc2m">CC2M : Conseiller communautaire délégué chargé du social — Membre du Bureau — Commission finances (CIF, titulaire) — Commission PLUi (suppléant) — CLECT (titulaire)</div>
+        </div>
+      </div>
+
+      <!-- Adjoints -->
+      <div class="elus-section-head reveal">Adjoints au Maire</div>
+      <div class="elus-grid reveal" style="margin-bottom: 1.5rem;">
+
+        <div class="elu-card adjoint">
+          <div class="elu-role adjoint-label">1ère Adjointe</div>
+          <div class="elu-name">Stéphanie MONTICO</div>
+          <div class="elu-delegations">Urbanisme, Animations & Festivités, Embellissement, Relations avec les associations — Membre du Bureau municipal</div>
+          <div class="elu-cc2m">CC2M : Commission sport, santé, mobilités (titulaire) — Commission PLUi (titulaire) — CLECT (suppléante)</div>
+        </div>
+
+        <div class="elu-card adjoint">
+          <div class="elu-role adjoint-label">2ème Adjoint</div>
+          <div class="elu-name">Bruno KOLODZIEJ</div>
+          <div class="elu-delegations">Services techniques et Suivi des Travaux — Membre du Bureau municipal — Commissions : urbanisme, cimetière — Correspondant SDIS</div>
+          <div class="elu-cc2m">CC2M : Syndicat des énergies de S&M (titulaire) — Commission PCS</div>
+        </div>
+
+        <div class="elu-card adjoint">
+          <div class="elu-role adjoint-label">3ème Adjointe</div>
+          <div class="elu-name">Catherine HENNEPEAUX</div>
+          <div class="elu-delegations">Action sociale, CCAS et PCS — Membre du CCAS et du SIVU des écoles</div>
+          <div class="elu-cc2m">CC2M : Commission petite enfance, enfance, jeunesse (titulaire) — Commission PCS</div>
+        </div>
+
+        <div class="elu-card adjoint">
+          <div class="elu-role adjoint-label">4ème Adjoint</div>
+          <div class="elu-name">Pierre ALLARD</div>
+          <div class="elu-delegations">Développement touristique, gestion des chemins, assainissement et Ordures Ménagères — Commissions : urbanisme, animations, appels d'offres</div>
+          <div class="elu-cc2m">CC2M : COVALTRI (titulaire) — Syndicat des énergies S&M (suppléant) — Commission tourisme, vie associative, patrimoine — Commission assainissement collectif/non collectif (titulaire)</div>
+        </div>
+
+        <div class="elu-card adjoint">
+          <div class="elu-role adjoint-label">5ème Adjointe</div>
+          <div class="elu-name">Marguerite LAFOND</div>
+          <div class="elu-delegations">Ruissellements, inondations et fibre — Correspondante fibre</div>
+          <div class="elu-cc2m">CC2M : Syndicat de l'eau S2E77 (titulaire) — Syndicat du Petit Morin (titulaire) — Commission aménagement du territoire (titulaire) — SMAGE (titulaire)</div>
+        </div>
+
+      </div>
+
+      <!-- Conseillers délégués -->
+      <div class="elus-section-head reveal">Conseillers délégués</div>
+      <div class="elus-grid reveal" style="margin-bottom: 1.5rem;">
+
+        <div class="elu-card delegue">
+          <div class="elu-role delegue-label">Conseiller délégué</div>
+          <div class="elu-name">Jacques GODARD</div>
+          <div class="elu-delegations">Affaires juridiques — Commissions : appels d'offres, urbanisme, liste électorale, impôts directs — Commission PCS</div>
+        </div>
+
+        <div class="elu-card delegue">
+          <div class="elu-role delegue-label">Conseillère déléguée</div>
+          <div class="elu-name">Isabelle VARRON</div>
+          <div class="elu-delegations">Environnement et ENS — Membre du SIVU des écoles — Comité de suivi de l'ENS</div>
+          <div class="elu-cc2m">CC2M : SMEP (titulaire)</div>
+        </div>
+
+        <div class="elu-card delegue">
+          <div class="elu-role delegue-label">Conseiller délégué</div>
+          <div class="elu-name">Anthony BOUSSAUD</div>
+          <div class="elu-delegations">Sécurité des biens et des personnes — Membre du SIVU des écoles, CCAS, liste électorale — Correspondant défense</div>
+          <div class="elu-cc2m">CC2M : Syndicat de gendarmerie (suppléant) — Commission PCS</div>
+        </div>
+
+        <div class="elu-card delegue">
+          <div class="elu-role delegue-label">Conseiller délégué</div>
+          <div class="elu-name">Gurvan JUDAS</div>
+          <div class="elu-delegations">Actions en direction de la jeunesse — Membre du SIVU des écoles et du CCAS</div>
+          <div class="elu-cc2m">CC2M : SMEP (suppléant)</div>
+        </div>
+
+      </div>
+
+      <!-- Conseillers -->
+      <div class="elus-section-head reveal">Conseillers municipaux</div>
+      <div class="elus-grid reveal">
+
+        <div class="elu-card">
+          <div class="elu-role conseiller-label">Conseillère</div>
+          <div class="elu-name">Minh-Tuyen GUICHETEAU</div>
+          <div class="elu-delegations">SIVU des écoles, CCAS — Commission animations et festivités</div>
+          <div class="elu-cc2m">CC2M : Commission culture (suppléante)</div>
+        </div>
+
+        <div class="elu-card">
+          <div class="elu-role conseiller-label">Conseillère</div>
+          <div class="elu-name">Anne BESSIÈRE</div>
+          <div class="elu-delegations">Référente développement économique — Rédactrice du Trait d'Union</div>
+        </div>
+
+        <div class="elu-card">
+          <div class="elu-role conseiller-label">Conseiller</div>
+          <div class="elu-name">Christophe COLLIN</div>
+          <div class="elu-delegations">Commission urbanisme — Commission PCS — Correspondant Forêts</div>
+          <div class="elu-cc2m">CC2M : Syndicat du Petit Morin (suppléant) — Commission aménagement du territoire (suppléant)</div>
+        </div>
+
+        <div class="elu-card">
+          <div class="elu-role conseiller-label">Conseillère</div>
+          <div class="elu-name">Edith THÉODOSE POMA</div>
+          <div class="elu-delegations">Commissions : urbanisme, animations et festivités — Rédactrice en chef du Trait d'Union</div>
+          <div class="elu-cc2m">CC2M : Commission culture (titulaire)</div>
+        </div>
+
+        <div class="elu-card">
+          <div class="elu-role conseiller-label">Conseiller</div>
+          <div class="elu-name">Marlon PALISSE</div>
+          <div class="elu-delegations">Comité de suivi de l'ENS</div>
+        </div>
+
+        <div class="elu-card">
+          <div class="elu-role conseiller-label">Conseillère</div>
+          <div class="elu-name">Sandrine PAYET</div>
+          <div class="elu-delegations">SIVU des écoles et CCAS</div>
+          <div class="elu-cc2m">CC2M : Commission petite enfance, enfance, jeunesse (suppléante)</div>
+        </div>
+
+        <div class="elu-card">
+          <div class="elu-role conseiller-label">Conseiller</div>
+          <div class="elu-name">Kai GIBERT-SANDER</div>
+          <div class="elu-delegations">Commissions : urbanisme, animations et festivités</div>
+          <div class="elu-cc2m">CC2M : Commission sport, santé, mobilités (suppléant)</div>
+        </div>
+
+        <div class="elu-card">
+          <div class="elu-role conseiller-label">Conseillère</div>
+          <div class="elu-name">Patricia PINCHEMEL</div>
+          <div class="elu-delegations">Commissions : appels d'offres, liste électorale</div>
+          <div class="elu-cc2m">CC2M : Commission tourisme, vie associative, patrimoine (suppléante)</div>
+        </div>
+
+        <div class="elu-card">
+          <div class="elu-role conseiller-label">Conseiller</div>
+          <div class="elu-name">Julien ROUSSELOT</div>
+          <div class="elu-delegations">Commissions : appels d'offres, urbanisme, liste électorale — CCAS</div>
+          <div class="elu-cc2m">CC2M : Commission assainissement collectif/non collectif (suppléant)</div>
+        </div>
+
+      </div>
+
+      <!-- Glossaire -->
+      <details class="glossaire-details" style="margin-top: 2.5rem;">
+        <summary style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; list-style: none;">
+          <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; font-weight: 600; color: var(--gris); text-transform: uppercase; letter-spacing: 0.08em;">
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Glossaire des sigles</span>
+          </div>
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" class="comm-chevron" style="transition: transform 0.2s;"><path d="M9 18l6-6-6-6"/></svg>
+        </summary>
+      
+        <div class="glossaire" style="margin-top: 1rem;">
+          <div class="glossaire-item"><strong>CC2M</strong> Communauté de Communes des 2 Morin</div>
+          <div class="glossaire-item"><strong>CIF</strong> Commission intercommunale des finances CC2M</div>
+          <div class="glossaire-item"><strong>CLECT</strong> Commission locale d'évaluation des charges transférées</div>
+          <div class="glossaire-item"><strong>PLUi</strong> Plan Local d'Urbanisme intercommunal</div>
+          <div class="glossaire-item"><strong>SMAGE</strong> Syndicat mixte d'aménagement et de gestion des eaux</div>
+          <div class="glossaire-item"><strong>SMEP</strong> Syndicat Mixte de Préfiguration du Parc Naturel Régional</div>
+          <div class="glossaire-item"><strong>CCAS</strong> Centre communal d'action sociale</div>
+          <div class="glossaire-item"><strong>SIVU</strong> Syndicat intercommunal à vocation unique</div>
+          <div class="glossaire-item"><strong>ENS</strong> Espace naturel sensible</div>
+          <div class="glossaire-item"><strong>PCS</strong> Plan communal de sauvegarde</div>
+          <div class="glossaire-item"><strong>SDIS</strong> Service départemental d'incendie et de secours</div>
+        </div>
+      </details>
+
+    </div><!-- /pane-elus -->
+
+
+    <!-- ── PERMANENCES ─── -->
+    <div class="cm-pane" id="pane-permanences">
+
+      <div class="alert-box primary reveal" style="margin-bottom: 2rem;">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div>
+          <strong>Mairie de Saint-Cyr-sur-Morin</strong>
+          <p>Avenue Daniel Simon, 77750 Saint-Cyr-sur-Morin — <a href="tel:0160238024" style="color:var(--blanc);font-weight:600;">01 60 23 80 24</a> — <a href="mailto:mairie.stcyrsurmorin@orange.fr" style="color:rgba(255,255,255,0.8);">mairie.stcyrsurmorin@orange.fr</a></p>
+        </div>
+      </div>
+
+      <div class="permanences-grid reveal">
+
+        <div class="perm-card">
+          <div class="perm-card-head">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            <span>Secrétariat</span>
+          </div>
+          <div class="perm-card-body">
+            <div class="perm-card-name">Accueil au public</div>
+            <div class="perm-horaires">
+              <div class="perm-horaire-row"><span class="perm-day">Lun, Mar, Jeu</span><span class="perm-hours">8h30–12h30 / 14h–17h30</span></div>
+              <div class="perm-horaire-row"><span class="perm-day">Mercredi</span><span class="perm-hours" style="color:var(--gris); font-style:italic;">Fermé au public</span></div>
+              <div class="perm-horaire-row"><span class="perm-day">Ven, Sam</span><span class="perm-hours">8h30–12h30</span></div>
+            </div>
+            <div class="perm-note">Vacances scolaires : du lundi au samedi, 8h30–12h30</div>
+          </div>
+        </div>
+
+        <div class="perm-card">
+          <div class="perm-card-head">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Service Urbanisme</span>
+          </div>
+          <div class="perm-card-body">
+            <div class="perm-card-name">Service Urbanisme</div>
+            <div class="perm-horaires">
+              <div class="perm-horaire-row"><span class="perm-day">Lun, Mar, Jeu</span><span class="perm-hours">9h–12h</span></div>
+              <div class="perm-horaire-row"><span class="perm-day">Mercredi</span><span class="perm-hours" style="color:var(--gris); font-style:italic;">Fermé</span></div>
+              <div class="perm-horaire-row"><span class="perm-day">Vendredi</span><span class="perm-hours" style="color:var(--gris); font-style:italic;">Fermé</span></div>
+              <div class="perm-horaire-row"><span class="perm-day">Samedi</span><span class="perm-hours">Un samedi sur deux — 9h–12h</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="perm-card">
+          <div class="perm-card-head">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <span>Action sociale</span>
+          </div>
+          <div class="perm-card-body">
+            <div class="perm-card-name">CCAS</div>
+            <div class="perm-horaires">
+              <div class="perm-horaire-row"><span class="perm-day">Jeudi</span><span class="perm-hours">9h–12h</span></div>
+            </div>
+            <div class="perm-note">Également sur rendez-vous</div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /pane-permanences -->
+
+
+    <!-- ── COMPTES-RENDUS ─── -->
+    <div class="cm-pane" id="pane-cr">
+      <p style="font-size: 0.88rem; color: var(--gris); margin-bottom: 2rem;">Cliquez sur un conseil municipal pour consulter le compte-rendu.</p>
+
+      <!-- 2025 -->
+      <div class="cr-annee-bloc reveal">
+        <div class="cr-annee-label">2025 <span>3 séances</span></div>
+        <div class="cr-grid">
+          <div class="cr-card featured">
+            <div class="cr-cover"><img src="/assets/docs/randonnees/Rando_circuit_N1-1.png" alt="CR du 2 juin 2025" /></div>
+            <div class="cr-card-text">
+              <div class="cr-card-date">2 juin 2025</div>
+              <div class="cr-card-label">Conseil Municipal</div>
+            </div>
+          </div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">7 avril 2025</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">27 janvier 2025</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+        </div>
+      </div>
+
+      <!-- 2024 -->
+      <div class="cr-annee-bloc reveal">
+        <div class="cr-annee-label">2024 <span>7 séances</span></div>
+        <div class="cr-grid">
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">16 décembre 2024</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">18 novembre 2024</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">24 septembre 2024</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">10 mai 2024</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">26 avril 2024</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">3 avril 2024</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">6 février 2024</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+        </div>
+      </div>
+
+      <!-- 2023 -->
+      <div class="cr-annee-bloc reveal">
+        <div class="cr-annee-label">2023 <span>8 séances</span></div>
+        <div class="cr-grid">
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">5 décembre 2023</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">24 octobre 2023</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">4 septembre 2023</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">9 juin 2023</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">22 mai 2023</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">11 avril 2023</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">30 mars 2023</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+          <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">13 février 2023</div><div class="cr-card-label">Conseil Municipal</div></div></div>
+        </div>
+      </div>
+
+      <!-- Années antérieures — version compacte -->
+      <details class="cr-annee-bloc reveal">
+        <summary style="cursor: pointer; font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: var(--gris); padding-bottom: 0.6rem; border-bottom: 2px solid var(--vert-pale); margin-bottom: 1rem; list-style: none; display: flex; align-items: center; gap: 0.75rem;">
+          Archives 2014–2022
+          <svg width="14" height="14" fill="none" stroke="var(--gris)" stroke-width="2.5" viewBox="0 0 24 24" style="transition: transform 0.2s;" class="details-chevron"><path d="M9 18l6-6-6-6"/></svg>
+        </summary>
+        <!-- 2022 -->
+        <div class="cr-annee-bloc">
+          <div class="cr-annee-label">2022 <span>7 séances</span></div>
+          <div class="cr-grid">
+            <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">13 décembre 2022</div></div></div>
+            <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">14 novembre 2022</div></div></div>
+            <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">26 septembre 2022</div></div></div>
+            <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">27 juin 2022</div></div></div>
+            <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">4 avril 2022</div></div></div>
+            <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">21 février 2022</div></div></div>
+            <div class="cr-card"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><div class="cr-card-text"><div class="cr-card-date">7 janvier 2022</div></div></div>
+          </div>
+        </div>
+        <!-- années 2021 à 2014 — liste compacte texte pour gagner de la place -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.5rem;">
+          <!-- 2021 -->
+          <div style="background: var(--creme); border-radius: 10px; padding: 1rem 1.25rem;">
+            <div style="font-family: 'Playfair Display', serif; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">2021</div>
+            <div style="font-size: 0.8rem; color: var(--gris); line-height: 1.8;">29 novembre · 4 octobre · 24 août · 6 juillet · 21 mai · 9 avril · 22 janvier</div>
+          </div>
+          <div style="background: var(--creme); border-radius: 10px; padding: 1rem 1.25rem;">
+            <div style="font-family: 'Playfair Display', serif; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">2020</div>
+            <div style="font-size: 0.8rem; color: var(--gris); line-height: 1.8;">20 nov · 23 oct · 18 sept · 31 août · 2 juil · 25 mai · 12 mars · 18 janv</div>
+          </div>
+          <div style="background: var(--creme); border-radius: 10px; padding: 1rem 1.25rem;">
+            <div style="font-family: 'Playfair Display', serif; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">2019</div>
+            <div style="font-size: 0.8rem; color: var(--gris); line-height: 1.8;">26 nov · 6 sept · 9 juil · 14 juin · 12 avr · 27 mars · 13 fév</div>
+          </div>
+          <div style="background: var(--creme); border-radius: 10px; padding: 1rem 1.25rem;">
+            <div style="font-family: 'Playfair Display', serif; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">2018</div>
+            <div style="font-size: 0.8rem; color: var(--gris); line-height: 1.8;">10 déc · 5 nov · 12 sept · 18 juin · 9 avr · 19 fév</div>
+          </div>
+          <div style="background: var(--creme); border-radius: 10px; padding: 1rem 1.25rem;">
+            <div style="font-family: 'Playfair Display', serif; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">2017</div>
+            <div style="font-size: 0.8rem; color: var(--gris); line-height: 1.8;">16 déc · 19 oct · 14 sept · 8 juil · 30 juin · 10 juin · 12 avr · 22 mars · 28 janv · 2 janv</div>
+          </div>
+          <div style="background: var(--creme); border-radius: 10px; padding: 1rem 1.25rem;">
+            <div style="font-family: 'Playfair Display', serif; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">2016</div>
+            <div style="font-size: 0.8rem; color: var(--gris); line-height: 1.8;">7 déc · 22 juin · 14 avr · 19 mars · 28 janv</div>
+          </div>
+          <div style="background: var(--creme); border-radius: 10px; padding: 1rem 1.25rem;">
+            <div style="font-family: 'Playfair Display', serif; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">2015</div>
+            <div style="font-size: 0.8rem; color: var(--gris); line-height: 1.8;">17 déc · 10 nov · 24 sept · 24 août · 1 juil · 25 juin · 11 avr · 7 mars · 10 fév</div>
+          </div>
+          <div style="background: var(--creme); border-radius: 10px; padding: 1rem 1.25rem;">
+            <div style="font-family: 'Playfair Display', serif; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">2014</div>
+            <div style="font-size: 0.8rem; color: var(--gris); line-height: 1.8;">13 décembre</div>
+          </div>
+        </div>
+      </details>
+
+    </div><!-- /pane-cr -->
+
+
+    <!-- ── COMMISSIONS ─── -->
+    <div class="cm-pane" id="pane-commissions">
+
+      <div class="info-note reveal" style="margin-bottom: 2rem;">
+        <strong>Note</strong> — La composition des commissions correspond à la mandature précédente (2020–2026). Elle sera mise à jour après la constitution des commissions de la nouvelle mandature 2026–2032.
+      </div>
+
+      <div class="comm-list reveal">
+
+        <details class="comm-item">
+          <summary class="comm-summary">
+            <div class="comm-icon"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
+            <span class="comm-name">Appel d'offres</span>
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="comm-chevron"><path d="M9 18l6-6-6-6"/></svg>
+          </summary>
+          <div class="comm-body">
+            <div class="comm-row"><strong>Présidente</strong><span>Edith Théodose Poma</span></div>
+            <div class="comm-row"><strong>Titulaires</strong><span>Denis Grenet-Laffont, André Hubert, Pierre Allard</span></div>
+            <div class="comm-row"><strong>Suppléants</strong><span>Francis Delarue, Stéphanie Montico, Audrey Degano</span></div>
+          </div>
+        </details>
+
+        <details class="comm-item">
+          <summary class="comm-summary">
+            <div class="comm-icon"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+            <span class="comm-name">Liste électorale</span>
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="comm-chevron"><path d="M9 18l6-6-6-6"/></svg>
+          </summary>
+          <div class="comm-body">
+            Philippe Blancheteau, Marie-Jo Brulé, Jacques Godard, Pierre Allard, Audrey Dégano
+          </div>
+        </details>
+
+        <details class="comm-item">
+          <summary class="comm-summary">
+            <div class="comm-icon"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <span class="comm-name">Commission des impôts directs</span>
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="comm-chevron"><path d="M9 18l6-6-6-6"/></svg>
+          </summary>
+          <div class="comm-body">
+            François Bourniche, Marie-Jo Brulé, Francis Delarue, Marie-Paule Dussourd, Jacques Godard, Denis Grenet-Laffont, Marguerite Lafond, Chantal Menjaud, Stéphanie Montico, Edith Théodose Poma, Pierre Allard, Audrey Dégano
+            <div style="margin-top: 0.5rem; font-size: 0.78rem; color: var(--gris); font-style: italic;">12 proposés — 6 seront choisis par la DGFIP</div>
+          </div>
+        </details>
+
+        <details class="comm-item">
+          <summary class="comm-summary">
+            <div class="comm-icon"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+            <span class="comm-name">CCAS</span>
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="comm-chevron"><path d="M9 18l6-6-6-6"/></svg>
+          </summary>
+          <div class="comm-body">
+            <div class="comm-row"><strong>Présidente</strong><span>Mme Théodose Poma</span></div>
+            <div class="comm-row"><strong>Membres</strong><span>Marie-Paule Dussourd, François Bourniche, Sabrina Recla, Marie-José Brulé, Anne Rebollo, André Hubert, Stéphanie Montico</span></div>
+          </div>
+        </details>
+
+        <details class="comm-item">
+          <summary class="comm-summary">
+            <div class="comm-icon"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+            <span class="comm-name">SIVU des écoles</span>
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="comm-chevron"><path d="M9 18l6-6-6-6"/></svg>
+          </summary>
+          <div class="comm-body">
+            <div class="comm-row"><strong>Titulaires</strong><span>Francis Delarue, Chantal Menjaud, Stéphanie Montico, Edith Théodose Poma, Isabelle Varron</span></div>
+            <div class="comm-row"><strong>Suppléants</strong><span>Marie-José Brulé, Ludovic Morice</span></div>
+          </div>
+        </details>
+
+        <details class="comm-item">
+          <summary class="comm-summary">
+            <div class="comm-icon"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <span class="comm-name">Urbanisme, environnement, PLU, assainissement</span>
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="comm-chevron"><path d="M9 18l6-6-6-6"/></svg>
+          </summary>
+          <div class="comm-body">
+            François Bourniche, Marie-José Brulé, Jacques Godard, Denis Grenet-Laffont, André Hubert, Marguerite Lafond, Chantal Menjaud, Isabelle Varron, Pierre Allard, Audrey Dégano
+          </div>
+        </details>
+
+        <details class="comm-item">
+          <summary class="comm-summary">
+            <div class="comm-icon"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
+            <span class="comm-name">Travaux — Bâtiments, voirie, éclairage, chemins</span>
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="comm-chevron"><path d="M9 18l6-6-6-6"/></svg>
+          </summary>
+          <div class="comm-body">
+            Denis Grenet-Laffont, André Hubert, Marguerite Lafond, Stéphanie Montico, Chantal Menjaud, Pierre Allard
+          </div>
+        </details>
+
+        <details class="comm-item">
+          <summary class="comm-summary">
+            <div class="comm-icon"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            <span class="comm-name">Culture et tourisme</span>
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="comm-chevron"><path d="M9 18l6-6-6-6"/></svg>
+          </summary>
+          <div class="comm-body">
+            Francis Delarue, Marie-Paule Dussourd, Denis Grenet-Laffont, Chantal Menjaud, Pierre Allard
+          </div>
+        </details>
+
+        <details class="comm-item">
+          <summary class="comm-summary">
+            <div class="comm-icon"><svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+            <span class="comm-name">Animation, festivités, sports et associations</span>
+            <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="comm-chevron"><path d="M9 18l6-6-6-6"/></svg>
+          </summary>
+          <div class="comm-body">
+            Philippe Blancheteau, Marie-José Brulé, Marie-Paule Dussourd, André Hubert, Stéphanie Montico, Ludovic Morice, Sabrina Récla, Isabelle Varron
+          </div>
+        </details>
+
+      </div>
+    </div><!-- /pane-commissions -->
+
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+
+  // Onglets
+  document.querySelectorAll('.cm-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cm-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.cm-pane').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('pane-' + btn.dataset.pane).classList.add('active');
+    });
+  });
+
+  // Chevrons des details archives
+  document.querySelectorAll('details').forEach(d => {
+    d.addEventListener('toggle', () => {
+      const ch = d.querySelector('.details-chevron');
+      if (ch) ch.style.transform = d.open ? 'rotate(90deg)' : '';
+    });
+  });
+</script>
 </body>
 </html>

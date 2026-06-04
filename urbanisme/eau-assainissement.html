@@ -1,11 +1,311 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eau & Assainissement — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Eau potable, assainissement individuel et collectif à Saint-Cyr-sur-Morin. Informations pratiques et bonnes pratiques." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── PRIORITÉS CONTRÔLE ──────────────────── */
+
+    .priorites-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin: 1.25rem 0;
+    }
+
+    .priorite-item {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 1rem;
+      align-items: start;
+      background: var(--creme);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+    }
+
+    .priorite-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.25rem 0.65rem;
+      border-radius: 100px;
+      text-align: center;
+      white-space: nowrap;
+      
+    }
+
+    .priorite-badge.p1 { background: rgba(196,80,60,0.12); color: #a03030; }
+    .priorite-badge.p2 { background: rgba(230,150,50,0.12); color: #a06020; }
+    .priorite-badge.p3 { background: rgba(220,180,60,0.12); color: #806010; }
+    .priorite-badge.p45 { background: rgba(58,90,64,0.1); color: var(--vert); font-size: 0.65rem; }
+
+    .priorite-text {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--texte);
+    }
+
+    .priorite-text strong { color: var(--texte); }
+
+    /* ── TARIF BOX ───────────────────────────── */
+
+    .tarif-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .tarif-pill {
+      background: var(--vert-pale);
+      border: 1px solid rgba(58,90,64,0.15);
+      border-radius: 12px;
+      padding: 0.85rem 1.25rem;
+      text-align: center;
+    }
+
+    .tarif-pill strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--vert);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .tarif-pill span {
+      font-size: 0.75rem;
+      color: var(--gris);
+    }
+
+    /* ── AIDES LIENS ─────────────────────────── */
+
+    .aides-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .aide-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--texte);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .aide-link:hover {
+      border-color: var(--vert);
+      color: var(--vert);
+    }
+
+    .aide-link svg { stroke: var(--vert); flex-shrink: 0; }
+
+    @media (max-width: 600px) {
+      .priorite-item { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Eau & Assainissement</h1>
+    <p class="page-intro">Eau potable, assainissement individuel et collectif sur la commune de Saint-Cyr-sur-Morin.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- EAU -->
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Eau potable</div>
+    <h2 class="section-title reveal" style="margin-bottom: 2rem;">L'eau dans notre commune</h2>
+
+    <div class="content-grid reveal" style="margin-bottom: 3rem;">
+      <div class="content-block">
+        <p>L'eau du robinet est gérée par le <strong>S2E77</strong> (anciennement SNE 77, Syndicat des Eaux). Le prix de l'eau est autour de <strong>4,24 € TTC/m³</strong> hors part fixe au compteur. Son prix a subi de fortes augmentations en raison de la nécessité de renouveler le réseau, parfois vieux de presque 60 ans.</p>
+        <p>Le syndicat a engagé en 2017–2018 la rénovation du réservoir semi-enterré des Armenats et le réseau alimentant Biercy, avec installation de points incendie. Coût du marché : <strong>632 936,50 € HT</strong>.</p>
+        <p>Privilégiez l'installation de cuves de récupération des eaux de pluie pour l'arrosage du jardin, le lavage des voitures, etc.</p>
+      </div>
+      <div>
+        <div class="contact-card">
+          <h3>S2E77 — Syndicat des Eaux</h3>
+          <p>
+            23, Rue Pasteur<br>
+            77510 Rebais<br>
+            <a href="tel:0164045137">01 64 04 51 37</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASSAINISSEMENT INDIVIDUEL -->
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Hameaux</div>
+    <h2 class="section-title reveal" style="margin-bottom: 1rem;">Assainissement individuel</h2>
+    <p class="reveal" style="font-size: 0.9rem; color: var(--gris); margin-bottom: 1.5rem;">Compétence de la Communauté de Communes des 2 Morin. L'ensemble des hameaux de Saint-Cyr est en assainissement non collectif.</p>
+
+    <div class="content-grid reveal" style="margin-bottom: 1.5rem;">
+      <div class="content-block">
+        <p>Depuis la loi sur l'eau (Grenelle de l'Environnement), le contrôle de conformité est obligatoire. C'est le <strong>SIANE-SPANC</strong> qui en a la charge. La fréquence des visites varie selon le niveau de non-conformité.</p>
+
+        <div class="priorites-list">
+          <div class="priorite-item">
+            <span class="priorite-badge p1">Priorité 1</span>
+            <div class="priorite-text"><strong>Absence d'installation ou système polluant.</strong> Visite tous les ans. Travaux obligatoires dans l'année du contrôle.</div>
+          </div>
+          <div class="priorite-item">
+            <span class="priorite-badge p2">Priorité 2</span>
+            <div class="priorite-text"><strong>Défauts majeurs (structures/sécurité).</strong> Visite tous les 4 ans. Travaux à réaliser avant la prochaine visite du SIANE.</div>
+          </div>
+          <div class="priorite-item">
+            <span class="priorite-badge p3">Priorité 3</span>
+            <div class="priorite-text">Visite tous les 4 ans. Défauts ne nécessitant pas de travaux immédiats.</div>
+          </div>
+          <div class="priorite-item">
+            <span class="priorite-badge p45">Priorités 4 & 5</span>
+            <div class="priorite-text">Défauts mineurs ou installation conforme. Visite tous les 5 ans.</div>
+          </div>
+        </div>
+
+        <p>Un rapport vous est remis indiquant le niveau de conformité et les travaux à réaliser.</p>
+
+        <div class="info-note" style="margin-top: 1.25rem;">
+          <strong>Micro-stations</strong> — Ces installations nécessitent un contrôle et une maintenance annuelle par votre installateur. Le rapport annuel doit être transmis au SIANE. En cas de non-envoi, une visite sera diligentée.
+        </div>
+      </div>
+
+      <div>
+        <div class="tarifs-box" style="margin-bottom: 1.25rem;">
+          <div class="tarif-item">
+            <strong>90 €</strong>
+            <span>TTC — Coût d'une visite (à partir du 1er janvier 2020)</span>
+          </div>
+          <div class="tarif-item">
+            <strong>66 €</strong>
+            <span>TTC — Étude de dossier pour une réhabilitation</span>
+          </div>
+          <div class="tarif-item">
+            <strong>90 €</strong>
+            <span>TTC — Visite de chantier</span>
+          </div>
+        </div>
+
+        <div class="alert-box" style="background: rgba(196,80,60,0.07); border-color: #C4503C;">
+          <svg width="20" height="20" fill="none" stroke="#C4503C" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4m0 4h.01"/>
+          </svg>
+          <div>
+            <strong style="color: #C4503C;">Rappel réglementaire</strong>
+            <p style="color: var(--texte);">Il est interdit de rejeter les eaux de pluie dans votre filière d'assainissement non collectif.</p>
+          </div>
+        </div>
+
+        <div class="contact-card" style="margin-top: 1.25rem;">
+          <h3>SIANE-SPANC</h3>
+          <p>9/13, avenue Jean de la Fontaine<br>77510 Rebais<br><a href="tel:0164045245">01 64 04 52 45</a><br><a href="http://www.siane77.fr" target="_blank" rel="noopener">siane77.fr</a></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-note reveal" style="margin-bottom: 3rem;">
+      <strong>En cas de vente</strong> — Vous devez disposer d'un contrôle SIANE-SPANC de moins de 3 ans. En cas de non-conformité (priorités 1 à 3), les travaux seront à réaliser soit par le vendeur, soit par l'acquéreur dans l'année suivant l'achat. Un dossier de réhabilitation est à retirer auprès du SIANE.
+    </div>
+
+    <!-- ASSAINISSEMENT COLLECTIF -->
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Centre-bourg</div>
+    <h2 class="section-title reveal" style="margin-bottom: 1rem;">Assainissement collectif</h2>
+
+    <div class="content-grid reveal" style="margin-bottom: 1.5rem;">
+      <div class="content-block">
+        <p>L'assainissement collectif concerne les habitants du Bourg. Ce service est géré par le <strong>SIANE-SPAC</strong>, le contrat Véolia étant arrivé à échéance en juillet 2018. Une nouvelle station d'épuration — un filtre planté de roseaux — a été construite en haut de l'avenue Daniel Simon au lieu-dit « La pièce de la rivière ». La station est commune avec Saint-Ouen-sur-Morin.</p>
+        <p>Toute création d'eaux usées supplémentaires dans le réseau génère l'obligation d'acquitter une taxe appelée <strong>PFAC</strong> (Participation Financière à l'Assainissement Collectif).</p>
+      </div>
+      <div>
+        <div class="tarifs-box">
+          <div class="tarif-item">
+            <strong>5 000 €</strong>
+            <span>Pour une habitation nouvelle</span>
+          </div>
+          <div class="tarif-item">
+            <strong>1 500 €</strong>
+            <span>Par appartement supplémentaire créé par division d'un bien existant</span>
+          </div>
+          <div class="tarif-item">
+            <strong>5 000 €</strong>
+            <span>Branchement principal d'une nouvelle copropriété</span>
+          </div>
+          <div class="tarif-item">
+            <strong>1 500 €</strong>
+            <span>Branchements supplémentaires copropriété</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-note reveal" style="margin-bottom: 3rem;">
+      <strong>Composition du prix de l'eau assainie</strong> — Le prix se compose d'un coût délégataire (surveillance station, maintenance postes de relevage, facturation), d'un coût communal (remboursement des emprunts), d'une participation à l'agence de l'eau, et d'une part fixe pour la location du compteur.
+    </div>
+
+    <!-- BONNES PRATIQUES -->
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Aides</div>
+    <h2 class="section-title reveal" style="margin-bottom: 1rem;">Bonnes pratiques & subventions</h2>
+    <p class="reveal" style="font-size: 0.9rem; color: var(--gris); margin-bottom: 1.5rem;">Les propriétaires qui réalisent ou réhabilitent leur installation d'assainissement non-collectif peuvent bénéficier d'aides des organismes suivants.</p>
+
+    <div class="aides-grid reveal">
+      <a href="https://www.anah.fr" target="_blank" rel="noopener" class="aide-link">
+        <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        ANAH — Agence Nationale de l'Habitat
+      </a>
+      <a href="http://www.caf.fr" target="_blank" rel="noopener" class="aide-link">
+        <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        CAF — Caisse d'Allocations Familiales
+      </a>
+      <a href="https://www.cohesion-territoires.gouv.fr" target="_blank" rel="noopener" class="aide-link">
+        <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+        Ministère de la Cohésion des territoires
+      </a>
+      <a href="https://www.impots.gouv.fr/portail" target="_blank" rel="noopener" class="aide-link">
+        <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Impôts — TVA réduite & déductions
+      </a>
+      <a href="https://www.service-public.fr" target="_blank" rel="noopener" class="aide-link">
+        <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        Service-Public.fr — infos & démarches
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
 </body>
 </html>

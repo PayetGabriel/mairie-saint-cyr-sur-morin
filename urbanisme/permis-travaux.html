@@ -1,11 +1,545 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Permis & Travaux — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Demandes d'autorisation d'urbanisme, aides financières et règlement de voirie communale à Saint-Cyr-sur-Morin." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── GRILLE DÉMARCHES URBANISME ──────────── */
+
+    .demarches-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .demarche-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.22s;
+    }
+
+    .demarche-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 22px rgba(42,37,32,0.08);
+      border-color: rgba(58,90,64,0.2);
+    }
+
+    .demarche-card-head {
+      padding: 1.1rem 1.4rem;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .demarche-card-head svg { stroke: var(--vert); flex-shrink: 0; }
+
+    .demarche-card-head span {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--vert);
+    }
+
+    .demarche-card-body {
+      padding: 1.25rem 1.4rem;
+    }
+
+    .demarche-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.75rem;
+      line-height: 1.3;
+    }
+
+    .demarche-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .demarche-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--vert);
+      text-decoration: none;
+      padding: 0.4rem 0.75rem;
+      background: var(--creme);
+      border-radius: 7px;
+      border: 1px solid rgba(200,191,176,0.35);
+      transition: all 0.18s;
+    }
+
+    .demarche-link:hover {
+      background: var(--vert-pale);
+      border-color: var(--vert);
+    }
+
+    .demarche-link svg { stroke: currentColor; flex-shrink: 0; }
+
+    .demarche-link .tag {
+      font-size: 0.67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--pierre-dark);
+      background: rgba(200,191,176,0.3);
+      padding: 0.1rem 0.45rem;
+      border-radius: 3px;
+      margin-left: auto;
+    }
+
+    /* ── COURRIEL DÉPÔT ──────────────────────── */
+
+    .depot-banner {
+      background: var(--texte);
+      border-radius: 16px;
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .depot-banner svg { stroke: rgba(255,255,255,0.5); flex-shrink: 0; }
+
+    .depot-banner-text h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--blanc);
+      margin-bottom: 0.35rem;
+    }
+
+    .depot-banner-text p {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      margin: 0;
+    }
+
+    .depot-banner a {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--blanc);
+      text-decoration: none;
+      background: var(--vert);
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      white-space: nowrap;
+      margin-left: auto;
+      transition: background 0.2s;
+    }
+
+    .depot-banner a:hover { background: var(--vert-clair); }
+
+    /* ── AIDES ───────────────────────────────── */
+
+    .aides-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      align-items: start;
+    }
+
+    .aides-body p {
+      font-size: 0.93rem;
+      line-height: 1.85;
+      color: var(--texte);
+      margin-bottom: 1rem;
+    }
+
+    .aides-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .aides-list-item {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--texte);
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(200,191,176,0.2);
+    }
+
+    .aides-list-item:last-child { border-bottom: none; }
+
+    .aides-list-item::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--vert);
+      flex-shrink: 0;
+    }
+
+    .org-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .org-link {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--texte);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .org-link:hover {
+      border-color: var(--vert);
+      color: var(--vert);
+    }
+
+    .org-link svg { stroke: var(--vert); flex-shrink: 0; }
+
+    /* ── VOIRIE ──────────────────────────────── */
+
+    .voirie-card {
+      background: var(--vert-pale);
+      border: 1px solid rgba(58,90,64,0.15);
+      border-radius: 16px;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .voirie-card svg { stroke: var(--vert); flex-shrink: 0; }
+
+    .voirie-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.4rem;
+    }
+
+    .voirie-card p {
+      font-size: 0.85rem;
+      color: var(--gris);
+      margin: 0 0 0.85rem;
+    }
+
+    .btn-no-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background: var(--creme);
+      color: var(--pierre-dark);
+      border: 1.5px solid rgba(200,191,176,0.5);
+      cursor: default;
+    }
+
+    @media (max-width: 768px) {
+      .aides-layout { grid-template-columns: 1fr; }
+      .depot-banner { flex-direction: column; align-items: flex-start; }
+      .depot-banner a { margin-left: 0; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Permis & Travaux</h1>
+    <p class="page-intro">Autorisations d'urbanisme, aides financières et règlement de voirie communale.</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- Dépôt dématérialisé -->
+    <div class="depot-banner reveal">
+      <svg width="28" height="28" fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <div class="depot-banner-text">
+        <h4>Dépôt dématérialisé des demandes</h4>
+        <p>Depuis le 1er janvier 2022, toutes les demandes d'autorisation d'urbanisme peuvent être déposées par voie électronique.</p>
+      </div>
+      <a href="mailto:depoturbanisme.mairiesaintcyr@orange.fr">depoturbanisme.mairiesaintcyr@orange.fr</a>
+    </div>
+
+    <!-- Formulaires -->
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Autorisations d'urbanisme</div>
+    <h2 class="section-title reveal" style="margin-bottom: 0.5rem;">Formulaires administratifs</h2>
+    <p class="reveal" style="font-size: 0.88rem; color: var(--gris); margin-bottom: 2rem;">Tous les formulaires sont disponibles sur service-public.fr. Cliquez sur les liens pour accéder aux informations et télécharger les formulaires.</p>
+
+    <div class="demarches-grid reveal">
+
+      <div class="demarche-card">
+        <div class="demarche-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Renseignement</span>
+        </div>
+        <div class="demarche-card-body">
+          <div class="demarche-card-title">Certificat d'urbanisme</div>
+          <div class="demarche-links">
+            <a href="https://www.service-public.fr/particuliers/vosdroits/F1633" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              Informations
+              <span class="tag">Service-Public</span>
+            </a>
+            <a href="https://www.service-public.fr/particuliers/vosdroits/R1970" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Formulaire
+              <span class="tag">Télécharger</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="demarche-card">
+        <div class="demarche-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <span>Petits travaux</span>
+        </div>
+        <div class="demarche-card-body">
+          <div class="demarche-card-title">Déclaration préalable de travaux</div>
+          <div class="demarche-links">
+            <a href="https://www.service-public.fr/particuliers/vosdroits/F17578" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              Informations DPMI
+              <span class="tag">Service-Public</span>
+            </a>
+            <a href="https://www.service-public.fr/particuliers/vosdroits/R11646" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Formulaire DP
+              <span class="tag">Télécharger</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="demarche-card">
+        <div class="demarche-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Construction</span>
+        </div>
+        <div class="demarche-card-body">
+          <div class="demarche-card-title">Permis de construire</div>
+          <div class="demarche-links">
+            <a href="https://www.service-public.fr/particuliers/vosdroits/R11637" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              PCMI — maison individuelle
+              <span class="tag">Service-Public</span>
+            </a>
+            <a href="https://www.service-public.fr/particuliers/vosdroits/R20835" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Formulaire autres constructions
+              <span class="tag">Télécharger</span>
+            </a>
+            <a href="https://www.formulaires.service-public.fr/gf/getAnnexe.do?cerfaAnnexe=13702-1&cerfaFormulaire=13702" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Annexe 2ème demandeur
+              <span class="tag">Télécharger</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="demarche-card">
+        <div class="demarche-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span>Modification</span>
+        </div>
+        <div class="demarche-card-body">
+          <div class="demarche-card-title">Permis modificatif</div>
+          <div class="demarche-links">
+            <a href="https://www.service-public.fr/particuliers/vosdroits/F19450" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              Informations
+              <span class="tag">Service-Public</span>
+            </a>
+            <a href="https://www.service-public.fr/particuliers/vosdroits/R21323" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Formulaire
+              <span class="tag">Télécharger</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="demarche-card">
+        <div class="demarche-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          <span>Transfert</span>
+        </div>
+        <div class="demarche-card-body">
+          <div class="demarche-card-title">Transfert de permis</div>
+          <div class="demarche-links">
+            <a href="https://www.service-public.fr/particuliers/vosdroits/F2698" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              Informations
+              <span class="tag">Service-Public</span>
+            </a>
+            <a href="https://www.service-public.fr/particuliers/vosdroits/R2034" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Formulaire
+              <span class="tag">Télécharger</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="demarche-card">
+        <div class="demarche-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Recours</span>
+        </div>
+        <div class="demarche-card-body">
+          <div class="demarche-card-title">Contestation d'une autorisation</div>
+          <div class="demarche-links">
+            <a href="https://www.service-public.fr/particuliers/vosdroits/F20567" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              Informations
+              <span class="tag">Service-Public</span>
+            </a>
+            <a href="https://www.service-public.fr/particuliers/vosdroits/R46120" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Modèle de recours gracieux
+              <span class="tag">Télécharger</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="demarche-card">
+        <div class="demarche-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Fiscalité</span>
+        </div>
+        <div class="demarche-card-body">
+          <div class="demarche-card-title">Taxe d'aménagement</div>
+          <div class="demarche-links">
+            <a href="https://www.service-public.fr/particuliers/vosdroits/F23263" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              Informations taxe d'aménagement
+              <span class="tag">Service-Public</span>
+            </a>
+            <a href="https://www.service-public.fr/particulieres/vosdroits/R23273" target="_blank" rel="noopener" class="demarche-link">
+              <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+              Simulateur de calcul
+              <span class="tag">Outil en ligne</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- AIDES FINANCIÈRES -->
+<section class="section" style="background: var(--blanc);">
+  <div class="section-inner">
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Financement</div>
+    <h2 class="section-title reveal" style="margin-bottom: 2rem;">Aides financières</h2>
+
+    <div class="aides-layout reveal">
+      <div class="aides-body">
+        <p>Les propriétaires qui font réaliser des travaux par des entreprises privées peuvent bénéficier de plusieurs dispositifs d'aide.</p>
+        <div class="aides-list">
+          <div class="aides-list-item">Aides de l'Agence Nationale de l'Habitat (ANAH), selon conditions d'attribution</div>
+          <div class="aides-list-item">Taux réduit de TVA à 10 %, sous conditions</div>
+          <div class="aides-list-item">Prêt auprès de la CAF ou d'une caisse de retraite</div>
+        </div>
+      </div>
+
+      <div class="org-links">
+        <a href="https://www.anah.fr" target="_blank" rel="noopener" class="org-link">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          anah.fr
+        </a>
+        <a href="http://www.caf.fr" target="_blank" rel="noopener" class="org-link">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          caf.fr
+        </a>
+        <a href="https://www.cohesion-territoires.gouv.fr" target="_blank" rel="noopener" class="org-link">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg>
+          Ministère de la Cohésion des territoires
+        </a>
+        <a href="https://www.impots.gouv.fr/portail" target="_blank" rel="noopener" class="org-link">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          impots.gouv.fr
+        </a>
+        <a href="https://www.service-public.fr" target="_blank" rel="noopener" class="org-link">
+          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          service-public.fr
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RÈGLEMENT DE VOIRIE -->
+<section class="section" style="background: var(--creme);">
+  <div class="section-inner">
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Document communal</div>
+    <h2 class="section-title reveal" style="margin-bottom: 2rem;">Règlement de voirie communale</h2>
+
+    <div class="voirie-card reveal">
+      <svg width="36" height="36" fill="none" stroke-width="1.6" viewBox="0 0 24 24">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10 9 9 9 8 9"/>
+      </svg>
+      <div>
+        <h3>Règlement de voirie communale</h3>
+        <p>Ce document définit les règles d'utilisation, de conservation et de permission de voirie sur le territoire communal.</p>
+        <div class="btn-no-link">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          Document en cours de mise en ligne
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
 </body>
 </html>
