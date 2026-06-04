@@ -14,6 +14,18 @@
   <link rel="stylesheet" href="/css/sivu.css" />
 
   <style>
+    /* On cible les éléments animés par le scroll reveal */
+    .reveal {
+      /* Force le rendu propre sur mobile et évite les clignotements/doublons */
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      
+      /* Indique au navigateur de se préparer à une transformation */
+      will-change: transform, opacity;
+      
+      /* Empêche les bugs de démultiplication sur certains moteurs de rendu */
+      transform: translateZ(0);
+    }
 
     /* ── GRILLE PRATICIENS ───────────────────── */
 
