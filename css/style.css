@@ -1399,6 +1399,8 @@ footer {
 .reveal.visible { opacity: 1; transform: none; }
 
 
+
+
 /* ─── RESPONSIVE ──────────────────────────── */
 
 @media (max-width: 992px) { /* On cible aussi les tablettes */
