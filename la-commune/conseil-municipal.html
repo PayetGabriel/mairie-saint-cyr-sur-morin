@@ -964,6 +964,33 @@
       if (ch) ch.style.transform = d.open ? 'rotate(90deg)' : '';
     });
   });
+
+  // Gestion de l'ancrage direct depuis le footer ou un lien externe
+  // Nouveau système par Index Numérique
+  function checkUrlTab() {
+    const hash = window.location.hash; // Récupère par ex '#tab-3'
+    
+    if (hash && hash.startsWith('#tab-')) {
+      // On extrait le numéro (ex: 3)
+      const tabIndex = parseInt(hash.replace('#tab-', ''), 10);
+      
+      // On récupère la liste de tous tes boutons d'onglets (.cm-tab)
+      const allTabs = document.querySelectorAll('.cm-tab');
+      
+      // Si l'onglet demandé existe bien
+      if (allTabs[tabIndex]) {
+        // On force le clic sur l'onglet correspondant
+        allTabs[tabIndex].click();
+        
+        // Petit scroll fluide automatique vers les onglets
+        allTabs[tabIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
+
+  // Écouteurs d'événements : au chargement et si on clique depuis le footer
+  window.addEventListener('DOMContentLoaded', checkUrlTab);
+  window.addEventListener('hashchange', checkUrlTab);
 </script>
 </body>
 </html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Urbanisme & Démarches — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Consultez le Plan Local d'Urbanisme (PLU), effectuez vos demandes de permis de construire ou travaux, et renseignez-vous sur la gestion des eaux et la prévention des inondations." />
+  <meta name="author" content="Gabriel PAYET" />
+
+  <meta name="geo.region" content="FR-77" />
+  <meta name="geo.placename" content="Saint-Cyr-sur-Morin" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Urbanisme & Démarches — Saint-Cyr-sur-Morin" />
+  <meta property="og:description" content="Consultez le Plan Local d'Urbanisme (PLU), vos demandes de permis, et les risques d'inondations de la commune." />
+  <meta property="og:image" content="https://mairie-saint-cyr-sur-morin.vercel.app/assets/img/logoSaintCyr_2020_web.png" />
+  <meta property="og:image:width" content="984" />
+  <meta property="og:image:height" content="1200" />
+
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <link rel="apple-touch-icon" href="/assets/img/logoSaintCyr_2020-favicon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+   
+  <style>
+    /* Structure globale calquée sur ton ancienne maintenance */
+    .hub-hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; /* Centre verticalement le texte + les cartes */
+        
+        /* Prend tout l'écran de manière dynamique */
+        min-height: 100vh; 
+        min-height: 100dvh; 
+        
+        /* Un padding équilibré pour laisser respirer la nav et le footer */
+        padding: 80px 1rem 4rem; 
+        background-color: var(--creme);
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+    .hub-header {
+      margin-bottom: 3rem;
+      max-width: 700px;
+    }
+
+    .hub-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      color: var(--texte);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .hub-header p {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--gris);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* Grille adaptée spécifiquement pour 4 grandes cartes */
+    .hub-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 colonnes de base (2x2) */
+        gap: 1.2rem;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* Media queries pour la réactivité de la grille */
+    /* Ajustements optionnels pour les petits écrans */
+    @media (max-width: 480px) {
+        /* On réduit l'espace au-dessus du hub pour remonter le tout */
+        .hub-hero {
+            padding: 75px 0.75rem 2rem;
+        }
+
+        /* On réduit l'en-tête */
+        .hub-header {
+            margin-bottom: 1.75rem;
+        }
+        
+        .hub-header h1 {
+            font-size: clamp(1.8rem, 7vw, 2.2rem); /* Titre plus compact */
+            margin-bottom: 0.5rem;
+        }
+
+        .hub-header p {
+            font-size: 0.95rem; /* Descriptif moins imposant */
+            line-height: 1.4;
+            padding: 0 5px;
+        }
+
+        /* La grille respire mieux avec moins d'écart */
+        .hub-grid {
+            gap: 0.75rem; 
+        }
+
+        /* Les cartes deviennent plus denses */
+        .hub-card {
+            padding: 1.25rem 0.75rem;
+            gap: 0.6rem;
+            border-radius: 14px; /* Arrondis ajustés à la taille */
+        }
+
+        /* Les icônes passent en mode discret */
+        .hub-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+        }
+
+        .hub-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Le texte des boutons */
+        .hub-label {
+            font-size: 0.8rem;
+            line-height: 1.2;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .hub-grid { 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 1.5rem;
+        }
+    }
+
+    /* Cartes d'accès rapide boostées à l'échelle du Hero */
+    .hub-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,.5);
+      border-radius: 20px; /* Plus grand pour le côté premium */
+      padding: 2rem 1.5rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--texte);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+      height: 100%;
+      box-shadow: 0 4px 10px rgba(42, 37, 32, 0.02);
+      transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .hub-card:hover {
+      border-color: var(--vert);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(58,90,64,.15);
+    }
+
+    /* Icône agrandie par rapport aux accès rapides standards */
+    .hub-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+    }
+
+    .hub-icon svg {
+      width: 28px;
+      height: 28px;
+      transition: stroke 0.3s ease;
+    }
+
+    .hub-card:hover .hub-icon { 
+      background: var(--vert); 
+    }
+    
+    .hub-card:hover .hub-icon svg { 
+      stroke: var(--blanc); 
+    }
+
+    .hub-label { 
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; 
+      font-weight: 500; 
+      line-height: 1.4; 
+    }
+  </style>
+</head>
+<body>
+
+<!-- Injection automatique de la Navbar -->
+<script src="/components/navbar.js"></script>
+
+<main class="hub-hero">
+  <div class="hub-header">
+    <h1>Urbanisme & <em>Aménagement</em></h1>
+    <p>Consultez la réglementation du village, accédez aux outils cartographiques du PLU, préparez vos déclarations de travaux et découvrez les dispositifs de gestion des réseaux.</p>
+  </div>
+
+  <div class="hub-grid">
+    <a href="/urbanisme/permis-travaux.html" class="hub-card">
+      <div class="hub-icon">
+        <svg fill="none" stroke="var(--vert)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+        </svg>
+      </div>
+      <span class="hub-label">Permis &<br>Travaux</span>
+    </a>
+
+    <a href="/urbanisme/plu.html" class="hub-card">
+      <div class="hub-icon">
+        <svg fill="none" stroke="var(--vert)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21" />
+          <line x1="9" y1="3" x2="9" y2="18" />
+          <line x1="15" y1="6" x2="15" y2="21" />
+        </svg>
+      </div>
+      <span class="hub-label">PLU</span>
+    </a>
+
+    <a href="/urbanisme/eau-assainissement.html" class="hub-card">
+      <div class="hub-icon">
+        <svg fill="none" stroke="var(--vert)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-13-7-13S5 10.7 5 15a7 7 0 0 0 7 7z" />
+        </svg>
+      </div>
+      <span class="hub-label">Eau &<br>Assainissement</span>
+    </a>
+
+    <a href="/urbanisme/inondations.html" class="hub-card">
+      <div class="hub-icon">
+        <svg fill="none" stroke="var(--vert)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M2 6c3-1.5 4 1.5 7 0s4-1.5 7 0 4 1.5 6 0" />
+            <path d="M2 12c3-1.5 4 1.5 7 0s4-1.5 7 0 4 1.5 6 0" />
+            <path d="M2 18c3-1.5 4 1.5 7 0s4-1.5 7 0 4 1.5 6 0" />
+        </svg>
+      </div>
+      <span class="hub-label">Inondations</span>
+    </a>
+  </div>
+</main>
+
+<div id="footer-placeholder"></div>
+
+<script>
+  // Système d'injection du footer
+  fetch('/components/footer.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('footer-placeholder').innerHTML = data;
+    });
+</script>
+
+</body>
+</html>
