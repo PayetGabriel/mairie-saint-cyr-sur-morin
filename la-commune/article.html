@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="page-title">Article — Saint-Cyr-sur-Morin</title>
+  <meta name="description" id="page-description" content="Actualité de la commune de Saint-Cyr-sur-Morin." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── ARTICLE LAYOUT ──────────────────────── */
+
+    .article-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 3rem 2.5rem 5rem;
+    }
+
+    /* Retour */
+    .article-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--gris);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 2.5rem;
+      transition: color 0.2s;
+    }
+
+    .article-back svg { stroke: currentColor; }
+    .article-back:hover { color: var(--vert); }
+
+    /* Meta */
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .article-tag {
+      display: inline-block;
+      background: var(--vert);
+      color: var(--blanc);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.7rem;
+      border-radius: 100px;
+    }
+
+    .article-date {
+      font-size: 0.8rem;
+      color: var(--gris);
+    }
+
+    /* Titre */
+    .article-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.75rem, 4vw, 2.4rem);
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    /* Image hero */
+    .article-hero {
+      width: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--creme);
+      margin-bottom: 2.5rem;
+    }
+
+    .article-hero img {
+      width: 100%;
+      display: block;
+      max-height: 420px;
+      object-fit: cover;
+    }
+
+    /* Corps */
+    .article-body {
+      font-size: 1rem;
+      line-height: 1.9;
+      color: var(--texte);
+    }
+
+    .article-body p {
+      margin-bottom: 1.25rem;
+    }
+
+    .article-body p:last-child { margin-bottom: 0; }
+
+    .article-body h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin: 2rem 0 0.75rem;
+      line-height: 1.3;
+    }
+
+    .article-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin: 1.5rem 0 0.6rem;
+    }
+
+    .article-body ul,
+    .article-body ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .article-body li {
+      margin-bottom: 0.4rem;
+      line-height: 1.7;
+    }
+
+    .article-body a {
+      color: var(--vert);
+      font-weight: 500;
+      text-decoration: underline;
+      text-decoration-color: rgba(58,90,64,0.3);
+      text-underline-offset: 2px;
+    }
+
+    .article-body a:hover {
+      text-decoration-color: var(--vert);
+    }
+
+    .article-body blockquote {
+      border-left: 3px solid var(--vert);
+      padding: 0.5rem 0 0.5rem 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--texte);
+    }
+
+    /* Séparateur pied d'article */
+    .article-footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(200,191,176,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .article-footer-left {
+      font-size: 0.82rem;
+      color: var(--gris);
+    }
+
+    .article-footer-left strong { color: var(--texte); }
+
+    .article-share {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .article-share span {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--gris);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .share-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--creme);
+      border: 1px solid rgba(200,191,176,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .share-btn svg { stroke: var(--gris); }
+
+    .share-btn:hover {
+      background: var(--vert-pale);
+      border-color: var(--vert);
+    }
+
+    .share-btn:hover svg { stroke: var(--vert); }
+
+    /* Articles liés */
+    .related-section {
+      background: var(--creme);
+      padding: 3rem 2.5rem;
+    }
+
+    .related-inner {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .related-inner h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 1.5rem;
+    }
+
+    .related-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .related-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.25rem;
+      text-decoration: none;
+      color: var(--texte);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .related-card:hover {
+      border-color: rgba(58,90,64,0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(42,37,32,0.07);
+    }
+
+    .related-card-tag {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--vert);
+    }
+
+    .related-card-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.4;
+    }
+
+    .related-card-date {
+      font-size: 0.72rem;
+      color: var(--gris);
+    }
+
+    /* État de chargement */
+    .article-loading {
+      text-align: center;
+      padding: 6rem 2rem;
+      color: var(--gris);
+    }
+
+    .article-loading svg {
+      stroke: var(--pierre-dark);
+      opacity: 0.3;
+      margin-bottom: 1rem;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .article-not-found {
+      text-align: center;
+      padding: 4rem 2rem;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .article-not-found svg { stroke: var(--pierre-dark); opacity: 0.25; margin-bottom: 1.25rem; }
+
+    .article-not-found h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.6rem;
+    }
+
+    .article-not-found p {
+      font-size: 0.88rem;
+      color: var(--gris);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .article-wrap { padding: 2rem 1.5rem 4rem; }
+      .related-section { padding: 2rem 1.5rem; }
+      .related-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── CONTENU PRINCIPAL ─── -->
+<main>
+  <div class="article-wrap">
+
+    <!-- Retour -->
+    <a href="/la-commune/actualites.html" class="article-back">
+      <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Toutes les actualités
+    </a>
+
+    <!-- Zone de chargement -->
+    <div id="article-loading" class="article-loading">
+      <svg width="36" height="36" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+        <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+      </svg>
+      <div>Chargement de l'article…</div>
+    </div>
+
+    <!-- Contenu article (injecté par JS) -->
+    <div id="article-content" style="display: none;">
+
+      <div class="article-meta">
+        <span class="article-tag" id="art-tag">—</span>
+        <span class="article-date" id="art-date">—</span>
+      </div>
+
+      <h1 class="article-title" id="art-title">—</h1>
+
+      <div class="article-hero" id="art-hero-wrap" style="display: none;">
+        <img id="art-hero" src="" alt="" />
+      </div>
+
+      <div class="article-body" id="art-body"></div>
+
+      <div class="article-footer">
+        <div class="article-footer-left">
+          Publié par <strong id="art-auteur">La Mairie</strong>
+        </div>
+        <div class="article-share">
+          <span>Partager</span>
+          <button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href); this.title='Lien copié !'" title="Copier le lien">
+            <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /article-content -->
+
+    <!-- Article introuvable -->
+    <div id="article-not-found" style="display: none;" class="article-not-found">
+      <svg width="48" height="48" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.35-4.35"/>
+      </svg>
+      <h2>Article introuvable</h2>
+      <p>L'article que vous cherchez n'existe pas ou a été supprimé.</p>
+      <a href="/la-commune/actualites.html" class="btn btn-primary">
+        Retour aux actualités
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<!-- ─── ARTICLES LIÉS ─── -->
+<section class="related-section" id="related-section" style="display: none;">
+  <div class="related-inner">
+    <h3>À lire aussi</h3>
+    <div class="related-grid" id="related-grid"></div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<div id="footer-placeholder"></div>
+
+<script src="/components/navbar.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+
+  // ────────────────────────────────────────────────
+  // Lecture de l'ID article depuis l'URL
+  // Exemple : /la-commune/article.html?id=12
+  // ────────────────────────────────────────────────
+
+  const params = new URLSearchParams(window.location.search);
+  const articleId = params.get('id');
+
+  // ── Fetch de l'article depuis l'API du panel ────
+  // À remplacer par la vraie URL de l'API une fois le panel construit.
+  // Exemple de réponse attendue :
+  // {
+  //   id: 12,
+  //   titre: "Travaux rue Daumont",
+  //   tag: "Travaux",
+  //   date: "11 janvier 2026",
+  //   auteur: "La Mairie",
+  //   image: "/assets/img/actualites/travaux-daumont.jpg",
+  //   contenu: "<p>...</p>",
+  //   articles_lies: [
+  //     { id: 9, titre: "...", tag: "...", date: "..." },
+  //     ...
+  //   ]
+  // }
+
+  function renderArticle(data) {
+    document.getElementById('article-loading').style.display = 'none';
+    document.getElementById('article-content').style.display = 'block';
+
+    document.getElementById('page-title').textContent = data.titre + ' — Saint-Cyr-sur-Morin';
+    document.getElementById('page-description').content = data.titre;
+
+    document.getElementById('art-tag').textContent = data.tag || 'Actualité';
+    document.getElementById('art-date').textContent = data.date || '';
+    document.getElementById('art-title').textContent = data.titre || '';
+    document.getElementById('art-body').innerHTML = data.contenu || '';
+    document.getElementById('art-auteur').textContent = data.auteur || 'La Mairie';
+
+    if (data.image) {
+      document.getElementById('art-hero').src = data.image;
+      document.getElementById('art-hero').alt = data.titre;
+      document.getElementById('art-hero-wrap').style.display = 'block';
+    }
+
+    if (data.articles_lies && data.articles_lies.length > 0) {
+      const grid = document.getElementById('related-grid');
+      data.articles_lies.slice(0, 3).forEach(a => {
+        grid.innerHTML += `
+          <a href="/la-commune/article.html?id=${a.id}" class="related-card">
+            <div class="related-card-tag">${a.tag || 'Actualité'}</div>
+            <div class="related-card-title">${a.titre}</div>
+            <div class="related-card-date">${a.date}</div>
+          </a>
+        `;
+      });
+      document.getElementById('related-section').style.display = 'block';
+    }
+  }
+
+  function showNotFound() {
+    document.getElementById('article-loading').style.display = 'none';
+    document.getElementById('article-not-found').style.display = 'block';
+  }
+
+  if (!articleId) {
+    // Pas d'ID dans l'URL → données de démo pour visualiser le template
+    renderArticle({
+      id: 0,
+      titre: 'Titre de l\'article — exemple de rendu',
+      tag: 'Actualité',
+      date: '1er janvier 2026',
+      auteur: 'La Mairie',
+      image: '',
+      contenu: `
+        <p>Ceci est un aperçu du template article. Le contenu réel sera chargé dynamiquement depuis l'API du panel d'administration, en passant l'identifiant de l'article dans l'URL : <code>/la-commune/article.html?id=12</code>.</p>
+        <h2>Exemple de sous-titre</h2>
+        <p>Le corps de l'article supporte les paragraphes, les titres de niveaux 2 et 3, les listes à puces et numérotées, les liens et les citations.</p>
+        <blockquote>Exemple de citation ou d'encadré mis en valeur avec la bordure verte caractéristique du site.</blockquote>
+        <p>Les images hero s'affichent en pleine largeur en haut de l'article, sous le titre. Les articles liés apparaissent en bas de page.</p>
+      `,
+      articles_lies: [
+        { id: 1, titre: 'Guide pratique pour le logement en cas d\'inondation', tag: 'Prévention', date: '8 janvier 2026' },
+        { id: 2, titre: 'Comptes-rendus du conseil municipal — Décembre 2025', tag: 'Conseil municipal', date: '5 janvier 2026' },
+        { id: 3, titre: 'Médiathèque — nouveaux horaires d\'ouverture', tag: 'Culture', date: '3 novembre 2025' },
+      ]
+    });
+  } else {
+    // Appel API réel — à activer une fois le panel construit
+    fetch(`/api/articles/${articleId}`)
+      .then(res => {
+        if (!res.ok) throw new Error('Not found');
+        return res.json();
+      })
+      .then(data => renderArticle(data))
+      .catch(() => showNotFound());
+  }
+</script>
+</body>
+</html>
