@@ -14,51 +14,6 @@
   <link rel="stylesheet" href="/css/sivu.css" />
 
   <style>
-
-    /* ── ONGLETS ─────────────────────────────── */
-
-    .cm-tabs {
-      display: flex;
-      gap: 0.375rem;
-      background: var(--creme);
-      border: 1px solid rgba(200,191,176,0.45);
-      border-radius: 14px;
-      padding: 0.375rem;
-      width: fit-content;
-      margin-bottom: 2.5rem;
-      flex-wrap: wrap;
-    }
-
-    .cm-tab {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.65rem 1.25rem;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: var(--gris);
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .cm-tab svg { stroke: currentColor; }
-
-    .cm-tab:hover { color: var(--texte); background: rgba(200,191,176,0.2); }
-
-    .cm-tab.active {
-      background: var(--blanc);
-      color: var(--vert);
-      box-shadow: 0 1px 6px rgba(42,37,32,0.08);
-    }
-
-    .cm-pane { display: none; }
-    .cm-pane.active { display: block; }
-
-
     /* ── CARTE ÉLU ───────────────────────────── */
 
     .elus-grid {
@@ -417,8 +372,6 @@
     /* ── RESPONSIVE ──────────────────────────── */
 
     @media (max-width: 768px) {
-      .cm-tabs { width: 100%; }
-      .cm-tab { flex: 1; justify-content: center; font-size: 0.78rem; padding: 0.6rem 0.75rem; }
       .elus-grid { grid-template-columns: 1fr; }
       .cr-grid { grid-template-columns: 1fr 1fr; }
     }
@@ -442,20 +395,20 @@
   <div class="section-inner">
 
     <!-- Onglets -->
-    <div class="cm-tabs" role="tablist">
-      <button class="cm-tab active" data-pane="elus">
+    <div class="tabs-bar reveal" role="tablist">
+      <button class="tab-btn active" data-pane="elus">
         <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Élus & délégations
       </button>
-      <button class="cm-tab" data-pane="permanences">
+      <button class="tab-btn" data-pane="permanences">
         <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
         Permanences
       </button>
-      <button class="cm-tab" data-pane="cr">
+      <button class="tab-btn" data-pane="cr">
         <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Comptes-rendus
       </button>
-      <button class="cm-tab" data-pane="commissions">
+      <button class="tab-btn" data-pane="commissions">
         <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
         Commissions
       </button>
@@ -463,7 +416,7 @@
 
 
     <!-- ── ÉLUS ─── -->
-    <div class="cm-pane active" id="pane-elus">
+    <div class="tab-pane active" id="pane-elus">
 
       <div class="info-note reveal" style="margin-bottom: 2rem;">
         <strong>Mandature 2026–2032</strong> — Suite aux élections municipales de mars 2026. Les délégations en italique concernent les mandats à la Communauté de Communes des 2 Morin (CC2M).
@@ -649,7 +602,7 @@
 
 
     <!-- ── PERMANENCES ─── -->
-    <div class="cm-pane" id="pane-permanences">
+    <div class="tab-pane" id="pane-permanences">
 
       <div class="alert-box primary reveal" style="margin-bottom: 2rem;">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -712,7 +665,7 @@
 
 
     <!-- ── COMPTES-RENDUS ─── -->
-    <div class="cm-pane" id="pane-cr">
+    <div class="tab-pane" id="pane-cr">
       <p style="font-size: 0.88rem; color: var(--gris); margin-bottom: 2rem;">Cliquez sur un conseil municipal pour consulter le compte-rendu.</p>
 
       <!-- 2025 -->
@@ -821,7 +774,7 @@
 
 
     <!-- ── COMMISSIONS ─── -->
-    <div class="cm-pane" id="pane-commissions">
+    <div class="tab-pane" id="pane-commissions">
 
       <div class="info-note reveal" style="margin-bottom: 2rem;">
         <strong>Note</strong> — La composition des commissions correspond à la mandature précédente (2020–2026). Elle sera mise à jour après la constitution des commissions de la nouvelle mandature 2026–2032.
@@ -947,11 +900,12 @@
     .then(r => r.text())
     .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
 
-  // Onglets
-  document.querySelectorAll('.cm-tab').forEach(btn => {
+  // Onglets mis à jour avec les nouvelles classes
+  document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.cm-tab').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.cm-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      
       btn.classList.add('active');
       document.getElementById('pane-' + btn.dataset.pane).classList.add('active');
     });
@@ -966,29 +920,19 @@
   });
 
   // Gestion de l'ancrage direct depuis le footer ou un lien externe
-  // Nouveau système par Index Numérique
   function checkUrlTab() {
-    const hash = window.location.hash; // Récupère par ex '#tab-3'
+    const hash = window.location.hash;
     
     if (hash && hash.startsWith('#tab-')) {
-      // On extrait le numéro (ex: 3)
       const tabIndex = parseInt(hash.replace('#tab-', ''), 10);
+      const allTabs = document.querySelectorAll('.tab-btn');
       
-      // On récupère la liste de tous tes boutons d'onglets (.cm-tab)
-      const allTabs = document.querySelectorAll('.cm-tab');
-      
-      // Si l'onglet demandé existe bien
       if (allTabs[tabIndex]) {
-        // On force le clic sur l'onglet correspondant
         allTabs[tabIndex].click();
-        
-        // Petit scroll fluide automatique vers les onglets
         allTabs[tabIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
   }
-
-  // Écouteurs d'événements : au chargement et si on clique depuis le footer
   window.addEventListener('DOMContentLoaded', checkUrlTab);
   window.addEventListener('hashchange', checkUrlTab);
 </script>
