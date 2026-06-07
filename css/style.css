@@ -520,8 +520,36 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   font-size: .88rem; font-weight: 500; transition: all .2s;
   padding: .7rem 1.6rem; cursor: pointer; border: none;
 }
-.btn-primary { background: var(--blanc); color: var(--texte); }
-.btn-primary:hover { background: var(--vert-pale); transform: translateY(-1px); }
+
+.btn-primary {
+  background: var(--blanc);
+  color: var(--texte);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  vertical-align: middle;
+}
+
+.btn-primary:hover {
+  background: var(--vert-pale);
+  transform: translateY(-1px);
+}
+
+.btn-primary svg {
+  display: inline-block;
+  flex-shrink: 0;
+  transform: translateY(0);
+  transition: transform 0.2s ease-in-out; /* Fluidité parfaite du chevron */
+}
+
+.btn-primary:hover svg {
+  transform: translateX(3px); /* Seul le chevron glisse sans faire bouger le bloc */
+}
+
 .btn-outline {
   background: transparent; color: var(--blanc);
   border: 1.5px solid rgba(255,255,255,.6);
