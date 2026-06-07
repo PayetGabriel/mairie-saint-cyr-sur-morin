@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Gestion — Saint-Cyr-sur-Morin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <style>
+    /* ── REPRISE DE TA CHARTE GRAPHIQUE ── */
+    :root {
+      --vert:        #3a5a40;
+      --vert-clair:  #6a9469;
+      --vert-pale:   #eef3ec;
+      --pierre:      #c8bfb0;
+      --pierre-dark: #7a6f63;
+      --creme:       #f7f4ef;
+      --texte:       #2a2520;
+      --gris:        #888078;
+      --blanc:       #ffffff;
+      --bleu-notif:  #4070b0;
+      
+      --sidebar-width: 280px;
+      --topbar-height: 70px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background-color: var(--creme); color: var(--texte); display: flex; height: 100vh; overflow: hidden; }
+
+    /* ── SIDEBAR (GAUCHE) ── */
+    aside  {
+      width: var(--sidebar-width);
+      background-color: var(--vert);
+      color: var(--blanc);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 1.5rem 1rem;
+      z-index: 10;
+      box-shadow: 4px 0 10px rgba(42,37,32,0.05);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 1.25rem;
+    }
+
+    .sidebar-brand img { width: 32px; height: auto; }
+    .sidebar-brand h1 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--blanc); line-height: 1.2; }
+    .sidebar-brand span { display: block; font-size: 0.7rem; font-family: 'DM Sans', sans-serif; font-weight: 400; color: rgba(255,255,255,0.6); }
+
+    .sidebar-menu { list-style: none; margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.35rem; flex: 1; }
+    
+    .menu-item a {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.75rem 1rem;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+
+    .menu-item a:hover { background: rgba(255,255,255,0.08); color: var(--blanc); }
+    .menu-item.active a { background: var(--vert-clair); color: var(--blanc); font-weight: 600; }
+    
+    .menu-badge { margin-left: auto; background: var(--rouge, #8c3a3a); color: white; font-size: 0.7rem; padding: 0.1rem 0.4rem; border-radius: 10px; font-weight: 700; }
+
+    /* Statut Base de données en bas du menu */
+    .sidebar-footer {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 1rem;
+    }
+
+    .db-status {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.6);
+      background: rgba(0,0,0,0.15);
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+    }
+
+    .status-dot { width: 8px; height: 8px; background-color: #4caf50; border-radius: 50%; box-shadow: 0 0 8px #4caf50; }
+
+    /* ── ZONE DE CONTENU (DROITE) ── */
+    main  {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* TOPBAR */
+    .topbar {
+      height: var(--topbar-height);
+      background: var(--blanc);
+      border-bottom: 1px solid rgba(200,191,176,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+    }
+
+    .page-title h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--texte); }
+
+    .topbar-actions { display: flex; align-items: center; gap: 1.5rem; }
+
+    .notif-btn { background: none; border: none; cursor: pointer; color: var(--gris); position: relative; display: flex; align-items: center; }
+    .notif-btn:hover { color: var(--vert); }
+    .notif-badge { position: absolute; top: -4px; right: -4px; width: 7px; height: 7px; background: var(--bleu-notif); border-radius: 50%; }
+
+    .user-profile { display: flex; align-items: center; gap: 0.75rem; padding-left: 1.5rem; border-left: 1px solid rgba(200,191,176,0.4); }
+    .user-avatar { width: 36px; height: 36px; background: var(--pierre); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--texte); font-size: 0.85rem; border: 2px solid var(--vert-pale); }
+    .user-info span { display: block; }
+    .user-name { font-size: 0.88rem; font-weight: 600; color: var(--texte); }
+    .user-role { font-size: 0.72rem; color: var(--gris); }
+
+    /* CONTENU DE LA PAGE INTERNE */
+    .content-body { flex: 1; padding: 2rem; overflow-y: auto; }
+
+    /* SPLIT SYSTEM : LISTE DES PAGES / ZONE D'ÉDITION */
+    .editor-layout { display: grid; grid-template-columns: 280px 1fr; gap: 2rem; height: 100%; align-items: start; }
+
+    /* Colonne des Pages */
+    .pages-selector { background: var(--blanc); border: 1px solid rgba(200,191,176,0.4); border-radius: 12px; padding: 1rem; }
+    .selector-title { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--pierre-dark); font-weight: 700; margin-bottom: 0.75rem; padding-left: 0.5rem; }
+    .pages-list { list-style: none; display: flex; flex-direction: column; gap: 0.25rem; }
+    .page-link { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0.75rem; font-size: 0.85rem; color: var(--texte); text-decoration: none; border-radius: 6px; font-weight: 500; }
+    .page-link:hover { background: var(--creme); }
+    .page-link.active { background: var(--vert-pale); color: var(--vert); font-weight: 600; }
+
+    /* Zone formulaire d'édition */
+    .editor-card { background: var(--blanc); border: 1px solid rgba(200,191,176,0.4); border-radius: 16px; padding: 2rem; box-shadow: 0 4px 12px rgba(42,37,32,0.02); }
+    .editor-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(200,191,176,0.3); padding-bottom: 1rem; margin-bottom: 1.5rem; }
+    .editor-header h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+    
+    /* Composants de formulaire */
+    .form-group { margin-bottom: 1.25rem; }
+    .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--pierre-dark); margin-bottom: 0.4rem; }
+    .form-control { width: 100%; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; padding: 0.65rem 0.85rem; border: 1px solid rgba(200,191,176,0.6); border-radius: 8px; color: var(--texte); background-color: var(--blanc); transition: border-color 0.2s; }
+    .form-control:focus { outline: none; border-color: var(--vert); background-color: #fff; }
+    
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* Boutons */
+    .btn { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; padding: 0.65rem 1.25rem; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .btn-primary { background: var(--vert); color: var(--blanc); }
+    .btn-primary:hover { background: var(--vert-clair); }
+    .btn-secondary { background: var(--vert-pale); color: var(--vert); }
+    .btn-secondary:hover { background: rgba(58,90,64,0.15); }
+
+    .section-divider { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--vert); display: flex; align-items: center; gap: 0.75rem; margin: 2rem 0 1rem; }
+    .section-divider::after { content: ''; flex: 1; height: 1px; background: rgba(200,191,176,0.4); }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="sidebar-container">
+      <div class="sidebar-brand">
+        <img src="/assets/img/logoSaintCyr_2020.png" alt="Blason Saint-Cyr-sur-Morin">
+        <div>
+          <h1>Saint-Cyr</h1>
+          <span>Espace Employés</span>
+        </div>
+      </div>
+
+      <ul class="sidebar-menu">
+        <li class="menu-item"><a href="#"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> Tableau de bord</a></li>
+        <li class="menu-item"><a href="#"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Utilisateurs</a></li>
+        <li class="menu-item"><a href="#"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> Publications</a></li>
+        <li class="menu-item active"><a href="#"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Éditeur No-Code</a></li>
+        <li class="menu-item"><a href="#"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Journal d'activité</a></li>
+        <li class="menu-item"><a href="#"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Messages <span class="menu-badge">3</span></a></li>
+        <li class="menu-item"><a href="#"><svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> Paramètres</a></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="db-status">
+        <div class="status-dot"></div>
+        <span>Supabase connecté</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    
+    <header class="topbar">
+      <div class="page-title">
+        <h2>Éditeur No-Code</h2>
+      </div>
+      <div class="topbar-actions">
+        <button class="notif-btn">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <div class="notif-badge"></div>
+        </button>
+        
+        <div class="user-profile">
+          <div class="user-avatar">SB</div>
+          <div class="user-info">
+            <span class="user-name">Sabrina Mazo</span>
+            <span class="user-role">Coordinatrice</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-body">
+      <div class="editor-layout">
+        
+        <nav class="pages-selector">
+          <div class="selector-title">Éléments du site</div>
+          <ul class="pages-list">
+            <li><a href="#" class="page-link">Barre de navigation</a></li>
+            <li><a href="#" class="page-link">Page d'accueil (Index)</a></li>
+            <li><a href="#" class="page-link active">Page Scolarité</a></li>
+            <li><a href="#" class="page-link">Page Transports</a></li>
+            <li><a href="#" class="page-link">Cantine & Menus</a></li>
+            <li><a href="#" class="page-link">Périscolaire & Loisirs</a></li>
+          </ul>
+        </nav>
+
+        <section class="editor-card">
+          <div class="editor-header">
+            <h3>Variables de la page : Scolarité</h3>
+            <button class="btn btn-primary">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Enregistrer les modifications
+            </button>
+          </div>
+
+          <form>
+            <div class="section-divider">En-tête de la page (Hero)</div>
+            
+            <div class="form-group">
+              <label for="hero-title">Titre principal (H1)</label>
+              <input type="text" id="hero-title" class="form-control" value="Scolarité">
+            </div>
+
+            <div class="form-group">
+              <label for="hero-desc">Sous-titre / Description d'introduction</label>
+              <textarea id="hero-desc" class="form-control" rows="2">Accueil de loisirs, collèges, lycées et transports scolaires pour les familles de Saint-Cyr-sur-Morin.</textarea>
+            </div>
+
+            <div class="section-divider">Section Écoles Primaires</div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="maternelle-directrice">Directrice Maternelle</label>
+                <input type="text" class="form-control" id="maternelle-directrice" value="A. Curbeira">
+              </div>
+              <div class="form-group">
+                <label>Téléphone Maternelle</label>
+                <input type="text" class="form-control" value="01 60 23 89 36">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Directrice Élémentaire</label>
+                <input type="text" class="form-control" value="Mme Lefranc">
+              </div>
+              <div class="form-group">
+                <label>Téléphone Élémentaire</label>
+                <input type="text" class="form-control" value="01 60 23 81 50">
+              </div>
+            </div>
+
+            <div class="section-divider">Alerte ou note importante</div>
+            <div class="form-group">
+              <label>Message de vigilance (Section Secondaire)</label>
+              <input type="text" class="form-control" value="Attention — Tous les tarifs et informations sont susceptibles d'être modifiés d'une année sur l'autre.">
+            </div>
+
+          </form>
+        </section>
+
+      </div>
+    </div>
+
+  </main>
+
+</body>
+</html>

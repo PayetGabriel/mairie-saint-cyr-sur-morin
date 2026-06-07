@@ -104,6 +104,50 @@
       background: rgba(200,191,176,0.4);
     }
 
+    /* ── CONTENEUR ET COMPOSANT DE LA PHOTO D'ÉLU ── */
+    .elu-photo-wrapper {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background-color: var(--blanc);
+      border: 1.5px solid rgba(200, 191, 176, 0.4);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      margin: 0 auto 1.2rem auto; /* Centre la photo et pousse le texte vers le bas */
+    }
+
+    /* La forme géométrique plate en arrière-plan */
+    .elu-photo-wrapper::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 60%;
+      background-color: var(--vert-pale);
+      border-radius: 50% 50% 0 0;
+      z-index: 1;
+    }
+
+    /* L'image de l'élu */
+    .elu-photo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Alignement vertical uniforme pour toutes les cartes */
+    .elu-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Centre tout le contenu de la carte si désiré */
+      text-align: center;  /* Aligne le texte au centre pour suivre la photo */
+    }
+
     /* Glossaire */
     .glossaire {
       display: grid;
@@ -422,10 +466,12 @@
         <strong>Mandature 2026–2032</strong> — Suite aux élections municipales de mars 2026. Les délégations en italique concernent les mandats à la Communauté de Communes des 2 Morin (CC2M).
       </div>
 
-      <!-- Maire -->
       <div class="elus-section-head reveal">Maire</div>
       <div class="elus-grid reveal" style="margin-bottom: 1.5rem;">
         <div class="elu-card maire">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/F Delarue.png" alt="Francis DELARUE" class="elu-photo-img">
+          </div>
           <div class="elu-role maire-label">Maire</div>
           <div class="elu-name">Francis DELARUE</div>
           <div class="elu-delegations">Président des commissions municipales et du Bureau — Président du CCAS et du SIVU des écoles — Membre du comité de suivi de l'ENS — Membre du comité de pilotage du PCS</div>
@@ -433,11 +479,13 @@
         </div>
       </div>
 
-      <!-- Adjoints -->
       <div class="elus-section-head reveal">Adjoints au Maire</div>
       <div class="elus-grid reveal" style="margin-bottom: 1.5rem;">
 
         <div class="elu-card adjoint">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/S Montico.png" alt="Stéphanie MONTICO" class="elu-photo-img">
+          </div>
           <div class="elu-role adjoint-label">1ère Adjointe</div>
           <div class="elu-name">Stéphanie MONTICO</div>
           <div class="elu-delegations">Urbanisme, Animations & Festivités, Embellissement, Relations avec les associations — Membre du Bureau municipal</div>
@@ -445,6 +493,9 @@
         </div>
 
         <div class="elu-card adjoint">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/B Kolodziej.png" alt="Bruno KOLODZIEJ" class="elu-photo-img">
+          </div>
           <div class="elu-role adjoint-label">2ème Adjoint</div>
           <div class="elu-name">Bruno KOLODZIEJ</div>
           <div class="elu-delegations">Services techniques et Suivi des Travaux — Membre du Bureau municipal — Commissions : urbanisme, cimetière — Correspondant SDIS</div>
@@ -452,6 +503,9 @@
         </div>
 
         <div class="elu-card adjoint">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/C Hennepeaux.png" alt="Catherine HENNEPEAUX" class="elu-photo-img">
+          </div>
           <div class="elu-role adjoint-label">3ème Adjointe</div>
           <div class="elu-name">Catherine HENNEPEAUX</div>
           <div class="elu-delegations">Action sociale, CCAS et PCS — Membre du CCAS et du SIVU des écoles</div>
@@ -459,6 +513,9 @@
         </div>
 
         <div class="elu-card adjoint">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/P Allard.png" alt="Pierre ALLARD" class="elu-photo-img">
+          </div>
           <div class="elu-role adjoint-label">4ème Adjoint</div>
           <div class="elu-name">Pierre ALLARD</div>
           <div class="elu-delegations">Développement touristique, gestion des chemins, assainissement et Ordures Ménagères — Commissions : urbanisme, animations, appels d'offres</div>
@@ -466,6 +523,9 @@
         </div>
 
         <div class="elu-card adjoint">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/M Lafond.png" alt="Marguerite LAFOND" class="elu-photo-img">
+          </div>
           <div class="elu-role adjoint-label">5ème Adjointe</div>
           <div class="elu-name">Marguerite LAFOND</div>
           <div class="elu-delegations">Ruissellements, inondations et fibre — Correspondante fibre</div>
@@ -474,17 +534,22 @@
 
       </div>
 
-      <!-- Conseillers délégués -->
       <div class="elus-section-head reveal">Conseillers délégués</div>
       <div class="elus-grid reveal" style="margin-bottom: 1.5rem;">
 
         <div class="elu-card delegue">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/J Godard.png" alt="Jacques GODARD" class="elu-photo-img">
+          </div>
           <div class="elu-role delegue-label">Conseiller délégué</div>
           <div class="elu-name">Jacques GODARD</div>
           <div class="elu-delegations">Affaires juridiques — Commissions : appels d'offres, urbanisme, liste électorale, impôts directs — Commission PCS</div>
         </div>
 
         <div class="elu-card delegue">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/I Varron.png" alt="Isabelle VARRON" class="elu-photo-img">
+          </div>
           <div class="elu-role delegue-label">Conseillère déléguée</div>
           <div class="elu-name">Isabelle VARRON</div>
           <div class="elu-delegations">Environnement et ENS — Membre du SIVU des écoles — Comité de suivi de l'ENS</div>
@@ -492,6 +557,9 @@
         </div>
 
         <div class="elu-card delegue">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/A Boussaud.png" alt="Anthony BOUSSAUD" class="elu-photo-img">
+          </div>
           <div class="elu-role delegue-label">Conseiller délégué</div>
           <div class="elu-name">Anthony BOUSSAUD</div>
           <div class="elu-delegations">Sécurité des biens et des personnes — Membre du SIVU des écoles, CCAS, liste électorale — Correspondant défense</div>
@@ -499,6 +567,9 @@
         </div>
 
         <div class="elu-card delegue">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/G Judas.png" alt="Gurvan JUDAS" class="elu-photo-img">
+          </div>
           <div class="elu-role delegue-label">Conseiller délégué</div>
           <div class="elu-name">Gurvan JUDAS</div>
           <div class="elu-delegations">Actions en direction de la jeunesse — Membre du SIVU des écoles et du CCAS</div>
@@ -507,11 +578,13 @@
 
       </div>
 
-      <!-- Conseillers -->
       <div class="elus-section-head reveal">Conseillers municipaux</div>
       <div class="elus-grid reveal">
 
         <div class="elu-card">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/M Guicheteau.png" alt="Minh-Tuyen GUICHETEAU" class="elu-photo-img">
+          </div>
           <div class="elu-role conseiller-label">Conseillère</div>
           <div class="elu-name">Minh-Tuyen GUICHETEAU</div>
           <div class="elu-delegations">SIVU des écoles, CCAS — Commission animations et festivités</div>
@@ -519,12 +592,18 @@
         </div>
 
         <div class="elu-card">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/A Bessieres.png" alt="Anne BESSIÈRE" class="elu-photo-img">
+          </div>
           <div class="elu-role conseiller-label">Conseillère</div>
           <div class="elu-name">Anne BESSIÈRE</div>
           <div class="elu-delegations">Référente développement économique — Rédactrice du Trait d'Union</div>
         </div>
 
         <div class="elu-card">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/C Rollin.png" alt="Christophe COLLIN" class="elu-photo-img">
+          </div>
           <div class="elu-role conseiller-label">Conseiller</div>
           <div class="elu-name">Christophe COLLIN</div>
           <div class="elu-delegations">Commission urbanisme — Commission PCS — Correspondant Forêts</div>
@@ -532,6 +611,9 @@
         </div>
 
         <div class="elu-card">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/E Theodose.png" alt="Edith THÉODOSE POMA" class="elu-photo-img">
+          </div>
           <div class="elu-role conseiller-label">Conseillère</div>
           <div class="elu-name">Edith THÉODOSE POMA</div>
           <div class="elu-delegations">Commissions : urbanisme, animations et festivités — Rédactrice en chef du Trait d'Union</div>
@@ -539,12 +621,18 @@
         </div>
 
         <div class="elu-card">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/P Palisse.png" alt="Marlon PALISSE" class="elu-photo-img">
+          </div>
           <div class="elu-role conseiller-label">Conseiller</div>
           <div class="elu-name">Marlon PALISSE</div>
           <div class="elu-delegations">Comité de suivi de l'ENS</div>
         </div>
 
         <div class="elu-card">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/S Payet.png" alt="Sandrine PAYET" class="elu-photo-img">
+          </div>
           <div class="elu-role conseiller-label">Conseillère</div>
           <div class="elu-name">Sandrine PAYET</div>
           <div class="elu-delegations">SIVU des écoles et CCAS</div>
@@ -552,6 +640,9 @@
         </div>
 
         <div class="elu-card">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/Kai Gibert Sander.png" alt="Kai GIBERT-SANDER" class="elu-photo-img">
+          </div>
           <div class="elu-role conseiller-label">Conseiller</div>
           <div class="elu-name">Kai GIBERT-SANDER</div>
           <div class="elu-delegations">Commissions : urbanisme, animations et festivités</div>
@@ -559,6 +650,9 @@
         </div>
 
         <div class="elu-card">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/Patricia Pinchemel.png" alt="Patricia PINCHEMEL" class="elu-photo-img">
+          </div>
           <div class="elu-role conseiller-label">Conseillère</div>
           <div class="elu-name">Patricia PINCHEMEL</div>
           <div class="elu-delegations">Commissions : appels d'offres, liste électorale</div>
@@ -566,6 +660,9 @@
         </div>
 
         <div class="elu-card">
+          <div class="elu-photo-wrapper">
+            <img src="/assets/img/conseil/Julien Rousselot.png" alt="Julien ROUSSELOT" class="elu-photo-img">
+          </div>
           <div class="elu-role conseiller-label">Conseiller</div>
           <div class="elu-name">Julien ROUSSELOT</div>
           <div class="elu-delegations">Commissions : appels d'offres, urbanisme, liste électorale — CCAS</div>
