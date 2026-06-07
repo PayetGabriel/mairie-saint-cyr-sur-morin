@@ -29,21 +29,27 @@
     }
 
     .demarche-bloc-head {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.25rem;
+      display: flex; /* Active le mode flexbox */
+      align-items: center; /* ALIGNE TOUT VERTICALEMENT AU CENTRE */
+      gap: 1.25rem; /* Gère l'espacement entre l'icône et le texte */
       margin-bottom: 1.75rem;
     }
 
     .demarche-icon {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
-      background: var(--vert-pale);
-      display: flex;
+      display: flex; /* Pour que le SVG reste bien centré dans sa boîte */
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
+      width: 44px; /* Ajuste selon ton besoin */
+      height: 44px;
+      background: var(--vert-pale); /* Si tu as une couleur de fond */
+      border-radius: 12px;
+      flex-shrink: 0; /* Empêche l'icône de s'écraser */
+    }
+
+    /* On supprime les marges par défaut du titre pour ne pas fausser l'alignement */
+    .demarche-bloc-head h2 {
+      margin: 0;
+      line-height: 1.2;
     }
 
     .demarche-icon svg { stroke: var(--vert); }

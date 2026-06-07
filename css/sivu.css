@@ -266,6 +266,15 @@
   line-height: 1.3; /* Un interlignage plus serré aide à l'alignement visuel */
 }
 
+.badge-tarif {
+  background-color: var(--vert-pale);
+  color: var(--vert);
+  padding: 0.2rem 0.8rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: inline-block;
+}
 
 /* ─── INFO BOX ─────────────────────────────── */
 
