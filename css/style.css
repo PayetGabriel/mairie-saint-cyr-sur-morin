@@ -572,6 +572,55 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 .infobande-item strong { color: var(--blanc); font-weight: 500; }
 
 
+/* ─── IMAGES RESPONSIVES (Respect du ratio et adaptabilité) ─────────────── */
+
+img {
+  max-width: 100%;
+  height: auto; /* Force le respect du ratio même si width/height sont écrits en HTML */
+  display: block;
+  object-fit: cover;
+}
+
+@media (max-width: 600px) {
+
+  /* Force les conteneurs d'images à ne pas dépasser la largeur de l'écran du mobile */
+  .village-photos {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .village-photo {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .village-photo img {
+    width: 100%;
+    max-height: 250px; /* Évite qu'une image verticale ne prenne tout l'écran sur mobile */
+    object-fit: cover;
+  }
+
+  /* Optimisation de la photo du maire sur petit écran */
+  .maire-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .maire-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; /* Joli rendu circulaire sur mobile */
+    object-fit: cover;
+  }
+}
+
+
 /* ─── CAROUSEL "EN CE MOMENT" ─────────────── */
 
 .carousel-section {
