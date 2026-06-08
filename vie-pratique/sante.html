@@ -55,11 +55,11 @@
       background: var(--vert);
     }
 
-    .sante-card-accent.orange  { background: #e8955a; }
-    .sante-card-accent.bleu    { background: #5a89c4; }
-    .sante-card-accent.violet  { background: #9b72b0; }
-    .sante-card-accent.teal    { background: #5aada4; }
-    .sante-card-accent.rouge   { background: #c4605a; }
+    .sante-card-accent.rouge  { background: var(--rouge-clair); }
+    .sante-card-accent.bleu   { background: var(--bleu-clair); }
+    .sante-card-accent.violet { background: var(--violet-clair); }
+    .sante-card-accent.jaune  { background: var(--jaune-clair); }
+    .sante-card-accent.bois   { background: var(--bois); }
 
     .sante-card-body {
       padding: 1.5rem;
@@ -85,16 +85,21 @@
     }
 
     .sante-icon svg { stroke: var(--vert); }
-    .sante-icon.orange  { background: rgba(232,149,90,0.12); }
-    .sante-icon.orange svg { stroke: #c47040; }
-    .sante-icon.bleu    { background: rgba(90,137,196,0.12); }
-    .sante-icon.bleu svg { stroke: #4070b0; }
-    .sante-icon.violet  { background: rgba(155,114,176,0.12); }
-    .sante-icon.violet svg { stroke: #7850a0; }
-    .sante-icon.teal    { background: rgba(90,173,164,0.12); }
-    .sante-icon.teal svg { stroke: #3a8880; }
-    .sante-icon.rouge   { background: rgba(196,96,90,0.12); }
-    .sante-icon.rouge svg { stroke: #a04040; }
+
+    .sante-icon.rouge  { background: var(--rouge-pale); }
+    .sante-icon.rouge svg { stroke: var(--rouge); }
+
+    .sante-icon.bleu   { background: var(--bleu-pale); }
+    .sante-icon.bleu svg { stroke: var(--bleu); }
+
+    .sante-icon.violet { background: var(--violet-pale); }
+    .sante-icon.violet svg { stroke: var(--violet); }
+
+    .sante-icon.jaune  { background: var(--jaune-pale); }
+    .sante-icon.jaune svg { stroke: var(--jaune); }
+
+    .sante-icon.bois   { background: var(--vert-pale); } /* Fond très doux qui matche avec le bois */
+    .sante-icon.bois svg { stroke: var(--bois); }
 
     .sante-specialite {
       font-size: 0.7rem;
@@ -105,11 +110,11 @@
       margin-bottom: 0.3rem;
     }
 
-    .sante-specialite.orange { color: #c47040; }
-    .sante-specialite.bleu   { color: #4070b0; }
-    .sante-specialite.violet { color: #7850a0; }
-    .sante-specialite.teal   { color: #3a8880; }
-    .sante-specialite.rouge  { color: #a04040; }
+    .sante-specialite.rouge  { color: var(--rouge-bois); }
+    .sante-specialite.bleu   { color: var(--bleu-bois); }
+    .sante-specialite.violet { color: var(--violet-bois); }
+    .sante-specialite.jaune  { color: var(--jaune-bois); }
+    .sante-specialite.bois   { color: var(--pierre-dark); }
 
     .sante-lieu {
       font-size: 0.78rem;
@@ -270,16 +275,16 @@
 
       <!-- Infirmières cabinet -->
       <div class="sante-card reveal">
-        <div class="sante-card-accent teal"></div>
+        <div class="sante-card-accent rouge"></div>
         <div class="sante-card-body">
           <div class="sante-card-head">
-            <div class="sante-icon teal">
+            <div class="sante-icon rouge">
               <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
               </svg>
             </div>
             <div>
-              <div class="sante-specialite teal">Infirmières</div>
+              <div class="sante-specialite rouge">Infirmières</div>
               <div class="sante-lieu">
                 <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 Cabinet Médical — 19 A, avenue de La Ferté-sous-Jouarre
@@ -311,16 +316,16 @@
 
       <!-- Infirmière libérale -->
       <div class="sante-card reveal">
-        <div class="sante-card-accent teal"></div>
+        <div class="sante-card-accent rouge"></div>
         <div class="sante-card-body">
           <div class="sante-card-head">
-            <div class="sante-icon teal">
+            <div class="sante-icon rouge">
               <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
               </svg>
             </div>
             <div>
-              <div class="sante-specialite teal">Infirmière libérale</div>
+              <div class="sante-specialite rouge">Infirmière libérale</div>
             </div>
           </div>
           <div class="praticiens-list">
@@ -373,16 +378,16 @@
 
       <!-- Pédicure-Podologue -->
       <div class="sante-card reveal">
-        <div class="sante-card-accent orange"></div>
+        <div class="sante-card-accent bois"></div>
         <div class="sante-card-body">
           <div class="sante-card-head">
-            <div class="sante-icon orange">
+            <div class="sante-icon bois">
               <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24" style="overflow: visible; transform: translateY(1.5px);">
                 <path d="M12 21V12M12 12C12 12 7 9 7 5a5 5 0 0 1 10 0c0 4-5 7-5 7z"></path>
               </svg>
             </div>
             <div>
-              <div class="sante-specialite orange">Pédicure-Podologue</div>
+              <div class="sante-specialite bois">Pédicure-Podologue</div>
               <div class="sante-lieu">
                 <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 Cabinet Médical — 19 A, avenue de La Ferté-sous-Jouarre
@@ -475,10 +480,10 @@
 
     <div class="sante-grid">
       <div class="sante-card reveal">
-        <div class="sante-card-accent rouge"></div>
+        <div class="sante-card-accent jaune"></div>
         <div class="sante-card-body">
           <div class="sante-card-head">
-            <div class="sante-icon rouge">
+            <div class="sante-icon jaune">
               <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
                 <path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703.202 1.358.796 1.9C4.785 13.2 7.195 14 8 14c.523 0 2.909-.38 3.098-1.287"/>
                 <path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-.202 1.358-.796 1.9-.489 1.3-2.9 2.1-3.704 2.1-.523 0-2.909-.38-3.098-1.287"/>
@@ -487,7 +492,7 @@
               </svg>
             </div>
             <div>
-              <div class="sante-specialite rouge">Vétérinaire</div>
+              <div class="sante-specialite jaune">Vétérinaire</div>
               <div class="sante-lieu">
                 <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                 6 avenue de la Ferté-sous-Jouarre
