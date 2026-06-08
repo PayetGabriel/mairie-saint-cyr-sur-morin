@@ -190,9 +190,24 @@
 
           <div class="form-checkbox">
             <input type="checkbox" id="rgpd" name="rgpd" required />
-            <label for="rgpd">
-              J'accepte que mes données soient utilisées dans le cadre de ma demande. <a href="#">En savoir plus</a>
-            </label>
+            <div class="checkbox-content">
+              <label for="rgpd">
+                J'accepte que mes données soient utilisées dans le cadre de ma demande.
+                <span class="rgpd-trigger" onclick="toggleRgpd(event)">En savoir plus</span>
+              </label>
+              
+              <details id="rgpd-details" class="rgpd-info">
+                <summary style="display: none;"></summary>
+                <div class="rgpd-info-content">
+                  <ul>
+                    <li><strong>Finalité :</strong> Vos données sont uniquement utilisées pour répondre à votre message (demande d'état civil, signalement, rdv avec les élus).</li>
+                    <li><strong>Destinataire :</strong> Seuls les services administratifs de la mairie y ont accès. Aucune donnée n'est commercialisée ou partagée.</li>
+                    <li><strong>Durée :</strong> Vos données sont supprimées une fois votre demande traitée et clôturée.</li>
+                    <li><strong>Vos droits :</strong> Vous disposez d'un droit d'accès, de modification ou de suppression de vos données sur simple demande à <a href="mailto:mairie.stcyrsurmorin@orange.fr">mairie.stcyrsurmorin@orange.fr</a>.</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
           </div>
 
           <button type="submit" class="btn btn-primary">
@@ -366,6 +381,16 @@
             if (!wrapper.contains(e.target)) wrapper.classList.remove('open');
         });
     });
+
+    function toggleRgpd(event) {
+      event.preventDefault(); // Évite de cocher la case par erreur en cliquant sur le texte
+      const details = document.getElementById('rgpd-details');
+      if (details.hasAttribute('open')) {
+        details.removeAttribute('open');
+      } else {
+        details.setAttribute('open', '');
+      }
+    }
 </script>
 
 </body>

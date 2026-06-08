@@ -1095,11 +1095,18 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   padding-right: 2.5rem;
 }
 
+/* Style spécifique pour les cases à cocher RGPD */
 .form-checkbox {
   display: flex;
   align-items: flex-start;
   gap: 0.7rem;
   margin-bottom: 1.5rem;
+}
+
+.checkbox-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .form-checkbox input[type="checkbox"] {
@@ -1124,6 +1131,61 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 }
 
 .form-checkbox label a:hover {
+  text-decoration: underline;
+}
+
+
+/* --- Style du déclencheur "En savoir plus" --- */
+.rgpd-trigger {
+  color: var(--vert);
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 0.25rem;
+}
+
+.rgpd-trigger:hover {
+  text-decoration: underline;
+}
+
+/* --- Bloc d'informations RGPD (Style épuré) --- */
+.rgpd-info {
+  width: 100%;
+  overflow: hidden;
+}
+
+.rgpd-info-content {
+  margin-top: 0.6rem;
+  padding: 0.85rem 1rem;
+  background: var(--creme); /* Utilise ton fond doux existant */
+  border-left: 2px stroke var(--pierre); /* Discret rappel de texture */
+  border-radius: 8px;
+}
+
+.rgpd-info-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rgpd-info-content li {
+  font-size: 0.8rem;
+  color: var(--texte);
+  line-height: 1.4;
+}
+
+.rgpd-info-content li strong {
+  color: var(--vert-clair); /* Met en valeur les thématiques sans agresser */
+}
+
+.rgpd-info-content li a {
+  color: var(--vert);
+  text-decoration: none;
+}
+
+.rgpd-info-content li a:hover {
   text-decoration: underline;
 }
 
