@@ -7,7 +7,13 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const { prenom, nom, email, telephone, sujet, message } = req.body;
+    let body = req.body;
+
+    if (typeof body === "string") {
+      body = JSON.parse(body);
+    }
+
+    const { prenom, nom, email, telephone, sujet, message } = body;
 
     if (!prenom || !nom || !email || !sujet || !message) {
       return res.status(400).json({ error: "Champs manquants" });
@@ -15,9 +21,7 @@ module.exports = async (req, res) => {
 
     let destination = "gabrielpayet@hotmail.com";
 
-    const sivuValues = ["cantine", "inscriptions"];
-
-    if (sivuValues.includes(sujet)) {
+    if (["cantine", "inscriptions"].includes(sujet)) {
       destination = "gabrielpayet250509@gmail.com";
     }
 
@@ -26,12 +30,10 @@ module.exports = async (req, res) => {
       to: destination,
       subject: `Contact mairie - ${sujet}`,
       html: `
-        <h2>Nouveau message</h2>
-        <p><strong>Nom :</strong> ${prenom} ${nom}</p>
-        <p><strong>Email :</strong> ${email}</p>
-        <p><strong>Téléphone :</strong> ${telephone || "Non renseigné"}</p>
-        <p><strong>Sujet :</strong> ${sujet}</p>
-        <hr>
+        <p><b>${prenom} ${nom}</b></p>
+        <p>${email}</p>
+        <p>${telephone || ""}</p>
+        <hr/>
         <p>${message}</p>
       `
     });
@@ -40,6 +42,9 @@ module.exports = async (req, res) => {
 
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ error: "Erreur serveur", details: err.message });
+    return res.status(500).json({
+      error: "Erreur serveur",
+      details: err.message
+    });
   }
 };
