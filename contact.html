@@ -275,62 +275,52 @@
     });
 
   document.addEventListener('DOMContentLoaded', () => {
-     // On utilise l'ID qui existe déjà dans ton HTML !
-     updateStatus('scheduleDropdown', 'mairie');
-  });
-
-  function toggleSchedule() {
-      document.getElementById('scheduleDropdown').classList.toggle('open');
-  }
-
-  // Gestion du formulaire de contact
-  document.getElementById('contact-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const responseDiv = document.getElementById('form-response');
-    const formData = new FormData(this);
-    
-    // Simulation d'envoi (remplacer par votre endpoint)
-    responseDiv.innerHTML = '<div class="form-loading">Envoi en cours...</div>';
-    
-    setTimeout(() => {
-      // Succès
-      responseDiv.innerHTML = `
-        <div class="form-success">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          <strong>Message envoyé !</strong>
-          <p>Nous vous répondrons dans les plus brefs délais.</p>
-        </div>
-      `;
-      
-      // Réinitialiser le formulaire
-      this.reset();
-      
-      // Masquer le message après 5 secondes
-      setTimeout(() => {
-        responseDiv.innerHTML = '';
-      }, 5000);
-    }, 1500);
-    
-    /* Pour un vrai envoi, utiliser :
-    fetch('/api/contact', {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        responseDiv.innerHTML = '... message de succès ...';
-      } else {
-        responseDiv.innerHTML = '... message d\'erreur ...';
-      }
-    })
-    .catch(error => {
-      responseDiv.innerHTML = '... message d\'erreur ...';
+      // On utilise l'ID qui existe déjà dans ton HTML !
+      updateStatus('scheduleDropdown', 'mairie');
     });
-    */
+
+    function toggleSchedule() {
+        document.getElementById('scheduleDropdown').classList.toggle('open');
+    }
+
+    document.getElementById('contact-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const responseDiv = document.getElementById('form-response');
+    responseDiv.innerHTML = '<div class="form-loading">Envoi en cours...</div>';
+
+    const formData = {
+      prenom: document.getElementById('prenom').value,
+      nom: document.getElementById('nom').value,
+      email: document.getElementById('email').value,
+      telephone: document.getElementById('telephone').value,
+      sujet: document.getElementById('sujet').value,
+      message: document.getElementById('message').value
+    };
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        responseDiv.innerHTML = `
+          <div class="form-success">
+            <strong>Message envoyé !</strong>
+          </div>
+        `;
+        this.reset();
+      } else {
+        responseDiv.innerHTML = `<div class="form-error">Erreur envoi</div>`;
+      }
+
+    } catch (err) {
+      responseDiv.innerHTML = `<div class="form-error">Erreur serveur</div>`;
+    }
   });
   document.querySelectorAll('.custom-select-container').forEach(container => {
         const select = container.querySelector('select');
