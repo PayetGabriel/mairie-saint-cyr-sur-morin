@@ -175,10 +175,27 @@
       line-height: 1.55;
     }
 
-    .lieu-info-row svg { stroke: var(--vert); flex-shrink: 0; margin-top: 0.1rem; }
+    .lieu-info-row svg { 
+      stroke: var(--vert); 
+      flex-shrink: 0; 
+      margin-top: 0.1rem; 
+    }
 
-    .lieu-info-row a { color: var(--vert); font-weight: 500; text-decoration: none; }
-    .lieu-info-row a:hover { text-decoration: underline; }
+    /* Version corrigée : On applique le style aux liens dans les lignes ET dans la note */
+    .lieu-info-row a,
+    .lieu-note a { 
+      color: var(--vert); 
+      font-weight: 500; 
+      text-decoration: none;
+      /* Optionnel : transition fluide si tu as des effets ailleurs */
+      transition: color 0.2s ease; 
+    }
+
+    .lieu-info-row a:hover,
+    .lieu-note a:hover { 
+      text-decoration: underline; 
+      color: var(--vert-fonce); /* Ou une autre couleur de survol si tu préfères */
+    }
 
     .lieu-note {
       font-size: 0.78rem;
