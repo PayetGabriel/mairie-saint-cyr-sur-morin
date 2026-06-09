@@ -1,11 +1,940 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tourisme & Hébergement — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Découvrez Saint-Cyr-sur-Morin : musée, Maison Mac Orlan, Auberge de l'Œuf Dur, randonnées et hébergements en vallée du Petit Morin." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── HERO TOURISME ───────────────────────── */
+
+    .tourisme-hero {
+      background: var(--texte);
+      padding: 8rem 2.5rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tourisme-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("/assets/img/saint-cyr-sur-morin-ciel.jpg") center/cover;
+      opacity: 0.25;
+    }
+
+    .tourisme-hero-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tourisme-hero-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 1rem;
+    }
+
+    .tourisme-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 600;
+      color: var(--blanc);
+      line-height: 1.2;
+      max-width: 700px;
+      margin-bottom: 0.75rem;
+    }
+
+    .tourisme-hero-sub {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.65);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    .tourisme-hero p {
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.8;
+      max-width: 620px;
+    }
+
+    .tourisme-hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .tourisme-hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 0.35rem 0.85rem;
+      border-radius: 100px;
+    }
+
+    .tourisme-hero-pill svg { stroke: currentColor; }
+
+
+    /* ── LIEU CULTUREL ───────────────────────── */
+
+    .lieu-section {
+      padding: 4rem 0;
+      border-bottom: 1px solid rgba(200,191,176,0.25);
+    }
+
+    .lieu-section:last-of-type { border-bottom: none; }
+
+    .lieu-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .lieu-layout.reverse .lieu-text { order: 2; }
+    .lieu-layout.reverse .lieu-visuel { order: 1; }
+
+    .lieu-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lieu-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 600;
+      color: rgba(58,90,64,0.12);
+      line-height: 1;
+      margin-bottom: -0.5rem;
+    }
+
+    .lieu-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      color: var(--vert);
+      margin-bottom: 0.5rem;
+    }
+
+    .lieu-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.25;
+      margin-bottom: 1.25rem;
+    }
+
+    .lieu-text p {
+      font-size: 0.93rem;
+      line-height: 1.85;
+      color: var(--texte);
+      margin-bottom: 1rem;
+    }
+
+    .lieu-text p:last-child { margin-bottom: 0; }
+
+    /* Infos pratiques lieu */
+    .lieu-infos {
+      background: var(--vert-pale);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      margin-top: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .lieu-info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      font-size: 0.83rem;
+      color: var(--texte);
+      line-height: 1.55;
+    }
+
+    .lieu-info-row svg { stroke: var(--vert); flex-shrink: 0; margin-top: 0.1rem; }
+
+    .lieu-info-row a { color: var(--vert); font-weight: 500; text-decoration: none; }
+    .lieu-info-row a:hover { text-decoration: underline; }
+
+    .lieu-note {
+      font-size: 0.78rem;
+      color: var(--gris);
+      font-style: italic;
+      margin-top: 0.75rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(58,90,64,0.1);
+    }
+
+    /* Galerie photos lieu */
+    .lieu-visuel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .lieu-photo-main {
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--creme);
+    }
+
+    .lieu-photo-main img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+
+    .lieu-photo-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .lieu-photo-small {
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--creme);
+    }
+
+    .lieu-photo-small img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+
+    .lieu-photo-placeholder {
+      background: var(--creme);
+      border-radius: 16px;
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lieu-photo-placeholder svg { stroke: var(--pierre-dark); opacity: 0.25; }
+
+
+    /* ── ALERTE TRANSPORT DIMANCHE ───────────── */
+
+    .dimanche-alert {
+      background: rgba(230,120,50,0.08);
+      border: 1px solid rgba(230,120,50,0.25);
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.83rem;
+      color: var(--texte);
+      line-height: 1.65;
+      margin-top: 1rem;
+    }
+
+    .dimanche-alert svg { stroke: #c06020; flex-shrink: 0; margin-top: 0.1rem; }
+
+
+    /* ── ACCÈS / VENIR ───────────────────────── */
+
+    .acces-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.1rem;
+    }
+
+    .acces-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .acces-card-head {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .acces-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .acces-icon svg { stroke: var(--vert); }
+
+    .acces-card-head strong {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--texte);
+    }
+
+    .acces-card p {
+      font-size: 0.83rem;
+      color: var(--gris);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .acces-card a { color: var(--vert); font-weight: 500; text-decoration: none; }
+    .acces-card a:hover { text-decoration: underline; }
+
+
+    /* ── HÉBERGEMENTS ────────────────────────── */
+
+    .heberg-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .heberg-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+
+    .heberg-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(42,37,32,0.09);
+      border-color: rgba(58,90,64,0.2);
+    }
+
+    .heberg-photo {
+      height: 200px;
+      overflow: hidden;
+      background: var(--creme);
+    }
+
+    .heberg-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .heberg-card:hover .heberg-photo img { transform: scale(1.04); }
+
+    .heberg-photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .heberg-photo-placeholder svg { stroke: var(--pierre-dark); opacity: 0.25; }
+
+    .heberg-body {
+      padding: 1.4rem;
+    }
+
+    .heberg-type {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--vert);
+      margin-bottom: 0.35rem;
+    }
+
+    .heberg-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.3rem;
+      line-height: 1.3;
+    }
+
+    .heberg-lieu {
+      font-size: 0.8rem;
+      color: var(--gris);
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .heberg-lieu svg { stroke: var(--pierre-dark); flex-shrink: 0; }
+
+    .heberg-desc {
+      font-size: 0.83rem;
+      color: var(--texte);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+
+    .heberg-contacts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .heberg-contact-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+    }
+
+    .heberg-contact-row svg { stroke: var(--vert); flex-shrink: 0; }
+
+    .heberg-contact-row a {
+      color: var(--vert);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .heberg-contact-row a:hover { text-decoration: underline; }
+
+    .heberg-contact-row span { color: var(--gris); }
+
+
+    /* ── CAMPING-CAR CARD ────────────────────── */
+
+    .cc-card {
+      background: var(--vert-pale);
+      border: 1px solid rgba(58,90,64,0.15);
+      border-radius: 16px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      overflow: hidden;
+      gap: 0;
+      margin-top: 1.25rem;
+    }
+
+    .cc-visual {
+      background: var(--creme);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 180px;
+    }
+
+    .cc-visual svg { stroke: var(--pierre-dark); opacity: 0.3; }
+
+    .cc-body {
+      padding: 2rem;
+    }
+
+    .cc-body h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.75rem;
+    }
+
+    .cc-body p {
+      font-size: 0.88rem;
+      color: var(--gris);
+      line-height: 1.7;
+      margin-bottom: 0.5rem;
+    }
+
+    .cc-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .cc-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--vert);
+      background: var(--blanc);
+      border: 1px solid rgba(58,90,64,0.15);
+      padding: 0.3rem 0.75rem;
+      border-radius: 100px;
+    }
+
+    .cc-pill svg { stroke: var(--vert); }
+
+
+    /* ── RESPONSIVE ──────────────────────────── */
+
+    @media (max-width: 900px) {
+      .lieu-layout,
+      .lieu-layout.reverse {
+        grid-template-columns: 1fr;
+      }
+      .lieu-layout.reverse .lieu-text { order: 2; }
+      .lieu-layout.reverse .lieu-visuel { order: 1; }
+      .cc-card { grid-template-columns: 1fr; }
+      .cc-visual { min-height: 120px; }
+    }
+
+    @media (max-width: 600px) {
+      .heberg-grid { grid-template-columns: 1fr; }
+      .acces-grid { grid-template-columns: 1fr; }
+      .lieu-photo-row { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<!-- ─── HERO ─── -->
+<header class="tourisme-hero">
+  <div class="tourisme-hero-inner">
+    <div class="tourisme-hero-label">Découvrir Saint-Cyr-sur-Morin</div>
+    <h1>L'échappée belle au cœur de la vallée du Petit Morin</h1>
+    <div class="tourisme-hero-sub">Patrimoine littéraire, nature préservée et esprit bohème à moins d'une heure de Paris.</div>
+    <p>Niché dans un écrin de verdure en Seine-et-Marne, Saint-Cyr-sur-Morin invite à la déconnexion et à la découverte. Ancien refuge de la bohème montmartroise et terre d'adoption de Pierre Mac Orlan, la commune déploie un potentiel touristique unique — charme bucolique de la Brie, histoire culturelle du XXe siècle et loisirs de plein air.</p>
+    <div class="tourisme-hero-pills">
+      <span class="tourisme-hero-pill">
+        <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        À 1 h de Paris
+      </span>
+      <span class="tourisme-hero-pill">
+        <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Village de caractère
+      </span>
+      <span class="tourisme-hero-pill">
+        <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Maison des Illustres
+      </span>
+      <span class="tourisme-hero-pill">
+        <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 3-6 4 10"/></svg>
+        5 circuits balisés
+      </span>
+    </div>
+  </div>
+</header>
+
+
+<!-- ─── INCONTOURNABLES CULTURELS ─── -->
+<section class="section">
+  <div class="section-inner">
+
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">À ne pas manquer</div>
+    <h2 class="section-title reveal" style="margin-bottom: 3rem;">Les incontournables culturels</h2>
+
+    <!-- 1. Musée -->
+    <div class="lieu-section reveal">
+      <div class="lieu-layout">
+        <div class="lieu-text">
+          <div class="lieu-num">01</div>
+          <div class="lieu-label">Musée</div>
+          <h3 class="lieu-title">Musée Départemental de la Seine-et-Marne</h3>
+          <p>Installé dans l'ancien <strong>Hôtel Moderne</strong> — bâtisse emblématique du début du XXe siècle qui vit défiler des figures légendaires telles que Georges Brassens, Juliette Gréco, Michel Piccoli ou Jean-Pierre Chabrol —, le musée est une étape incontournable de votre visite.</p>
+          <p><strong>Rez-de-chaussée (Patrimoine rural) :</strong> Immersion interactive dans la vie quotidienne et les métiers d'autrefois en Brie. Outils traditionnels, vannerie, menuiserie, betterave, céréales, pommes à cidre et fabrication artisanale du Brie. Fiches et modules vidéo pour petits et grands.</p>
+          <p><strong>À l'étage (Expositions temporaires) :</strong> Espace moderne accueillant régulièrement des expositions artistiques, historiques ou sociétales en résonance avec le territoire.</p>
+
+          <div class="lieu-infos">
+            <div class="lieu-info-row">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              17 avenue de la Ferté-sous-Jouarre, Saint-Cyr-sur-Morin
+            </div>
+            <div class="lieu-info-row">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Lun, Mar, Jeu, Ven, Dim : 10h–12h30 / 14h–17h30 · Mer : 10h–12h30
+            </div>
+            <div class="lieu-info-row">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0160244600">01 60 24 46 00</a>
+            </div>
+            <div class="lieu-info-row">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <a href="https://musee-seine-et-marne.fr/fr" target="_blank" rel="noopener">musee-seine-et-marne.fr</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="lieu-visuel">
+          <div class="lieu-photo-main">
+            <img src="/assets/img/musee-seine-et-marne-exterieur-ete.jpg" alt="Musée Départemental de la Seine-et-Marne — extérieur" />
+          </div>
+          <div class="lieu-photo-row">
+            <div class="lieu-photo-small">
+              <img src="/assets/img/musée-intérieur-1.webp" alt="Intérieur du musée — patrimoine rural" />
+            </div>
+            <div class="lieu-photo-small">
+              <img src="/assets/img/musée-intérieur-2.jpg" alt="Intérieur du musée — exposition" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 2. Maison Mac Orlan -->
+    <div class="lieu-section reveal">
+      <div class="lieu-layout reverse">
+        <div class="lieu-text">
+          <div class="lieu-num">02</div>
+          <div class="lieu-label">Maison des Illustres</div>
+          <h3 class="lieu-title">Maison de Pierre Mac Orlan</h3>
+          <p>L'histoire contemporaine de Saint-Cyr-sur-Morin est indissociable de celle de <strong>Pierre Mac Orlan</strong> (1882–1970). L'écrivain, poète et parolier, auteur du mythique <em>Quai des Brumes</em> (adapté au cinéma avec Jean Gabin et Michèle Morgan), s'installe dans cette maison briarde avec son épouse Marguerite en 1927, et y vit jusqu'à son dernier souffle.</p>
+          <p>Labellisée <strong>« Maison des Illustres »</strong> depuis 2013, la demeure est restée figée dans le temps, exactement telle que l'artiste l'a laissée. La visite guidée offre une plongée intime et émouvante dans son quotidien : son bureau, ses livres, ses objets personnels et ses instruments de musique semblent encore attendre leur maître.</p>
+
+          <div class="lieu-infos">
+            <div class="lieu-info-row">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              Ouvert le <strong>dimanche après-midi</strong> uniquement
+            </div>
+            <div class="lieu-info-row">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              Visites guidées : 14h00 · 15h00 · 16h00
+            </div>
+            <div class="lieu-info-row">
+              <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Accès gratuit — sans réservation (géré par le Musée Départemental)
+            </div>
+            <div class="lieu-note">
+              Les visites guidées sont assurées par les équipes du Musée Départemental de la Seine-et-Marne. Renseignements au <a href="tel:0160244600">01 60 24 46 00</a>.
+            </div>
+          </div>
+        </div>
+
+        <div class="lieu-visuel">
+          <div class="lieu-photo-main">
+            <img src="/assets/img/maison-macorlan.jpg" alt="Maison de Pierre Mac Orlan — vue extérieure" />
+          </div>
+          <div class="lieu-photo-row">
+            <div class="lieu-photo-small">
+              <img src="/assets/img/Mac-Orlan-Exterieur.webp" alt="Maison Mac Orlan — façade" />
+            </div>
+            <div class="lieu-photo-small">
+              <img src="/assets/img/mac-orlan-interieur.jpg" alt="Maison Mac Orlan — intérieur" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 3. Auberge de l'Œuf Dur -->
+    <div class="lieu-section reveal">
+      <div class="lieu-layout">
+        <div class="lieu-text">
+          <div class="lieu-num">03</div>
+          <div class="lieu-label">Site historique</div>
+          <h3 class="lieu-title">L'Auberge de l'Œuf Dur et de l'Amour</h3>
+          <p>Symbole du passé insolite et artistique du village. Au début du XXe siècle, Saint-Cyr-sur-Morin devient la « campagne » des artistes de Montmartre. En 1910, <strong>Frédéric Gérard</strong> (dit « Frédé »), animateur du célèbre Lapin Agile, acquiert une maison ici. Dans son sillage, Julien Callé fonde la légendaire <strong>Auberge de l'Œuf Dur et de l'Amour</strong>.</p>
+          <p>Avec sa façade colorée rappelant l'esprit des cabarets parisiens, l'établissement devient le point de ralliement des peintres, poètes, écrivains et musiciens venus chercher l'inspiration au grand air. Aujourd'hui préservée, l'ancienne auberge conserve sur ses murs des <strong>fresques et graffitis d'époque</strong>, témoignages uniques de cette effervescence culturelle.</p>
+          <div class="lieu-note" style="background: var(--creme); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 1.25rem; font-size: 0.8rem; color: var(--gris); font-style: italic;">
+            Ce lieu historique se découvre principalement de l'extérieur ou lors d'événements spécifiques organisés par la commune.
+          </div>
+        </div>
+
+        <div class="lieu-visuel">
+          <div class="lieu-photo-main">
+            <img src="/assets/img/Auberge-1.webp" alt="Auberge de l'Œuf Dur — façade" />
+          </div>
+          <div class="lieu-photo-row">
+            <div class="lieu-photo-small">
+              <img src="/assets/img/Auberge-2.webp" alt="Auberge de l'Œuf Dur — détail" />
+            </div>
+            <div class="lieu-photo-small">
+              <img src="/assets/img/Auberge.jpg" alt="Auberge de l'Œuf Dur — détail" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ─── PATRIMOINE RELIGIEUX ─── -->
+<section class="section" style="background: var(--blanc);">
+  <div class="section-inner">
+
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Patrimoine</div>
+    <h2 class="section-title reveal" style="margin-bottom: 2.5rem;">Patrimoine historique et religieux</h2>
+
+    <div class="lieu-layout reveal">
+      <div class="lieu-text">
+        <div class="lieu-label">XIIe siècle</div>
+        <h3 class="lieu-title">Église Saint-Cyr et Sainte-Julitte</h3>
+        <p>Située à quelques pas du lit du Petit Morin, l'église paroissiale dédiée à Saint Cyr et sa mère Sainte Julitte dresse sa silhouette depuis le <strong>XIIe siècle</strong>. Témoin précieux de l'histoire médiévale de la Brie, l'édifice présente une architecture typique de la région.</p>
+        <p>Son atmosphère paisible et fraîche invite à une halte spirituelle ou historique lors de votre promenade dans le centre-bourg. Des messes sont célébrées tous les premiers samedis du mois à 18h30.</p>
+      </div>
+      <div class="lieu-visuel">
+        <div class="lieu-photo-main">
+          <img src="/assets/img/Eglise.webp" alt="Église Saint-Cyr et Sainte-Julitte" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ─── NATURE & RANDONNÉES ─── -->
+<section class="section" style="background: var(--creme);">
+  <div class="section-inner">
+
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Plein air</div>
+    <h2 class="section-title reveal" style="margin-bottom: 2.5rem;">Nature, balades & randonnées</h2>
+
+    <div class="content-grid reveal" style="margin-bottom: 2rem;">
+      <div class="content-block">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--texte); margin-bottom: 0.75rem;">Promenade sur les berges du Petit Morin</h3>
+        <p>Pour les promeneurs d'un jour, les abords du Petit Morin offrent un cadre ombragé et idyllique. Accessible à pied depuis le pôle culturel, ce sentier au fil de l'eau permet d'admirer la faune et la flore locales, les reflets de la rivière et les anciens ponts qui structurent le paysage du village.</p>
+      </div>
+      <div class="content-block">
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--texte); margin-bottom: 0.75rem;">Randonnées dans la Vallée du Morin</h3>
+        <p>Le relief vallonné et les chemins forestiers font de Saint-Cyr-sur-Morin un terrain de jeu pour les randonneurs. Plusieurs sentiers balisés permettent de découvrir les hameaux, les anciens moulins et des panoramas imprenables sur les plateaux briards.</p>
+      </div>
+    </div>
+
+    <a href="/decouvrir/randonnees.html" class="btn btn-primary reveal">
+      Voir les 5 circuits balisés
+      <svg style="transform: translateY(-0.12);" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"></path></svg>
+    </a>
+
+  </div>
+</section>
+
+
+<!-- ─── INFOS PRATIQUES — VENIR ─── -->
+<section class="section" style="background: var(--blanc);">
+  <div class="section-inner">
+
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Accès</div>
+    <h2 class="section-title reveal" style="margin-bottom: 2rem;">Comment venir à Saint-Cyr-sur-Morin ?</h2>
+
+    <div class="acces-grid reveal">
+
+      <div class="acces-card">
+        <div class="acces-card-head">
+          <div class="acces-icon">
+            <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          </div>
+          <strong>En voiture</strong>
+        </div>
+        <p>Depuis Paris, empruntez l'<strong>autoroute A4</strong>. Compter environ <strong>1 heure</strong> selon le trafic. Des parkings gratuits sont disponibles à proximité du Musée Départemental.</p>
+      </div>
+
+      <div class="acces-card">
+        <div class="acces-card-head">
+          <div class="acces-icon">
+            <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><path d="M6 11h4M14 11h4"/></svg>
+          </div>
+          <strong>En transports en commun</strong>
+        </div>
+        <p>Depuis <strong>Paris Gare de l'Est</strong>, Ligne P du Transilien jusqu'à <strong>La Ferté-sous-Jouarre</strong>. À la gare routière, prenez le bus ligne <strong>2484</strong> et descendez à l'arrêt <em>Route d'Archet</em>. Le Musée est à 3 minutes à pied. Trajet total : environ <strong>1h05</strong>.</p>
+        <div class="dimanche-alert">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <div><strong>Le dimanche</strong> (jour d'ouverture de la Maison Mac Orlan), les horaires sont restreints : départ depuis La Ferté à <strong>9h43</strong>, retour depuis Saint-Cyr à <strong>17h08</strong>. Anticipez votre organisation.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ─── HÉBERGEMENTS ─── -->
+<section class="section" style="background: var(--creme);">
+  <div class="section-inner">
+
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Dormir à Saint-Cyr</div>
+    <h2 class="section-title reveal" style="margin-bottom: 0.5rem;">Hébergements</h2>
+    <p class="reveal" style="font-size: 0.88rem; color: var(--gris); margin-bottom: 2.5rem;">Chambres d'hôtes et camping pour prolonger votre séjour ou accueillir vos proches.</p>
+
+    <!-- Chambres d'hôtes -->
+    <div class="section-label reveal" style="margin-bottom: 1.25rem; font-size: 0.68rem;">Chambres d'hôtes</div>
+
+    <div class="heberg-grid" style="margin-bottom: 2rem;">
+
+      <div class="heberg-card reveal">
+        <div class="heberg-photo">
+          <img src="/assets/img/clos-de-la-rose.jpg" alt="Le Clos de la Rose" />
+        </div>
+        <div class="heberg-body">
+          <div class="heberg-type">Chambre d'hôtes</div>
+          <div class="heberg-name">Le Clos de la Rose</div>
+          <div class="heberg-lieu">
+            <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hameau de l'Hermitière
+          </div>
+          <div class="heberg-contacts">
+            <div class="heberg-contact-row">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0160448104">01 60 44 81 04</a>
+            </div>
+            <div class="heberg-contact-row">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <a href="https://www.clos-de-la-rose.com" target="_blank" rel="noopener">clos-de-la-rose.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="heberg-card reveal">
+        <div class="heberg-photo">
+          <img src="/assets/img/la-horse-au-ru.jpg" alt="La Horse au Rû" onerror="this.closest('.heberg-photo').innerHTML='<div class=heberg-photo-placeholder><svg width=32 height=32 fill=none stroke-width=1.5 viewBox=\'0 0 24 24\'><rect x=3 y=3 width=18 height=18 rx=2/><circle cx=8.5 cy=8.5 r=1.5/><polyline points=\'21 15 16 10 5 21\'/></svg></div>'" />
+        </div>
+        <div class="heberg-body">
+          <div class="heberg-type">Chambre d'hôtes</div>
+          <div class="heberg-name">La Horse au Rû</div>
+          <div class="heberg-lieu">
+            <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hameau du Rû de Vrou
+          </div>
+          <div class="heberg-contacts">
+            <div class="heberg-contact-row">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0160238189">01 60 23 81 89</a>
+              <span>·</span>
+              <a href="tel:0613427723">06 13 42 77 23</a>
+            </div>
+            <div class="heberg-contact-row">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <a href="https://www.la-horse-au-ru.com" target="_blank" rel="noopener">la-horse-au-ru.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="heberg-card reveal">
+        <div class="heberg-photo">
+          <img src="/assets/img/prieure-saint-cyr.jpg" alt="Le Prieuré de Saint-Cyr-sur-Morin" />
+        </div>
+        <div class="heberg-body">
+          <div class="heberg-type">Chambres d'hôtes · Locations festives</div>
+          <div class="heberg-name">Le Prieuré de Saint-Cyr</div>
+          <div class="heberg-lieu">
+            <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hameau du Rû de Vrou
+          </div>
+          <div class="heberg-desc">Locations festives avec chambres — idéal pour mariages et séminaires.</div>
+          <div class="heberg-contacts">
+            <div class="heberg-contact-row">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0160238424">01 60 23 84 24</a>
+              <span>·</span>
+              <a href="tel:0617608255">06 17 60 82 55</a>
+            </div>
+            <div class="heberg-contact-row">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <a href="https://prieuresaintcyr.com" target="_blank" rel="noopener">prieuresaintcyr.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Camping -->
+    <div class="section-label reveal" style="margin-bottom: 1.25rem; font-size: 0.68rem;">Camping</div>
+
+    <div class="heberg-grid reveal" style="margin-bottom: 2rem;">
+
+      <div class="heberg-card">
+        <div class="heberg-photo">
+          <img src="/assets/img/camping-choisiel.webp" alt="Camping du Choisel" />
+        </div>
+        <div class="heberg-body">
+          <div class="heberg-type">Camping ★★★★</div>
+          <div class="heberg-name">Camping du Choisel</div>
+          <div class="heberg-lieu">
+            <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Hameau de Courcelles-la-Roue
+          </div>
+          <div class="heberg-desc">Location de mobile-homes à l'année ou de passage.</div>
+          <div class="heberg-contacts">
+            <div class="heberg-contact-row">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:0160238493">01 60 23 84 93</a>
+            </div>
+            <div class="heberg-contact-row">
+              <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <a href="https://campingduchoisel.com" target="_blank" rel="noopener">campingduchoisel.com</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Camping-car -->
+    <div class="section-label reveal" style="margin-bottom: 1.25rem; font-size: 0.68rem;">Camping-car</div>
+
+    <div class="cc-card reveal">
+      <div class="cc-visual">
+        <svg width="48" height="48" fill="none" stroke-width="1.3" viewBox="0 0 24 24">
+          <rect x="1" y="7" width="16" height="11" rx="2"/>
+          <path d="M17 9h2l3 3v4h-5V9z"/>
+          <circle cx="5.5" cy="19.5" r="1.5"/>
+          <circle cx="16.5" cy="19.5" r="1.5"/>
+        </svg>
+      </div>
+      <div class="cc-body">
+        <h4>Emplacement camping-car</h4>
+        <p>Situé entre l'église et la Mairie, le long de la rivière du Petit Morin. Accès libre.</p>
+        <div class="cc-pills">
+          <span class="cc-pill">
+            <svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+            Vidange WC
+          </span>
+          <span class="cc-pill">
+            <svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+            Eau potable
+          </span>
+          <span class="cc-pill">
+            <svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            72h maximum
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<div id="footer-placeholder"></div>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
 </body>
 </html>
