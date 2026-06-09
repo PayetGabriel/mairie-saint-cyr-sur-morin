@@ -155,23 +155,40 @@
 <!-- Contact SIVU -->
 <section class="section" style="background: var(--vert-pale);">
   <div class="section-inner">
-    <div class="sivu-contact reveal">
-      <div>
-        <div class="section-label">Contact</div>
-        <h2 class="section-title" style="margin-bottom: 1rem;">Coordinatrice du SIVU</h2>
-        <p style="font-size: 1.05rem; line-height: 1.8; color: var(--texte);">
+    <div class="content-block reveal">
+      <div class="section-label">Contact</div>
+      <h2 class="section-title">Besoin d'informations ?</h2>
+    </div>
+    
+    <div class="contact-grid reveal">
+      <div class="contact-card">
+        <h3>
+            <svg width="20" height="20" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 0.5rem;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Coordinatrice SIVU
+        </h3>
+        <p>
           <strong>Sabrina Mazo</strong><br />
-          <a href="tel:0160238024" style="color: var(--vert); text-decoration: none;">01 60 23 80 24</a> / 
-          <a href="tel:0671254119" style="color: var(--vert); text-decoration: none;">06 71 25 41 19</a><br />
-          <a href="mailto:sivu.stcyrstouen@orange.fr" style="color: var(--vert); text-decoration: none;">sivu.stcyrstouen@orange.fr</a>
+          <a href="tel:0160238024">01 60 23 80 24</a><br />
+          <a href="tel:0671254119">06 71 25 41 19</a><br />
+          <a href="mailto:sivu.stcyrstouen@orange.fr">sivu.stcyrstouen@orange.fr</a>
         </p>
+        <div class="card-footer-action">
+          <a href="/contact.html#formulaire-de-contact">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Contacter le service scolaire
+          </a>
+        </div>
       </div>
-      <div>
-        <p style="font-size: .9rem; line-height: 1.7; color: var(--gris);">
-          <strong style="color: var(--texte);">Mairie de Saint-Cyr-sur-Morin</strong><br />
+
+      <div class="contact-card">
+        <h3>
+            <svg width="20" height="20" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24" style="vertical-align: middle; margin-right: 0.5rem;"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Mairie de Saint-Cyr
+        </h3>
+        <p>
           Avenue Daniel Simon<br />
           77750 Saint-Cyr-sur-Morin<br />
-          <a href="tel:0160238024" style="color: var(--vert); text-decoration: none;">01 60 23 80 24</a>
+          <a href="tel:0160238024">01 60 23 80 24</a>
         </p>
       </div>
     </div>
@@ -188,71 +205,6 @@
     .then(data => {
       document.getElementById('footer-placeholder').innerHTML = data;
     });
-</script>
-<script>
-  // Carousel
-  (function() {
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dotsContainer = document.querySelector('.carousel-dots');
-    const track = document.querySelector('.carousel-track');
-    let current = 0, timer;
-
-    // Créer les dots
-    slides.forEach((_, i) => {
-      const d = document.createElement('button');
-      d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-      d.setAttribute('aria-label', `Slide ${i + 1}`);
-      d.addEventListener('click', () => goTo(i));
-      dotsContainer.appendChild(d);
-    });
-
-    // Calcule et fixe la hauteur max de toutes les slides
-    function fixHeight() {
-      track.style.height = '';
-      slides.forEach(s => {
-        s.style.position = 'relative';
-        s.style.opacity = '1';
-        s.style.pointerEvents = 'auto';
-        s.style.height = 'auto';
-      });
-      const maxH = Math.max(...Array.from(slides).map(s => s.offsetHeight));
-      track.style.height = maxH + 'px';
-      slides.forEach(s => {
-        s.style.position = '';
-        s.style.opacity = '';
-        s.style.pointerEvents = '';
-        s.style.height = maxH + 'px';
-      });
-    }
-
-    function goTo(n) {
-      slides[current].classList.remove('active');
-      document.querySelectorAll('.carousel-dot')[current].classList.remove('active');
-      current = (n + slides.length) % slides.length;
-      slides[current].classList.add('active');
-      document.querySelectorAll('.carousel-dot')[current].classList.add('active');
-      resetTimer();
-    }
-
-    function resetTimer() {
-      clearInterval(timer);
-      timer = setInterval(() => goTo(current + 1), 5000);
-    }
-
-    document.querySelector('.carousel-prev').addEventListener('click', () => goTo(current - 1));
-    document.querySelector('.carousel-next').addEventListener('click', () => goTo(current + 1));
-
-    slides[0].classList.add('active');
-    resetTimer();
-
-    if (document.readyState === 'complete') {
-      fixHeight();
-    } else {
-      window.addEventListener('load', fixHeight);
-    }
-
-    window.addEventListener('resize', fixHeight);
-  })();
 </script>
 </body>
 </html>

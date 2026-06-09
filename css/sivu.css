@@ -632,6 +632,28 @@
   color: var(--vert-clair);
 }
 
+/* Un footer de carte élégant et intégré */
+.card-footer-action {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(200, 191, 176, 0.4); /* Le même gris que tes bordures de cartes */
+  display: block;
+}
+
+.card-footer-action a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--vert);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
+}
+
+.card-footer-action a:hover {
+  opacity: 0.7;
+}
 
 /* ─── SIVU CONTACT ────────────────────────── */
 

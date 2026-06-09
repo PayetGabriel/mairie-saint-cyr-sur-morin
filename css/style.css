@@ -1058,6 +1058,11 @@ img {
 
 
 /* ─── FORMULAIRE DE CONTACT ───────────────── */
+#formulaire-de-contact {
+    /* Ajuste la valeur (ex: 80px ou 100px) selon la hauteur de ton menu fixe */
+    scroll-margin-top: 100px; 
+}
+
 .contact-card h3 {
   display: flex;
   align-items: center; /* Aligne l'icône et le texte sur le même axe central */
