@@ -151,6 +151,11 @@
       gap: 1.25rem;
     }
 
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
     /* Carte numéro */
     .tu-card {
       background: var(--blanc);
@@ -314,19 +319,19 @@
     <div class="section-label reveal" style="margin-bottom: 0.75rem;">Dernier numéro</div>
     <div class="tu-une reveal">
       <div class="tu-une-cover">
-        <img src="/assets/docs/randonnees/Rando_circuit_N1-1.png" alt="Couverture Trait d'Union n°42" />
+        <img src="/assets/docs/TDU/TDU 42.png" alt="Couverture Trait d'Union n°42" />
       </div>
       <div class="tu-une-body">
         <div class="tu-une-label">Bulletin municipal</div>
         <div class="tu-une-title">Trait d'Union<br>n°42</div>
         <div class="tu-une-date">Novembre 2025</div>
-        <button class="btn btn-primary" onclick="void(0)">
+        <a href="/assets/docs/TDU/TDU 42.pdf" target="_blank" class="btn btn-primary">
           <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
           </svg>
           Consulter ce numéro
-        </button>
+        </a>
       </div>
     </div>
 
@@ -341,14 +346,19 @@
       </summary>
       <div class="tu-annee-content">
         <div class="tu-annee-grid">
-          <div class="tu-card">
-            <div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div>
-            <div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°42</div><div class="tu-card-date">Novembre 2025</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div>
-          </div>
-          <div class="tu-card">
-            <div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div>
-            <div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°41</div><div class="tu-card-date">Avril 2025</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div>
-          </div>
+          <a href="/assets/docs/TDU/TDU 42.pdf" target="_blank" class="card-link">
+            <div class="tu-card">
+              <div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 42.png" alt="Couverture Trait d'Union n°42"></div>
+              <div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°42</div><div class="tu-card-date">Novembre 2025</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div>
+            </div>
+          </a>
+          
+          <a href="/assets/docs/TDU/TDU 41.pdf" target="_blank" class="card-link">
+            <div class="tu-card">
+              <div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 41.png" alt="Couverture Trait d'Union n°41"></div>
+              <div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°41</div><div class="tu-card-date">Avril 2025</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div>
+            </div>
+          </a>
         </div>
       </div>
     </details>
@@ -362,10 +372,14 @@
       </summary>
       <div class="tu-annee-content">
         <div class="tu-annee-grid">
-          <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°40</div><div class="tu-card-date">Décembre 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          <a href="/assets/docs/TDU/TDU 40.pdf" target="_blank" class="card-link">
+            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 40.png" alt="Couverture Trait d'Union n°40"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°40</div><div class="tu-card-date">Décembre 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          </a>
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°39</div><div class="tu-card-date">Septembre 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°38</div><div class="tu-card-date">Mai 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
-          <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°37</div><div class="tu-card-date">Janvier 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          <a href="/assets/docs/TDU/TDU 37.pdf" target="_blank" class="card-link">
+            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 37.png" alt="Couverture Trait d'Union n°37"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°37</div><div class="tu-card-date">Janvier 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          </a>
         </div>
       </div>
     </details>
@@ -380,9 +394,15 @@
       <div class="tu-annee-content">
         <div class="tu-annee-grid">
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°36</div><div class="tu-card-date">Novembre 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
-          <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°35</div><div class="tu-card-date">Juillet 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
-          <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°34</div><div class="tu-card-date">Avril 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
-          <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°33</div><div class="tu-card-date">Janvier 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          <a href="/assets/docs/TDU/TDU 35.pdf" target="_blank" class="card-link">
+            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 35.png" alt="Couverture Trait d'Union n°35"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°35</div><div class="tu-card-date">Juillet 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          </a>
+          <a href="/assets/docs/TDU/TDU 34.pdf" target="_blank" class="card-link">
+            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 34.png" alt="Couverture Trait d'Union n°34"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°34</div><div class="tu-card-date">Avril 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          </a>
+          <a href="/assets/docs/TDU/TDU 33.pdf" target="_blank" class="card-link">
+            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 33.png" alt="Couverture Trait d'Union n°33"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°33</div><div class="tu-card-date">Janvier 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          </a>
         </div>
       </div>
     </details>
@@ -396,7 +416,9 @@
       </summary>
       <div class="tu-annee-content">
         <div class="tu-annee-grid">
-          <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°32</div><div class="tu-card-date">Octobre 2022</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          <a href="/assets/docs/TDU/TDU 32.pdf" target="_blank" class="card-link">
+            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 32.png" alt="Couverture Trait d'Union n°32"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°32</div><div class="tu-card-date">Octobre 2022</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          </a>
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°31</div><div class="tu-card-date">Juillet 2022</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°30</div><div class="tu-card-date">Mai 2022</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°29</div><div class="tu-card-date">Janvier 2022</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
