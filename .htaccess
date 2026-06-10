@@ -1,0 +1,12 @@
+# 1. On active le moteur de réécriture
+RewriteEngine On
+
+# 2. Si l'utilisateur demande une URL sans .html
+# Et qu'il existe un fichier .html correspondant
+# Alors on sert le fichier .html sans changer l'URL dans la barre d'adresse
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+# 3. Equivalent de ta règle 404 personnalisée
+ErrorDocument 404 /404.html
