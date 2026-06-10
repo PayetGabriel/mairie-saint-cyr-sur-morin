@@ -162,7 +162,7 @@
           <div class="form-group">
             <label for="sujet">Sujet <span class="required">*</span></label>
             <div class="custom-select-container">
-                <select id="sujet" name="sujet" required>
+                <select id="sujet" name="sujet">
                     <option value="" disabled selected>Sélectionnez l'objet de votre demande</option>
                     <optgroup label="Administratif">
                         <option value="etat-civil">État Civil (Actes, mariages, naissance)</option>
@@ -275,7 +275,6 @@
     });
 
   document.addEventListener('DOMContentLoaded', () => {
-     // On utilise l'ID qui existe déjà dans ton HTML !
      updateStatus('scheduleDropdown', 'mairie');
   });
 
@@ -288,29 +287,77 @@
     e.preventDefault();
     
     const responseDiv = document.getElementById('form-response');
+    let errors = [];
     
-    // --- 1. VALIDATION DU SELECT CUSTOMISÉ ---
+    // Nettoyage préalable des anciennes erreurs visuelles
+    document.querySelectorAll('.form-group input, .form-group textarea, .custom-select-wrapper').forEach(el => {
+        el.classList.remove('select-error');
+    });
+    
+    // 1. Validation du Prénom
+    const prenom = document.getElementById('prenom');
+    if (!prenom.value.trim()) {
+        prenom.classList.add('select-error');
+        errors.push("Le prénom est obligatoire.");
+    }
+    
+    // 2. Validation du Nom
+    const nom = document.getElementById('nom');
+    if (!nom.value.trim()) {
+        nom.classList.add('select-error');
+        errors.push("Le nom est obligatoire.");
+    }
+    
+    // 3. Validation de l'Email (Présence + Format Regex)
+    const email = document.getElementById('email');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.value.trim()) {
+        email.classList.add('select-error');
+        errors.push("L'adresse email est obligatoire.");
+    } else if (!emailRegex.test(email.value.trim())) {
+        email.classList.add('select-error');
+        errors.push("L'adresse email n'est pas au bon format (ex: nom@domaine.fr).");
+    }
+    
+    // 4. Validation du Sujet (Select custom)
     const selectSujet = document.getElementById('sujet');
     const customWrapper = document.querySelector('.custom-select-wrapper');
-    
     if (!selectSujet.value) {
         if (customWrapper) customWrapper.classList.add('select-error');
-        
+        errors.push("Veuillez sélectionner le sujet de votre demande.");
+    }
+    
+    // 5. Validation du Message
+    const message = document.getElementById('message');
+    if (!message.value.trim()) {
+        message.classList.add('select-error');
+        errors.push("Le message ne peut pas être vide.");
+    }
+    
+    // 6. Validation de la case RGPD
+    const rgpd = document.getElementById('rgpd');
+    if (!rgpd.checked) {
+        errors.push("Vous devez accepter l'utilisation de vos données pour envoyer le formulaire.");
+    }
+
+    // SI DES ERREURS SONT PRÉSENTES
+    if (errors.length > 0) {
         responseDiv.innerHTML = `
           <div class="form-error" style="padding: 1rem 1.5rem; background: #ffebee; border-left: 3px solid #f44336; border-radius: 8px; margin-bottom: 1.5rem;">
-            <strong style="color: #c62828;">Champ obligatoire manquant</strong>
-            <p style="margin:0; color: #555; font-size: 0.9rem;">Veuillez sélectionner l'objet de votre demande dans la liste déroulante.</p>
+            <strong style="color: #c62828;">Informations incorrectes ou manquantes</strong>
+            <ul style="margin: 0.5rem 0 0; padding-left: 1.2rem; color: #555; font-size: 0.9rem;">
+                ${errors.map(err => `<li>${err}</li>`).join('')}
+            </ul>
           </div>
         `;
         
-        selectSujet.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return; // Bloque l'envoi
-    } else {
-        if (customWrapper) customWrapper.classList.remove('select-error');
+        // On scroll vers le premier élément en erreur de manière fluide
+        const firstError = document.querySelector('.select-error') || rgpd;
+        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return; // On stoppe l'envoi
     }
-    // ─────────────────────────────────────────
     
-    // On extrait toutes les données du formulaire proprement
+    // Si tout est OK, on prépare les données
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
     
@@ -340,12 +387,8 @@
             </div>
           </div>
         `;
-        // On vide le formulaire
         this.reset();
-        // On remet le faux select à zéro visuellement
         document.querySelector('.custom-select-trigger').textContent = "Sélectionnez l'objet de votre demande";
-        
-        // Disparaît après 6 secondes
         setTimeout(() => { responseDiv.innerHTML = ''; }, 6000);
       } else {
         throw new Error(result.error || "Erreur inconnue");
@@ -362,9 +405,9 @@
     });
   });
   
+  // Génération du select customisé
   document.querySelectorAll('.custom-select-container').forEach(container => {
         const select = container.querySelector('select');
-        const options = select.querySelectorAll('option, optgroup');
         
         const wrapper = document.createElement('div');
         wrapper.classList.add('custom-select-wrapper');
@@ -393,8 +436,6 @@
                     select.value = opt.dataset.value;
                     trigger.textContent = opt.textContent;
                     wrapper.classList.remove('open');
-                    
-                    // --- 2. NETTOYAGE DE L'ERREUR AU CLIC ---
                     wrapper.classList.remove('select-error');
                 });
                 customOptions.appendChild(opt);
@@ -409,14 +450,20 @@
             wrapper.classList.toggle('open');
         });
 
-        // Fermer si on clique ailleurs
         window.addEventListener('click', (e) => {
             if (!wrapper.contains(e.target)) wrapper.classList.remove('open');
         });
     });
 
+    // Enlever l'erreur dès que l'utilisateur tape ou corrige dans un champ standard
+    document.querySelectorAll('.form-group input, .form-group textarea').forEach(input => {
+        input.addEventListener('input', function() {
+            this.classList.remove('select-error');
+        });
+    });
+
     function toggleRgpd(event) {
-      event.preventDefault(); // Évite de cocher la case par erreur en cliquant sur le texte
+      event.preventDefault();
       const details = document.getElementById('rgpd-details');
       if (details.hasAttribute('open')) {
         details.removeAttribute('open');

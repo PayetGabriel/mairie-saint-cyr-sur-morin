@@ -1424,9 +1424,11 @@ img {
     background: #f9f9f9;
 }
 
-/* Bordure d'alerte si le sélecteur customisé est oublié */
+/* Bordure d'erreur globale pour inputs, textareas et select-custom */
+.form-group input.select-error,
+.form-group textarea.select-error,
 .custom-select-wrapper.select-error .custom-select-trigger {
-    border-color: #f44336 !important;
+    border-color: #c62828 !important;
     background-color: #fff8f8 !important;
     box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.08) !important;
 }
