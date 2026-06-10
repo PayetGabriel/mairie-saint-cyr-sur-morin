@@ -1,11 +1,703 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=/construction.html">
-  <title>Redirection...</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan Local d'Urbanisme — Saint-Cyr-sur-Morin</title>
+  <meta name="description" content="Plan Local d'Urbanisme (PLU) de Saint-Cyr-sur-Morin. Zonage, règlement, documents complémentaires et informations pratiques." />
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/sivu.css" />
+
+  <style>
+
+    /* ── ZONES PLU ───────────────────────────── */
+
+    .zones-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .zone-card {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(200,191,176,0.4);
+      transition: all 0.22s;
+    }
+
+    .zone-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(42,37,32,0.08);
+    }
+
+    .zone-head {
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .zone-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      line-height: 1;
+      min-width: 42px;
+    }
+
+    .zone-head-text strong {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 0.1rem;
+    }
+
+    .zone-head-text span {
+      font-size: 0.72rem;
+      opacity: 0.75;
+    }
+
+    .zone-body {
+      background: var(--blanc);
+      padding: 0.85rem 1.25rem;
+    }
+
+    .zone-regl-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--vert);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .zone-regl-link svg { stroke: currentColor; }
+    .zone-regl-link:hover { opacity: 0.75; }
+
+    /* Couleurs par zone */
+    .zone-card.zone-a .zone-head { background: rgba(120,180,80,0.12); color: #4a7a20; }
+    .zone-card.zone-a .zone-letter { color: #4a7a20; }
+    .zone-card.zone-u .zone-head { background: rgba(90,130,196,0.1); color: #3a6090; }
+    .zone-card.zone-u .zone-letter { color: #3a6090; }
+    .zone-card.zone-n .zone-head { background: rgba(58,90,64,0.1); color: var(--vert); }
+    .zone-card.zone-n .zone-letter { color: var(--vert); }
+    .zone-card.zone-aux .zone-head { background: rgba(156,111,62,0.1); color: var(--bois); }
+    .zone-card.zone-aux .zone-letter { color: var(--bois); }
+
+
+    /* ── GRILLE DOCUMENTS ────────────────────── */
+
+    .docs-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .docs-section-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      color: var(--pierre-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .docs-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(200,191,176,0.4);
+    }
+
+    .docs-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 0.6rem;
+    }
+
+    .doc-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.8rem 1rem;
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--texte);
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .doc-item:hover {
+      border-color: var(--vert);
+      color: var(--vert);
+      background: var(--vert-pale);
+    }
+
+    .doc-item svg { stroke: var(--vert); flex-shrink: 0; }
+    .doc-item:hover svg { stroke: var(--vert); }
+
+    .doc-item .doc-num {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--gris);
+      background: var(--creme);
+      padding: 0.1rem 0.5rem;
+      border-radius: 4px;
+      margin-left: auto;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .doc-item:hover .doc-num {
+      background: rgba(58,90,64,0.1);
+      color: var(--vert);
+    }
+
+
+    /* ── GÉOPORTAIL BANNER ───────────────────── */
+
+    .geoprtail-banner {
+      background: var(--texte);
+      border-radius: 14px;
+      padding: 1.5rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .geoprtail-banner svg { stroke: rgba(255,255,255,0.5); flex-shrink: 0; }
+
+    .geoprtail-banner-text h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--blanc);
+      margin-bottom: 0.3rem;
+    }
+
+    .geoprtail-banner-text p {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.45);
+      margin: 0;
+    }
+
+    .geoprtail-banner a.btn {
+      background: var(--vert);
+      color: var(--blanc);
+      margin-left: auto;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .geoprtail-banner a.btn:hover { background: var(--vert-clair); }
+
+
+    /* ── VRAI/PAS VRAI ───────────────────────── */
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid rgba(200,191,176,0.25);
+    }
+
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-summary {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.1rem 0;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+
+    .faq-summary::-webkit-details-marker { display: none; }
+
+    .faq-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .faq-icon svg { stroke: var(--vert); }
+
+    .faq-q {
+      flex: 1;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--texte);
+      line-height: 1.4;
+    }
+
+    .faq-chevron { stroke: var(--gris); transition: transform 0.2s; }
+    details[open] .faq-chevron { transform: rotate(90deg); }
+
+    .faq-body {
+      padding: 0 0 1.25rem 3rem;
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--texte);
+    }
+
+    .faq-body p { margin-bottom: 0.75rem; }
+    .faq-body p:last-child { margin-bottom: 0; }
+
+    .faq-body a { color: var(--vert); font-weight: 500; text-decoration: none; }
+    .faq-body a:hover { text-decoration: underline; }
+
+    /* Définitions emprise / surface */
+    .def-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .def-card {
+      background: var(--creme);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+
+    .def-card strong {
+      display: block;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 700;
+      color: var(--vert);
+      margin-bottom: 0.4rem;
+    }
+
+    .def-card p {
+      font-size: 0.8rem !important;
+      color: var(--gris) !important;
+      line-height: 1.6 !important;
+      margin: 0 !important;
+    }
+
+
+    /* ── CONTACT URBANISME ───────────────────── */
+
+    .urba-contact {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: flex-start; /* Changé de center à flex-start pour mieux gérer le texte multiligne */
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .urba-contact svg { 
+      stroke: var(--vert); 
+      flex-shrink: 0; 
+      margin-top: 0.2rem; /* Pour aligner avec le haut du texte */
+    }
+
+    .urba-contact-body strong {
+      /* On enlève display: block pour qu'ils ne sautent pas de ligne inutilement */
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--texte);
+    }
+
+    .urba-contact-body p {
+      font-size: 0.83rem;
+      color: var(--gris);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    /* Optionnel : pour bien séparer les deux personnes */
+    .urba-contact-body p br {
+      display: block;
+      margin-bottom: 0.5rem; /* Ajuste cet espace si besoin */
+    }
+
+    .urba-contact-body a { color: var(--vert); font-weight: 500; text-decoration: none; }
+
+
+    @media (max-width: 768px) {
+      .def-grid { grid-template-columns: 1fr; }
+      .geoprtail-banner { flex-direction: column; align-items: flex-start; }
+      .geoprtail-banner a.btn { margin-left: 0; }
+    }
+
+    @media (max-width: 480px) {
+      .zones-grid { grid-template-columns: 1fr 1fr; }
+      .docs-list { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-  <p>Si vous n'êtes pas redirigé, <a href="/construction.html">cliquez ici</a>.</p>
+
+<header class="page-header" style="background: var(--vert);">
+  <div class="page-header-inner">
+    <h1>Plan Local d'Urbanisme</h1>
+    <p class="page-intro">Le PLU détermine l'avenir du territoire communal, son aménagement et la protection de ses espaces naturels et bâtis.</p>
+    <div style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.78rem; color:rgba(255,255,255,0.65); margin-top:0.75rem;">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Applicable depuis le 9 novembre 2020
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-inner">
+
+    <!-- Intro + Géoportail -->
+    <div class="content-grid reveal" style="margin-bottom: 2.5rem;">
+      <div class="content-block">
+        <p>Le PLU est un document d'urbanisme réglementaire <strong>opposable à tout projet</strong> faisant l'objet d'une demande sur la commune. Tout dépôt de permis de construire ou de déclaration préalable de travaux sera validé par le service de l'urbanisme à condition que le projet soit conforme au règlement en vigueur.</p>
+        <p>Le PLU découpe et organise le territoire en différentes zones (A, N, U, AUX). À chaque zone correspond un règlement définissant les règles de construction sur ce secteur. Sa rédaction s'appuie sur le <strong>Code de l'urbanisme</strong>.</p>
+        <p>L'ensemble des bois de la commune est déclaré <strong>Espaces Boisés Classés</strong>, ce qui interdit le défrichement. Toute coupe doit être déclarée en mairie jusqu'à 25 hectares ; au-delà, une autorisation préfectorale est requise.</p>
+      </div>
+      <div>
+        <div class="geoprtail-banner reveal">
+          <svg width="24" height="24" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <div class="geoprtail-banner-text">
+            <h4>Géoportail de l'urbanisme</h4>
+            <p>Ce PLU est également consultable en ligne sur le portail national.</p>
+          </div>
+          <a href="https://www.geoportail-urbanisme.gouv.fr/" target="_blank" rel="noopener" class="btn">
+            Accéder
+            <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zones -->
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Zonage</div>
+    <h2 class="section-title reveal" style="margin-bottom: 1.5rem;">Les zones du PLU</h2>
+
+    <div class="zones-grid reveal">
+
+      <div class="zone-card zone-a">
+        <div class="zone-head">
+          <div class="zone-letter">A</div>
+          <div class="zone-head-text">
+            <strong>Zone agricole</strong>
+            <span>Protéger les terres agricoles</span>
+          </div>
+        </div>
+        <div class="zone-body">
+          <a href="#" target="_blank" rel="noopener" class="zone-regl-link">
+            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Règlement zone A
+          </a>
+        </div>
+      </div>
+
+      <div class="zone-card zone-u">
+        <div class="zone-head">
+          <div class="zone-letter">U</div>
+          <div class="zone-head-text">
+            <strong>Zone urbanisée</strong>
+            <span>Bourg et hameaux construits</span>
+          </div>
+        </div>
+        <div class="zone-body">
+          <a href="#" target="_blank" rel="noopener" class="zone-regl-link">
+            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Règlement zone U
+          </a>
+        </div>
+      </div>
+
+      <div class="zone-card zone-n">
+        <div class="zone-head">
+          <div class="zone-letter">N</div>
+          <div class="zone-head-text">
+            <strong>Zone naturelle</strong>
+            <span>Espaces naturels protégés</span>
+          </div>
+        </div>
+        <div class="zone-body">
+          <a href="#" target="_blank" rel="noopener" class="zone-regl-link">
+            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Règlement zone N
+          </a>
+        </div>
+      </div>
+
+      <div class="zone-card zone-aux">
+        <div class="zone-head">
+          <div class="zone-letter">AUX</div>
+          <div class="zone-head-text">
+            <strong>Zone artisanale</strong>
+            <span>Activités économiques</span>
+          </div>
+        </div>
+        <div class="zone-body">
+          <a href="#" target="_blank" rel="noopener" class="zone-regl-link">
+            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Règlement zone AUX
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Plans de zonage -->
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Documents graphiques</div>
+    <h2 class="section-title reveal" style="margin-bottom: 1.5rem;">Plans de zonage &amp; règlement</h2>
+
+    <div class="docs-section reveal">
+      <div class="docs-section-label">Plans de zonage</div>
+      <div class="docs-list">
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Plan n°4.2a — Ensemble du territoire
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Plan n°4.2b — Bourg et hameaux de Biercy, Armenats, Archet et Hermitière
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Plan n°4.2c — Hameaux
+          <span class="doc-num">PDF</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="docs-section reveal">
+      <div class="docs-section-label">Règlement</div>
+      <div class="docs-list">
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Règlement du PLU
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Règlement de voirie communale
+          <span class="doc-num">PDF</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Documents complémentaires -->
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Documents complémentaires</div>
+    <h2 class="section-title reveal" style="margin-bottom: 1.5rem;">Dossier complet du PLU</h2>
+
+    <div class="docs-section reveal">
+      <div class="docs-section-label">Pièces principales</div>
+      <div class="docs-list">
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          1. Délibération d'approbation
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          2. Rapport de présentation
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          3. PADD — Projet d'Aménagement et de Développement Durables
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          4. OAP — Orientations d'Aménagement et de Programmation
+          <span class="doc-num">PDF</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="docs-section reveal">
+      <div class="docs-section-label">Avis &amp; concertation</div>
+      <div class="docs-list">
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Avis des PPA (Personnes Publiques Associées)
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Bilan de la concertation
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Rapport d'enquête publique
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Porter à connaissance
+          <span class="doc-num">PDF</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="docs-section reveal">
+      <div class="docs-section-label">Documents techniques</div>
+      <div class="docs-list">
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Mise à jour GAZ SUP
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Notice sanitaire
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Servitudes d'utilité publique
+          <span class="doc-num">PDF</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="docs-section reveal">
+      <div class="docs-section-label">Servitudes &amp; réseaux</div>
+      <div class="docs-list">
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Plan n°5.2a — Servitudes
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Plan n°5.2b — Servitude PM1
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Plan n°6.2a — Réseau d'eau potable, secteur Nord
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Plan n°6.2b — Réseau d'eau potable, secteur Sud
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Plan n°6.2c — Réseau d'assainissement
+          <span class="doc-num">PDF</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener" class="doc-item">
+          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Plan n°6.2d — Zone de bruit
+          <span class="doc-num">PDF</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ─── VRAI / PAS VRAI ─── -->
+<section class="section" style="background: var(--blanc);">
+  <div class="section-inner">
+
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Questions pratiques</div>
+    <h2 class="section-title reveal" style="margin-bottom: 2rem;">Vrai, Pas vrai…</h2>
+
+    <div class="faq-list reveal">
+
+      <details class="faq-item">
+        <summary class="faq-summary">
+          <div class="faq-icon">
+            <div class="faq-icon">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+              </svg>
+            </div>
+          </div>
+          <span class="faq-q">Peut-on construire sans en informer la mairie ?</span>
+          <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="faq-chevron"><path d="M9 18l6-6-6-6"/></svg>
+        </summary>
+        <div class="faq-body">
+          <p><strong>Oui, uniquement</strong> si l'emprise au sol et la surface de plancher de la construction projetée est inférieure ou égale à <strong>5 m²</strong>, ainsi que pour les piscines de moins de 10 m², enterrées ou hors-sol, non couvertes.</p>
+          <p>Au-delà de cette superficie, vous devez déposer en mairie soit une <strong>déclaration préalable (DP)</strong> de travaux, soit un <strong>permis de construire (PC)</strong>. Ce dossier sera étudié pour vérifier sa conformité aux règles du PLU/PPRI en vigueur sur la commune.</p>
+          <p>Les dossiers d'urbanisme sont à retirer en mairie ou à télécharger sur <a href="https://www.service-public.fr/particuliers/vosdroits/N319" target="_blank" rel="noopener">service-public.fr</a>.</p>
+
+          <div class="def-grid">
+            <div class="def-card">
+              <strong>* Emprise au sol</strong>
+              <p>Projection verticale du volume de la construction, tous débords et surplombs inclus. Les ornements (moulures, marquises non portées) et les débords de toiture sans poteaux en sont exclus.</p>
+            </div>
+            <div class="def-card">
+              <strong>** Surface de plancher</strong>
+              <p>Somme des surfaces de planchers de chaque niveau clos et couvert, calculée à partir du nu intérieur des façades, après déduction des murs, escaliers, locaux sous 1,80 m, places de stationnement, combles non aménageables, caves non accessibles depuis les parties communes, et 10 % des surfaces habitables.</p>
+            </div>
+          </div>
+        </div>
+      </details>
+
+    </div>
+
+    <!-- Contact service urbanisme -->
+    <div class="urba-contact reveal" style="margin-top: 2.5rem;">
+      <svg width="22" height="22" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <div class="urba-contact-body">
+        <strong>Service Urbanisme — Mairie de Saint-Cyr-sur-Morin</strong>
+        <p>
+          <strong>Marguerite LAFOND</strong> (élue) · <strong>Sophie SEROI</strong> (secrétaire)<br>
+          <span style="display:block; margin-top: 0.5rem;">
+            Accueil : lun, mar, jeu — 9h à 12h · sur RDV le samedi · Fermé mer et ven
+          </span>
+          <a href="tel:0160238024">01 60 23 80 24</a> · <a href="mailto:depoturbanisme.mairiesaintcyr@orange.fr">depoturbanisme.mairiesaintcyr@orange.fr</a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<div id="footer-placeholder"></div>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script>
+  fetch('/components/footer.html')
+    .then(r => r.text())
+    .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+</script>
 </body>
 </html>
