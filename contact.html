@@ -283,54 +283,62 @@
       document.getElementById('scheduleDropdown').classList.toggle('open');
   }
 
-  // Gestion du formulaire de contact
+  // Gestion du formulaire de contact avec l'API
   document.getElementById('contact-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const responseDiv = document.getElementById('form-response');
-    const formData = new FormData(this);
     
-    // Simulation d'envoi (remplacer par votre endpoint)
+    // On extrait toutes les données du formulaire proprement
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    // Affichage du chargement
     responseDiv.innerHTML = '<div class="form-loading">Envoi en cours...</div>';
     
-    setTimeout(() => {
-      // Succès
-      responseDiv.innerHTML = `
-        <div class="form-success">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-            <polyline points="20 6 9 17 4 12"/>
-          </svg>
-          <strong>Message envoyé !</strong>
-          <p>Nous vous répondrons dans les plus brefs délais.</p>
-        </div>
-      `;
-      
-      // Réinitialiser le formulaire
-      this.reset();
-      
-      // Masquer le message après 5 secondes
-      setTimeout(() => {
-        responseDiv.innerHTML = '';
-      }, 5000);
-    }, 1500);
-    
-    /* Pour un vrai envoi, utiliser :
+    // Appel au backend
     fetch('/api/contact', {
       method: 'POST',
-      body: formData
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
     })
     .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        responseDiv.innerHTML = '... message de succès ...';
+    .then(result => {
+      if (result.success) {
+        // Succès
+        responseDiv.innerHTML = `
+          <div class="form-success">
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <div>
+              <strong>Message envoyé !</strong>
+              <p style="margin:0; font-size:0.9rem;">Nous vous répondrons dans les plus brefs délais.</p>
+            </div>
+          </div>
+        `;
+        // On vide le formulaire
+        this.reset();
+        // On remet le faux select à zéro visuellement
+        document.querySelector('.custom-select-trigger').textContent = "Sélectionnez l'objet de votre demande";
+        
+        // Disparaît après 6 secondes
+        setTimeout(() => { responseDiv.innerHTML = ''; }, 6000);
       } else {
-        responseDiv.innerHTML = '... message d\'erreur ...';
+        throw new Error(result.error || "Erreur inconnue");
       }
     })
     .catch(error => {
-      responseDiv.innerHTML = '... message d\'erreur ...';
+      console.error(error);
+      responseDiv.innerHTML = `
+        <div class="form-error" style="padding: 1.5rem; background: #ffebee; border-left: 3px solid #f44336; border-radius: 8px;">
+          <strong style="color: #c62828;">Une erreur est survenue</strong>
+          <p style="margin:0; color: #555; font-size: 0.9rem;">Le message n'a pas pu être envoyé. Veuillez réessayer plus tard.</p>
+        </div>
+      `;
     });
-    */
   });
   document.querySelectorAll('.custom-select-container').forEach(container => {
         const select = container.querySelector('select');
