@@ -195,15 +195,29 @@
       margin: 0;
     }
 
+    /* 1. Assure-toi que ton bouton est bien configuré */
     .geoprtail-banner a.btn {
       background: var(--vert);
-      color: var(--blanc);
+      color: var(--blanc); /* Couleur du texte */
       margin-left: auto;
       white-space: nowrap;
       flex-shrink: 0;
+      display: inline-flex;     /* Pour que le SVG soit à l'intérieur du bouton et prenne la même couleur */
+      align-items: center;      /* Centre l'icône verticalement */
+      gap: 0.5rem;             /* Espace entre texte et icône */
     }
 
-    .geoprtail-banner a.btn:hover { background: var(--vert-clair); }
+    /* 2. Force l'icône à hériter de la couleur du texte du bouton */
+    .geoprtail-banner a.btn svg {
+      stroke: currentColor;     /* Hérite de la couleur du texte du bouton */
+      stroke-width: 2.5;
+      flex-shrink: 0;
+    }
+
+    /* 3. Au survol, tout change proprement */
+    .geoprtail-banner a.btn:hover { 
+      background: var(--vert-clair); 
+    }
 
 
     /* ── VRAI/PAS VRAI ───────────────────────── */
@@ -678,7 +692,7 @@
       <div class="urba-contact-body">
         <strong>Service Urbanisme — Mairie de Saint-Cyr-sur-Morin</strong>
         <p>
-          <strong>Marguerite LAFOND</strong> (élue) · <strong>Sophie SEROI</strong> (secrétaire)<br>
+          <strong>Stéphanie MONTICO</strong> (élue) · <strong>Sophie SEROI</strong> (secrétaire)<br>
           <span style="display:block; margin-top: 0.5rem;">
             Accueil : lun, mar, jeu — 9h à 12h · sur RDV le samedi · Fermé mer et ven
           </span>
