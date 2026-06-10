@@ -74,8 +74,7 @@ module.exports = async (req, res) => {
                 <p style="margin: 0 0 5px; font-size: 12px; color: #888078; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Expéditeur</p>
                 <p style="margin: 0; color: #2a2520; font-size: 16px; font-weight: 500;">${prenom} ${nom}</p>
                 <p style="margin: 5px 0 0; color: #3a5a40; font-size: 14px;"><a href="mailto:${email}" style="color: #3a5a40; text-decoration: none;">${email}</a></p>
-                ${telephone ? `<p style="margin: 5px 0 0; color: #555; font-size: 14px;">📞 ${telephone}</p>` : ''}
-            </div>
+                ${telephone ? `<p style="margin: 5px 0 0; color: #555555; font-size: 14px;"><span style="color: #3a5a40; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 5px;">Tél. :</span> <a href="tel:${telephone}" style="color: #2a2520; text-decoration: none;">${telephone}</a></p>` : ''}            </div>
             <div style="margin-bottom: 25px;">
                 <p style="margin: 0 0 5px; font-size: 12px; color: #888078; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Sujet de la demande</p>
                 <div style="display: inline-block; background: #e8f0e9; color: #2e4a34; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 600;">
