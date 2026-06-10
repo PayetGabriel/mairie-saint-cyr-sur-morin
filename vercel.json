@@ -4,7 +4,8 @@
   "rewrites": [
     { "source": "/(.*)", "destination": "/$1" }
   ],
-  "errorRoutes": [
-    { "status": 404, "src": "/404.html", "dest": "/404.html" }
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "status": 404, "dest": "/404.html" }
   ]
 }
