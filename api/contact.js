@@ -113,7 +113,7 @@ module.exports = async (req, res) => {
 
             <div style="text-align: center; padding-top: 20px; border-top: 1px solid #f0ece6;">
                 <a href="${mailtoUrl}" style="background-color: ${theme.primary}; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600; font-size: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.08);">
-                    ✉ Répondre à l'expéditeur
+                    Répondre à l'expéditeur
                 </a>
             </div>
         </div>
@@ -124,7 +124,7 @@ module.exports = async (req, res) => {
 
     try {
         await transporter.sendMail({
-            from: process.env.MAIL_USER,
+            from: `"Formulaire Contact Site" <${process.env.MAIL_USER}>`,
             to: destinataire,
             replyTo: email,
             subject: `[Contact Site] ${sujetPropre} - ${prenom} ${nom}`,
