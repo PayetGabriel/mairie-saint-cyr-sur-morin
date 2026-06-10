@@ -1189,36 +1189,6 @@ img {
   text-decoration: underline;
 }
 
-/* ─── ÉTATS D'ERREUR DU FORMULAIRE ───────────────── */
-/* La variable rouge-clair de ta palette secondaire ou un rouge sobre */
-.form-group.has-error label,
-.form-group.has-error .required {
-  color: #c62828 !important;
-}
-
-.form-group.has-error input,
-.form-group.has-error textarea,
-.form-group.has-error select {
-  border-color: #f44336 !important;
-  background-color: #fff8f8 !important;
-}
-
-/* Cas particulier de ton custom-select */
-.form-group.has-error .custom-select-trigger {
-  border-color: #f44336 !important;
-  background-color: #fff8f8 !important;
-  color: #c62828 !important;
-}
-
-/* Cas particulier de la checkbox RGPD */
-.form-checkbox.has-error label {
-  color: #c62828 !important;
-}
-.form-checkbox.has-error input[type="checkbox"] {
-  outline: 2px solid #f44336;
-  outline-offset: 2px;
-}
-
 
 /* --- Style du déclencheur "En savoir plus" --- */
 .rgpd-trigger {
