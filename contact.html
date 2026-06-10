@@ -11,32 +11,35 @@
   <meta name="geo.region" content="FR-77" />
   <meta name="geo.placename" content="Saint-Cyr-sur-Morin" />
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Contact — Saint-Cyr-sur-Morin" />
   <meta property="og:description" content="Contactez votre mairie. Coordonnées et formulaire de contact." />
   <meta property="og:image" content="https://mairie-saint-cyr-sur-morin.vercel.app/assets/img/logoSaintCyr_2020_web.png" />
   
-  <!-- Favicons -->
   <link rel="icon" type="image/png" href="assets/img/logoSaintCyr_2020-favicon.png">
   <link rel="apple-touch-icon" href="assets/img/logoSaintCyr_2020-favicon.png">
 
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="robots" content="index, follow" />
 
-  <!-- Fonts & Styles -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/sivu.css" />
+  
+  <style>
+    /* Correction pour la validation visuelle du select customisé */
+    .custom-select-wrapper.select-error .custom-select-trigger {
+        border-color: #f44336 !important;
+        background-color: #fff8f8 !important;
+        box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.08) !important;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- ─── NAVBAR (chargée automatiquement) ─── -->
-
-<!-- ─── PAGE HEADER ─── -->
 <header class="page-header contact-header">
   <div class="page-header-inner">
     <div class="section-label reveal" style="color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.3); margin: 0 auto 1.5rem auto;">Contact</div>
@@ -45,11 +48,9 @@
   </div>
 </header>
 
-<!-- ─── SECTION CONTACT ─── -->
 <section class="section">
   <div class="section-inner">
     
-    <!-- Alert Box pour horaires -->
     <div class="info-bar-container reveal">
       <div class="schedule-dropdown" id="scheduleDropdown">
         
@@ -83,10 +84,8 @@
       </div>
     </div>
     
-    <!-- Grid Contact + Formulaire -->
     <div class="sivu-contact reveal">
       
-      <!-- Coordonnées -->
       <div>
         <h2 class="section-title reveal" style="margin-bottom: 2rem;">Coordonnées</h2>
         
@@ -131,7 +130,6 @@
         </div>
       </div>
 
-      <!-- Formulaire -->
       <div class="reveal">
         <h2 class="section-title reveal" style="margin-bottom: 2rem;" id="formulaire-de-contact">Formulaire de contact</h2>
         
@@ -226,7 +224,6 @@
   </div>
 </section>
 
-<!-- ─── SECTION AUTRES CONTACTS ─── -->
 <section class="section" style="background: var(--blanc); padding: 4rem 2.5rem;">
   <div class="section-inner">
     <div class="section-label" style="text-align: center; margin-bottom: 1rem;">Services annexes</div>
@@ -260,7 +257,6 @@
   </div>
 </section>
 
-<!-- ─── FOOTER (chargé automatiquement) ─── -->
 <div id="footer-placeholder"></div>
 
 <script src="/components/navbar.js"></script>
@@ -275,28 +271,47 @@
     });
 
   document.addEventListener('DOMContentLoaded', () => {
-     // On utilise l'ID qui existe déjà dans ton HTML !
-     updateStatus('scheduleDropdown', 'mairie');
+      updateStatus('scheduleDropdown', 'mairie');
   });
 
   function toggleSchedule() {
       document.getElementById('scheduleDropdown').classList.toggle('open');
   }
 
-  // Gestion du formulaire de contact avec l'API
+  // GESTION DU FORMULAIRE DE CONTACT
   document.getElementById('contact-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const responseDiv = document.getElementById('form-response');
     
-    // On extrait toutes les données du formulaire proprement
+    // --- FIABILISATION DU SELECT CUSTOM ---
+    const selectSujet = document.getElementById('sujet');
+    const customWrapper = document.querySelector('.custom-select-wrapper');
+    
+    // Bloque la soumission si aucun choix n'est fait dans l'élément natif sous-jacent
+    if (!selectSujet.value) {
+        if (customWrapper) customWrapper.classList.add('select-error');
+        
+        responseDiv.innerHTML = `
+          <div class="form-error" style="padding: 1rem 1.5rem; background: #ffebee; border-left: 3px solid #f44336; border-radius: 8px; margin-bottom: 1.5rem;">
+            <strong style="color: #c62828;">Champ obligatoire manquant</strong>
+            <p style="margin:0; color: #555; font-size: 0.9rem;">Veuillez sélectionner l'objet de votre demande dans la liste déroulante.</p>
+          </div>
+        `;
+        
+        // Remonte un poil sur le champ oublié pour capter l'attention
+        selectSujet.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return; 
+    } else {
+        if (customWrapper) customWrapper.classList.remove('select-error');
+    }
+    // ──────────────────────────────────────
+    
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
     
-    // Affichage du chargement
     responseDiv.innerHTML = '<div class="form-loading">Envoi en cours...</div>';
     
-    // Appel au backend
     fetch('/api/contact', {
       method: 'POST',
       headers: {
@@ -307,7 +322,6 @@
     .then(response => response.json())
     .then(result => {
       if (result.success) {
-        // Succès
         responseDiv.innerHTML = `
           <div class="form-success">
             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
@@ -319,12 +333,12 @@
             </div>
           </div>
         `;
-        // On vide le formulaire
         this.reset();
-        // On remet le faux select à zéro visuellement
-        document.querySelector('.custom-select-trigger').textContent = "Sélectionnez l'objet de votre demande";
         
-        // Disparaît après 6 secondes
+        // Reset visuel du trigger customisé
+        const customTrigger = document.querySelector('.custom-select-trigger');
+        if (customTrigger) customTrigger.textContent = "Sélectionnez l'objet de votre demande";
+        
         setTimeout(() => { responseDiv.innerHTML = ''; }, 6000);
       } else {
         throw new Error(result.error || "Erreur inconnue");
@@ -340,17 +354,20 @@
       `;
     });
   });
-  
+
+  // INITIALISATION DU SELECT CUSTOMISÉ
   document.querySelectorAll('.custom-select-container').forEach(container => {
         const select = container.querySelector('select');
-        const options = select.querySelectorAll('option, optgroup');
         
         const wrapper = document.createElement('div');
         wrapper.classList.add('custom-select-wrapper');
         
         const trigger = document.createElement('div');
         trigger.classList.add('custom-select-trigger');
-        trigger.textContent = select.querySelector('option[selected]').textContent;
+        
+        // Initialisation du texte par défaut
+        const selectedOption = select.querySelector('option[selected]') || select.querySelector('option');
+        trigger.textContent = selectedOption ? selectedOption.textContent : "Sélectionnez l'objet de votre demande";
         
         const customOptions = document.createElement('div');
         customOptions.classList.add('custom-options');
@@ -372,6 +389,9 @@
                     select.value = opt.dataset.value;
                     trigger.textContent = opt.textContent;
                     wrapper.classList.remove('open');
+                    
+                    // Nettoie l'état d'erreur immédiatement au clic sur un choix valide
+                    wrapper.classList.remove('select-error');
                 });
                 customOptions.appendChild(opt);
             }
@@ -385,21 +405,20 @@
             wrapper.classList.toggle('open');
         });
 
-        // Fermer si on clique ailleurs
         window.addEventListener('click', (e) => {
             if (!wrapper.contains(e.target)) wrapper.classList.remove('open');
         });
-    });
+  });
 
-    function toggleRgpd(event) {
-      event.preventDefault(); // Évite de cocher la case par erreur en cliquant sur le texte
+  function toggleRgpd(event) {
+      event.preventDefault(); 
       const details = document.getElementById('rgpd-details');
       if (details.hasAttribute('open')) {
         details.removeAttribute('open');
       } else {
         details.setAttribute('open', '');
       }
-    }
+  }
 </script>
 
 </body>
