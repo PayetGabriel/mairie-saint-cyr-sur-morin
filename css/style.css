@@ -426,7 +426,9 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 /* ─── HERO ────────────────────────────────── */
 
 .hero {
-  position: relative; height: 100vh; min-height: 580px;
+  position: relative; 
+  height: 100svh; /* svh = Small Viewport Height. Ignore complètement les barres d'outils et zooms, reste bloqué à la zone visible */
+  min-height: 580px;
   overflow: hidden;
 }
 .hero-bg {
@@ -1544,48 +1546,27 @@ footer {
 
 
 
-/* ─── RESPONSIVE GRANDS ÉCRANS ──────────────────────────── */
-/* Utilisation de scale pour zoomer proprement sans casser les hauteurs (100vh) */
+/* ─── RESPONSIVE ──────────────────────────── */
+/* ─── RESPONSIVE TRÈS GRANDS ÉCRANS (RÉGLAGE FLOTTAISON PERFECT) ─── */
 
 /* ─── PALIER 1 : ÉCRANS STANDARDS ÉTIRÉS (De 1920px à 2559px) ─── */
 @media screen and (min-width: 1920px) and (max-width: 2559px) {
   html {
-    background: var(--creme); /* Évite un flash blanc sur les côtés */
-  }
-  body {
-    transform: scale(1.10);
-    transform-origin: top center;
-    width: calc(100% / 1.10);
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 110%; /* Augmente la taille de base de 10% (tout le site grossit proprement) */
   }
 }
 
 /* ─── PALIER 2 : ÉCRANS HAUTE DÉFINITION / 2K (De 2560px à 3399px) ─── */
 @media screen and (min-width: 2560px) and (max-width: 3399px) {
   html {
-    background: var(--creme);
-  }
-  body {
-    transform: scale(1.25);
-    transform-origin: top center;
-    width: calc(100% / 1.25);
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 120%; /* Augmente de 20% pour ton 34 pouces */
   }
 }
 
 /* ─── PALIER 3 : ÉCRANS TRÈS GRANDS & ULTRA-LARGE (À partir de 3400px) ─── */
 @media screen and (min-width: 3400px) {
   html {
-    background: var(--creme);
-  }
-  body {
-    transform: scale(1.50);
-    transform-origin: top center;
-    width: calc(100% / 1.50);
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 135%;
   }
 }
 
