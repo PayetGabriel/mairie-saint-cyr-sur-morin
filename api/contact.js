@@ -119,6 +119,16 @@ module.exports = async (req, res) => {
             replyTo: email,
             subject: `[Contact Site] ${sujetPropre} - ${prenom} ${nom}`,
             html: htmlContent
+
+            // --- AJOUT DE DESTINATAIRES SUPPLÉMENTAIRES (Options) ---
+            // Pour mettre plusieurs personnes en destinataire principal :
+            // to: [destinataire, 'autre-adresse@mail.com'].join(', '),
+            
+            // Pour ajouter un ou plusieurs CC (visibles par tous) :
+            // cc: 'adjoint.mairie@orange.fr',
+            
+            // Pour ajouter un ou plusieurs CCI (cachés / archive secrète) :
+            // bcc: 'archive-site@saint-cyr-sur-morin.fr'
         });
 
         return res.status(200).json({ success: true });
