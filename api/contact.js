@@ -79,7 +79,14 @@ module.exports = async (req, res) => {
         }
     });
 
-    // --- DESIGN DE L'EMAIL DYNAMIQUE (Utilise l'objet theme) ---
+    // Encodage propre du lien mailto pour le bouton de réponse automatique
+    const mailtoSubject = encodeURIComponent(`Bien reçu - Formulaire ${theme.enteteText}`);
+    const mailtoBody = encodeURIComponent(
+        `Bonjour,\n\nNous avons bien reçu votre message via le formulaire de contact de notre site internet. Votre demande va être traitée dans les plus brefs délais.\n\nCordialement,\nL'équipe administrative.`
+    );
+    const mailtoUrl = `mailto:${email}?subject=${mailtoSubject}&body=${mailtoBody}`;
+
+    // --- DESIGN DE L'EMAIL DYNAMIQUE (Utilise l'objet theme + Bouton mailto) ---
     const htmlContent = `
     <div style="font-family: 'Segoe UI', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e0dbd5;">
         <div style="background: ${theme.primary}; padding: 30px; text-align: center;">
@@ -88,6 +95,15 @@ module.exports = async (req, res) => {
             <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 5px 0 0;">${theme.subText}</p>
         </div>
         <div style="background: #ffffff; padding: 35px 30px;">
+            
+            <div style="margin-bottom: 30px; padding: 20px; background-color: #fcfbf9; border: 1px dashed ${theme.primary}; border-radius: 8px; text-align: center;">
+                <p style="margin: 0 0 12px 0; font-size: 14px; color: #2a2520; font-weight: 500;">Action rapide pour les services :</p>
+                <a href="${mailtoUrl}" style="background-color: ${theme.primary}; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    ✔ Confirmer la bonne réception (Bien reçu)
+                </a>
+                <p style="margin: 8px 0 0 0; font-size: 11px; color: #888078; italic;">Cliquez ci-dessus pour ouvrir un mail de réponse prêt à envoyer à l'usager.</p>
+            </div>
+
             <div style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #f0ece6;">
                 <p style="margin: 0 0 5px; font-size: 12px; color: #888078; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Expéditeur</p>
                 <p style="margin: 0; color: #2a2520; font-size: 16px; font-weight: 500;">${prenom} ${nom}</p>
@@ -119,16 +135,6 @@ module.exports = async (req, res) => {
             replyTo: email,
             subject: `[Contact Site] ${sujetPropre} - ${prenom} ${nom}`,
             html: htmlContent
-
-            // --- AJOUT DE DESTINATAIRES SUPPLÉMENTAIRES (Options) ---
-            // Pour mettre plusieurs personnes en destinataire principal :
-            // to: [destinataire, 'autre-adresse@mail.com'].join(', '),
-            
-            // Pour ajouter un ou plusieurs CC (visibles par tous) :
-            // cc: 'adjoint.mairie@orange.fr',
-            
-            // Pour ajouter un ou plusieurs CCI (cachés / archive secrète) :
-            // bcc: 'archive-site@saint-cyr-sur-morin.fr'
         });
 
         return res.status(200).json({ success: true });
