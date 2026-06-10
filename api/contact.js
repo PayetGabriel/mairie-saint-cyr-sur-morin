@@ -20,6 +20,22 @@ module.exports = async (req, res) => {
         return res.status(400).json({ error: 'Champs obligatoires manquants' });
     }
 
+    // --- DICTIONNAIRE DE TRADUCTION DES SUJETS ---
+    const sujetsTraduits = {
+        'etat-civil': 'État Civil (Actes, mariages, naissance)',
+        'urbanisme': 'Urbanisme (PLU, permis de construire)',
+        'elections': 'Élections & Recensement',
+        'cantine': 'Cantine & Menus',
+        'inscriptions': 'Inscriptions scolaires / Périscolaire',
+        'associations': 'Associations & Clubs',
+        'evenements': 'Événements & Culture',
+        'voirie': 'Voirie & Propreté',
+        'autre': 'Autre demande / Monsieur le Maire'
+    };
+
+    // Récupération du label propre (si inconnu, on garde la valeur brute par sécurité)
+    const sujetPropre = sujetsTraduits[sujet] || sujet;
+
     // --- ROUTAGE SIVU vs MAIRIE ---
     let destinataire = 'gabrielpayet@hotmail.com'; // Mairie par défaut
     
@@ -34,7 +50,6 @@ module.exports = async (req, res) => {
         return res.status(500).json({ error: 'Configuration serveur invalide' });
     }
 
-    // Configuration de nodemailer avec ton Gmail
     // Configuration explicite pour Gmail sur Vercel
     const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -64,7 +79,7 @@ module.exports = async (req, res) => {
             <div style="margin-bottom: 25px;">
                 <p style="margin: 0 0 5px; font-size: 12px; color: #888078; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Sujet de la demande</p>
                 <div style="display: inline-block; background: #e8f0e9; color: #2e4a34; padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 600;">
-                    ${sujet}
+                    ${sujetPropre}
                 </div>
             </div>
             <div>
@@ -81,11 +96,21 @@ module.exports = async (req, res) => {
 
     try {
         await transporter.sendMail({
-            from: process.env.MAIL_USER, // Plus propre et évite les bugs de strings complexes
+            from: process.env.MAIL_USER,
             to: destinataire,
             replyTo: email,
-            subject: `[Contact Site] ${sujet} - ${prenom} ${nom}`,
-            html: htmlContent
+            subject: `[Contact Site] ${sujetPropre} - ${prenom} ${nom}`,
+            html: htmlContent,
+            
+            // --- AJOUT DE DESTINATAIRES SUPPLÉMENTAIRES (Options) ---
+            // Pour mettre plusieurs personnes en destinataire principal :
+            // to: [destinataire, 'autre-adresse@mail.com'].join(', '),
+            
+            // Pour ajouter un ou plusieurs CC (visibles par tous) :
+            // cc: 'adjoint.mairie@orange.fr',
+            
+            // Pour ajouter un ou plusieurs CCI (cachés / archive secrète) :
+            // bcc: 'archive-site@saint-cyr-sur-morin.fr'
         });
 
         return res.status(200).json({ success: true });
