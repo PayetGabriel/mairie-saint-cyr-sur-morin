@@ -12,74 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/sivu.css" />
-  
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
-  <script>
-      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-      document.addEventListener("DOMContentLoaded", () => {
-          const previews = document.querySelectorAll('canvas.pdf-preview');
-
-          // On crée un "observateur" qui surveille le défilement de la page
-          const observer = new IntersectionObserver((entries, observer) => {
-              entries.forEach(entry => {
-                  if (!entry.isIntersecting) return;
-
-                  const canvas = entry.target;
-                  const pdfUrl = canvas.dataset.pdf;
-                  const parent = canvas.parentElement; // Le .tu-card-cover
-                  
-                  observer.unobserve(canvas);
-                  if (!pdfUrl) return;
-
-                  pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
-                      return pdf.getPage(1);
-                  }).then(page => {
-                      const ctx = canvas.getContext('2d');
-                      const baseViewport = page.getViewport({ scale: 1.0 });
-                      const expectedWidth = parent.clientWidth || 240;
-                      
-                      const scale = (expectedWidth / baseViewport.width) * 1.5; 
-                      const viewport = page.getViewport({ scale: scale });
-
-                      canvas.width = viewport.width;
-                      canvas.height = viewport.height;
-
-                      const renderContext = {
-                          canvasContext: ctx,
-                          viewport: viewport
-                      };
-                      
-                      page.render(renderContext).promise.then(() => {
-                          canvas.classList.add('ready');
-                          parent.classList.add('loaded');
-                      });
-
-                  }).catch(err => {
-                      console.warn("Fichier PDF non trouvé ou inaccessible : " + pdfUrl);
-                      
-                      // 1. On coupe immédiatement l'effet Skeleton sur le parent
-                      parent.classList.add('loaded'); 
-                      
-                      // 2. On injecte TON placeholder statique exact à la place du canvas
-                      canvas.outerHTML = `
-                          <div class="tu-card-placeholder">
-                              <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                  <polyline points="14 2 14 8 20 8"/>
-                              </svg>
-                          </div>`;
-                  });
-              });
-          }, {
-              rootMargin: "300px"
-          });
-
-          // On applique l'observateur sur tous nos canvas
-          previews.forEach(canvas => observer.observe(canvas));
-      });
-  </script>
 
   <style>
 
@@ -755,6 +687,8 @@
 <div id="footer-placeholder"></div>
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="/js/pdf-preview.js"></script>
 <script>
   fetch('/components/footer.html')
     .then(r => r.text())
