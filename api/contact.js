@@ -23,6 +23,7 @@ module.exports = async (req, res) => {
     // --- DICTIONNAIRE DE TRADUCTION DES SUJETS ---
     const sujetsTraduits = {
         'etat-civil': 'État Civil (Actes, mariages, naissance, passeport)',
+        'arretes': 'Arrêtés municipaux (Consultation, demande, information)',
         'elections': 'Élections & Recensement citoyen',
         'ccas-social': 'Action sociale & CCAS (Aides, logement)',
         'urbanisme': 'Urbanisme (PLU, permis de construire, déclaration)',
