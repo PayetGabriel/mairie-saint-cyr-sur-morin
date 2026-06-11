@@ -15,13 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
             observer.unobserve(canvas);
             if (!pdfUrl) return;
 
-            // Au lieu de : pdfjsLib.getDocument(pdfUrl)
-            // On lui passe un objet de configuration :
-            pdfjsLib.getDocument({
-                url: pdfUrl,
-                disableAutoFetch: true,  // Empêche de télécharger tout le reste du PDF en arrière-plan
-                disableStream: true      // Force le traitement par morceaux choisis si le serveur le permet
-            }).promise.then(pdf => {
+            pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
                 return pdf.getPage(1);
             }).then(page => {
                 const ctx = canvas.getContext('2d');
