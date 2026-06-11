@@ -12,6 +12,64 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/sivu.css" />
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <script>
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+      document.addEventListener("DOMContentLoaded", () => {
+          const previews = document.querySelectorAll('canvas.pdf-preview');
+
+          // On crée un "observateur" qui surveille le défilement de la page
+          const observer = new IntersectionObserver((entries, observer) => {
+              entries.forEach(entry => {
+                  // Si le canvas n'est pas encore visible à l'écran, on ne fait RIEN
+                  if (!entry.isIntersecting) return;
+
+                  const canvas = entry.target;
+                  const pdfUrl = canvas.dataset.pdf;
+                  
+                  // On arrête de surveiller ce canvas pour ne pas le régénérer deux fois
+                  observer.unobserve(canvas);
+
+                  if (!pdfUrl) return;
+
+                  // Génération du PDF uniquement maintenant qu'il est visible
+                  pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+                      return pdf.getPage(1);
+                  }).then(page => {
+                      const ctx = canvas.getContext('2d');
+                      
+                      // Calcul de la taille du conteneur pour s'adapter parfaitement
+                      const baseViewport = page.getViewport({ scale: 1.0 });
+                      const expectedWidth = canvas.parentElement.clientWidth || 240;
+                      
+                      // Équilibre parfait netteté/performance (ratio 1.5)
+                      const scale = (expectedWidth / baseViewport.width) * 1.5; 
+                      const viewport = page.getViewport({ scale: scale });
+
+                      canvas.width = viewport.width;
+                      canvas.height = viewport.height;
+
+                      const renderContext = {
+                          canvasContext: ctx,
+                          viewport: viewport
+                      };
+                      page.render(renderContext);
+                  }).catch(err => {
+                      console.error("Erreur preview PDF : " + pdfUrl, err);
+                      canvas.outerHTML = `<div class="tu-card-placeholder"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>`;
+                  });
+              });
+          }, {
+              rootMargin: "100px" // Anticipe le calcul 100px avant que l'élément n'apparaisse à l'écran
+          });
+
+          // On applique l'observateur sur tous nos canvas
+          previews.forEach(canvas => observer.observe(canvas));
+      });
+  </script>
 
   <style>
 
@@ -191,6 +249,20 @@
       transition: transform 0.35s ease;
     }
 
+    .tu-une-cover canvas,
+    .tu-card-cover canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .tu-card:hover .tu-card-cover canvas {
+      transform: scale(1.04);
+    }
+
     .tu-card:hover .tu-card-cover img {
       transform: scale(1.04);
     }
@@ -319,7 +391,7 @@
     <div class="section-label reveal" style="margin-bottom: 0.75rem;">Dernier numéro</div>
     <div class="tu-une reveal">
       <div class="tu-une-cover">
-        <img src="/assets/docs/TDU/TDU 42.png" alt="Couverture Trait d'Union n°42" />
+        <canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 42.pdf"></canvas>
       </div>
       <div class="tu-une-body">
         <div class="tu-une-label">Bulletin municipal</div>
@@ -348,14 +420,18 @@
         <div class="tu-annee-grid">
           <a href="/assets/docs/TDU/TDU 42.pdf" target="_blank" class="card-link">
             <div class="tu-card">
-              <div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 42.png" alt="Couverture Trait d'Union n°42"></div>
+              <div class="tu-card-cover">
+                <canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 42.pdf"></canvas>
+              </div>
               <div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°42</div><div class="tu-card-date">Novembre 2025</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div>
             </div>
           </a>
           
           <a href="/assets/docs/TDU/TDU 41.pdf" target="_blank" class="card-link">
             <div class="tu-card">
-              <div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 41.png" alt="Couverture Trait d'Union n°41"></div>
+              <div class="tu-card-cover">
+                <canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 41.pdf"></canvas>
+              </div>
               <div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°41</div><div class="tu-card-date">Avril 2025</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div>
             </div>
           </a>
@@ -373,12 +449,12 @@
       <div class="tu-annee-content">
         <div class="tu-annee-grid">
           <a href="/assets/docs/TDU/TDU 40.pdf" target="_blank" class="card-link">
-            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 40.png" alt="Couverture Trait d'Union n°40"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°40</div><div class="tu-card-date">Décembre 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+            <div class="tu-card"><div class="tu-card-cover"><canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 40.pdf"></canvas></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°40</div><div class="tu-card-date">Décembre 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           </a>
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°39</div><div class="tu-card-date">Septembre 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°38</div><div class="tu-card-date">Mai 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           <a href="/assets/docs/TDU/TDU 37.pdf" target="_blank" class="card-link">
-            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 37.png" alt="Couverture Trait d'Union n°37"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°37</div><div class="tu-card-date">Janvier 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+            <div class="tu-card"><div class="tu-card-cover"><canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 37.pdf"></canvas></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°37</div><div class="tu-card-date">Janvier 2024</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           </a>
         </div>
       </div>
@@ -395,13 +471,13 @@
         <div class="tu-annee-grid">
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°36</div><div class="tu-card-date">Novembre 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           <a href="/assets/docs/TDU/TDU 35.pdf" target="_blank" class="card-link">
-            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 35.png" alt="Couverture Trait d'Union n°35"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°35</div><div class="tu-card-date">Juillet 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+            <div class="tu-card"><div class="tu-card-cover"><canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 35.pdf"></canvas></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°35</div><div class="tu-card-date">Juillet 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           </a>
           <a href="/assets/docs/TDU/TDU 34.pdf" target="_blank" class="card-link">
-            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 34.png" alt="Couverture Trait d'Union n°34"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°34</div><div class="tu-card-date">Avril 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+            <div class="tu-card"><div class="tu-card-cover"><canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 34.pdf"></canvas></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°34</div><div class="tu-card-date">Avril 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           </a>
           <a href="/assets/docs/TDU/TDU 33.pdf" target="_blank" class="card-link">
-            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 33.png" alt="Couverture Trait d'Union n°33"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°33</div><div class="tu-card-date">Janvier 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+            <div class="tu-card"><div class="tu-card-cover"><canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 33.pdf"></canvas></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°33</div><div class="tu-card-date">Janvier 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           </a>
         </div>
       </div>
@@ -417,7 +493,7 @@
       <div class="tu-annee-content">
         <div class="tu-annee-grid">
           <a href="/assets/docs/TDU/TDU 32.pdf" target="_blank" class="card-link">
-            <div class="tu-card"><div class="tu-card-cover"><img src="/assets/docs/TDU/TDU 32.png" alt="Couverture Trait d'Union n°32"></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°32</div><div class="tu-card-date">Octobre 2022</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+            <div class="tu-card"><div class="tu-card-cover"><canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 32.pdf"></canvas></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°32</div><div class="tu-card-date">Octobre 2022</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           </a>
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°31</div><div class="tu-card-date">Juillet 2022</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°30</div><div class="tu-card-date">Mai 2022</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
