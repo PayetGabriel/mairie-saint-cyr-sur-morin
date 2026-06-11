@@ -19,6 +19,7 @@
 
     .zones-grid {
       display: grid;
+      /* Garde ta configuration de grille automatique */
       grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
       gap: 1rem;
       margin-bottom: 2rem;
@@ -29,6 +30,11 @@
       overflow: hidden;
       border: 1px solid rgba(200,191,176,0.4);
       transition: all 0.22s;
+      
+      /* FLUIDITÉ : Force la carte à devenir un conteneur vertical */
+      display: flex;
+      flex-direction: column;
+      height: 100%; /* S'assure que toutes les cartes ont la même hauteur sur la ligne */
     }
 
     .zone-card:hover {
@@ -41,6 +47,9 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
+      
+      /* Optionnel : si tu veux que la zone de texte occupe tout le reste */
+      flex: 1; 
     }
 
     .zone-letter {
@@ -51,21 +60,33 @@
       min-width: 42px;
     }
 
+    .zone-head-text {
+      /* Aligne le texte correctement à l'intérieur */
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
     .zone-head-text strong {
       display: block;
       font-size: 0.82rem;
       font-weight: 600;
-      margin-bottom: 0.1rem;
+      line-height: 1.3; /* Évite les télescopages si le titre doublait */
     }
 
     .zone-head-text span {
       font-size: 0.72rem;
       opacity: 0.75;
+      line-height: 1.3; /* Gère proprement l'interlignage sur 2 lignes */
     }
 
     .zone-body {
       background: var(--blanc);
       padding: 0.85rem 1.25rem;
+      
+      /* ALIGNEMENT : Force le bloc blanc à rester collé tout en bas */
+      margin-top: auto; 
+      border-top: 1px solid rgba(200,191,176,0.2); /* Ajoute une légère démarcation propre */
     }
 
     .zone-regl-link {
@@ -84,12 +105,19 @@
     .zone-regl-link:hover { opacity: 0.75; }
 
     /* Couleurs par zone */
+    .zone-card.zone-a { border-color: rgba(120,180,80,0.25); }
     .zone-card.zone-a .zone-head { background: rgba(120,180,80,0.12); color: #4a7a20; }
     .zone-card.zone-a .zone-letter { color: #4a7a20; }
+
+    .zone-card.zone-u { border-color: rgba(90,130,196,0.2); }
     .zone-card.zone-u .zone-head { background: rgba(90,130,196,0.1); color: #3a6090; }
     .zone-card.zone-u .zone-letter { color: #3a6090; }
+
+    .zone-card.zone-n { border-color: rgba(58,90,64,0.2); }
     .zone-card.zone-n .zone-head { background: rgba(58,90,64,0.1); color: var(--vert); }
     .zone-card.zone-n .zone-letter { color: var(--vert); }
+
+    .zone-card.zone-aux { border-color: rgba(156,111,62,0.2); }
     .zone-card.zone-aux .zone-head { background: rgba(156,111,62,0.1); color: var(--bois); }
     .zone-card.zone-aux .zone-letter { color: var(--bois); }
 
