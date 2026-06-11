@@ -24,28 +24,22 @@
           // On crée un "observateur" qui surveille le défilement de la page
           const observer = new IntersectionObserver((entries, observer) => {
               entries.forEach(entry => {
-                  // Si le canvas n'est pas encore visible à l'écran, on ne fait RIEN
                   if (!entry.isIntersecting) return;
 
                   const canvas = entry.target;
                   const pdfUrl = canvas.dataset.pdf;
+                  const parent = canvas.parentElement; // Le .tu-card-cover
                   
-                  // On arrête de surveiller ce canvas pour ne pas le régénérer deux fois
                   observer.unobserve(canvas);
-
                   if (!pdfUrl) return;
 
-                  // Génération du PDF uniquement maintenant qu'il est visible
                   pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
                       return pdf.getPage(1);
                   }).then(page => {
                       const ctx = canvas.getContext('2d');
-                      
-                      // Calcul de la taille du conteneur pour s'adapter parfaitement
                       const baseViewport = page.getViewport({ scale: 1.0 });
-                      const expectedWidth = canvas.parentElement.clientWidth || 240;
+                      const expectedWidth = parent.clientWidth || 240;
                       
-                      // Équilibre parfait netteté/performance (ratio 1.5)
                       const scale = (expectedWidth / baseViewport.width) * 1.5; 
                       const viewport = page.getViewport({ scale: scale });
 
@@ -56,14 +50,30 @@
                           canvasContext: ctx,
                           viewport: viewport
                       };
-                      page.render(renderContext);
+                      
+                      page.render(renderContext).promise.then(() => {
+                          canvas.classList.add('ready');
+                          parent.classList.add('loaded');
+                      });
+
                   }).catch(err => {
-                      console.error("Erreur preview PDF : " + pdfUrl, err);
-                      canvas.outerHTML = `<div class="tu-card-placeholder"><svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>`;
+                      console.warn("Fichier PDF non trouvé ou inaccessible : " + pdfUrl);
+                      
+                      // 1. On coupe immédiatement l'effet Skeleton sur le parent
+                      parent.classList.add('loaded'); 
+                      
+                      // 2. On injecte TON placeholder statique exact à la place du canvas
+                      canvas.outerHTML = `
+                          <div class="tu-card-placeholder">
+                              <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                  <polyline points="14 2 14 8 20 8"/>
+                              </svg>
+                          </div>`;
                   });
               });
           }, {
-              rootMargin: "100px" // Anticipe le calcul 100px avant que l'élément n'apparaisse à l'écran
+              rootMargin: "300px"
           });
 
           // On applique l'observateur sur tous nos canvas
@@ -257,6 +267,51 @@
       object-position: top;
       display: block;
       transition: transform 0.35s ease;
+    }
+
+    /* Le conteneur du canvas devient le parent de l'animation */
+    .tu-card-cover, .tu-une-cover {
+      position: relative;
+      background: #f4f1ec; /* Ton fond crème de secours */
+      overflow: hidden;
+    }
+
+    /* L'animation de vague lumineuse (Skeleton) */
+    .tu-card-cover::before, .tu-une-cover::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(90deg, #f4f1ec 25%, #eae6df 50%, #f4f1ec 75%);
+      background-size: 200% 100%;
+      animation: loadingSkeleton 1.6s infinite linear;
+      z-index: 1;
+      transition: opacity 0.4s ease-out;
+    }
+
+    /* SÉCURITÉ : Si le parent est marqué loaded OU s'il contient un placeholder, on cache l'effet */
+    .tu-card-cover.loaded::before, 
+    .tu-une-cover.loaded::before,
+    .tu-card-cover:has(.tu-card-placeholder)::before {
+      opacity: 0;
+      pointer-events: none;
+      animation: none; /* Stoppe complètement le calcul de l'animation */
+    }
+
+    /* Le canvas est caché au début, puis apparaît en fondu */
+    canvas.pdf-preview {
+      opacity: 0;
+      transition: opacity 0.4s ease-out, transform 0.35s ease;
+      z-index: 2;
+      position: relative;
+    }
+
+    canvas.pdf-preview.ready {
+      opacity: 1;
+    }
+
+    @keyframes loadingSkeleton {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
 
     .tu-card:hover .tu-card-cover canvas {
@@ -469,7 +524,7 @@
       </summary>
       <div class="tu-annee-content">
         <div class="tu-annee-grid">
-          <div class="tu-card"><div class="tu-card-cover"><div class="tu-card-placeholder"><svg width="28" height="28" fill="none" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°36</div><div class="tu-card-date">Novembre 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
+          <div class="tu-card"><div class="tu-card-cover"><canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 36.pdf"></canvas></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°36</div><div class="tu-card-date">Novembre 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           <a href="/assets/docs/TDU/TDU 35.pdf" target="_blank" class="card-link">
             <div class="tu-card"><div class="tu-card-cover"><canvas class="pdf-preview" data-pdf="/assets/docs/TDU/TDU 35.pdf"></canvas></div><div class="tu-card-body"><div class="tu-card-num">Trait d'Union n°35</div><div class="tu-card-date">Juillet 2023</div><div class="tu-card-btn"><svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Consulter</div></div></div>
           </a>
