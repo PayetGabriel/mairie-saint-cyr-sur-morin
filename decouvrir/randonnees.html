@@ -144,7 +144,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1;
+      z-index: 3;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       padding-bottom: 5px; /* Ajustement pour centrer visuellement le chiffre */
     }
@@ -419,9 +419,9 @@
     <!-- ── CIRCUIT N°1 ─── -->
     <div class="circuit-card reveal" data-diff="facile">
       <div class="circuit-layout">
-        <div class="circuit-preview">
+        <div class="circuit-preview pdf-preview-container">
           <div class="circuit-num-badge">1</div>
-          <img src="/assets/docs/randonnees/Rando_circuit_N1-1.png" alt="Aperçu fiche circuit N°1" />
+          <canvas class="pdf-preview" data-pdf="/assets/docs/randonnees/Rando_circuit_N1.pdf"></canvas>
         </div>
         <div class="circuit-content">
           <div class="circuit-head">
@@ -500,9 +500,9 @@
     <!-- ── CIRCUIT N°2 ─── -->
     <div class="circuit-card reveal" data-diff="sportif">
       <div class="circuit-layout">
-        <div class="circuit-preview">
+        <div class="circuit-preview pdf-preview-container">
           <div class="circuit-num-badge">2</div>
-          <img src="/assets/docs/randonnees/Rando_circuit_N2_003-1.png" alt="Aperçu fiche circuit N°2" />
+          <canvas class="pdf-preview" data-pdf="/assets/docs/randonnees/Rando_circuit_N2_003.pdf"></canvas>
         </div>
         <div class="circuit-content">
           <div class="circuit-head">
@@ -574,9 +574,9 @@
     <!-- ── CIRCUIT N°3 ─── -->
     <div class="circuit-card reveal" data-diff="facile">
       <div class="circuit-layout">
-        <div class="circuit-preview">
+        <div class="circuit-preview pdf-preview-container">
           <div class="circuit-num-badge">3</div>
-          <img src="/assets/docs/randonnees/Rando_circuit_N3www-1.png" alt="Aperçu fiche circuit N°3" />
+          <canvas class="pdf-preview" data-pdf="/assets/docs/randonnees/Rando_circuit_N3www.pdf"></canvas>
         </div>
         <div class="circuit-content">
           <div class="circuit-head">
@@ -648,9 +648,9 @@
     <!-- ── CIRCUIT N°4 ─── -->
     <div class="circuit-card reveal" data-diff="sportif">
       <div class="circuit-layout">
-        <div class="circuit-preview">
+        <div class="circuit-preview pdf-preview-container">
           <div class="circuit-num-badge">4</div>
-          <img src="/assets/docs/randonnees/Rando_circuit_N4-1.png" alt="Aperçu fiche circuit N°4" />
+          <canvas class="pdf-preview" data-pdf="/assets/docs/randonnees/Rando_circuit_N4.pdf"></canvas>
         </div>
         <div class="circuit-content">
           <div class="circuit-head">
@@ -722,9 +722,9 @@
     <!-- ── CIRCUIT N°5 ─── -->
     <div class="circuit-card reveal" data-diff="facile">
       <div class="circuit-layout">
-        <div class="circuit-preview">
+        <div class="circuit-preview pdf-preview-container">
           <div class="circuit-num-badge">5</div>
-          <img src="/assets/docs/randonnees/Boucle_des_sentes_N5-1.png" alt="Aperçu fiche circuit N°5" />
+          <canvas class="pdf-preview" data-pdf="/assets/docs/randonnees/Boucle_des_sentes_N5.pdf"></canvas>
         </div>
         <div class="circuit-content">
           <div class="circuit-head">
@@ -792,6 +792,8 @@
 
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="/js/pdf-preview.js"></script>
 <script>
   fetch('/components/footer.html')
     .then(r => r.text())

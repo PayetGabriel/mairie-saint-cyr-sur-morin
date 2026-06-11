@@ -1479,6 +1479,73 @@ img {
 .tab-pane.active { display: block; }
 
 
+/* ── SYSTÈME DE PREVIEW PDF CENTRALISÉ ── */
+.pdf-preview-container {
+  position: relative;
+  background: #f4f1ec;
+  overflow: hidden;
+  display: block;
+}
+
+/* L'animation Skeleton */
+.pdf-preview-container::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(90deg, #f4f1ec 25%, #eae6df 50%, #f4f1ec 75%);
+  background-size: 200% 100%;
+  animation: loadingSkeleton 1.6s infinite linear;
+  z-index: 1;
+  transition: opacity 0.4s ease-out;
+}
+
+/* Arrêt de l'animation */
+.pdf-preview-container.loaded::before,
+.pdf-preview-container:has(.pdf-fallback-placeholder)::before {
+  opacity: 0;
+  pointer-events: none;
+  animation: none;
+}
+
+/* Le Canvas du PDF */
+canvas.pdf-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.4s ease-out, transform 0.35s ease;
+  z-index: 2;
+  position: relative;
+}
+
+canvas.pdf-preview.ready {
+  opacity: 1;
+}
+
+/* Le Placeholder statique en cas d'erreur/absence */
+.pdf-fallback-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vert-pale);
+}
+
+.pdf-fallback-placeholder svg {
+  stroke: var(--vert);
+  opacity: 0.3;
+}
+
+@keyframes loadingSkeleton {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+
 /* ─── FOOTER ──────────────────────────────── */
 
 footer {
