@@ -22,14 +22,21 @@ module.exports = async (req, res) => {
 
     // --- DICTIONNAIRE DE TRADUCTION DES SUJETS ---
     const sujetsTraduits = {
-        'etat-civil': 'État Civil (Actes, mariages, naissance)',
-        'urbanisme': 'Urbanisme (PLU, permis de construire)',
-        'elections': 'Élections & Recensement',
+        'etat-civil': 'État Civil (Actes, mariages, naissance, passeport)',
+        'elections': 'Élections & Recensement citoyen',
+        'ccas-social': 'Action sociale & CCAS (Aides, logement)',
+        'urbanisme': 'Urbanisme (PLU, permis de construire, déclaration)',
+        'voirie-technique': 'Voirie, Propreté & Services Techniques',
+        'eau-dechets': 'Eau, Assainissement & Déchets (Syndicats)',
         'cantine': 'Cantine & Menus',
+        'transports': 'Transports scolaires & Études',
         'inscriptions': 'Inscriptions scolaires / Périscolaire',
-        'associations': 'Associations & Clubs',
-        'evenements': 'Événements & Culture',
-        'voirie': 'Voirie & Propreté',
+        'mediatheque': 'Médiathèque (Inscriptions, animations)',
+        'associations': 'Associations (Subventions, vie associative)',
+        'salle-polyvalente': 'Location de la Salle Polyvalente',
+        'evenements': 'Événements, Festivités & Culture',
+        'signalement': 'Signalement (Problème, incivilité, urgence)',
+        'site': 'Site web',
         'autre': 'Autre demande / Monsieur le Maire'
     };
 
@@ -37,7 +44,7 @@ module.exports = async (req, res) => {
     const sujetPropre = sujetsTraduits[sujet] || sujet;
 
     // --- CONFIGURATION DYNAMIQUE DU THÈME & ROUTAGE ---
-    let destinataire = 'gabrielpayet@hotmail.com, mairie.stcyrsurmorin@orange.fr'; // Mairie par défaut
+    let destinataire = 'gabrielpayet@hotmail.com, gabriel.payet@ynov.com'; // Mairie par défaut
     
     // Définition des couleurs du thème Mairie (Par défaut)
     let theme = {
@@ -48,9 +55,9 @@ module.exports = async (req, res) => {
         subText: 'Nouveau message du site internet'
     };
 
-    // Si le sujet est lié au scolaire/enfance, on bascule sur le SIVU (Destinataire + Couleurs)
-    if (['cantine', 'inscriptions'].includes(sujet)) {
-        destinataire = 'gabrielpayet250509@gmail.com'; 
+    // ROUTAGE SIVU : Si le sujet est lié au scolaire/enfance, on bascule sur le SIVU
+    if (['cantine', 'inscriptions', 'transports'].includes(sujet)) {
+        destinataire = 'gabrielpayet250509@gmail.com'; // À remplacer par le mail du SIVU à terme
         
         // On écrase les variables avec la charte SIVU Violette
         theme = {

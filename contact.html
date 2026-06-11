@@ -163,23 +163,39 @@
             <label for="sujet">Sujet <span class="required">*</span></label>
             <div class="custom-select-container">
                 <select id="sujet" name="sujet">
-                    <option value="" disabled selected>Sélectionnez l'objet de votre demande</option>
-                    <optgroup label="Administratif">
-                        <option value="etat-civil">État Civil (Actes, mariages, naissance)</option>
-                        <option value="urbanisme">Urbanisme (PLU, permis de construire)</option>
-                        <option value="elections">Élections & Recensement</option>
-                    </optgroup>
-                    <optgroup label="Scolaire & Enfance (SIVU)">
-                        <option value="cantine">Cantine & Menus</option>
-                        <option value="inscriptions">Inscriptions scolaires / Périscolaire</option>
-                    </optgroup>
-                    <optgroup label="Vie Locale">
-                        <option value="associations">Associations & Clubs</option>
-                        <option value="evenements">Événements & Culture</option>
-                        <option value="voirie">Voirie & Propreté</option>
-                    </optgroup>
-                    <option value="autre">Autre demande / Monsieur le Maire</option>
-                </select>
+                  <option value="" disabled selected>Sélectionnez l'objet de votre demande</option>
+                  
+                  <optgroup label="Administratif & Vie Pratique">
+                      <option value="etat-civil">État Civil (Actes, mariages, naissance, passeport)</option>
+                      <option value="elections">Élections & Recensement citoyen</option>
+                      <option value="ccas-social">Action sociale & CCAS (Aides, logement)</option>
+                  </optgroup>
+                  
+                  <optgroup label="Urbanisme & Cadre de vie">
+                      <option value="urbanisme">Urbanisme (PLU, permis de construire, déclaration)</option>
+                      <option value="voirie-technique">Voirie, Propreté & Services Techniques</option>
+                      <option value="eau-dechets">Eau, Assainissement & Déchets (Syndicats)</option>
+                  </optgroup>
+                  
+                  <optgroup label="Scolaire & Enfance (SIVU)">
+                      <option value="cantine">Cantine & Menus</option>
+                      <option value="transports">Transports scolaires & Études</option>
+                      <option value="inscriptions">Inscriptions scolaires / Périscolaire</option>
+                  </optgroup>
+                  
+                  <optgroup label="Culture, Associations & Loisirs">
+                      <option value="mediatheque">Médiathèque (Inscriptions, animations)</option>
+                      <option value="associations">Associations (Subventions, vie associative)</option>
+                      <option value="salle-polyvalente">Location de la Salle Polyvalente</option>
+                      <option value="evenements">Événements, Festivités & Culture</option>
+                  </optgroup>
+
+                  <optgroup label="Autre">
+                      <option value="signalement">Signalement (Problème, incivilité, urgence)</option>
+                      <option value="site">Site web</option>
+                      <option value="autre">Autre demande / Monsieur le Maire</option>
+                  </optgroup>
+              </select>
             </div>
           </div>
 
