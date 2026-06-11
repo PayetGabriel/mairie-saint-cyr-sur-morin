@@ -1347,6 +1347,7 @@ img {
 .custom-select-wrapper {
     position: relative;
     user-select: none;
+    z-index: 10;
 }
 
 .custom-select-trigger {
