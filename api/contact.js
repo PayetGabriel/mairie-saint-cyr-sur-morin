@@ -70,6 +70,10 @@ module.exports = async (req, res) => {
         };
     }
 
+    if (['site'].includes(sujet)) {
+        destinataire = 'gabrelpayet@hotmail.com, gabriel.payet@ynov.com';
+    }
+
     // Vérification des variables d'environnement avant configuration
     if (!process.env.MAIL_USER || !process.env.MAIL_PASS) {
         console.error("Configuration manquante : MAIL_USER ou MAIL_PASS est undefined");
