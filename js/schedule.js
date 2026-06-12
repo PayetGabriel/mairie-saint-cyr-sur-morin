@@ -10,25 +10,29 @@ const DATA_HORAIRES = {
             0: []                       // Dim
         },
         labels: {
-            1: "Lun: 09:00–12:30 / 14:00–17:30",
-            2: "Mar: 09:00–12:30 / 14:00–17:30",
-            3: "Mer: 08:30–12:30",
-            4: "Jeu: 09:00–12:30 / 14:00–17:30",
-            5: "Ven: 09:00–12:30",
-            6: "Sam: 08:30–12:30",
-            0: "Dimanche: Fermé"
+            1: { jour: "Lundi", heures: "09:00–12:30 / 14:00–17:30" },
+            2: { jour: "Mardi", heures: "09:00–12:30 / 14:00–17:30" },
+            3: { jour: "Mercredi", heures: "08:30–12:30" },
+            4: { jour: "Jeudi", heures: "09:00–12:30 / 14:00–17:30" },
+            5: { jour: "Vendredi", heures: "09:00–12:30" },
+            6: { jour: "Samedi", heures: "08:30–12:30" },
+            0: { jour: "Dimanche", heures: "Fermé" }
         }
     },
     urbanisme: {
         config: {
             2: [[9, 12]], // Mar
             5: [[9, 12]], // Ven
-            0: [], 1: [], 3: [], 4: [], 6: [] 
+            1: [], 3: [], 4: [], 6: [], 0: []
         },
         labels: {
-            2: "Mardi: 09:00–12:00",
-            5: "Vendredi: 09:00–12:00",
-            0: "Fermé (Autres jours sur RDV)"
+            1: { jour: "Lundi", heures: "Fermé (Sur RDV)" },
+            2: { jour: "Mardi", heures: "09:00–12:00" },
+            3: { jour: "Mercredi", heures: "Fermé (Sur RDV)" },
+            4: { jour: "Jeudi", heures: "Fermé (Sur RDV)" },
+            5: { jour: "Vendredi", heures: "09:00–12:00" },
+            6: { jour: "Samedi", heures: "Fermé" },
+            0: { jour: "Dimanche", heures: "Fermé" }
         }
     }
 };
@@ -42,31 +46,64 @@ function updateStatus(containerId, serviceKey) {
     const currentTime = now.getHours() + now.getMinutes() / 60;
     
     const service = DATA_HORAIRES[serviceKey];
+    if (!service) return;
     
-    // 1. Mise à jour du texte "Aujourd'hui" (recherche par ID ou par classe)
+    // 1. Mise à jour du texte résumé "Aujourd'hui"
     const todayText = container.querySelector('#today-text') || container.querySelector('.today-text');
     if (todayText) {
-        const label = service.labels[day] || service.labels[0];
-        todayText.innerHTML = `<strong>Aujourd'hui :</strong> ${label}`;
+        const currentLabel = service.labels[day];
+        todayText.innerHTML = `<strong>Aujourd'hui :</strong> ${currentLabel.jour} (${currentLabel.heures})`;
     }
 
-    // 2. Calcul d'ouverture
+    // 1.5 GÉNÉRATION DYNAMIQUE DE LA LISTE DES HORAIRES
+    const scheduleList = container.querySelector('.schedule-list');
+    if (scheduleList) {
+        scheduleList.innerHTML = ''; // On vide l'ancienne liste au cas où
+        
+        // On boucle du Lundi (1) au Dimanche (0) pour afficher la semaine dans l'ordre logique
+        const ordreJours = [1, 2, 3, 4, 5, 6, 0];
+        
+        ordreJours.forEach(d => {
+            const labelData = service.labels[d];
+            const li = document.createElement('li');
+            li.setAttribute('data-day', d);
+            li.innerHTML = `<span>${labelData.jour}</span> <strong>${labelData.heures}</strong>`;
+            
+            // Surlignage si c'est le jour actuel
+            if (d === day) {
+                li.classList.add('is-today');
+            }
+            
+            scheduleList.appendChild(li);
+        });
+    }
+
+    // 2. Calcul d'ouverture réelle
     let isOpen = false;
     const intervals = service.config[day] || [];
     intervals.forEach(range => {
         if (currentTime >= range[0] && currentTime < range[1]) isOpen = true;
     });
 
-    // 3. Mise à jour du badge
+    // 3. Mise à jour du badge d'état
     const badge = container.querySelector('.status-badge');
     if (badge) {
         badge.textContent = isOpen ? "Ouvert" : "Fermé";
         badge.className = `status-badge ${isOpen ? 'open' : 'closed'}`;
     }
-
-    // 4. Surlignage de la liste
-    const listItems = container.querySelectorAll('.schedule-list li');
-    listItems.forEach(li => {
-        if(parseInt(li.getAttribute('data-day')) === day) li.classList.add('is-today');
-    });
 }
+
+// Fonction globale d'ouverture/fermeture du dropdown
+function toggleSchedule() {
+    const dropdown = document.getElementById('scheduleDropdown');
+    if (dropdown) dropdown.classList.toggle('open');
+}
+
+// Ce bloc s'exécute tout seul sur toutes les pages qui importent schedule.js
+document.addEventListener('DOMContentLoaded', () => {
+    const dropdown = document.getElementById('scheduleDropdown');
+    if (dropdown) {
+        const service = dropdown.getAttribute('data-service') || 'mairie';
+        updateStatus('scheduleDropdown', service);
+    }
+});

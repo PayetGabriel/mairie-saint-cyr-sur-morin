@@ -473,6 +473,31 @@
 <!-- ─── MOT DU MAIRE ─── -->
 <section class="section maire-section" id="mot-du-maire">
   <div class="section-inner">
+    <!-- Alert Box pour horaires -->
+    <div class="info-bar-container reveal">
+      <div class="schedule-dropdown" id="scheduleDropdown" data-service="mairie">
+        
+        <div class="dropdown-trigger" onclick="toggleSchedule()">
+          <div class="info-item">
+            <svg width="20" height="20" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+            <span id="today-text">Chargement des horaires...</span>
+          </div>
+          
+          <div class="trigger-actions">
+            <span class="status-badge">...</span>
+            <svg class="arrow-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="dropdown-content">
+          <ul class="schedule-list"></ul>
+        </div>
+      </div>
+    </div>
 
     <div class="maire-layout">
 
@@ -768,6 +793,7 @@
 
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="/js/schedule.js"></script>
 <script>
   fetch('/components/footer.html')
     .then(r => r.text())
