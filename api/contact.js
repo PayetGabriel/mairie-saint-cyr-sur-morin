@@ -71,7 +71,7 @@ module.exports = async (req, res) => {
     }
 
     if (['site'].includes(sujet)) {
-        destinataire = 'gabrelpayet@hotmail.com, gabriel.payet@ynov.com';
+        destinataire = 'gabrielpayet@hotmail.com, gabriel.payet@ynov.com';
     }
 
     // Vérification des variables d'environnement avant configuration
