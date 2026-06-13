@@ -113,6 +113,17 @@
     }
 
     .arrete-pdf svg { stroke: var(--vert); }
+
+    @media (max-width: 576px) {
+      .arrete-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.8rem;
+      }
+      .arrete-pdf {
+        align-self: flex-end; /* Aligne le bouton à droite en bas sur mobile */
+      }
+    }
   </style>
 </head>
 <body>
@@ -164,6 +175,43 @@
       </a>
     </div>
     -->
+
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+
+    <div class="section-label reveal" style="margin-bottom: 0.75rem;">En vigueur</div>
+    <h2 class="section-title reveal" style="margin-bottom: 2rem;">Arrêtés actuels</h2>
+
+    <div class="reveal" style="display: flex; flex-direction: column; gap: 0.75rem;">
+      
+      <a href="/assets/docs/arretes/arrete-2026-001.pdf" target="_blank" class="arrete-card">
+        <div class="arrete-num">2026-001</div>
+        <div class="arrete-info">
+          <div class="arrete-title">Arrêté portant réglementation de la circulation rue Eugène Daumont</div>
+          <div class="arrete-date">Pris le 15 janvier 2026 — En vigueur jusqu'au 30 mars 2026</div>
+        </div>
+        <div class="arrete-pdf">
+          <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Consulter
+        </div>
+      </a>
+
+      <a href="/assets/docs/arretes/arrete-2026-002.pdf" target="_blank" class="arrete-card">
+        <div class="arrete-num">2026-002</div>
+        <div class="arrete-info">
+          <div class="arrete-title">Interdiction temporaire de stationnement — Place de la Mairie (Marché de nuit)</div>
+          <div class="arrete-date">Pris le 5 juin 2026 — En vigueur le 19 juin 2026</div>
+        </div>
+        <div class="arrete-pdf">
+          <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Consulter
+        </div>
+      </a>
+
+    </div>
 
   </div>
 </section>
