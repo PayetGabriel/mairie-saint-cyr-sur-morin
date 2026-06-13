@@ -148,7 +148,24 @@
       text-align: center;  /* Aligne le texte au centre pour suivre la photo */
     }
 
-    /* Glossaire */
+    /* ── BANNIÈRE PHOTO DE GROUPE ── */
+    .elu-group-banner {
+      display: flex;
+      justify-content: center; /* Centre l'image si elle ne fait pas toute la largeur */
+      width: 100%;
+    }
+
+    .elu-group-banner img {
+      width: 100%;
+      max-width: 800px; /* Aligne cette valeur sur la largeur de tes blocs de texte (ex: 800px, 1000px...) */
+      height: auto; /* Conserve le ratio de l'image */
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(200,191,176,0.3);
+      box-shadow: 0 4px 20px rgba(42,37,32,0.04);
+    }
+
+    /* ── GLOSSAIRE ───────────────────────────── */
     .glossaire {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -464,6 +481,10 @@
 
       <div class="info-note reveal" style="margin-bottom: 2rem;">
         <strong>Mandature 2026–2032</strong> — Suite aux élections municipales de mars 2026. Les délégations en italique concernent les mandats à la Communauté de Communes des 2 Morin (CC2M).
+      </div>
+
+      <div class="elu-group-banner reveal">
+        <img src="/assets/img/conseil/Conseil Municipal.png" alt="Photo de groupe du Conseil Municipal de Saint-Cyr-sur-Morin">
       </div>
 
       <div class="elus-section-head reveal">Maire</div>
