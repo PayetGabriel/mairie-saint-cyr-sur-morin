@@ -40,6 +40,23 @@
       line-height: 1.7;
     }
 
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease; /* Transition pour le bouton lui-même */
+    }
+
+    .btn-outline svg {
+      display: block; /* Enlève les espaces résiduels sous le SVG */
+      transition: transform 0.2s ease-in-out; /* LA clé pour la fluidité */
+    }
+
+    .btn-outline:hover svg {
+      transform: translateX(3px); /* Seul le chevron bouge au survol */
+    }
+
     /* Arrêté card (à activer quand il y en a) */
     .arrete-card {
       background: var(--blanc);
@@ -96,23 +113,6 @@
     }
 
     .arrete-pdf svg { stroke: var(--vert); }
-
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: all 0.3s ease; /* Transition pour le bouton lui-même */
-    }
-
-    .btn-outline svg {
-      display: block; /* Enlève les espaces résiduels sous le SVG */
-      transition: transform 0.2s ease-in-out; /* LA clé pour la fluidité */
-    }
-
-    .btn-outline:hover svg {
-      transform: translateX(3px); /* Seul le chevron bouge au survol */
-    }
   </style>
 </head>
 <body>
