@@ -560,7 +560,7 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   transition: transform 0.2s ease-in-out; /* Fluidité parfaite du chevron */
 }
 
-.btn-primary:hover svg {
+.btn-primary:hover svg.icon-arrow {
   transform: translateX(3px); /* Seul le chevron glisse sans faire bouger le bloc */
 }
 

@@ -51,10 +51,11 @@
     .btn-outline svg {
       display: block; /* Enlève les espaces résiduels sous le SVG */
       transition: transform 0.2s ease-in-out; /* LA clé pour la fluidité */
+      transform: translateY(0.25px);
     }
 
     .btn-outline:hover svg {
-      transform: translateX(3px); /* Seul le chevron bouge au survol */
+      transform: translateX(3px) translateY(0.25px); /* Seul le chevron bouge au survol */
     }
 
     /* Arrêté card (à activer quand il y en a) */
