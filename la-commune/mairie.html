@@ -457,6 +457,335 @@
         /* On décale un tout petit peu moins pour que la rupture de couleur crème s'aligne pile sous la nav */
         scroll-margin-top: 68px; 
     }
+
+    /* ── COMMUNAUTÉ DE COMMUNES ──────────────── */
+
+    .cc2m-section {
+      background: var(--creme);
+    }
+
+    .cc2m-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .cc2m-header img {
+      height: 56px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .cc2m-header-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.3rem;
+    }
+
+    .cc2m-header-text p {
+      font-size: 0.88rem;
+      color: var(--gris);
+    }
+
+    /* Fiche identité CC2M */
+    .cc2m-fiche {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .cc2m-fiche-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .cc2m-fiche-card h4 {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 700;
+      color: var(--vert);
+      margin-bottom: 0.75rem;
+    }
+
+    .cc2m-fiche-card p,
+    .cc2m-fiche-card a {
+      font-size: 0.9rem;
+      color: var(--texte);
+      line-height: 1.7;
+      text-decoration: none;
+    }
+
+    .cc2m-fiche-card a {
+      color: var(--vert);
+      font-weight: 500;
+    }
+
+    .cc2m-fiche-card a:hover { text-decoration: underline; }
+
+    /* Ajustements pour la fiche à 3 cartes */
+    @media (min-width: 901px) {
+      .cc2m-fiche {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .cc2m-elus-intro {
+      font-size: 0.82rem !important;
+      color: var(--gris);
+      margin-bottom: 0.75rem;
+    }
+
+    .cc2m-elus-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .cc2m-elus-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.88rem;
+      color: var(--texte);
+    }
+
+    .cc2m-elus-list svg {
+      stroke: var(--vert);
+      flex-shrink: 0;
+    }
+
+    .cc2m-stat-row {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .cc2m-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cc2m-stat-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem 1rem; /* Espace vertical et horizontal */
+        margin-top: 0.5rem;
+    }
+
+    .cc2m-stat strong {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--vert);
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+
+    .cc2m-stat span {
+      font-size: 0.78rem;
+      color: var(--gris);
+    }
+
+    /* Contexte fusion */
+    .cc2m-context {
+      background: var(--blanc);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      font-size: 0.88rem;
+      color: var(--texte);
+      line-height: 1.7;
+      border-left: 3px solid var(--vert);
+      margin-bottom: 3rem;
+    }
+
+    /* Grille compétences */
+    .competences-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .competence-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 14px;
+      padding: 1.4rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: all 0.2s;
+    }
+
+    .competence-card:hover {
+      border-color: var(--vert);
+      box-shadow: 0 4px 16px rgba(58,90,64,0.08);
+    }
+
+    .competence-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .competence-icon svg { stroke: var(--vert); }
+
+    .competence-card strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.3rem;
+    }
+
+    .competence-card p {
+      font-size: 0.8rem;
+      color: var(--gris);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .competence-card p a {
+      color: var(--vert);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .competence-card.a-venir {
+      border-style: dashed;
+      opacity: 0.7;
+    }
+
+    .competence-card.a-venir .competence-icon {
+      background: var(--creme);
+    }
+
+    .competence-card.a-venir .competence-icon svg {
+      stroke: var(--pierre-dark);
+    }
+
+    .badge-avenir {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--pierre-dark);
+      background: var(--creme);
+      border: 1px solid rgba(200,191,176,0.5);
+      border-radius: 4px;
+      padding: 0.15rem 0.5rem;
+      margin-bottom: 0.3rem;
+    }
+
+    /* Gendarmeries */
+    .gendarmeries-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .gendarmerie-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.4);
+      border-radius: 12px;
+      padding: 1.1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .gendarmerie-card svg { stroke: var(--vert); flex-shrink: 0; }
+
+    .gendarmerie-card strong {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.15rem;
+    }
+
+    .gendarmerie-card p {
+      font-size: 0.8rem;
+      color: var(--gris);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .gendarmerie-card a {
+      color: var(--vert);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+
+    /* ── RESPONSIVE ──────────────────────────── */
+
+    @media (max-width: 900px) {
+      .maire-layout {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .maire-portrait {
+        position: static;
+        display: grid;
+        grid-template-columns: 160px 1fr;
+        gap: 1.5rem;
+        align-items: center;
+      }
+      .maire-photo-wrap { grid-row: span 1; }
+      .cc2m-fiche { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .maire-portrait {
+        grid-template-columns: 1fr;
+      }
+      .maire-photo-wrap img { aspect-ratio: 1/1; }
+      .cc2m-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      .gendarmeries-row { grid-template-columns: 1fr; }
+      .competences-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── AJUSTEMENT DU DEFILEMENT DES ANCRES ── */
+
+    #mot-du-maire {
+        /* On décale de la hauteur de la nav (68px) + un bonus pour laisser respirer le titre */
+        scroll-margin-top: 68px; 
+    }
+
+    #communaute-de-communes {
+        /* On décale un tout petit peu moins pour que la rupture de couleur crème s'aligne pile sous la nav */
+        scroll-margin-top: 68px; 
+    }
+
+    /* Titres des sous-groupes de compétences */
+    .cc2m-comp-group-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      font-weight: 700;
+      color: var(--gris);
+      margin-bottom: 1rem;
+      padding-bottom: 0.25rem;
+      border-bottom: 1px solid rgba(200,191,176,0.3);
+    }
   </style>
 </head>
 <body>
@@ -571,7 +900,7 @@
       </div>
     </div>
 
-    <!-- Chiffres & contacts -->
+    <!-- Chiffres, contacts & Représentants -->
     <div class="cc2m-fiche reveal">
       <div class="cc2m-fiche-card">
         <h4>La CC2M en chiffres</h4>
@@ -593,7 +922,8 @@
                 <span>territoire rural</span>
             </div>
         </div>
-        </div>
+      </div>
+      
       <div class="cc2m-fiche-card">
         <h4>Contact & accès</h4>
         <p>
@@ -604,6 +934,26 @@
           <a href="https://www.cc2morin.fr" target="_blank" rel="noopener">www.cc2morin.fr</a>
         </p>
       </div>
+
+      <!-- Nouvelle carte : Conseillers communautaires de Saint-Cyr -->
+      <div class="cc2m-fiche-card">
+        <h4>Vos élus au Conseil Communautaire</h4>
+        <p class="cc2m-elus-intro">3 conseillers de Saint-Cyr-sur-Morin siègent et vous représentent au sein de l'intercommunalité :</p>
+        <ul class="cc2m-elus-list">
+          <li>
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <strong>Francis DELARUE</strong>
+          </li>
+          <li>
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <strong>Stéphanie MONTICO</strong>
+          </li>
+          <li>
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <strong>Pierre ALLARD</strong>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <!-- Contexte fusion -->
@@ -611,172 +961,155 @@
       Depuis le <strong>1er janvier 2017</strong>, la Communauté de Communes la Brie des Morin (21 communes) a fusionné avec la Communauté de Communes Cœur de Brie (10 communes) pour former la Communauté de Communes des 2 Morin.
     </div>
 
-    <!-- Compétences -->
+    <!-- Section Compétences avec sous-groupes -->
     <div class="reveal">
       <div class="section-label" style="margin-bottom: 0.75rem;">Compétences</div>
-     <h3 style="font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; color: var(--texte); margin-bottom: 1.75rem;">Ses responsabilités sur votre territoire</h3>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; color: var(--texte); margin-bottom: 2.5rem;">Ses responsabilités sur votre territoire</h3>
     </div>
 
-    <div class="competences-grid">
-
-      <div class="competence-card reveal">
-        <div class="competence-icon">
-          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
+    <!-- 1. COMPÉTENCES OBLIGATOIRES -->
+    <div class="cc2m-comp-group reveal">
+      <h4 class="cc2m-comp-group-title">Compétences obligatoires</h4>
+      <div class="competences-grid">
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/></svg></div>
+          <div>
+            <strong>Aménagement de l'espace</strong>
+            <p>Planification globale, schémas de cohérence et structuration du territoire des deux Morin.</p>
+          </div>
         </div>
-        <div>
-          <strong>Assainissement non collectif</strong>
-          <p>En cas de non-conformité lors d'une vente, l'acquéreur dispose d'un an pour se mettre aux normes. Suivi par le SIANE — <a href="tel:0164045245">01 64 04 52 45</a>.</p>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div>
+            <strong>Développement économique & finances</strong>
+            <p>Soutien aux entreprises et projets économiques locaux, gestion financière intercommunale.</p>
+          </div>
         </div>
-      </div>
-
-      <div class="competence-card reveal">
-        <div class="competence-icon">
-          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-            <polyline points="3 6 5 6 21 6"/>
-            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-            <path d="M10 11v6M14 11v6"/>
-            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-          </svg>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+          <div>
+            <strong>Gens du voyage</strong>
+            <p>Aménagement, entretien et gestion des aires d’accueil réglementaires sur l'intercommunalité.</p>
+          </div>
         </div>
-        <div>
-          <strong>Ordures ménagères & encombrants</strong>
-          <p>Collecte et gestion des déchets, tri sélectif sur l'ensemble du territoire. Voir la <a href="/vie-pratique/dechets.html">rubrique déchets</a>.</p>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></div>
+          <div>
+            <strong>Ordures ménagères & encombrants</strong>
+            <p>Collecte et traitement des déchets, tri sélectif sur l'ensemble du territoire. Voir la <a href="/vie-pratique/dechets.html">rubrique déchets</a>.</p>
+          </div>
         </div>
-      </div>
-
-      <div class="competence-card reveal">
-        <div class="competence-icon">
-          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-            <line x1="12" y1="1" x2="12" y2="23"/>
-            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-          </svg>
-        </div>
-        <div>
-          <strong>Développement économique & finances</strong>
-          <p>Soutien aux entreprises et projets économiques locaux, gestion financière intercommunale.</p>
-        </div>
-      </div>
-
-      <div class="competence-card reveal">
-        <div class="competence-icon">
-          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-          </svg>
-        </div>
-        <div>
-          <strong>Tourisme</strong>
-          <p>Promotion et développement touristique de la Vallée des deux Morin.</p>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div>
+            <strong>Milieux aquatiques (GEMAPI)</strong>
+            <p>Gestion des milieux aquatiques et prévention des inondations sur les cours d'eau du secteur.</p>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="competence-card reveal">
-        <div class="competence-icon">
-          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-            <rect x="1" y="3" width="15" height="13" rx="2"/>
-            <path d="M16 8h4l3 3v5h-7V8z"/>
-            <circle cx="5.5" cy="18.5" r="2.5"/>
-            <circle cx="18.5" cy="18.5" r="2.5"/>
-          </svg>
+    <!-- 2. COMPÉTENCES OPTIONNELLES -->
+    <div class="cc2m-comp-group reveal" style="margin-top: 2.5rem;">
+      <h4 class="cc2m-comp-group-title">Compétences optionnelles</h4>
+      <div class="competences-grid">
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 17l4-8 4 4 3-6 4 10"/><path d="M3 17h18"/></svg></div>
+          <div>
+            <strong>Environnement</strong>
+            <p>Protection et mise en valeur de l’environnement et des espaces naturels communs.</p>
+          </div>
         </div>
-        <div>
-          <strong>Transports</strong>
-          <p>TAD (transport à la demande) pour la santé, démarches, emploi, achats et loisirs. Tarif unique 2 €. Rens. <a href="tel:0800066066">0800 066 066</a>. Transport scolaire : voir <a href="/enfance-loisirs/ecoles/transports.html">la page dédiée</a>.</p>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+          <div>
+            <strong>Jeunesse, Sport & Culture</strong>
+            <p>Construction, entretien et fonctionnement d’équipements culturels et sportifs d’intérêt communautaire, réseau Biblio' 2 Morin.</p>
+          </div>
+        </div>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+          <div>
+            <strong>Action sociale d'intérêt communautaire</strong>
+            <p>Petite enfance, RAM, séniors, handicap, santé, LAEP, Halte-Garderie. Familles Rurales à Saint-Cyr : <a href="tel:0160238195">01 60 23 81 95</a>.</p>
+          </div>
+        </div>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 19h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/></svg></div>
+          <div>
+            <strong>Voirie communautaire</strong>
+            <p>Création, aménagement et entretien des voies définies d'intérêt communautaire.</p>
+          </div>
+        </div>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div>
+          <div>
+            <strong>Maisons de services au public</strong>
+            <p>Création et gestion des espaces de services de proximité et d'accompagnement des citoyens.</p>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="competence-card reveal">
-        <div class="competence-icon">
-          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
+    <!-- 3. COMPÉTENCES FACULTATIVES -->
+    <div class="cc2m-comp-group reveal" style="margin-top: 2.5rem;">
+      <h4 class="cc2m-comp-group-title">Compétences facultatives</h4>
+      <div class="competences-grid">
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+          <div>
+            <strong>Transports</strong>
+            <p>TAD (transport à la demande) pour la santé, l'emploi et les loisirs à 2 €. Tél : <a href="tel:0800066066">0800 066 066</a>. Scolaire : voir <a href="/enfance-loisirs/ecoles/transports.html">la page dédiée</a>.</p>
+          </div>
         </div>
-        <div>
-          <strong>Service à la personne</strong>
-          <p>Petite enfance, RAM (Relais Assistantes Maternelles), séniors, handicap, santé, LAEP, Halte-Garderie. Familles Rurales à Saint-Cyr : <a href="tel:0160238195">01 60 23 81 95</a>.</p>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          <div>
+            <strong>Aménagement numérique & Santé</strong>
+            <p>Déploiement du très haut débit et actions de santé d’intérêt communautaire pour les usagers.</p>
+          </div>
+        </div>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div>
+          <div>
+            <strong>Défense incendie & Sage</strong>
+            <p>Gestion de la défense extérieure contre les incendies (DECI) et mise en œuvre du SAGE des 2 Morin.</p>
+          </div>
+        </div>
+        <div class="competence-card">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div>
+            <strong>Assainissement non collectif</strong>
+            <p>Suivi de la conformité des installations autonomes par le SIANE — <a href="tel:0164045245">01 64 04 52 45</a>.</p>
+          </div>
+        </div>
+        <div class="competence-card a-venir">
+          <div class="competence-icon"><svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8v4l3 3"/></svg></div>
+          <div>
+            <div class="badge-avenir">À venir</div>
+            <strong>Eau potable & ALSH</strong>
+            <p>Prises de compétences prévues pour l'assainissement collectif et l'Accueil de Loisirs Sans Hébergement.</p>
+          </div>
         </div>
       </div>
-
-      <div class="competence-card reveal">
-        <div class="competence-icon">
-          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
-        </div>
-        <div>
-          <strong>Jeunesse, Sport & Culture</strong>
-          <p>Animation du territoire, soutien aux équipements sportifs et culturels, réseau des médiathèques Biblio' 2 Morin.</p>
-        </div>
-      </div>
-
-      <div class="competence-card reveal">
-        <div class="competence-icon">
-          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M3 17l4-8 4 4 3-6 4 10"/>
-            <path d="M3 17h18"/>
-          </svg>
-        </div>
-        <div>
-          <strong>Environnement & aménagement</strong>
-          <p>Préservation des espaces naturels, aménagement du territoire intercommunal.</p>
-        </div>
-      </div>
-
-      <div class="competence-card a-venir reveal">
-        <div class="competence-icon">
-          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            <path d="M12 8v4l3 3"/>
-          </svg>
-        </div>
-        <div>
-          <div class="badge-avenir">À venir</div>
-          <strong>Eau & Assainissement</strong>
-          <p>Reprise de la compétence eau potable et assainissement collectif prévue.</p>
-        </div>
-      </div>
-
-      <div class="competence-card a-venir reveal">
-        <div class="competence-icon">
-          <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-          </svg>
-        </div>
-        <div>
-          <div class="badge-avenir">À venir</div>
-          <strong>ALSH</strong>
-          <p>Accueil de Loisirs Sans Hébergement — reprise de compétence prévue.</p>
-        </div>
-      </div>
-
     </div>
 
     <!-- Gendarmeries -->
     <div class="reveal">
-      <div class="section-label" style="margin-top: 3rem; margin-bottom: 0.75rem;">Sécurité</div>
+      <div class="section-label" style="margin-top: 3.5rem; margin-bottom: 0.75rem;">Sécurité</div>
       <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--texte); margin-bottom: 1.25rem;">Gendarmeries du secteur</h3>
     </div>
 
     <div class="gendarmeries-row reveal">
       <div class="gendarmerie-card">
-        <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
+        <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <div>
           <strong>Gendarmerie de La Ferté-Gaucher</strong>
           <p>21, rue du Docteur Cochot<br><a href="tel:0164040009">01 64 04 00 09</a></p>
         </div>
       </div>
       <div class="gendarmerie-card">
-        <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
+        <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         <div>
           <strong>Gendarmerie de Rebais</strong>
           <p>Avenue Jean de la Fontaine<br><a href="tel:0164758210">01 64 75 82 10</a></p>

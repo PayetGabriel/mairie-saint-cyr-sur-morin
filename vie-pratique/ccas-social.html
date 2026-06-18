@@ -14,24 +14,102 @@
   <link rel="stylesheet" href="/css/sivu.css" />
 
   <style>
+    /* ── BLOC D'IDENTITÉ CCAS ────────────────── */
+    .ccas-hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      align-items: start;
+    }
+
+    .ccas-presentation p {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--texte);
+      margin-bottom: 1.25rem;
+    }
+
+    .ccas-meta-card {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.45);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(58,90,64,0.02);
+    }
+
+    .ccas-meta-card h3 {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      color: var(--vert);
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(200,191,176,0.3);
+    }
+
+    .ccas-meta-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .ccas-meta-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .ccas-meta-item svg {
+      stroke: var(--vert);
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+    }
+
+    .ccas-meta-content strong {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--texte);
+      margin-bottom: 0.15rem;
+    }
+
+    .ccas-meta-content p {
+      font-size: 0.8rem;
+      color: var(--gris);
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .ccas-meta-content a {
+      color: var(--vert);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .ccas-meta-content a:hover { text-decoration: underline; }
 
     /* ── DOMAINES CCAS ───────────────────────── */
-
     .domaines-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      margin: 2rem 0;
+      gap: 1.25rem;
+      margin: 3rem 0;
     }
 
     .domaine-card {
       background: var(--blanc);
       border: 1px solid rgba(200,191,176,0.4);
       border-radius: 14px;
-      padding: 1.5rem;
+      padding: 1.6rem;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 0.85rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .domaine-card:hover {
+      border-color: var(--vert);
     }
 
     .domaine-icon {
@@ -48,7 +126,7 @@
 
     .domaine-card h4 {
       font-family: 'Playfair Display', serif;
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: var(--texte);
       line-height: 1.3;
@@ -62,75 +140,41 @@
     }
 
     /* ── ACTIVITÉS PROPOSÉES ─────────────────── */
+    .activites-container {
+      background: var(--blanc);
+      border: 1px solid rgba(200,191,176,0.35);
+      border-radius: 14px;
+      padding: 1.75rem;
+      margin-bottom: 4rem;
+    }
 
     .activites-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.85rem;
+      margin-top: 1.25rem;
     }
 
     .activite-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.4rem 0.85rem;
-      background: var(--vert-pale);
-      border-radius: 100px;
-      font-size: 0.8rem;
-      color: var(--vert);
-      font-weight: 500;
-    }
-
-    .activite-pill svg { stroke: var(--vert); }
-
-    /* ── POINTS D'ACCÈS ──────────────────────── */
-
-    .acces-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1.5rem;
-    }
-
-    .acces-point {
-      background: var(--creme);
-      border-radius: 12px;
-      padding: 1.25rem;
       display: flex;
-      gap: 0.9rem;
-      align-items: flex-start;
-    }
-
-    .acces-point svg { stroke: var(--vert); flex-shrink: 0; margin-top: 0.1rem; }
-
-    .acces-point strong {
-      display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.6rem 1rem;
+      background: var(--creme);
+      border: 1px solid rgba(200,191,176,0.25);
+      border-radius: 10px;
+      font-size: 0.82rem;
       color: var(--texte);
-      margin-bottom: 0.3rem;
-    }
-
-    .acces-point p {
-      font-size: 0.8rem;
-      color: var(--gris);
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    .acces-point a {
-      color: var(--vert);
-      text-decoration: none;
       font-weight: 500;
     }
+
+    .activite-pill svg { stroke: var(--vert); flex-shrink: 0; }
 
     /* ── HABITAT ET HUMANISME ────────────────── */
-
     .hh-layout {
       display: grid;
-      grid-template-columns: 1fr 280px;
-      gap: 2.5rem;
+      grid-template-columns: 1fr 300px;
+      gap: 3rem;
       align-items: start;
     }
 
@@ -138,18 +182,18 @@
       font-size: 0.93rem;
       line-height: 1.85;
       color: var(--texte);
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
     }
 
     .hh-benevoles {
       background: var(--vert-pale);
-      border-radius: 14px;
-      padding: 1.5rem;
+      border-radius: 16px;
+      padding: 1.75rem;
     }
 
     .hh-benevoles h4 {
       font-family: 'Playfair Display', serif;
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 600;
       color: var(--vert);
       margin-bottom: 1rem;
@@ -161,7 +205,7 @@
       margin: 0 0 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
     .hh-benevoles li {
@@ -185,73 +229,132 @@
 
     .hh-contact {
       border-top: 1px solid rgba(58,90,64,0.15);
-      padding-top: 1rem;
+      padding-top: 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
 
     .hh-contact a {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
       font-size: 0.82rem;
       color: var(--vert);
       text-decoration: none;
       font-weight: 500;
     }
 
-    .hh-contact a svg { stroke: var(--vert); }
+    .hh-contact a:hover { text-decoration: underline; }
+    .hh-contact a svg { stroke: var(--vert); flex-shrink: 0; }
 
-    /* ── AUTRES SERVICES ─────────────────────── */
-
-    .services-list {
+    /* ── GRILLE DES SERVICES INSTITUTIONNELS ── */
+    .services-master-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+      margin-top: 2rem;
     }
 
-    .service-item {
+    .service-panel {
       background: var(--blanc);
       border: 1px solid rgba(200,191,176,0.4);
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
+      border-radius: 14px;
+      padding: 1.6rem;
+      display: flex;
+      gap: 1.1rem;
+      align-items: flex-start;
+    }
+
+    .service-panel-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--creme);
       display: flex;
       align-items: center;
-      gap: 1rem;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(200,191,176,0.3);
     }
 
-    .service-item svg { stroke: var(--vert); flex-shrink: 0; }
+    .service-panel-icon svg { stroke: var(--vert); }
 
-    .service-item strong {
+    .service-panel-content {
+      flex: 1;
+    }
+
+    .service-panel-content strong {
       display: block;
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       font-weight: 600;
       color: var(--texte);
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.35rem;
     }
 
-    .service-item p {
-      font-size: 0.8rem;
+    .service-panel-content .service-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: var(--vert);
+      margin-bottom: 0.6rem;
+    }
+
+    .service-panel-content p {
+      font-size: 0.82rem;
       color: var(--gris);
-      margin: 0;
+      margin: 0 0 0.75rem 0;
+      line-height: 1.6;
+    }
+
+    .service-meta-subblock {
+      background: var(--creme);
+      border-radius: 8px;
+      padding: 0.6rem 0.85rem;
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--texte);
       line-height: 1.5;
     }
 
-    .service-item a {
-      color: var(--vert);
+    .service-meta-subblock span {
+      display: block;
       font-weight: 500;
+      color: var(--vert);
+      margin-bottom: 0.15rem;
+    }
+
+    .service-panel-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .service-panel-links a {
+      color: var(--vert);
       text-decoration: none;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
-    @media (max-width: 860px) {
-      .hh-layout { grid-template-columns: 1fr; }
-      .domaines-grid { grid-template-columns: 1fr; }
+    .service-panel-links a:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ──────────────────────────── */
+    @media (max-width: 960px) {
+      .ccas-hero-grid { grid-template-columns: 1fr; gap: 1.5rem; }
+      .hh-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .services-master-grid { grid-template-columns: 1fr; }
     }
 
-    @media (max-width: 600px) {
-      .acces-grid { grid-template-columns: 1fr; }
-      .services-list { grid-template-columns: 1fr; }
+    @media (max-width: 768px) {
+      .domaines-grid { grid-template-columns: 1fr; gap: 1rem; }
+      .activites-list { grid-template-columns: 1fr; gap: 0.6rem; }
     }
   </style>
 </head>
@@ -264,102 +367,103 @@
   </div>
 </header>
 
-<section class="section">
+<!-- SECTIONS CCAS MUNICIPAL -->
+<section class="section" style="background: var(--creme);">
   <div class="section-inner reveal">
 
-    <!-- CCAS -->
-    <div class="section-label" style="margin-bottom: 0.75rem;">Action sociale</div>
-    <h2 class="section-title" style="margin-bottom: 1rem;">Centre Communal d'Action Sociale</h2>
+    <div class="section-label" style="margin-bottom: 0.75rem;">Action sociale locale</div>
+    <h2 class="section-title" style="margin-bottom: 2rem;">Centre Communal d'Action Sociale (CCAS)</h2>
 
-    <div class="content-grid reveal" style="margin-bottom: 2rem;">
-      <div class="content-block">
-        <p>Le Centre Communal d'Action Sociale (CCAS) est là pour vous aider et vous accompagner ponctuellement en cas de difficultés. Il est composé de <strong>6 élus et 6 bénévoles</strong>, sous la présidence du Maire, et dispose de son propre règlement intérieur.</p>
-        <p>Le Centre Social est à la disposition de chacun, quel que soit son âge. Il bénéficie d'une subvention de la mairie et de quelques dons.</p>
+    <!-- Présentation globale & carte fonctionnelle alternative -->
+    <div class="ccas-hero-grid reveal">
+      <div class="ccas-presentation">
+        <p>Le Centre Communal d'Action Sociale (CCAS) est un établissement public de proximité, ancré au cœur de notre commune pour soutenir, conseiller et orienter ponctuellement les habitants confrontés à des difficultés passagères ou durables. Sa structure humaine associe l'ancrage démocratique local à l'engagement citoyen direct des habitants.</p>
+        <p>Le CCAS est structurellement et humainement à la disposition absolue de chaque administré de Saint-Cyr-sur-Morin, quel que soit son âge ou sa situation personnelle. Pour accomplir ses missions de solidarité, son fonctionnement autonome est rendu possible par une subvention annuelle versée par la Mairie, complétée par la générosité publique via des dons privés.</p>
       </div>
-      <div class="info-note" style="align-self: start;">
-        <strong>Contact</strong> — Pour toute demande, prenez contact avec la mairie au <a href="tel:0160238024" style="color: var(--vert); font-weight: 600;">01 60 23 80 24</a> qui vous orientera vers le bon interlocuteur du CCAS.
+
+      <!-- Fiche technique & contacts réunies proprement -->
+      <div class="ccas-meta-card">
+        <h3>Fonctionnement & Permanences</h3>
+        <div class="ccas-meta-list">
+          <div class="ccas-meta-item">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div class="ccas-meta-content">
+              <strong>Composition de l'équipe</strong>
+              <p>12 membres engagés : 6 conseillers élus et 6 bénévoles locaux, placés sous la présidence institutionnelle du Maire.</p>
+            </div>
+          </div>
+          <div class="ccas-meta-item">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <div class="ccas-meta-content">
+              <strong>Permanences en Mairie</strong>
+              <p>Accueil ouvert tous les matins (sauf le mercredi et le samedi) ainsi que sur rendez-vous spécifique.</p>
+            </div>
+          </div>
+          <div class="ccas-meta-item">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <div class="ccas-meta-content">
+              <strong>Ligne téléphonique directe</strong>
+              <p><a href="tel:0160238024">01 60 23 80 24</a></p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- 3 domaines -->
+    <!-- 3 domaines d'intervention légaux -->
     <div class="domaines-grid reveal">
       <div class="domaine-card">
         <div class="domaine-icon">
-          <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
-            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-          </svg>
+          <svg width="20" height="20" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
-        <h4>Action sociale légale</h4>
-        <p>Accompagnement des ayants droit pour l'obtention des attributions légales (RSA, APL…).</p>
+        <h4>1. L’action sociale légale</h4>
+        <p>Instruction obligatoire et accompagnement technique des dossiers des ayants droit pour l’obtention des dispositifs de solidarité nationale et des attributions légales (RSA, APL…).</p>
       </div>
       <div class="domaine-card">
         <div class="domaine-icon">
-          <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
+          <svg width="20" height="20" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"/><path d="M12 7v5l3 3"/></svg>
         </div>
-        <h4>Action sociale locale</h4>
-        <p>Identification et accompagnement des personnes en détresse ou isolées, selon la politique sociale des élus locaux.</p>
+        <h4>2. L’action sociale locale</h4>
+        <p>Mise en œuvre concrète des choix d'orientation solidaire définis par vos élus de proximité. Elle permet notamment d'identifier et de rompre activement la détresse ou l’isolement.</p>
       </div>
       <div class="domaine-card">
         <div class="domaine-icon">
-          <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-          </svg>
+          <svg width="20" height="20" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
-        <h4>Animation sociale</h4>
-        <p>Organisation d'activités sociales pour tisser du lien et favoriser la convivialité à tous les âges.</p>
+        <h4>3. Les activités & animations</h4>
+        <p>Déploiement d'actions préventives thématiques, de dispositifs d'accueil civique et de rendez-vous intergénérationnels réguliers pour préserver une cohésion forte au village.</p>
       </div>
     </div>
 
-    <!-- Activités proposées -->
-    <div class="reveal" style="margin-bottom: 3rem;">
-      <p style="font-size: 0.88rem; color: var(--gris); margin-bottom: 0.5rem;">Activités organisées par le CCAS</p>
+    <!-- Détail des activités proposées -->
+    <div class="activites-container reveal">
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; color: var(--texte); margin: 0 0 0.25rem;">Actions concrètes proposées par le CCAS</h3>
+      <p style="font-size: 0.82rem; color: var(--gris); margin: 0;">Rendez-vous thématiques, apprentissages et partages ouverts à tous les habitants</p>
+      
       <div class="activites-list">
         <div class="activite-pill">
-          <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          Révision du Code de la route
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          Révision collective du Code de la route
         </div>
         <div class="activite-pill">
-          <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Prévention des risques ménagers
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Prévention des risques ménagers et budgétaires
         </div>
         <div class="activite-pill">
-          <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          Découvertes du Patrimoine saint-cyrien
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          Formation civique aux premiers secours
         </div>
         <div class="activite-pill">
-          <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-          Moments de partage et d'échanges
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          Accueil et intégration des nouveaux arrivants
         </div>
-      </div>
-    </div>
-
-    <!-- Points d'accès aux droits -->
-    <div class="reveal">
-      <h3 style="font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--texte); margin-bottom: 0.5rem;">Points d'accès aux droits</h3>
-      <p style="font-size: 0.88rem; color: var(--gris); margin-bottom: 0.5rem;">Pour vous accompagner dans vos démarches administratives</p>
-    </div>
-    
-    <div class="acces-grid reveal">
-      <div class="acces-point">
-        <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <div>
-          <strong>Coulommiers</strong>
-          <p>22, rue du Palais de Justice — 77120 Coulommiers<br>
-          <a href="tel:0164658860">01 64 65 88 60</a><br>
-          Du lundi au vendredi : 9h–12h / 14h–17h30</p>
+        <div class="activite-pill">
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+          Récompenses officielles aux diplômes (Brevet, Bac, CAP, BEP)
         </div>
-      </div>
-      <div class="acces-point">
-        <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        <div>
-          <strong>La Ferté-sous-Jouarre</strong>
-          <p>34–36, rue des Pelletiers — Espace Citoyen — 77260<br>
-          <a href="tel:0160222563">01 60 22 25 63</a><br>
-          Lundi : 9h–12h / 14h–17h30<br>
-          Mardi, Jeudi, Vendredi : 9h–12h</p>
+        <div class="activite-pill">
+          <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Moments chaleureux de partage et d’échanges intergénérationnels
         </div>
       </div>
     </div>
@@ -367,7 +471,7 @@
   </div>
 </section>
 
-<!-- HABITAT ET HUMANISME -->
+<!-- SECTION HABITAT ET HUMANISME -->
 <section class="section" style="background: var(--blanc);">
   <div class="section-inner reveal">
     <div class="section-label" style="margin-bottom: 0.75rem;">Logement solidaire</div>
@@ -375,55 +479,151 @@
 
     <div class="hh-layout reveal">
       <div class="hh-body">
-        <p>L'objectif d'Habitat et Humanisme est de favoriser l'insertion par le logement, en permettant à des familles ou à des personnes isolées en difficultés d'accéder à un logement de qualité à faible loyer et de bénéficier d'un accompagnement de proximité qui favorise la création de liens sociaux et une insertion durable.</p>
-        <p>L'antenne Seine-et-Marne gère <strong>8 logements en secteur rural</strong> (Boissy-le-Châtel et Saint-Cyr-sur-Morin). À Saint-Cyr-sur-Morin, l'association intervient dans une résidence comprenant <strong>5 logements</strong> de 2 et 3 pièces. Cinq familles sont logées de manière pérenne ou dans l'attente d'un logement social, et bénéficient d'un accompagnement.</p>
+        <p>L'objectif premier d'Habitat et Humanisme est de favoriser l'insertion durable par le logement. L'association permet à des familles ou à des personnes isolées fragilisées par les aléas de la vie d'accéder à un logement de grande qualité architecturale à faible niveau de loyer, tout en bénéficiant d'un véritable suivi de proximité assurant le retour à l'autonomie.</p>
+        <p>L'antenne départementale gère activement <strong>8 logements en secteur rural</strong> partagés entre Boissy-le-Châtel et Saint-Cyr-sur-Morin. Dans notre village, l'association intervient directement au sein d'une petite résidence chaleureuse comprenant <strong>5 logements</strong> (de 2 et 3 pièces). Cinq familles y sont installées de manière pérenne ou en phase de transition vers un logement social classique.</p>
       </div>
 
       <div class="hh-benevoles">
         <h4>Rejoignez les bénévoles</h4>
         <ul>
-          <li>Faciliter l'intégration des locataires</li>
-          <li>Accompagner dans les démarches administratives</li>
+          <li>Faciliter l'intégration locale des locataires</li>
+          <li>Accompagner ponctuellement les démarches administratives</li>
           <li>Réaliser de petits travaux d'entretien (bricolage, jardinage)</li>
         </ul>
-        <p style="font-size: 0.78rem; color: var(--gris); margin-bottom: 1rem;">Quel que soit votre profil et le temps dont vous disposez, votre aide est bienvenue.</p>
+        <p style="font-size: 0.78rem; color: var(--gris); margin-bottom: 1.25rem;">Quel que soit votre profil et le temps dont vous disposez, votre aide est bienvenue.</p>
         <div class="hh-contact">
           <a href="mailto:c.lebras@habitat-humanisme.org">
-            <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             c.lebras@habitat-humanisme.org
           </a>
           <a href="tel:0675342041">
-            <svg width="13" height="13" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             Christiane LE BRAS — 06 75 34 20 41
           </a>
         </div>
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- AUTRES SERVICES SOCIAUX -->
+<!-- ACCÈS AUX DROITS & EXTERNES (RESTRUCTURÉ) -->
 <section class="section" style="background: var(--creme);">
   <div class="section-inner reveal">
-    <div class="section-label" style="margin-bottom: 0.75rem;">Proximité</div>
-    <h2 class="section-title" style="margin-bottom: 2rem;">Autres services de solidarité</h2>
+    <div class="section-label" style="margin-bottom: 0.75rem;">Services publics intercommunaux</div>
+    <h2 class="section-title" style="margin-bottom: 0.5rem;">Réseau d'accès aux droits de proximité</h2>
+    <p style="font-size: 0.9rem; color: var(--gris); margin-bottom: 2rem;">Les guichets et organismes permanents accessibles à proximité de Saint-Cyr-sur-Morin.</p>
 
-    <div class="services-list reveal">
-      <div class="service-item">
-        <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <div>
-          <strong>Maison des Solidarités</strong>
-          <p>26/28 rue du Palais de Justice, Coulommiers<br><a href="tel:0164755820">01 64 75 58 20</a></p>
+    <div class="services-master-grid reveal">
+      
+      <div class="service-panel">
+        <div class="service-panel-icon">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="service-panel-content">
+          <span class="service-tag">Accompagnement Démarches</span>
+          <strong>Maison France Services — La Ferté-Gaucher</strong>
+          <p>Aide globale aux démarches administratives du quotidien (impôts, emploi, retraite, immatriculation…).</p>
+          <div class="service-meta-subblock">
+            6, rue Ernest Delbet — 77320 La Ferté-Gaucher
+          </div>
+          <div class="service-panel-links" style="margin-top: 0.75rem;">
+            <a href="tel:0164205472"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01 64 20 54 72</a>
+            <a href="mailto:mfs@cc2m.fr" style="margin-left: 5px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> mfs@cc2m.fr</a>
+          </div>
         </div>
       </div>
-      <div class="service-item">
-        <svg width="20" height="20" fill="none" stroke-width="1.8" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <div>
-          <strong>Secours Populaire</strong>
-          <p>33 rue de Condé, La Ferté-sous-Jouarre<br><a href="tel:0160226712">01 60 22 67 12</a></p>
+
+      <div class="service-panel">
+        <div class="service-panel-icon">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="service-panel-content">
+          <span class="service-tag">Accès aux Droits</span>
+          <strong>Maison France Services — La Ferté-sous-Jouarre</strong>
+          <p>Guichet unique d'accompagnement numérique et administratif auprès des partenaires institutionnels de l'État.</p>
+          <div class="service-meta-subblock">
+            17, rue de Reuil — 77260 La Ferté-sous-Jouarre
+            <span style="margin-top: 0.4rem;">Horaires d'ouverture :</span>
+            Lundi au jeudi : 9h00–12h30 & 14h00–17h00<br>Vendredi : 9h00–12h30
+          </div>
+          <div class="service-panel-links" style="margin-top: 0.75rem;">
+            <a href="tel:0160221919"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01 60 22 19 19</a>
+          </div>
         </div>
       </div>
+
+      <div class="service-panel">
+        <div class="service-panel-icon">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        </div>
+        <div class="service-panel-content">
+          <span class="service-tag">Solidarité Départementale</span>
+          <strong>Maison Départementale des Solidarités (MDS)</strong>
+          <p>Pôle d'action global du Département : insertion, accès aux droits RSA, protection maternelle et infantile (PMI), petite enfance et gestion de l'APA (autonomie).</p>
+          <div class="service-meta-subblock">
+            Rue du Pré Meunier — 77120 Coulommiers
+            <span style="margin-top: 0.4rem;">Horaires d'ouverture :</span>
+            Lundi au vendredi : 8h30–12h30 & 13h30–17h00<br>(Fermé uniquement le mardi matin)
+          </div>
+          <div class="service-panel-links" style="margin-top: 0.75rem;">
+            <a href="tel:0164755820"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01 64 75 58 20</a>
+            <a href="tel:0164755816" style="margin-left: 5px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01 64 75 58 16</a>
+            <a href="tel:0164653568" style="margin-left: 5px;"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01 64 65 35 68</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-panel">
+        <div class="service-panel-icon">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="service-panel-content">
+          <span class="service-tag">Prestations Familiales</span>
+          <strong>Caisse d'Allocations Familiales (CAF)</strong>
+          <p>Permanence officielle de l'organisme d'aide aux familles. Attention, l'accueil physique se fait uniquement sur rendez-vous.</p>
+          <div class="service-meta-subblock">
+            Points d'accueil physiques exclusifs à <strong>Meaux</strong> ou à <strong>Coulommiers</strong>
+          </div>
+          <div class="service-panel-links" style="margin-top: 0.75rem;">
+            <a href="tel:0810257710"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 08 10 25 77 10</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-panel">
+        <div class="service-panel-icon">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="service-panel-content">
+          <span class="service-tag">Protection Sociale & Retraite</span>
+          <strong>Assurance Retraite (Régime Général) & MSA</strong>
+          <p>Gestion, calcul et suivi des droits de retraite pour les salariés et les exploitants du secteur agricole (Mutualité Sociale Agricole).</p>
+          <div class="service-meta-subblock">
+            Antennes départementales basées à Meaux :<br>47, avenue Salvador Allende — 77100 Meaux
+          </div>
+          <div class="service-panel-links" style="margin-top: 0.75rem;">
+            <a href="tel:3960"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 3960</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-panel">
+        <div class="service-panel-icon">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <div class="service-panel-content">
+          <span class="service-tag">Solidarité Associative</span>
+          <strong>Secours Populaire Français</strong>
+          <p>Antenne locale d'aide matérielle, alimentaire et d'accompagnement solidaire d'urgence pour les personnes en situation de précarité.</p>
+          <div class="service-meta-subblock">
+            33, rue de Condé — 77260 La Ferté-sous-Jouarre
+          </div>
+          <div class="service-panel-links" style="margin-top: 0.75rem;">
+            <a href="tel:0160226712"><svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01 60 22 67 12</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
