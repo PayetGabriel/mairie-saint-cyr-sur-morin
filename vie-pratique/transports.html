@@ -30,6 +30,11 @@
       border-radius: 16px;
       overflow: hidden;
       transition: all 0.22s;
+      
+      /* FIX : On passe la carte en flexbox vertical */
+      display: flex;
+      flex-direction: column;
+      height: 100%; /* Force la carte à prendre toute la hauteur de sa cellule de grille */
     }
 
     .ligne-card:hover {
@@ -44,6 +49,9 @@
       display: flex;
       align-items: center;
       gap: 1rem;
+      
+      /* FIX : C'est ce bloc qui grandit pour combler le vide si le texte voisin est plus long */
+      flex-grow: 1; 
     }
 
     .ligne-num {
@@ -94,6 +102,9 @@
       width: 100%;
       display: block;
       border-top: 1px solid rgba(200,191,176,0.3);
+      
+      /* FIX : On empêche le conteneur du plan de se déformer */
+      flex-shrink: 0;
     }
 
     .ligne-plan img {
@@ -110,6 +121,10 @@
       align-items: center;
       justify-content: space-between;
       gap: 0.75rem;
+      
+      /* FIX : Sécurité pour ancrer le footer tout en bas et l'empêcher de shrink */
+      margin-top: auto;
+      flex-shrink: 0;
     }
 
     .ligne-footer a {
@@ -177,7 +192,7 @@
     }
 
     .tad-arrêts {
-      background: var(--creme);
+      background: var(--blanc);
       border-radius: 12px;
       padding: 1.25rem;
       margin-top: 1.25rem;
@@ -205,7 +220,7 @@
       font-size: 0.78rem;
       font-weight: 500;
       color: var(--texte);
-      background: var(--blanc);
+      background: var(--creme);
       border: 1px solid rgba(200,191,176,0.4);
       padding: 0.25rem 0.7rem;
       border-radius: 100px;
@@ -319,12 +334,40 @@
 <header class="page-header" style="background: var(--vert);">
   <div class="page-header-inner">
     <h1>Transports</h1>
-    <p class="page-intro">Lignes de bus, transport à la demande et navette séniors pour se déplacer depuis Saint-Cyr-sur-Morin.</p>
+    <p class="page-intro">Lignes de bus, gares, transport à la demande et navette séniors pour se déplacer depuis Saint-Cyr-sur-Morin.</p>
   </div>
 </header>
 
-<!-- ─── LIGNES DE BUS ─── -->
+<!-- ─── GARES SNCF ─── -->
 <section class="section">
+  <div class="section-inner reveal">
+    <div class="section-label" style="margin-bottom: 0.75rem;">Réseau Transilien (Ligne P)</div>
+    <h2 class="section-title" style="margin-bottom: 1.5rem;">Gares SNCF à proximité</h2>
+    <div class="seniors-details" style="margin-top: 0;">
+      <div class="seniors-detail-card">
+        <div class="seniors-detail-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 22h16M5 20v-8a7 7 0 0 1 14 0v8M9 14h6M9 17h6"/></svg>
+        </div>
+        <div>
+          <strong>Gare de La Ferté-sous-Jouarre (7 km)</strong>
+          <p>Ligne P : un train toutes les heures, et deux trains par heure aux heures de pointe.</p>
+        </div>
+      </div>
+      <div class="seniors-detail-card">
+        <div class="seniors-detail-icon">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 22h16M5 20v-8a7 7 0 0 1 14 0v8M9 14h6M9 17h6"/></svg>
+        </div>
+        <div>
+          <strong>Gare de Saâcy-sur-Marne</strong>
+          <p>Accès aux lignes du réseau de transports régionaux de l'Est parisien.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── LIGNES DE BUS ─── -->
+<section class="section" style="background: var(--blanc);"">
   <div class="section-inner reveal">
 
     <div class="section-label" style="margin-bottom: 0.75rem;">Réseau Transdev Brie &amp; 2 Morin</div>
@@ -398,13 +441,55 @@
         </div>
       </div>
 
+      <!-- Ligne 2483 -->
+      <div class="ligne-card reveal">
+        <div class="ligne-head">
+          <div class="ligne-num">2483</div>
+          <div class="ligne-head-text">
+            <strong>Montmirail — La Ferté-sous-Jouarre</strong>
+            <span>Dessert Saint-Cyr-sur-Morin</span>
+          </div>
+          <span class="ligne-badge reguliere">Régulière</span>
+        </div>
+        <div class="ligne-plan">
+          <img src="/assets/img/2483.png" alt="Plan de la ligne 2483" />
+        </div>
+        <div class="ligne-footer">
+          <a href="https://www.iledefrance-mobilites.fr" target="_blank" rel="noopener">
+            Horaires &amp; plan
+            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Ligne 2484 -->
+      <div class="ligne-card reveal">
+        <div class="ligne-head">
+          <div class="ligne-num">2484</div>
+          <div class="ligne-head-text">
+            <strong>Bassevelle — Coulommiers</strong>
+            <span>Dessert Saint-Cyr-sur-Morin</span>
+          </div>
+          <span class="ligne-badge reguliere">Régulière</span>
+        </div>
+        <div class="ligne-plan">
+          <img src="/assets/img/2484.png" alt="Plan de la ligne 2484" />
+        </div>
+        <div class="ligne-footer">
+          <a href="https://www.iledefrance-mobilites.fr" target="_blank" rel="noopener">
+            Horaires &amp; plan
+            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+        </div>
+      </div>
+
     </div>
 
   </div>
 </section>
 
 <!-- ─── TRANSPORT À LA DEMANDE ─── -->
-<section class="section" style="background: var(--blanc);">
+<section class="section">
   <div class="section-inner reveal">
 
     <div class="section-label" style="margin-bottom: 0.75rem;">CC2M</div>
@@ -412,10 +497,19 @@
 
     <div class="tad-layout">
       <div class="tad-body">
-        <p>La Communauté de Communes des 2 Morin propose un service de transport à la demande opérationnel depuis le 1er juin 2015. Le Proxi'bus répond aux besoins liés à la santé, aux démarches administratives, aux achats et aux loisirs.</p>
-        <p>Le service est ouvert à tous. Les usagers de moins de 14 ans doivent être accompagnés d'un adulte. Il fonctionne du lundi après-midi au samedi après-midi, hors jours fériés.</p>
-        <p>Les titres habituels de transport Île-de-France sont acceptés (ticket t+, carte Navigo, Imagin'R, Améthyste…). Il est également possible d'acheter un titre à bord. Les personnes à mobilité réduite peuvent utiliser le service — le préciser lors de la réservation, le véhicule est adapté.</p>
-        <p><strong>Annulation :</strong> appelez la centrale dès que possible. Au-delà de trois absences injustifiées, le droit d'utilisation du service peut être retiré.</p>
+        <p>La Communauté de Communes des 2 Morin propose un service de transport à la demande. Le Proxi'bus répond aux besoins liés à la santé, aux démarches administratives, aux achats et aux loisirs.</p>
+        
+        <p><strong>Proxi'bus Tout Public (2 €) :</strong> Accessible à tous (les usagers de moins de 14 ans doivent être accompagnés). Le service fonctionne du lundi au vendredi entre 8h30 et 17h.</p>
+        
+        <p><strong>Pour les plus de 70 ans (GRATUIT) :</strong> La CC2M organise un accès gratuit sous conditions. Renseignements et réservations 48h à l'avance au <a href="tel:0164652151" style="color: var(--vert); font-weight: 600;">01 64 65 21 51</a>.</p>
+        
+        <p>Les titres habituels de transport Île-de-France sont acceptés (ticket t+, carte Navigo, Imagin'R, Améthyste…). Il est également possible d'acheter un titre à bord. Le véhicule est adapté aux personnes à mobility réduite (à préciser lors de la réservation).</p>
+        
+        <p><strong>Annulation :</strong> Appelez la centrale dès que possible. Au-delà de trois absences injustifiées, le droit d'utilisation du service peut être retiré.</p>
+
+        <p style="font-size: 0.88rem; color: var(--gris); margin-top: 1.5rem;">
+          Site du transporteur : <a href="https://www.transdev-idf.com" target="_blank" rel="noopener" style="color: var(--vert); font-weight: 500;">www.transdev-idf.com</a>
+        </p>
 
         <div class="tad-arrêts">
           <h5>Arrêts à Saint-Cyr-sur-Morin</h5>
@@ -433,8 +527,9 @@
 
       <div class="tad-contact-card reveal">
         <h4>Réservation Proxi'bus</h4>
-        <div class="tad-tel">0800 066 066</div>
-        <p>Gratuit — du lundi au vendredi<br>8h30–12h30 / 13h30–17h</p>
+        <div class="tad-tel" style="font-size: 1.6rem;">0 800 066 066</div>
+        <p style="font-size: 0.75rem; opacity: 0.8; margin-top: -0.5rem;">Appel gratuit depuis un poste fixe</p>
+        <p>Du lundi au vendredi<br>8h30 – 17h00</p>
         <p>Réservez <strong>au plus tard la veille</strong> avant 17h et au plus tôt un mois avant votre déplacement.</p>
       </div>
     </div>
@@ -443,7 +538,7 @@
 </section>
 
 <!-- ─── MOBILITÉS SÉNIORS ─── -->
-<section class="section" style="background: var(--creme);">
+<section class="section" style="background: var(--blanc);">
   <div class="section-inner reveal">
 
     <div class="section-label" style="margin-bottom: 0.75rem;">Pour les + de 70 ans</div>
