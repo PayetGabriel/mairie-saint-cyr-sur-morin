@@ -10,7 +10,8 @@
 
 .page-header {
   background: linear-gradient(135deg, var(--vert) 0%, var(--vert-clair) 100%);
-  padding: calc(4.5rem + 68px) 2.5rem 4rem;
+  /* Correction ici : 4.5rem passe à 4rem pour correspondre au bas */
+  padding: calc(4rem + 68px) 2.5rem 4rem;
   position: relative;
 }
 
@@ -27,6 +28,15 @@
   margin: 0 auto;
   position: relative;
   z-index: 1;
+}
+
+.page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 600;
+  color: var(--blanc);
+  line-height: 1.2;
+  margin-bottom: 1rem;
 }
 
 /* Style spécifique pour le badge de mise à jour */
@@ -64,15 +74,6 @@
 
 .breadcrumb span:not(:first-child) {
   color: rgba(255,255,255,0.4);
-}
-
-.page-header h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
-  font-weight: 600;
-  color: var(--blanc);
-  line-height: 1.2;
-  margin-bottom: 1rem;
 }
 
 .page-intro {
