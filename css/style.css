@@ -1968,7 +1968,7 @@ footer {
     mix-blend-mode: normal !important;
   }
 
-  /* 1. ZÉRO MARGE SUR LA PAGE (Supprime aussi l'URL, la date et le titre du navigateur) */
+  /* 3. ZÉRO MARGE SUR LA PAGE (Supprime aussi l'URL, la date et le titre du navigateur) */
   @page {
     margin: 0;
   }
@@ -1977,10 +1977,10 @@ footer {
     padding: 0;
   }
 
-  /* 2. FORCE TOUS LES "SCROLL REVEAL" À S'ACTIVER ET ÊTRE VISIBLES */
+  /* 4. FORCE TOUS LES "SCROLL REVEAL" À S'ACTIVER ET ÊTRE VISIBLES */
   .reveal, 
   [class*="reveal"],
-  [data-sr-id] { /* Cible aussi les IDs générés par la bibliothèque ScrollReveal.js */
+  [data-sr-id] {
     opacity: 1 !important;
     visibility: visible !important;
     transform: none !important;
@@ -1988,45 +1988,89 @@ footer {
     animation: none !important;
   }
 
-  /* 3. Force le rendu des couleurs pour le dégradé du header */
+  /* 5. Force le rendu des couleurs pour le dégradé du header */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* 4. Fond blanc pur pour tout le reste du PDF */
+  /* 6. Fond blanc pur pour tout le reste du PDF */
   body, html, main, .tab-content, .tab-pane {
     background: #ffffff !important;
     color: #111111 !important;
   }
 
-  /* 5. Nettoyage des éléments d'interface inutiles */
-  nav, footer, .comm-chevron, .page-header::before {
+  /* 7. Nettoyage des éléments d'interface inutiles */
+  nav, footer, .page-header::before {
     display: none !important;
   }
 
-  /* 6. Ajustement du Header (Parfaitement collé aux bords grâce au marge 0) */
+  /* 8. Ajustement du Header */
   .page-header {
-    padding: 4rem 2.5rem !important; /* Ajuste le padding interne pour que le texte ne colle pas aux bords physiques */
+    padding: 4rem 2.5rem !important;
   }
 
-  /* 7. Gestion des onglets et accordéons pour qu'ils soient tous ouverts */
+  /* 9. GESTION DES ONGLETS : On n'affiche QUE l'onglet actif et son bouton */
+  .tab-btn:not(.active) {
+    display: none !important;
+  }
+
   .tab-pane {
+    display: none !important;
+  } 
+
+  /*
+  .tabs-bar,
+  .tab-btn,
+  .tab-content,
+  .tab-pane {
+    display: none !important;
+  }
+  
+  Si besoin de cacher les onglets */
+  
+  .tab-pane.active {
     display: block !important;
     opacity: 1 !important;
   }
 
+  /* 10. FORCE L'OUVERTURE DE TOUTES LES COMMISSIONS (<details>) */
   details.comm-item {
     display: block !important;
-  }
-  
-  details.comm-item:not([open]) > *:not(summary) {
-    display: block !important;
+    height: auto !important;
   }
 
-  /* Évite de couper une commission sur un saut de page */
+  /* LE SECRET POUR LES NAVIGATEURS MODERNES :
+     On court-circuicte le comportement natif du Shadow DOM qui masque le contenu */
+  details.comm-item::details-content {
+    display: block !important;
+    content-visibility: visible !important; /* Force le rendu du texte masqué */
+    visibility: visible !important;
+    height: auto !important;
+  }
+
+  /* Sécurité pour forcer le bloc interne et ses enfants à s'afficher */
+  details.comm-item .comm-body {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    padding: 0.5rem 0 1rem 1.5rem !important; /* Optionnel : léger ajustement des marges pour le PDF */
+  }
+
+  /* Conserve la structure en colonnes des lignes (Présidente, Titulaires...) */
+  details.comm-item .comm-row {
+    display: flex !important;
+  }
+
+  /* Force le chevron à tourner vers le bas pour simuler l'état déplié */
+  details.comm-item .comm-chevron {
+    transform: rotate(90deg) !important;
+  }
+
+  /* Évite de couper un bloc de commission en deux au changement de page du PDF */
   .comm-item {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 }
