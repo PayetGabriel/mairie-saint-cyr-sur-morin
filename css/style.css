@@ -1948,3 +1948,85 @@ footer {
 
   .footer-inner { grid-template-columns: 1fr; }
 }
+
+
+@media print {
+  /* 1. FORCE LE TEXTE ET LE DÉFILEMENT À DEVENIR NORMAUX */
+  html, body {
+    overflow: visible !important;
+    overflow-x: visible !important;
+    height: auto !important;
+    position: static !important; /* Annule les positionnements fixes/absolus du body */
+  }
+
+  /* 2. DÉSACTIVE L'ACCÉLÉRATION GRAPHIQUE QUI TRANSFORME LE TEXTE EN IMAGE */
+  *, *::before, *::after {
+    will-change: auto !important;
+    transform: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    mix-blend-mode: normal !important;
+  }
+
+  /* 1. ZÉRO MARGE SUR LA PAGE (Supprime aussi l'URL, la date et le titre du navigateur) */
+  @page {
+    margin: 0;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 2. FORCE TOUS LES "SCROLL REVEAL" À S'ACTIVER ET ÊTRE VISIBLES */
+  .reveal, 
+  [class*="reveal"],
+  [data-sr-id] { /* Cible aussi les IDs générés par la bibliothèque ScrollReveal.js */
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* 3. Force le rendu des couleurs pour le dégradé du header */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 4. Fond blanc pur pour tout le reste du PDF */
+  body, html, main, .tab-content, .tab-pane {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+
+  /* 5. Nettoyage des éléments d'interface inutiles */
+  nav, footer, .comm-chevron, .page-header::before {
+    display: none !important;
+  }
+
+  /* 6. Ajustement du Header (Parfaitement collé aux bords grâce au marge 0) */
+  .page-header {
+    padding: 4rem 2.5rem !important; /* Ajuste le padding interne pour que le texte ne colle pas aux bords physiques */
+  }
+
+  /* 7. Gestion des onglets et accordéons pour qu'ils soient tous ouverts */
+  .tab-pane {
+    display: block !important;
+    opacity: 1 !important;
+  }
+
+  details.comm-item {
+    display: block !important;
+  }
+  
+  details.comm-item:not([open]) > *:not(summary) {
+    display: block !important;
+  }
+
+  /* Évite de couper une commission sur un saut de page */
+  .comm-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
