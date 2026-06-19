@@ -1995,9 +1995,13 @@ footer {
   }
 
   /* 6. Fond blanc pur pour tout le reste du PDF */
-  body, html, main, .tab-content, .tab-pane {
+  body, html, main, .section, .tab-content, .tab-pane {
     background: #ffffff !important;
     color: #111111 !important;
+  }
+
+  .village-section {
+    background: var(--texte) !important;
   }
 
   /* 7. Nettoyage des éléments d'interface inutiles */
