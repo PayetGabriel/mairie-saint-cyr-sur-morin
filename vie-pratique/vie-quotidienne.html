@@ -532,26 +532,36 @@
 
     <div class="services-grid">
 
-      <div class="service-card reveal">
+      <!-- LA POSTE -->
+      <div class="service-card reveal visible">
         <div class="service-card-head">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
           <span>La Poste</span>
         </div>
         <div class="service-card-body">
           <div class="service-card-name">Agence Postale Communale</div>
           <p>1, place de l'Église — <a href="tel:0160255636">01 60 25 56 36</a></p>
           <table class="horaires-table">
-            <tr class="fermé"><td>Lundi</td><td>Fermé</td></tr>
-            <tr><td>Mar – Jeu</td><td>9h – 12h</td></tr>
-            <tr><td>Vendredi</td><td>9h – 12h / 16h – 19h30</td></tr>
-            <tr><td>Samedi</td><td>9h – 12h</td></tr>
+            <tbody>
+              <tr class="fermé"><td>Lundi</td><td>Fermé</td></tr>
+              <tr><td>Mar – Jeu</td><td>9h – 12h</td></tr>
+              <tr><td>Vendredi</td><td>9h – 12h / 16h – 19h30</td></tr>
+              <tr><td>Samedi</td><td>9h – 12h</td></tr>
+            </tbody>
           </table>
         </div>
       </div>
 
-      <div class="service-card reveal">
+      <!-- CULTURE -->
+      <div class="service-card reveal visible">
         <div class="service-card-head">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
           <span>Culture</span>
         </div>
         <div class="service-card-body">
@@ -565,9 +575,13 @@
         </div>
       </div>
 
-      <div class="service-card reveal">
+      <!-- JURIDIQUE -->
+      <div class="service-card reveal visible">
         <div class="service-card-head">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <!-- NOUVEAU : Balance de la justice -->
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M12 3v18M3 7h18M6 7l-3 9h6l-3-9M18 7l-3 9h6l-3-9M9 21h6" />
+          </svg>
           <span>Juridique</span>
         </div>
         <div class="service-card-body">
@@ -576,9 +590,16 @@
         </div>
       </div>
 
-      <div class="service-card reveal">
+      <!-- PRESTATIONS FAMILIALES -->
+      <div class="service-card reveal visible">
         <div class="service-card-head">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          <!-- NOUVEAU : Cellule familiale centrée (Adulte + Enfant) -->
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <circle cx="8.5" cy="7" r="4" />
+            <path d="M22 21v-2a3 3 0 0 0-2-2.82" />
+            <circle cx="17" cy="11" r="2" />
+          </svg>
           <span>Prestations familiales</span>
         </div>
         <div class="service-card-body">
@@ -587,9 +608,13 @@
         </div>
       </div>
 
-      <div class="service-card reveal">
+      <!-- EMPLOI -->
+      <div class="service-card reveal visible">
         <div class="service-card-head">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
           <span>Emploi</span>
         </div>
         <div class="service-card-body">
@@ -598,10 +623,15 @@
         </div>
       </div>
 
-      <div class="service-card reveal">
+      <!-- INSERTION & JEUNES -->
+      <div class="service-card reveal visible">
         <div class="service-card-head">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><circle cx="16" cy="3.13" r="3"/></svg>
-          <span>Insertion & Jeunes</span>
+          <!-- NOUVEAU : Compas de l'orientation et de l'accompagnement -->
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" />
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 8.88 9.88 16.24 7.76" />
+          </svg>
+          <span>Insertion &amp; Jeunes</span>
         </div>
         <div class="service-card-body">
           <div class="service-card-name">Mission Locale (Brie et Morins)</div>
@@ -609,9 +639,13 @@
         </div>
       </div>
 
-      <div class="service-card reveal">
+      <!-- TOURISME -->
+      <div class="service-card reveal visible">
         <div class="service-card-head">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
           <span>Tourisme</span>
         </div>
         <div class="service-card-body">
@@ -623,7 +657,7 @@
           </div>
 
           <div style="margin-bottom: 0.6rem;">
-            <strong style="font-size: 0.85rem; color: var(--texte);">Brie & Champagne (Rebais)</strong><br>
+            <strong style="font-size: 0.85rem; color: var(--texte);">Brie &amp; Champagne (Rebais)</strong><br>
             <span style="font-size: 0.85rem;">9, place du Marché</span> — <a href="tel:0164654744" style="font-size: 0.85rem;">01 64 65 47 44</a>
           </div>
 
@@ -634,21 +668,25 @@
         </div>
       </div>
 
-      <div class="service-card reveal">
+      <!-- SERVICES RELIGIEUX -->
+      <div class="service-card reveal visible">
         <div class="service-card-head">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+          <!-- NOUVEAU : Voûte/Porche architectural neutre et laïque -->
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+            <path d="M4 21V10a8 8 0 0 1 16 0v11M12 21V11" />
+          </svg>
           <span>Services religieux</span>
         </div>
         <div class="service-card-body">
-          <div class="service-card-name">Paroisse & Secteur</div>
+          <div class="service-card-name">Paroisse &amp; Secteur</div>
           
           <div style="margin-bottom: 0.6rem;">
             <strong style="font-size: 0.85rem; color: var(--texte);">Presbytère de La Ferté-sous-Jouarre</strong><br>
-            <span style="font-size: 0.85rem;">Renseignements & démarches</span> — <a href="tel:0174813010" style="font-size: 0.85rem;">01 74 81 30 10</a>
+            <span style="font-size: 0.85rem;">Renseignements &amp; démarches</span> — <a href="tel:0174813010" style="font-size: 0.85rem;">01 74 81 30 10</a>
           </div>
 
           <div style="margin-bottom: 0.6rem;">
-            <strong style="font-size: 0.85rem; color: var(--texte);">Catéchuménat (Ados & Adultes)</strong><br>
+            <strong style="font-size: 0.85rem; color: var(--texte);">Catéchuménat (Ados &amp; Adultes)</strong><br>
             <span style="font-size: 0.85rem;">Christiane Wongermez</span> — <a href="tel:0623859230" style="font-size: 0.85rem;">06 23 85 92 30</a>
           </div>
 
