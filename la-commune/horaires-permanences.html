@@ -49,85 +49,72 @@
     <div class="section-label reveal" style="margin-bottom: 0.75rem;">Accueil &amp; Services</div>
     <h2 class="section-title reveal" style="margin-bottom: 2rem;">Horaires d'ouverture au public</h2>
 
-    <div class="permanences-grid reveal">
+    <div class="permanences-grid reveal" id="permanences-container">
 
-        <!-- CARTE 1 : MAIRIE -->
-        <div class="perm-card">
-            <div class="perm-card-head">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            <span>Mairie (Horaires généraux)</span>
-            </div>
-            <div class="perm-card-body">
-            <div class="perm-card-name">Accueil général</div>
-            <div class="perm-horaires">
-                <div class="perm-horaire-row"><span class="perm-day">Lun, Mar, Jeu</span><span class="perm-hours">09:00–12:30 / 14:00–17:30</span></div>
-                <div class="perm-horaire-row"><span class="perm-day">Mer, Sam</span><span class="perm-hours">08:30–12:30</span></div>
-                <div class="perm-horaire-row"><span class="perm-day">Vendredi</span><span class="perm-hours">09:00–12:30</span></div>
-                <div class="perm-horaire-row"><span class="perm-day">Dimanche</span><span class="perm-hours" style="color:var(--gris); font-style:italic;">Fermé</span></div>
-            </div>
-            </div>
+      <!-- CARTE 1 : MAIRIE -->
+      <div class="perm-card" data-perm-id="mairie">
+        <div class="perm-card-head">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span>Mairie (Horaires généraux)</span>
         </div>
+        <div class="perm-card-body">
+          <div class="perm-card-name">Accueil général</div>
+          <div class="perm-horaires">
+            <!-- Injecté par JS -->
+          </div>
+          <!-- Note injectée par JS si elle existe -->
+        </div>
+      </div>
 
       <!-- CARTE 2 : SECRÉTARIAT -->
-        <div class="perm-card">
+      <div class="perm-card" data-perm-id="secretariat">
         <div class="perm-card-head">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            </svg>
-            <span>Secrétariat</span>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          </svg>
+          <span>Secrétariat</span>
         </div>
         <div class="perm-card-body">
-            <div class="perm-card-name">Accueil au public</div>
-            <div class="perm-horaires">
-            <div class="perm-horaire-row"><span class="perm-day">Lun, Mar, Jeu</span><span class="perm-hours">9h00–12h30 / 14h00–17h30</span></div>
-            <div class="perm-horaire-row"><span class="perm-day">Mercredi</span><span class="perm-hours">8h30–12h30</span></div>
-            <div class="perm-horaire-row"><span class="perm-day">Vendredi</span><span class="perm-hours">9h00–12h30</span></div>
-            <div class="perm-horaire-row"><span class="perm-day">Samedi</span><span class="perm-hours">8h30–12h30</span></div>
-            </div>
-            <div class="perm-note">Vacances scolaires : Fermé tous les après-midi</div>
+          <div class="perm-card-name">Accueil au public</div>
+          <div class="perm-horaires">
+            <!-- Injecté par JS -->
+          </div>
         </div>
-        </div>
+      </div>
 
-        <!-- CARTE 3 : URBANISME -->
-        <div class="perm-card">
+      <!-- CARTE 3 : URBANISME -->
+      <div class="perm-card" data-perm-id="urbanisme">
         <div class="perm-card-head">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                <polyline points="9 22 9 12 15 12 15 22"/>
-            </svg>
-            <span>Service Urbanisme</span>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Service Urbanisme</span>
         </div>
         <div class="perm-card-body">
-            <div class="perm-card-name">Service Urbanisme</div>
-            <div class="perm-horaires">
-            <div class="perm-horaire-row"><span class="perm-day">Mar, Jeu</span><span class="perm-hours">9h00–12h30</span></div>
-            <div class="perm-horaire-row"><span class="perm-day">Lundi</span><span class="perm-hours">9h00–12h30 <small style="color:var(--gris); font-weight:normal;">(semaines impaires)</small></span></div>
-            <div class="perm-horaire-row"><span class="perm-day">Samedi</span><span class="perm-hours">9h00–12h30 <small style="color:var(--gris); font-weight:normal;">(semaines paires)</small></span></div>
-            <div class="perm-horaire-row"><span class="perm-day">Mer, Ven</span><span class="perm-hours" style="color:var(--gris); font-style:italic;">Fermé</span></div>
-            </div>
+          <div class="perm-card-name">Service Urbanisme</div>
+          <div class="perm-horaires">
+            <!-- Injecté par JS -->
+          </div>
         </div>
-        </div>
+      </div>
 
-        <!-- CARTE 4 : CCAS -->
-        <div class="perm-card">
+      <!-- CARTE 4 : CCAS -->
+      <div class="perm-card" data-perm-id="ccas">
         <div class="perm-card-head">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-            </svg>
-            <span>Action sociale</span>
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+          </svg>
+          <span>Action sociale</span>
         </div>
         <div class="perm-card-body">
-            <div class="perm-card-name">CCAS</div>
-            <div class="perm-horaires">
-            <div class="perm-horaire-row"><span class="perm-day">Lun, Mar, Jeu, Ven</span><span class="perm-hours">Ouvert tous les matins</span></div>
-            <div class="perm-horaire-row"><span class="perm-day">Mer, Sam</span><span class="perm-hours" style="color:var(--gris); font-style:italic;">Fermé</span></div>
-            </div>
-            <div class="perm-note">Également sur rendez-vous</div>
+          <div class="perm-card-name">CCAS</div>
+          <div class="perm-horaires">
+            <!-- Injecté par JS -->
+          </div>
         </div>
-        </div>
+      </div>
 
     </div>
 
@@ -138,6 +125,7 @@
 
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="js/site-content-loader.js" type="module"></script>
 <script>
   // Chargement asynchrone du footer commun
   fetch('/components/footer.html')
