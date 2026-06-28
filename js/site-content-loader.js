@@ -125,10 +125,11 @@ async function initEtatCivil() {
 
     const pageData = data.value
 
-    // A. Injection de la date de mise à jour (Correction faite ici aussi pour la sécurité)
-    const dateTextSpan = document.getElementById('update-date-text')
+    // A. Injection propre de la date de mise à jour (sans double espace et bien isolée)
+    const dateTextSpan = document.getElementById('etat-civil-update-date')
     if (dateTextSpan && pageData.update_date) {
-      dateTextSpan.textContent = pageData.update_date
+    // On écrit la phrase complète ici pour maîtriser l'espace à 100%
+    dateTextSpan.textContent = `Mis à jour le ${pageData.update_date}`
     }
 
     // B. Vidage complet du conteneur
