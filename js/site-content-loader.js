@@ -298,26 +298,34 @@ async function initDechets() {
 
     // A. Rendu du Calendrier de collecte
     if (calContainer && dechetsData.calendrier) {
-      const cal = dechetsData.calendrier
-      calContainer.innerHTML = `
+    const cal = dechetsData.calendrier
+    
+    // NOUVEAU : On met à jour le grand titre de la section avec l'année dynamique
+    const mainTitleEl = document.getElementById('calendrier-main-title')
+    if (mainTitleEl && cal.main_title) {
+        mainTitleEl.textContent = cal.main_title
+    }
+
+    // Le reste de la carte calendrier ne change pas
+    calContainer.innerHTML = `
         <div class="calendrier-card reveal" style="margin-bottom: 3rem;">
-          <div class="calendrier-preview-col pdf-preview-container">
+        <div class="calendrier-preview-col pdf-preview-container">
             <canvas class="pdf-preview" data-pdf="${cal.pdf_url}"></canvas>
-          </div>
-          <div class="calendrier-info-col">
+        </div>
+        <div class="calendrier-info-col">
             <h3>${cal.title}</h3>
             <p>${cal.desc}</p>
             <a href="${cal.pdf_url}" class="btn btn-primary" target="_blank">
-              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                 <polyline points="7 10 12 15 17 10"/>
                 <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Télécharger le calendrier (PDF)
+            </svg>
+            Télécharger le calendrier (PDF)
             </a>
-          </div>
         </div>
-      `
+        </div>
+    `
     }
 
     // B. Rendu de la Grille des fiches pratiques
