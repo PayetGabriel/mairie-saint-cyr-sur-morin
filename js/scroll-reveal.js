@@ -21,3 +21,6 @@ const observer = new IntersectionObserver((entries) => {
 });
 
 reveals.forEach(r => observer.observe(r));
+
+// AJOUTE JUSTE CETTE LIGNE TOUT À LA FIN :
+window.revealObserver = observer;
