@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCommissions()
   initPermanences()
   initEtatCivil()
+  initDechets()
 })
 
 /**
@@ -269,5 +270,125 @@ async function initEtatCivil() {
   } catch (err) {
     // Correction de la quote ici (utilisation de doubles guillemets pour entourer la chaîne)
     console.error("Erreur lors du chargement dynamique de l'État Civil:", err.message)
+  }
+}
+
+/**
+ * 4. Gestion de la page Gestion des Déchets
+ */
+async function initDechets() {
+  const calContainer = document.getElementById('calendrier-target')
+  const fichesContainer = document.getElementById('fiches-target')
+  const orgContainer = document.getElementById('organismes-target')
+  
+  // Si on n'est pas sur la bonne page, on s'arrête
+  if (!calContainer && !fichesContainer && !orgContainer) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'dechets_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const dechetsData = data.value
+
+    // A. Rendu du Calendrier de collecte
+    if (calContainer && dechetsData.calendrier) {
+      const cal = dechetsData.calendrier
+      calContainer.innerHTML = `
+        <div class="calendrier-card reveal" style="margin-bottom: 3rem;">
+          <div class="calendrier-preview-col pdf-preview-container">
+            <canvas class="pdf-preview" data-pdf="${cal.pdf_url}"></canvas>
+          </div>
+          <div class="calendrier-info-col">
+            <h3>${cal.title}</h3>
+            <p>${cal.desc}</p>
+            <a href="${cal.pdf_url}" class="btn btn-primary" target="_blank">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Télécharger le calendrier (PDF)
+            </a>
+          </div>
+        </div>
+      `
+    }
+
+    // B. Rendu de la Grille des fiches pratiques
+    if (fichesContainer && dechetsData.fiches) {
+      fichesContainer.innerHTML = ''
+      dechetsData.fiches.forEach(fiche => {
+        const card = document.createElement('a')
+        card.href = fiche.pdf_url
+        card.className = 'fiche-card reveal'
+        card.target = '_blank'
+        
+        card.innerHTML = `
+          <div class="fiche-preview pdf-preview-container">
+            <canvas class="pdf-preview" data-pdf="${fiche.pdf_url}"></canvas>
+          </div>
+          <div class="fiche-body">
+            <div class="fiche-header">
+              <div class="fiche-color-dot ${fiche.color_dot}"></div>
+              <div class="fiche-name">${fiche.name}</div>
+            </div>
+            <div class="fiche-desc">${fiche.desc}</div>
+            <div class="fiche-dl">
+              <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Fiche PDF
+            </div>
+          </div>
+        `
+        fichesContainer.appendChild(card)
+      })
+    }
+
+    // C. Rendu de la Grille des organismes
+    if (orgContainer && dechetsData.organismes) {
+      orgContainer.innerHTML = ''
+      dechetsData.organismes.forEach(org => {
+        const orgCard = document.createElement('div')
+        orgCard.className = 'organisme-card'
+        orgCard.innerHTML = `
+          <h3>${org.name}</h3>
+          <p>${org.desc}</p>
+          <a href="${org.url}" target="_blank" rel="noopener">${org.url.replace('https://', '')} →</a>
+        `
+        orgContainer.appendChild(orgCard)
+      })
+    }
+
+    // D. Notification pour ton script de Preview PDF (Optionnel mais sécurisant)
+    // Si ton script qui dessine le PDF dans le <canvas> écoute un événement pour se relancer :
+    window.dispatchEvent(new Event('pdf-preview-reload'));
+
+    // E. Ré-accroche des éléments injectés à ton IntersectionObserver global (.reveal)
+    if (window.revealObserver) {
+      if (calContainer) calContainer.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el));
+      if (fichesContainer) fichesContainer.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el));
+    } else {
+      // Secours si l'observer global n'est pas encore instancié
+      setTimeout(() => {
+        const elements = document.querySelectorAll('#calendrier-target .reveal, #fiches-target .reveal');
+        if (window.revealObserver) {
+          elements.forEach(el => window.revealObserver.observe(el));
+        } else {
+          elements.forEach(el => el.classList.add('visible'));
+        }
+      }, 100);
+    }
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des données de gestion des déchets:", err.message)
   }
 }
