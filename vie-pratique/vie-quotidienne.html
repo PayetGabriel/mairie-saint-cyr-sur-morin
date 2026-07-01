@@ -733,44 +733,7 @@
     <div class="section-label" style="margin-bottom: 0.75rem;">Bien vivre à Saint-Cyr</div>
     <h2 class="section-title" style="margin-bottom: 2rem;">Coordonnées utiles</h2>
 
-    <div class="coords-grid reveal">
-      <div class="coord-item"><span class="coord-label">Mairie</span><a href="tel:0160238024" class="coord-tel">01 60 23 80 24</a></div>
-      <div class="coord-item"><span class="coord-label">École Élémentaire</span><a href="tel:0160238150" class="coord-tel">01 60 23 81 50</a></div>
-      <div class="coord-item"><span class="coord-label">École Maternelle</span><a href="tel:0160238936" class="coord-tel">01 60 23 89 36</a></div>
-      <div class="coord-item"><span class="coord-label">Accueil de Loisirs (Périscolaire)</span><a href="tel:0160238195" class="coord-tel">01 60 23 81 95</a></div>
-      <div class="coord-item"><span class="coord-label">Agence Postale</span><a href="tel:0160255636" class="coord-tel">01 60 25 56 36</a></div>
-      <div class="coord-item"><span class="coord-label">Médiathèque</span><a href="tel:0160016125" class="coord-tel">01 60 01 61 25</a></div>
-      <div class="coord-item"><span class="coord-label">Syndicat des Eaux</span><a href="tel:0164045137" class="coord-tel">01 64 04 51 37</a></div>
-      <div class="coord-item"><span class="coord-label">Encombrants (Covaltri / CC2M)</span><a href="tel:0164652151" class="coord-tel">01 64 65 21 51</a></div>
-      
-      <div class="coord-item"><span class="coord-label">Dépannage Enedis (Électricité)</span><a href="tel:0972675044" class="coord-tel">09 72 67 50 44</a></div>
-      <div class="coord-item"><span class="coord-label">Dépannage GRDF (Gaz)</span><a href="tel:0800473333" class="coord-tel">0800 473 333</a></div>
-      
-      <div class="coord-item"><span class="coord-label">Pharmacie de Garde</span><a href="tel:3237" class="coord-tel">3237</a></div>
-      <div class="coord-item urgence"><span class="coord-label">Urgence européenne</span><a href="tel:112" class="coord-tel">112</a></div>
-      <div class="coord-item urgence"><span class="coord-label">SAMU</span><a href="tel:15" class="coord-tel">15</a></div>
-      <div class="coord-item urgence"><span class="coord-label">Pompiers</span><a href="tel:18" class="coord-tel">18</a></div>
-      <div class="coord-item urgence"><span class="coord-label">Police / Gendarmerie</span><a href="tel:17" class="coord-tel">17</a></div>
-      <div class="coord-item"><span class="coord-label">Gendarmerie (Rebais)</span><a href="tel:0164758210" class="coord-tel">01 64 75 82 10</a></div>
-      <div class="coord-item"><span class="coord-label">Centre anti-poison (Paris)</span><a href="tel:0140054848" class="coord-tel">01 40 05 48 48</a></div>
-      <div class="coord-item"><span class="coord-label">Urgences Vétérinaires</span><a href="tel:0170389177" class="coord-tel">01 70 38 91 77</a></div>
-
-      <div class="coord-item"><span class="coord-label">Cancer Info Service</span><a href="tel:0810810821" class="coord-tel">0810 810 821</a></div>
-      <div class="coord-item"><span class="coord-label">Violences Conjugales / Femmes</span><a href="tel:3919" class="coord-tel">3919</a></div>
-      <div class="coord-item"><span class="coord-label">Femmes battues</span><a href="tel:107" class="coord-tel">107</a></div>
-      <div class="coord-item"><span class="coord-label">Femmes abusées</span><a href="tel:0800059595" class="coord-tel">0800 059 595</a></div>
-      <div class="coord-item"><span class="coord-label">Hommes battus</span><a href="tel:0951734494" class="coord-tel">09 51 73 44 94</a></div>
-      <div class="coord-item"><span class="coord-label">Violences familiales</span><a href="tel:0144730127" class="coord-tel">01 44 73 01 27</a></div>
-      <div class="coord-item"><span class="coord-label">Enfance maltraitée</span><a href="tel:119" class="coord-tel">119</a></div>
-      <div class="coord-item"><span class="coord-label">Accueil sans abri</span><a href="tel:115" class="coord-tel">115</a></div>
-      <div class="coord-item"><span class="coord-label">Alcooliques Anonymes</span><a href="tel:0820326883" class="coord-tel">08 20 32 68 83</a></div>
-      <div class="coord-item"><span class="coord-label">Écoute Alcool</span><a href="tel:0811913030" class="coord-tel">0811 913 030</a></div>
-      <div class="coord-item"><span class="coord-label">Écoute Cannabis</span><a href="tel:0811912020" class="coord-tel">0811 912 020</a></div>
-      <div class="coord-item"><span class="coord-label">Tabac Info Service</span><a href="tel:3989" class="coord-tel">3989</a></div>
-      <div class="coord-item"><span class="coord-label">Drogue Info Service</span><a href="tel:0800231313" class="coord-tel">0800 231 313</a></div>
-      <div class="coord-item"><span class="coord-label">Sida Info Service</span><a href="tel:0800840800" class="coord-tel">0800 840 800</a></div>
-      <div class="coord-item"><span class="coord-label">Prévention radicalisation</span><a href="tel:0800005696" class="coord-tel">0800 005 696</a></div>
-    </div>
+    <div id="coords-target" class="coords-grid"></div>
   </div>
 </section>
 
@@ -877,8 +840,7 @@
 <section class="section" style="background: var(--blanc);">
   <div class="section-inner reveal">
     <div class="section-label">Patrimoine & aménagements</div>
-    <h2 class="section-title">La place de l'Église</h2>
-    <div class="badge-maj">Mis à jour : 14 mars 2021</div>
+    <h2 class="section-title" style="margin-bottom: 2rem">La place de l'Église</h2>
 
     <!-- ÉTAPE 1 : Le Constat (2014) -->
     <div class="content-block reveal">
@@ -985,6 +947,7 @@
 <div id="footer-placeholder"></div>
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="/js/site-content-loader.js" type="module"></script>
 <script>
   fetch('/components/footer.html')
     .then(r => r.text())

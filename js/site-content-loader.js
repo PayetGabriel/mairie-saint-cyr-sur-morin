@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPermanences()
   initEtatCivil()
   initDechets()
+  initVieQuotidienne()
 })
 
 /**
@@ -398,5 +399,58 @@ async function initDechets() {
 
   } catch (err) {
     console.error("Erreur lors du chargement des données de gestion des déchets:", err.message)
+  }
+}
+
+/**
+ * 5. Gestion de la page Vie Quotidienne (Coordonnées Utiles)
+ */
+async function initVieQuotidienne() {
+  const container = document.getElementById('coords-target')
+  if (!container) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'vie_quotidienne_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const coordsList = data.value
+    container.innerHTML = ''
+
+    coordsList.forEach(item => {
+      // Nettoyage des espaces pour le lien mobile href="tel:"
+      const cleanNumber = item.number.replace(/\s+/g, '')
+      
+      const coordItem = document.createElement('div')
+      // Application dynamique de la classe 'urgence' selon le booléen
+      coordItem.className = item.is_emergency ? 'coord-item urgence reveal' : 'coord-item reveal'
+      
+      coordItem.innerHTML = `
+        <span class="coord-label">${item.name}</span>
+        <a href="tel:${cleanNumber}" class="coord-tel">${item.number}</a>
+      `
+      container.appendChild(coordItem)
+    })
+
+    // Ré-accroche à l'IntersectionObserver pour les animations au scroll
+    if (window.revealObserver) {
+      container.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el))
+    } else {
+      setTimeout(() => {
+        if (window.revealObserver) {
+          container.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el))
+        } else {
+          container.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'))
+        }
+      }, 100)
+    }
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des coordonnées utiles:", err.message)
   }
 }
