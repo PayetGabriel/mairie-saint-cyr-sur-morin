@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initEtatCivil()
   initDechets()
   initVieQuotidienne()
+  initTransports()
 })
 
 /**
@@ -452,5 +453,71 @@ async function initVieQuotidienne() {
 
   } catch (err) {
     console.error("Erreur lors du chargement des coordonnées utiles:", err.message)
+  }
+}
+
+/**
+ * 6. Gestion de la page Transports (Grille des lignes de bus)
+ */
+async function initTransports() {
+  const container = document.getElementById('transports-target')
+  if (!container) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'transports_lignes_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value || !data.value.lignes) return
+
+    const listeLignes = data.value.lignes
+    container.innerHTML = ''
+
+    listeLignes.forEach(ligne => {
+      const card = document.createElement('div')
+      card.className = 'ligne-card reveal'
+      
+      card.innerHTML = `
+        <div class="ligne-head">
+          <div class="ligne-num">${ligne.id}</div>
+          <div class="ligne-head-text">
+            <strong>${ligne.name}</strong>
+            <span>${ligne.dessert}</span>
+          </div>
+          <span class="ligne-badge ${ligne.badge_type}">${ligne.badge_label}</span>
+        </div>
+        <div class="ligne-plan">
+          <img src="${ligne.img_url}" alt="Plan de la ligne ${ligne.id}" />
+        </div>
+        <div class="ligne-footer">
+          <a href="${ligne.url}" target="_blank" rel="noopener">
+            Horaires &amp; plan
+            ${EXTERNAL_LINK_SVG}
+          </a>
+        </div>
+      `
+      container.appendChild(card)
+    })
+
+    // ─────────────────────────────────────────────────────────
+    // RE-TRIGGER DE L'OBSERVATEUR DE SCROLL (.reveal)
+    // ─────────────────────────────────────────────────────────
+    if (window.revealObserver) {
+      container.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el))
+    } else {
+      setTimeout(() => {
+        if (window.revealObserver) {
+          container.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el))
+        } else {
+          container.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'))
+        }
+      }, 100)
+    }
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des lignes de transport:", err.message)
   }
 }
