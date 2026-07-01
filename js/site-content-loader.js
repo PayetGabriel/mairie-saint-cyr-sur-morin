@@ -128,23 +128,18 @@ async function initEtatCivil() {
 
     const pageData = data.value
 
-    // A. Injection propre de la date de mise à jour (sans double espace et bien isolée)
     const dateTextSpan = document.getElementById('etat-civil-update-date')
     if (dateTextSpan && pageData.update_date) {
-    // On écrit la phrase complète ici pour maîtriser l'espace à 100%
-    dateTextSpan.textContent = `Mis à jour le ${pageData.update_date}`
+      dateTextSpan.textContent = `Mis à jour le ${pageData.update_date}`
     }
 
-    // B. Vidage complet du conteneur
     container.innerHTML = ''
 
-    // C. Boucle sur le tableau d'ordonnancement (sections_order)
     pageData.sections_order.forEach(sectionKey => {
       const sData = pageData.sections[sectionKey]
       if (!sData) return
 
       const bloc = document.createElement('div')
-      // Note : On garde la classe reveal pour le style et l'animation
       bloc.className = 'demarche-bloc reveal'
       bloc.id = sectionKey
 
@@ -242,35 +237,14 @@ async function initEtatCivil() {
       }
 
       bodyHTML += `</div>`
-
       bloc.innerHTML = headHTML + bodyHTML
       container.appendChild(bloc)
     })
 
-    // ─────────────────────────────────────────────────────────
-    // D. SYSTEME DE RE-TRIGGER POUR LA CLASSE "REVEAL"
-    // ─────────────────────────────────────────────────────────
-    
-    // On vérifie si ton observateur global existe
-    if (window.revealObserver) {
-      // On va chercher tous les nouveaux blocs .reveal qu'on vient d'injecter dans le conteneur
-      container.querySelectorAll('.reveal').forEach(bloc => {
-        window.revealObserver.observe(bloc);
-      });
-    } else {
-      // Plan de secours au cas où le script de scroll charge après Supabase
-      setTimeout(() => {
-        if (window.revealObserver) {
-          container.querySelectorAll('.reveal').forEach(bloc => window.revealObserver.observe(bloc));
-        } else {
-          // Si vraiment l'observateur n'est pas là, on affiche les blocs brute sans animation
-          container.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-        }
-      }, 100);
-    }
+    // Nettoyé grâce à la fonction globale
+    bindNewReveals(container)
 
   } catch (err) {
-    // Correction de la quote ici (utilisation de doubles guillemets pour entourer la chaîne)
     console.error("Erreur lors du chargement dynamique de l'État Civil:", err.message)
   }
 }
@@ -283,7 +257,6 @@ async function initDechets() {
   const fichesContainer = document.getElementById('fiches-target')
   const orgContainer = document.getElementById('organismes-target')
   
-  // Si on n'est pas sur la bonne page, on s'arrête
   if (!calContainer && !fichesContainer && !orgContainer) return
 
   try {
@@ -298,39 +271,35 @@ async function initDechets() {
 
     const dechetsData = data.value
 
-    // A. Rendu du Calendrier de collecte
     if (calContainer && dechetsData.calendrier) {
-    const cal = dechetsData.calendrier
-    
-    // NOUVEAU : On met à jour le grand titre de la section avec l'année dynamique
-    const mainTitleEl = document.getElementById('calendrier-main-title')
-    if (mainTitleEl && cal.main_title) {
-        mainTitleEl.textContent = cal.main_title
+      const cal = dechetsData.calendrier
+      
+      const mainTitleEl = document.getElementById('calendrier-main-title')
+      if (mainTitleEl && cal.main_title) {
+          mainTitleEl.textContent = cal.main_title
+      }
+
+      calContainer.innerHTML = `
+          <div class="calendrier-card reveal" style="margin-bottom: 3rem;">
+          <div class="calendrier-preview-col pdf-preview-container">
+              <canvas class="pdf-preview" data-pdf="${cal.pdf_url}"></canvas>
+          </div>
+          <div class="calendrier-info-col">
+              <h3>${cal.title}</h3>
+              <p>${cal.desc}</p>
+              <a href="${cal.pdf_url}" class="btn btn-primary" target="_blank">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Télécharger le calendrier (PDF)
+              </a>
+          </div>
+          </div>
+      `
     }
 
-    // Le reste de la carte calendrier ne change pas
-    calContainer.innerHTML = `
-        <div class="calendrier-card reveal" style="margin-bottom: 3rem;">
-        <div class="calendrier-preview-col pdf-preview-container">
-            <canvas class="pdf-preview" data-pdf="${cal.pdf_url}"></canvas>
-        </div>
-        <div class="calendrier-info-col">
-            <h3>${cal.title}</h3>
-            <p>${cal.desc}</p>
-            <a href="${cal.pdf_url}" class="btn btn-primary" target="_blank">
-            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-            </svg>
-            Télécharger le calendrier (PDF)
-            </a>
-        </div>
-        </div>
-    `
-    }
-
-    // B. Rendu de la Grille des fiches pratiques
     if (fichesContainer && dechetsData.fiches) {
       fichesContainer.innerHTML = ''
       dechetsData.fiches.forEach(fiche => {
@@ -363,7 +332,6 @@ async function initDechets() {
       })
     }
 
-    // C. Rendu de la Grille des organismes
     if (orgContainer && dechetsData.organismes) {
       orgContainer.innerHTML = ''
       dechetsData.organismes.forEach(org => {
@@ -378,25 +346,11 @@ async function initDechets() {
       })
     }
 
-    // D. Notification pour ton script de Preview PDF (Optionnel mais sécurisant)
-    // Si ton script qui dessine le PDF dans le <canvas> écoute un événement pour se relancer :
     window.dispatchEvent(new Event('pdf-preview-reload'));
 
-    // E. Ré-accroche des éléments injectés à ton IntersectionObserver global (.reveal)
-    if (window.revealObserver) {
-      if (calContainer) calContainer.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el));
-      if (fichesContainer) fichesContainer.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el));
-    } else {
-      // Secours si l'observer global n'est pas encore instancié
-      setTimeout(() => {
-        const elements = document.querySelectorAll('#calendrier-target .reveal, #fiches-target .reveal');
-        if (window.revealObserver) {
-          elements.forEach(el => window.revealObserver.observe(el));
-        } else {
-          elements.forEach(el => el.classList.add('visible'));
-        }
-      }, 100);
-    }
+    // Nettoyé grâce à la fonction globale sur les deux conteneurs concernés
+    if (calContainer) bindNewReveals(calContainer)
+    if (fichesContainer) bindNewReveals(fichesContainer)
 
   } catch (err) {
     console.error("Erreur lors du chargement des données de gestion des déchets:", err.message)
@@ -424,11 +378,8 @@ async function initVieQuotidienne() {
     container.innerHTML = ''
 
     coordsList.forEach(item => {
-      // Nettoyage des espaces pour le lien mobile href="tel:"
       const cleanNumber = item.number.replace(/\s+/g, '')
-      
       const coordItem = document.createElement('div')
-      // Application dynamique de la classe 'urgence' selon le booléen
       coordItem.className = item.is_emergency ? 'coord-item urgence reveal' : 'coord-item reveal'
       
       coordItem.innerHTML = `
@@ -438,18 +389,8 @@ async function initVieQuotidienne() {
       container.appendChild(coordItem)
     })
 
-    // Ré-accroche à l'IntersectionObserver pour les animations au scroll
-    if (window.revealObserver) {
-      container.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el))
-    } else {
-      setTimeout(() => {
-        if (window.revealObserver) {
-          container.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el))
-        } else {
-          container.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'))
-        }
-      }, 100)
-    }
+    // Nettoyé grâce à la fonction globale
+    bindNewReveals(container)
 
   } catch (err) {
     console.error("Erreur lors du chargement des coordonnées utiles:", err.message)
@@ -502,22 +443,28 @@ async function initTransports() {
       container.appendChild(card)
     })
 
-    // ─────────────────────────────────────────────────────────
-    // RE-TRIGGER DE L'OBSERVATEUR DE SCROLL (.reveal)
-    // ─────────────────────────────────────────────────────────
-    if (window.revealObserver) {
-      container.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el))
-    } else {
-      setTimeout(() => {
-        if (window.revealObserver) {
-          container.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el))
-        } else {
-          container.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'))
-        }
-      }, 100)
-    }
+    // Nettoyé grâce à la fonction globale
+    bindNewReveals(container)
 
   } catch (err) {
     console.error("Erreur lors du chargement des lignes de transport:", err.message)
+  }
+}
+
+/**
+ * UTILS - Raccroche les nouveaux éléments du DOM à l'IntersectionObserver global (.reveal)
+ * @param {HTMLElement} parentContainer - Le conteneur parent contenant les nouveaux éléments .reveal
+ */
+function bindNewReveals(parentContainer) {
+  if (window.revealObserver) {
+    parentContainer.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el))
+  } else {
+    setTimeout(() => {
+      if (window.revealObserver) {
+        parentContainer.querySelectorAll('.reveal').forEach(el => window.revealObserver.observe(el))
+      } else {
+        parentContainer.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'))
+      }
+    }, 100)
   }
 }
