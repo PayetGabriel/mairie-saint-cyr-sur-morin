@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initDechets()
   initVieQuotidienne()
   initTransports()
+  initSallePolyvalente()
 })
 
 /**
@@ -448,6 +449,68 @@ async function initTransports() {
 
   } catch (err) {
     console.error("Erreur lors du chargement des lignes de transport:", err.message)
+  }
+}
+
+/**
+ * 7. Gestion de la page Salle Polyvalente (Tarifs & Cautions)
+ */
+async function initSallePolyvalente() {
+  const target = document.getElementById('salle-polyvalente-section')
+  if (!target) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'salle_polyvalente_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const { tarifs, cautions } = data.value
+
+    // Fonction utilitaire pour formater les prix (Ex: 57,50 € ou 180 €)
+    const formatPrice = (num) => {
+      return Number.isInteger(num) 
+        ? `${num} €` 
+        : `${num.toFixed(2).replace('.', ',')} €`;
+    };
+
+    // Remplissage des cellules dans les quatre tableaux
+    target.querySelectorAll('tr[data-formule]').forEach(row => {
+      const saison = row.getAttribute('data-saison');
+      const cible = row.getAttribute('data-cible');
+      const formule = row.getAttribute('data-formule');
+
+      const basePrice = tarifs?.[saison]?.[cible]?.[formule];
+
+      if (basePrice !== undefined) {
+        const arrhes = basePrice * 0.25;
+        const solde = basePrice * 0.75;
+
+        row.querySelector('.price-main').textContent = formatPrice(basePrice);
+        
+        const subPrices = row.querySelectorAll('.price-sub');
+        if (subPrices.length >= 2) {
+          subPrices[0].textContent = formatPrice(arrhes);
+          subPrices[1].textContent = formatPrice(solde);
+        }
+      }
+    });
+
+    // Remplissage des cautions
+    if (cautions) {
+      const elMenage = document.getElementById('caution-menage');
+      const elMateriel = document.getElementById('caution-materiel');
+      
+      if (elMenage) elMenage.textContent = formatPrice(cautions.menage);
+      if (elMateriel) elMateriel.textContent = formatPrice(cautions.materiel);
+    }
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des tarifs de la salle polyvalente:", err.message)
   }
 }
 

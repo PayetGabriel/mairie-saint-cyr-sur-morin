@@ -274,9 +274,6 @@
 </head>
 <body>
 
-<!-- ─── NAVBAR ─── -->
-<div id="navbar-placeholder"></div>
-
 <!-- ─── PAGE HEADER ─── -->
 <header class="page-header" style="background: var(--vert);">
   <div class="page-header-inner reveal">
@@ -285,11 +282,9 @@
   </div>
 </header>
 
-<!-- ─── SECTION PRINCIPALE ─── -->
-<section class="section">
+<section class="section" id="salle-polyvalente-section">
   <div class="section-inner">
 
-    <!-- Chiffres clés -->
     <div class="key-stats reveal">
       <div class="key-stat">
         <div class="key-stat-num">200</div>
@@ -305,7 +300,6 @@
       </div>
     </div>
 
-    <!-- Présentation + réservation -->
     <div class="content-grid reveal" style="margin-bottom: 3rem;">
       <div class="content-block">
         <p>Située <strong>avenue Daniel Simon</strong>, à côté de la Mairie, la salle polyvalente est attribuée aux particuliers et aux associations de la commune comme aux organisateurs extérieurs.</p>
@@ -328,14 +322,12 @@
       </div>
     </div>
 
-    <!-- Tarifs -->
     <div class="section-label" style="margin-bottom: 0.75rem;">Tarifs</div>
     <h2 class="section-title" style="margin-bottom: 0.5rem;">Tableau des tarifs</h2>
     <p style="font-size: 0.85rem; color: var(--gris); margin-bottom: 2rem;">
       Applicables à partir du 1<sup>er</sup> janvier 2023, sous réserve de modifications ultérieures.
     </p>
 
-    <!-- Toggle saisons -->
     <div class="saison-tabs" role="tablist">
       <button class="saison-btn active" data-saison="ete">
         <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -355,7 +347,6 @@
       </button>
     </div>
 
-    <!-- Tarifs ÉTÉ -->
     <div class="saison-pane active" id="saison-ete">
       <div class="tarifs-section">
 
@@ -377,23 +368,23 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr data-saison="ete" data-cible="commune" data-formule="vin_honneur">
                 <td>Vin d'honneur</td>
-                <td class="price-main">180 €</td>
-                <td class="price-sub">45 €</td>
-                <td class="price-sub">135 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
-              <tr>
+              <tr data-saison="ete" data-cible="commune" data-formule="un_jour">
                 <td>1 journée</td>
-                <td class="price-main">230 €</td>
-                <td class="price-sub">57,50 €</td>
-                <td class="price-sub">172,50 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
-              <tr>
+              <tr data-saison="ete" data-cible="commune" data-formule="deux_jours">
                 <td>2 journées</td>
-                <td class="price-main">330 €</td>
-                <td class="price-sub">82,50 €</td>
-                <td class="price-sub">247,50 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
             </tbody>
           </table>
@@ -418,23 +409,23 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr data-saison="ete" data-cible="exterieur" data-formule="vin_honneur">
                 <td>Vin d'honneur</td>
-                <td class="price-main">330 €</td>
-                <td class="price-sub">82,50 €</td>
-                <td class="price-sub">247,50 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
-              <tr>
+              <tr data-saison="ete" data-cible="exterieur" data-formule="un_jour">
                 <td>1 journée</td>
-                <td class="price-main">480 €</td>
-                <td class="price-sub">120 €</td>
-                <td class="price-sub">360 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
-              <tr>
+              <tr data-saison="ete" data-cible="exterieur" data-formule="deux_jours">
                 <td>2 journées</td>
-                <td class="price-main">630 €</td>
-                <td class="price-sub">157,50 €</td>
-                <td class="price-sub">472,50 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
             </tbody>
           </table>
@@ -443,7 +434,6 @@
       </div>
     </div>
 
-    <!-- Tarifs HIVER -->
     <div class="saison-pane" id="saison-hiver">
       <div class="tarifs-section">
 
@@ -465,23 +455,23 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr data-saison="hiver" data-cible="commune" data-formule="vin_honneur">
                 <td>Vin d'honneur</td>
-                <td class="price-main">220 €</td>
-                <td class="price-sub">55 €</td>
-                <td class="price-sub">165 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
-              <tr>
+              <tr data-saison="hiver" data-cible="commune" data-formule="un_jour">
                 <td>1 journée</td>
-                <td class="price-main">290 €</td>
-                <td class="price-sub">72,50 €</td>
-                <td class="price-sub">217,50 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
-              <tr>
+              <tr data-saison="hiver" data-cible="commune" data-formule="deux_jours">
                 <td>2 journées</td>
-                <td class="price-main">400 €</td>
-                <td class="price-sub">100 €</td>
-                <td class="price-sub">300 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
             </tbody>
           </table>
@@ -506,23 +496,23 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr data-saison="hiver" data-cible="exterieur" data-formule="vin_honneur">
                 <td>Vin d'honneur</td>
-                <td class="price-main">370 €</td>
-                <td class="price-sub">92,50 €</td>
-                <td class="price-sub">277,50 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
-              <tr>
+              <tr data-saison="hiver" data-cible="exterieur" data-formule="un_jour">
                 <td>1 journée</td>
-                <td class="price-main">540 €</td>
-                <td class="price-sub">135 €</td>
-                <td class="price-sub">405 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
-              <tr>
+              <tr data-saison="hiver" data-cible="exterieur" data-formule="deux_jours">
                 <td>2 journées</td>
-                <td class="price-main">700 €</td>
-                <td class="price-sub">175 €</td>
-                <td class="price-sub">525 €</td>
+                <td class="price-main">—</td>
+                <td class="price-sub">—</td>
+                <td class="price-sub">—</td>
               </tr>
             </tbody>
           </table>
@@ -531,12 +521,10 @@
       </div>
     </div>
 
-    <!-- Note arrhes -->
     <div class="info-note reveal">
       <strong>Arrhes</strong> — Un quart du montant total est demandé pour confirmer la réservation. Les arrhes sont encaissées immédiatement et ne sont pas remboursables, quel que soit le motif d'annulation.
     </div>
 
-    <!-- Conditions retrait des clés -->
     <h2 class="section-title" style="margin: 3rem 0 1.5rem;">Le jour de la location</h2>
 
     <div class="conditions-grid">
@@ -550,7 +538,7 @@
         </div>
         <div>
           <strong>Caution ménage</strong>
-          <p>Chèque de caution de <strong style="color: var(--texte);">250 €</strong> à remettre lors du retrait des clés.</p>
+          <p>Chèque de caution de <strong style="color: var(--texte);" id="caution-menage">— €</strong> à remettre lors du retrait des clés.</p>
         </div>
       </div>
 
@@ -564,7 +552,7 @@
         </div>
         <div>
           <strong>Caution matériel</strong>
-          <p>Chèque de caution de <strong style="color: var(--texte);">500 €</strong> à remettre lors du retrait des clés.</p>
+          <p>Chèque de caution de <strong style="color: var(--texte);" id="caution-materiel">— €</strong> à remettre lors du retrait des clés.</p>
         </div>
       </div>
 
@@ -607,6 +595,7 @@
 
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="/js/site-content-loader.js" type="module"></script>
 <script>
   fetch('/components/footer.html')
     .then(r => r.text())
