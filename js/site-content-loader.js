@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTransports()
   initSallePolyvalente()
   initPLU()
+  initPermisTravaux()
 })
 
 /**
@@ -594,6 +595,106 @@ async function initPLU() {
 
   } catch (err) {
     console.error("Erreur lors du chargement des données du PLU :", err.message)
+  }
+}
+
+/**
+ * 9. Gestion de la page Autorisations d'Urbanisme & Travaux
+ */
+async function initPermisTravaux() {
+  // On vérifie la présence d'au moins un élément clé de la page avant de continuer
+  if (!document.getElementById('voirie-btn-wrapper') && !document.getElementById('links-certificat')) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'permis_travaux_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const pageData = data.value
+
+    // 1. Gestion du bouton Règlement de voirie
+    const voirieWrapper = document.getElementById('voirie-btn-wrapper')
+    if (voirieWrapper) {
+      const rawUrl = pageData.voirie_document_url
+      
+      // Check absolu : si c'est null, vide, une grille (#) ou les textes "null"/"undefined"
+      const isEmpty = !rawUrl || 
+                      rawUrl.trim() === '' || 
+                      rawUrl.trim() === '#' || 
+                      rawUrl.trim() === 'null' || 
+                      rawUrl.trim() === 'undefined'
+
+      if (!isEmpty) {
+        voirieWrapper.innerHTML = `
+          <a href="${rawUrl.trim()}" class="btn-download" target="_blank" rel="noopener">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>Télécharger le document (PDF)</a>`.trim()
+      } else {
+        voirieWrapper.innerHTML = `
+          <div class="btn-no-link">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 8v4l3 3"></path>
+            </svg>Document en cours de mise en ligne</div>`.trim()
+      }
+    }
+
+    // Dictionnaire de configuration des types de liens (SVGs exacts + Texte du badge)
+    const linkTypeConfig = {
+      'service-public': {
+        tag: 'Service-Public',
+        svg: '<svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>'
+      },
+      'telecharger': {
+        tag: 'Télécharger',
+        svg: '<svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+      },
+      'outil-en-ligne': {
+        tag: 'Outil en ligne',
+        svg: '<svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>'
+      }
+    }
+
+    // Mapping entre les clés du JSON et les IDs des conteneurs HTML
+    const cardMapping = {
+      'certificat': 'links-certificat',
+      'declaration': 'links-declaration',
+      'construire': 'links-construire',
+      'modificatif': 'links-modificatif',
+      'transfert': 'links-transfert',
+      'contestation': 'links-contestation',
+      'fiscalite': 'links-fiscalite'
+    }
+
+    // 2. Injection dynamique des liens dans les 7 cartes
+    if (pageData.cards_links) {
+      Object.entries(cardMapping).forEach(([jsonKey, elementId]) => {
+        const container = document.getElementById(elementId)
+        if (!container) return
+
+        const linksArray = pageData.cards_links[jsonKey] || []
+        
+        // Génération propre de chaque lien sans aucun espace parasite
+        container.innerHTML = linksArray.map(link => {
+          const config = linkTypeConfig[link.type] || linkTypeConfig['service-public']
+          return `
+            <a href="${link.url}" target="_blank" rel="noopener" class="demarche-link">
+              ${config.svg}${link.label}<span class="tag">${config.tag}</span>
+            </a>`.trim()
+        }).join('\n')
+      })
+    }
+
+  } catch (err) {
+    console.error('Erreur lors du chargement des données de permis-travaux:', err)
   }
 }
 
