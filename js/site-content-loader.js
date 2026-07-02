@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initVieQuotidienne()
   initTransports()
   initSallePolyvalente()
+  initPLU()
 })
 
 /**
@@ -511,6 +512,88 @@ async function initSallePolyvalente() {
 
   } catch (err) {
     console.error("Erreur lors du chargement des tarifs de la salle polyvalente:", err.message)
+  }
+}
+
+/**
+ * 8. Gestion de la page PLU (Urbanisme - Zones fixes & listes extensibles)
+ */
+async function initPLU() {
+  const container = document.getElementById('plu-page-section')
+  if (!container) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'plu_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const { zones, groups, applicable_date } = data.value
+
+    // 1.5 Mise à jour de la date d'application du badge (évite le double espace)
+    const dateBadgeSpan = document.getElementById('plu-applicable-date')
+    if (dateBadgeSpan && applicable_date) {
+      dateBadgeSpan.textContent = `Applicable depuis le ${applicable_date}`
+    }
+
+    // 1. Mise à jour des liens des 4 zones structurelles fixes
+    if (zones) {
+      Object.keys(zones).forEach(zoneKey => {
+        const linkEl = container.querySelector(`a[data-zone="${zoneKey}"]`)
+        if (linkEl) linkEl.href = zones[zoneKey] || '#'
+      })
+    }
+
+    // 2. Génération dynamique de l'ensemble des groupes et sous-sections de documents
+    const dynamicWrapper = document.getElementById('plu-dynamic-groups')
+    if (dynamicWrapper && groups) {
+      dynamicWrapper.innerHTML = ''
+
+      groups.forEach(group => {
+        // Ajout des en-têtes du groupe principal
+        const headHTML = `
+          <div class="section-label reveal" style="margin-top: 3rem; margin-bottom: 0.75rem;">${group.label}</div>
+          <h2 class="section-title reveal" style="margin-bottom: 1.5rem;">${group.title}</h2>
+        `
+        const groupDiv = document.createElement('div')
+        groupDiv.innerHTML = headHTML
+        
+        // Ajout de chaque sous-section de documents
+        group.sections.forEach(section => {
+          const sectionEl = document.createElement('div')
+          sectionEl.className = 'docs-section reveal'
+          
+          let docsHTML = `<div class="docs-section-label">${section.section_label}</div>`
+          docsHTML += `<div class="docs-list">`
+          
+          section.docs.forEach(doc => {
+            docsHTML += `
+              <a href="${doc.url}" target="_blank" rel="noopener" class="doc-item">
+                <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                ${doc.label}
+                <span class="doc-num">PDF</span>
+              </a>
+            `
+          })
+          
+          docsHTML += `</div>`
+          sectionEl.innerHTML = docsHTML
+          groupDiv.appendChild(sectionEl)
+        })
+
+        dynamicWrapper.appendChild(groupDiv)
+      })
+
+      // Ré-attachement à l'IntersectionObserver pour les animations fluides
+      bindNewReveals(dynamicWrapper)
+    }
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des données du PLU :", err.message)
   }
 }
 

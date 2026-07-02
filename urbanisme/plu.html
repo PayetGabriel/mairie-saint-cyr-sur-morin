@@ -407,15 +407,14 @@
       <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
       </svg>
-      Applicable depuis le 9 novembre 2020
+      <span id="plu-applicable-date">...</span>
     </div>
   </div>
 </header>
 
-<section class="section">
+<section class="section" id="plu-page-section">
   <div class="section-inner">
 
-    <!-- Intro + Géoportail -->
     <div class="content-grid reveal" style="margin-bottom: 2.5rem;">
       <div class="content-block">
         <p>Le PLU est un document d'urbanisme réglementaire <strong>opposable à tout projet</strong> faisant l'objet d'une demande sur la commune. Tout dépôt de permis de construire ou de déclaration préalable de travaux sera validé par le service de l'urbanisme à condition que le projet soit conforme au règlement en vigueur.</p>
@@ -440,7 +439,6 @@
       </div>
     </div>
 
-    <!-- Zones -->
     <div class="section-label reveal" style="margin-bottom: 0.75rem;">Zonage</div>
     <h2 class="section-title reveal" style="margin-bottom: 1.5rem;">Les zones du PLU</h2>
 
@@ -455,7 +453,7 @@
           </div>
         </div>
         <div class="zone-body">
-          <a href="#" target="_blank" rel="noopener" class="zone-regl-link">
+          <a href="#" target="_blank" rel="noopener" class="zone-regl-link" data-zone="A">
             <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             Règlement zone A
           </a>
@@ -471,7 +469,7 @@
           </div>
         </div>
         <div class="zone-body">
-          <a href="#" target="_blank" rel="noopener" class="zone-regl-link">
+          <a href="#" target="_blank" rel="noopener" class="zone-regl-link" data-zone="U">
             <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             Règlement zone U
           </a>
@@ -487,7 +485,7 @@
           </div>
         </div>
         <div class="zone-body">
-          <a href="#" target="_blank" rel="noopener" class="zone-regl-link">
+          <a href="#" target="_blank" rel="noopener" class="zone-regl-link" data-zone="N">
             <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             Règlement zone N
           </a>
@@ -503,7 +501,7 @@
           </div>
         </div>
         <div class="zone-body">
-          <a href="#" target="_blank" rel="noopener" class="zone-regl-link">
+          <a href="#" target="_blank" rel="noopener" class="zone-regl-link" data-zone="AUX">
             <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             Règlement zone AUX
           </a>
@@ -512,159 +510,7 @@
 
     </div>
 
-    <!-- Plans de zonage -->
-    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Documents graphiques</div>
-    <h2 class="section-title reveal" style="margin-bottom: 1.5rem;">Plans de zonage &amp; règlement</h2>
-
-    <div class="docs-section reveal">
-      <div class="docs-section-label">Plans de zonage</div>
-      <div class="docs-list">
-        <a href="/assets/docs/urbanisme/plan-zonage/Plan-n°4.2a-Ensemble-du-territoire.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Plan n°4.2a — Ensemble du territoire
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/plan-zonage/Plan-n°4.2b-Bourg-et-hameaux-de-Biercy-Armenats-Archet-et-Hermitiere.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Plan n°4.2b — Bourg et hameaux de Biercy, Armenats, Archet et Hermitière
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/plan-zonage/Plan-n°4.2c-hameaux.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Plan n°4.2c — Hameaux
-          <span class="doc-num">PDF</span>
-        </a>
-      </div>
-    </div>
-
-    <div class="docs-section reveal">
-      <div class="docs-section-label">Règlement</div>
-      <div class="docs-list">
-        <a href="/assets/docs/urbanisme/Reglement.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Règlement du PLU
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/Reglement-de-la-voirie-communale.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Règlement de voirie communale
-          <span class="doc-num">PDF</span>
-        </a>
-      </div>
-    </div>
-
-    <!-- Documents complémentaires -->
-    <div class="section-label reveal" style="margin-bottom: 0.75rem;">Documents complémentaires</div>
-    <h2 class="section-title reveal" style="margin-bottom: 1.5rem;">Dossier complet du PLU</h2>
-
-    <div class="docs-section reveal">
-      <div class="docs-section-label">Pièces principales</div>
-      <div class="docs-list">
-        <a href="/assets/docs/urbanisme/docs-complementaires/1.Deliberation-dapprobation-3.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          1. Délibération d'approbation
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/2.Rapport-de-presentation.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          2. Rapport de présentation
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/3.PADD_-1.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          3. PADD — Projet d'Aménagement et de Développement Durables
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/4.OAP_.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          4. OAP — Orientations d'Aménagement et de Programmation
-          <span class="doc-num">PDF</span>
-        </a>
-      </div>
-    </div>
-
-    <div class="docs-section reveal">
-      <div class="docs-section-label">Avis &amp; concertation</div>
-      <div class="docs-list">
-        <a href="/assets/docs/urbanisme/docs-complementaires/Avis-des-PPA.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Avis des PPA (Personnes Publiques Associées)
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/Bilan-de-la-concertation.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Bilan de la concertation
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/Rapport-denquete-publique.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Rapport d'enquête publique
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/Porter-a-connaissance.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Porter à connaissance
-          <span class="doc-num">PDF</span>
-        </a>
-      </div>
-    </div>
-
-    <div class="docs-section reveal">
-      <div class="docs-section-label">Documents techniques</div>
-      <div class="docs-list">
-        <a href="/assets/docs/urbanisme/docs-complementaires/Mise-a-jour-GAZ-SUP.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Mise à jour GAZ SUP
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/Notice-sanitaire.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Notice sanitaire
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/Servitudes-dutilite-publiques.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Servitudes d'utilité publique
-          <span class="doc-num">PDF</span>
-        </a>
-      </div>
-    </div>
-
-    <div class="docs-section reveal">
-      <div class="docs-section-label">Servitudes &amp; réseaux</div>
-      <div class="docs-list">
-        <a href="/assets/docs/urbanisme/docs-complementaires/Plan-n°5.2a-Servitudes.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Plan n°5.2a — Servitudes
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/Plan-n°5.2b-Servitude-PM1.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Plan n°5.2b — Servitude PM1
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/Plan-n°6.2a-Reseau-deau-potable-secteur-Nord.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Plan n°6.2a — Réseau d'eau potable, secteur Nord
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/Plan-n°6.2b-Reseau-deau-potable-secteur-Sud.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Plan n°6.2b — Réseau d'eau potable, secteur Sud
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/Plan-n°6.2c-Reseau-dassainissement.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Plan n°6.2c — Réseau d'assainissement
-          <span class="doc-num">PDF</span>
-        </a>
-        <a href="/assets/docs/urbanisme/docs-complementaires/Plan-n°6.2d-Zone-de-bruit.pdf" target="_blank" rel="noopener" class="doc-item">
-          <svg width="15" height="15" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Plan n°6.2d — Zone de bruit
-          <span class="doc-num">PDF</span>
-        </a>
-      </div>
-    </div>
+    <div id="plu-dynamic-groups"></div>
 
   </div>
 </section>
@@ -724,9 +570,10 @@
         <p>
           <strong>Stéphanie MONTICO</strong> (élue) · <strong>Sophie SEROI</strong> (secrétaire)<br>
           <span style="display:block; margin-top: 0.5rem;">
-            Accueil : lun, mar, jeu — 9h à 12h · sur RDV le samedi · Fermé mer et ven
+            Accueil : 
+            <a href="/la-commune/horaires-permanences.html">Consulter les horaires</a>
           </span>
-          <a href="tel:0160238024">01 60 23 80 24</a> · <a href="mailto:depoturbanisme.mairiesaintcyr@orange.fr">depoturbanisme.mairiesaintcyr@orange.fr</a>
+          <a href="tel:0160238024">01 60 23 80 24</a> · <a href="mailto:urbanisme77405.mairiesaintcyr@orange.fr">urbanisme77405.mairiesaintcyr@orange.fr</a>
         </p>
       </div>
     </div>
@@ -738,6 +585,7 @@
 <div id="footer-placeholder"></div>
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="/js/site-content-loader.js" type="module"></script>
 <script>
   fetch('/components/footer.html')
     .then(r => r.text())
