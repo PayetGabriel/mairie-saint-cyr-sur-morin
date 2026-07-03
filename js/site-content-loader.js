@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSallePolyvalente()
   initPLU()
   initPermisTravaux()
+  initEauAssainissement()
 })
 
 /**
@@ -695,6 +696,69 @@ async function initPermisTravaux() {
 
   } catch (err) {
     console.error('Erreur lors du chargement des données de permis-travaux:', err)
+  }
+}
+
+/**
+ * 10. Gestion de la page Eau & Assainissement
+ */
+async function initEauAssainissement() {
+  // On teste la présence d'un ID unique avant d'exécuter
+  if (!document.getElementById('eau-prix-m3')) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'eau_assainissement_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const pageData = data.value
+
+    // 1. Injection du prix de l'eau au m³
+    const eauPrixSpan = document.getElementById('eau-prix-m3')
+    if (eauPrixSpan && pageData.prix_eau_m3) {
+      eauPrixSpan.textContent = pageData.prix_eau_m3
+    }
+
+    // 2. Injection des tarifs SPANC (Individuel)
+    if (pageData.spanc_tarifs) {
+      const spancMapping = {
+        'visite': 'spanc-visite',
+        'etude': 'spanc-etude',
+        'chantier': 'spanc-chantier'
+      }
+      
+      Object.entries(spancMapping).forEach(([jsonKey, elementId]) => {
+        const el = document.getElementById(elementId)
+        if (el && pageData.spanc_tarifs[jsonKey]) {
+          el.textContent = pageData.spanc_tarifs[jsonKey]
+        }
+      })
+    }
+
+    // 3. Injection des tarifs PFAC (Collectif)
+    if (pageData.pfac_tarifs) {
+      const pfacMapping = {
+        'neuf': 'pfac-neuf',
+        'appartement': 'pfac-appartement',
+        'copro_principal': 'pfac-copro-principal',
+        'copro_supp': 'pfac-copro-supp'
+      }
+
+      Object.entries(pfacMapping).forEach(([jsonKey, elementId]) => {
+        const el = document.getElementById(elementId)
+        if (el && pageData.pfac_tarifs[jsonKey]) {
+          el.textContent = pageData.pfac_tarifs[jsonKey]
+        }
+      })
+    }
+
+  } catch (err) {
+    console.error('Erreur lors du chargement des données Eau & Assainissement:', err)
   }
 }
 

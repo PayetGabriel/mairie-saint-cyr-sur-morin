@@ -144,7 +144,7 @@
 
     <div class="content-grid reveal" style="margin-bottom: 3rem;">
       <div class="content-block">
-        <p>L'eau du robinet est gérée par le <strong>S2E77</strong> (anciennement SNE 77, Syndicat des Eaux). Le prix de l'eau est autour de <strong>4,24 € TTC/m³</strong> hors part fixe au compteur. Son prix a subi de fortes augmentations en raison de la nécessité de renouveler le réseau, parfois vieux de presque 60 ans.</p>
+        <p>L'eau du robinet est gérée par le <strong>S2E77</strong> (anciennement SNE 77, Syndicat des Eaux). Le prix de l'eau est autour de <strong id="eau-prix-m3">4,24 € TTC/m³</strong> hors part fixe au compteur. Son prix a subi de fortes augmentations en raison de la nécessité de renouveler le réseau, parfois vieux de presque 60 ans.</p>
         <p>Le syndicat a engagé en 2017–2018 la rénovation du réservoir semi-enterré des Armenats et le réseau alimentant Biercy, avec installation de points incendie. Coût du marché : <strong>632 936,50 € HT</strong>.</p>
         <p>Privilégiez l'installation de cuves de récupération des eaux de pluie pour l'arrosage du jardin, le lavage des voitures, etc.</p>
       </div>
@@ -198,15 +198,15 @@
       <div>
         <div class="tarifs-box" style="margin-bottom: 1.25rem;">
           <div class="tarif-item">
-            <strong>90 €</strong>
+            <strong id="spanc-visite">90 €</strong>
             <span>TTC — Coût d'une visite (à partir du 1er janvier 2020)</span>
           </div>
           <div class="tarif-item">
-            <strong>66 €</strong>
+            <strong id="spanc-etude">66 €</strong>
             <span>TTC — Étude de dossier pour une réhabilitation</span>
           </div>
           <div class="tarif-item">
-            <strong>90 €</strong>
+            <strong id="spanc-chantier">90 €</strong>
             <span>TTC — Visite de chantier</span>
           </div>
         </div>
@@ -245,19 +245,19 @@
       <div>
         <div class="tarifs-box">
           <div class="tarif-item">
-            <strong>5 000 €</strong>
+            <strong id="pfac-neuf">5 000 €</strong>
             <span>Pour une habitation nouvelle</span>
           </div>
           <div class="tarif-item">
-            <strong>1 500 €</strong>
+            <strong id="pfac-appartement">1 500 €</strong>
             <span>Par appartement supplémentaire créé par division d'un bien existant</span>
           </div>
           <div class="tarif-item">
-            <strong>5 000 €</strong>
+            <strong id="pfac-copro-principal">5 000 €</strong>
             <span>Branchement principal d'une nouvelle copropriété</span>
           </div>
           <div class="tarif-item">
-            <strong>1 500 €</strong>
+            <strong id="pfac-copro-supp">1 500 €</strong>
             <span>Branchements supplémentaires copropriété</span>
           </div>
         </div>
@@ -302,6 +302,7 @@
 <div id="footer-placeholder"></div>
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="/js/site-content-loader.js" type="module"></script>
 <script>
   fetch('/components/footer.html')
     .then(r => r.text())
