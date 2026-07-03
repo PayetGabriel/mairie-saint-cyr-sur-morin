@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initSivuInfos()
   initScolaritePeriscolaire()
   initTransportsEtudes()
+  initCantine()
+  initInscriptions()
+  initSivuPracticalDocs()
 })
 
 /**
@@ -1127,7 +1130,7 @@ async function initTransportsEtudes() {
         etudesList.innerHTML = `
           <li>Elle a lieu <strong>deux fois par semaine</strong> les ${es.jours} de <strong>${es.horaires}</strong> à l'${es.etablissement}.</li>
           <li>${es.pedibus_details}</li>
-          <li><strong>Tarif :</strong> ${es.tarif}</li>
+          <li><strong>Tarif :</strong> ${es.tarif} d'inscription</li>
           <li><strong>Mode d'inscription :</strong> ${es.inscription_details}</li>
         `.trim()
       }
@@ -1159,6 +1162,205 @@ async function initTransportsEtudes() {
 
   } catch (err) {
     console.error("Erreur lors du chargement des transports et des études :", err.message)
+  }
+}
+
+/**
+ * 14. Gestion de la Cantine Scolaire (Menus & Tarifs)
+ */
+async function initCantine() {
+  const menusContainer = document.getElementById('cantine-menus-container')
+  if (!menusContainer) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'cantine_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const pageData = data.value
+
+    // --- 1. RENDU DES MENUS (GRILLE DE CARTES DE DOCUMENT) ---
+    if (pageData.menus) {
+      menusContainer.innerHTML = pageData.menus.map(menu => `
+        <a href="${menu.url}" class="doc-card" target="_blank" rel="noopener noreferrer">
+          <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+          </svg>
+          <div class="doc-info">
+            <strong>${menu.title}</strong>
+            <span>${menu.subtitle}</span>
+          </div>
+        </a>`.trim()).join('\n')
+    }
+
+    // --- 2. RENDU DES TARIFS (BLOC COMPLEXE AVEC HISTORIQUE / ANNÉE) ---
+    const tarifsBox = document.getElementById('cantine-tarifs-box')
+    if (tarifsBox && pageData.tarifs) {
+      const t = pageData.tarifs
+      
+      const itemsHtml = (t.items || []).map(item => `
+        <div class="tarif-item">
+          <strong>${item.price}</strong>
+          <span>${item.label}</span>
+        </div>`.trim()).join('\n')
+
+      tarifsBox.innerHTML = `
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-top: 25px; margin-bottom: 0.5rem; color: var(--vert);">
+          Tarifs ${t.annee}
+        </h3>
+        ${itemsHtml}
+        <p style="font-size: .85rem; color: var(--gris); margin-top: 1rem;">
+          ${t.note}
+        </p>
+      `.trim()
+    }
+
+    // --- 3. RENDU DU BOUTON RÈGLEMENT INTÉRIEUR ---
+    const reglementContainer = document.getElementById('cantine-reglement-container')
+    if (reglementContainer && pageData.reglement) {
+      reglementContainer.innerHTML = `
+        <a href="${pageData.reglement.url}" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+          </svg>
+          ${pageData.reglement.label}
+        </a>`.trim()
+    }
+
+    // --- 4. RELANCER L'INTERSECTION OBSERVER POUR LES EFFETS .REVEAL ---
+    const parentMenus = menusContainer.closest('.section-inner')
+    if (parentMenus) bindNewReveals(parentMenus)
+
+    if (tarifsBox) {
+      const parentTarifs = tarifsBox.closest('.section-inner')
+      if (parentTarifs) bindNewReveals(parentTarifs)
+    }
+
+    const parentReglement = reglementContainer?.closest('.section-inner')
+    if (parentReglement) bindNewReveals(parentReglement)
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des données de la cantine :", err.message)
+  }
+}
+
+/**
+ * 15. Gestion des Documents d'Inscriptions Scolaires
+ */
+async function initInscriptions() {
+  const cantineDocsContainer = document.getElementById('inscriptions-cantine-container')
+  const etudeDocsContainer = document.getElementById('inscriptions-etude-container')
+  
+  // On s'assure d'être sur la bonne page avant de requêter Supabase
+  if (!cantineDocsContainer && !etudeDocsContainer) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'inscriptions_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const pageData = data.value
+
+    // Fonction template réutilisable pour générer une carte de document
+    const renderDocCards = (docsArray) => {
+      if (!docsArray) return ''
+      return docsArray.map(doc => {
+        // Si l'URL est une ancre vide #, on ne met pas les attributs de nouvel onglet
+        const isExternal = doc.url && doc.url !== '#'
+        const attributes = isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''
+        
+        return `
+          <a href="${doc.url}" class="doc-card" ${attributes}>
+            <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <div class="doc-info">
+              <strong>${doc.title}</strong>
+              <span>${doc.subtitle}</span>
+            </div>
+          </a>`.trim()
+      }).join('\n')
+    }
+
+    // --- 1. RENDU DES DOCUMENTS DE LA CANTINE ---
+    if (cantineDocsContainer && pageData.cantine_docs) {
+      cantineDocsContainer.innerHTML = renderDocCards(pageData.cantine_docs)
+    }
+
+    // --- 2. RENDU DES DOCUMENTS DE L'ÉTUDE ---
+    if (etudeDocsContainer && pageData.etude_docs) {
+      etudeDocsContainer.innerHTML = renderDocCards(pageData.etude_docs)
+    }
+
+    // --- 3. RELANCER L'INTERSECTION OBSERVER POUR LES TRANSITIONS CSS ---
+    if (cantineDocsContainer) {
+      const parentCantine = cantineDocsContainer.closest('.section-inner')
+      if (parentCantine) bindNewReveals(parentCantine)
+    }
+
+    if (etudeDocsContainer) {
+      const parentEtude = etudeDocsContainer.closest('.section-inner')
+      if (parentEtude) bindNewReveals(parentEtude)
+    }
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des documents d'inscriptions :", err.message)
+  }
+}
+
+/**
+ * 16. Gestion des Documents Pratiques du SIVU (Page Accueil SIVU)
+ */
+async function initSivuPracticalDocs() {
+  const docsContainer = document.getElementById('sivu-practical-docs-container')
+  if (!docsContainer) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'sivu_practical_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const pageData = data.value
+
+    if (pageData.docs) {
+      docsContainer.innerHTML = pageData.docs.map(doc => {
+        const isExternal = doc.url && doc.url !== '#'
+        const attributes = isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''
+        
+        return `
+          <a href="${doc.url}" class="doc-card" ${attributes}>
+            <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <div class="doc-info">
+              <strong>${doc.title}</strong>
+              <span>${doc.subtitle}</span>
+            </div>
+          </a>`.trim()
+      }).join('\n')
+    }
+
+    // Relancer l'Intersection Observer pour préserver les effets .reveal
+    const parentSection = docsContainer.closest('.section-inner')
+    if (parentSection) bindNewReveals(parentSection)
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des documents pratiques du SIVU :", err.message)
   }
 }
 

@@ -102,44 +102,9 @@
       <div class="section-label">Informations pratiques</div>
       <h2 class="section-title">Documents & horaires</h2>
     </div>
-    <div class="docs-grid reveal">
-      <a href="https://drive.google.com/file/d/1Wi8JCIATCWo-6o5cZY7aeobdTEKA6tph/view?usp=drive_link" class="doc-card" target="_blank" rel="noopener noreferrer">
-        <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-        </svg>
-        <div class="doc-info">
-          <strong>Calendrier scolaire 2026-2027</strong>
-          <span>PDF — Mis à jour le 06/06/2026</span>
-        </div>
-      </a>
-      <a href="https://drive.google.com/file/d/1cuILz7XNVoEVDi6jkV2grVYAu2mP8kwa/view?usp=drive_link" class="doc-card" target="_blank" rel="noopener noreferrer">
-        <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-        </svg>
-        <div class="doc-info">
-          <strong>Horaires école élémentaire & maternelle</strong>
-          <span>PDF — Élémentaire 8h40 / Maternelle 8h45</span>
-        </div>
-      </a>
-      <a href="https://drive.google.com/file/d/1m0t643v4weHCKjlv5V0Xsi78K9lYUjPs/view?usp=drive_link" class="doc-card" target="_blank" rel="noopener noreferrer">
-        <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-        </svg>
-        <div class="doc-info">
-          <strong>Fournitures scolaires 2025-2026</strong>
-          <span>PDF — Liste complète</span>
-        </div>
-      </a>
-      <a href="https://drive.google.com/file/d/19SVT9OtX52t1bfEr9q7hoIlCWmhSajTy/view?usp=drive_link" class="doc-card" target="_blank" rel="noopener noreferrer">
-        <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-        </svg>
-        <div class="doc-info">
-          <strong>Fiche d'acceptation des règlements intérieurs</strong>
-          <span>PDF — À remplir et à retourner</span>
-        </div>
-      </a>
-    </div>
+    
+    <!-- Conteneur dynamique pour la grille des documents SIVU -->
+    <div id="sivu-practical-docs-container" class="docs-grid reveal"></div>
   </div>
 </section>
 
@@ -188,8 +153,9 @@
 
 <div id="footer-placeholder"></div>
 
-<script src="../../components/navbar.js"></script>
+<script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="/js/site-content-loader.js" type="module"></script>
 <script>
   fetch('/components/footer.html')
     .then(response => response.text())

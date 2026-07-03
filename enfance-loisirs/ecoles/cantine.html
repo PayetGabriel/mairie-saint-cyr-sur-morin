@@ -58,7 +58,6 @@
   </div>
 </section>
 
-<!-- Menus -->
 <section class="section" style="background: var(--blanc);">
   <div class="section-inner">
     <div class="content-block reveal">
@@ -68,48 +67,10 @@
       <p><strong>Sur demande préalable</strong>, un repas sans porc ou végétarien peut être demandé à la mairie (dernier délai : <strong>vendredi avant 10h</strong> pour la semaine suivante).</p>
     </div>
     
-    <div class="docs-grid reveal" style="margin-top: 2rem;">
-      <a href="https://drive.google.com/file/d/16uTd3N9x_wI6kkm7LsM53ukvKipEGmR5/view?usp=drive_link" class="doc-card" target="_blank" rel="noopener noreferrer">
-        <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-        </svg>
-        <div class="doc-info">
-          <strong>Repas du 29 juin au 3 juillet 2026</strong>
-          <span>PDF — Maternelle et élémentaire</span>
-        </div>
-      </a>
-      <a href="https://drive.google.com/file/d/1qX1UKhwlAAARFKK3u4cwVOjc6LweAJj2/view?usp=drive_link" class="doc-card" target="_blank" rel="noopener noreferrer">
-        <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-        </svg>
-        <div class="doc-info">
-          <strong>Repas du 22 au 26 juin 2026</strong>
-          <span>PDF — Maternelle et élémentaire</span>
-        </div>
-      </a>
-      <a href="https://drive.google.com/file/d/1_AliZ73yxJYTjBFcL_V-qV-1brZ2IHg9/view?usp=drive_link" class="doc-card" target="_blank" rel="noopener noreferrer">
-        <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-        </svg>
-        <div class="doc-info">
-          <strong>Repas du 15 au 19 juin 2026</strong>
-          <span>PDF — Maternelle et élémentaire</span>
-        </div>
-      </a>
-      <a href="https://drive.google.com/file/d/1_AliZ73yxJYTjBFcL_V-qV-1brZ2IHg9/view?usp=drive_link" class="doc-card" target="_blank" rel="noopener noreferrer">
-        <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-        </svg>
-        <div class="doc-info">
-          <strong>Repas du 8 au 12 juin 2026</strong>
-          <span>PDF — Maternelle et élémentaire</span>
-        </div>
-      </a>
-    </div>
+    <div id="cantine-menus-container" class="docs-grid reveal" style="margin-top: 2rem;"></div>
   </div>
 </section>
 
-<!-- Prestataire -->
 <section class="section" style="background: var(--vert-pale);">
   <div class="section-inner">
     <div class="content-block reveal">
@@ -127,7 +88,6 @@
   </div>
 </section>
 
-<!-- Inscription & tarifs -->
 <section class="section">
   <div class="section-inner">
     <div class="content-grid reveal">
@@ -139,41 +99,20 @@
          <p><strong>Note :</strong> Inscription et paiement s'effectuent exclusivement en mairie de Saint-Cyr-sur-Morin.</p>
         </div>
       </div>
-      <div class="tarifs-box">
-        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-top: 25px; margin-bottom: 0.5rem; color: var(--vert);">Tarifs 2024/2025</h3>
-        <div class="tarif-item">
-          <strong>4,45€</strong>
-          <span>Enfants de Saint-Cyr et Saint-Ouen</span>
-        </div>
-        <div class="tarif-item">
-          <strong>5,60€</strong>
-          <span>Enfants hors communes</span>
-        </div>
-        <div class="tarif-item">
-          <strong>1,70€</strong>
-          <span>Enfants avec PAI (repas apporté)</span>
-        </div>
-        <p style="font-size: .85rem; color: var(--gris); margin-top: 1rem;">Suite à l'augmentation du repas par le traiteur due à l'application de la loi Egalim, tarifs en vigueur à compter du 1er septembre 2024.</p>
-      </div>
+      
+      <div id="cantine-tarifs-box" class="tarifs-box"></div>
     </div>
   </div>
 </section>
 
-<!-- Règlement intérieur -->
 <section class="section" style="background: var(--blanc);">
   <div class="section-inner">
     <div class="content-block reveal">
       <div class="section-label">Règlement</div>
       <h2 class="section-title">Le règlement intérieur de la cantine</h2>
       <p>Le règlement intérieur de la cantine scolaire a été adapté à notre projet éducatif. Les règles de respect devront être réciproques entre les enfants et les encadrants. Le permis à point laisse sa place au concept de réparation. Un enfant qui manquera de respect à un adulte pourra l'aider le service suivant. Un enfant qui insulte un autre enfant pourra lui porter ses affaires le lendemain… à chacun de décider quelle réparation il imagine.</p>
-      <div style="margin-top: 1.5rem;">
-        <a href="https://drive.google.com/file/d/14-GnZJlu6lPzH5bH-021jshbMnCYJ1gQ/view?usp=drive_link" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-          </svg>
-          Télécharger le règlement intérieur 2026-2027
-        </a>
-      </div>
+      
+      <div id="cantine-reglement-container" style="margin-top: 1.5rem;"></div>
     </div>
   </div>
 </section>
@@ -196,92 +135,15 @@
 
 <div id="footer-placeholder"></div>
 
-<script src="../../components/navbar.js"></script>
+<script src="/components/navbar.js"></script>
+<script src="/js/scroll-reveal.js"></script>
+<script src="/js/site-content-loader.js" type="module"></script>
 <script>
   fetch('/components/footer.html')
     .then(response => response.text())
     .then(data => {
       document.getElementById('footer-placeholder').innerHTML = data;
     });
-</script>
-<script>
-  // Reveal on scroll
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        e.target.querySelectorAll('.acces-card, .actu-item').forEach((el, i) => {
-          el.style.transitionDelay = `${i * 60}ms`;
-        });
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(r => observer.observe(r));
-
-  // Carousel
-  (function() {
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dotsContainer = document.querySelector('.carousel-dots');
-    const track = document.querySelector('.carousel-track');
-    let current = 0, timer;
-
-    // Créer les dots
-    slides.forEach((_, i) => {
-      const d = document.createElement('button');
-      d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-      d.setAttribute('aria-label', `Slide ${i + 1}`);
-      d.addEventListener('click', () => goTo(i));
-      dotsContainer.appendChild(d);
-    });
-
-    // Calcule et fixe la hauteur max de toutes les slides
-    function fixHeight() {
-      track.style.height = '';
-      slides.forEach(s => {
-        s.style.position = 'relative';
-        s.style.opacity = '1';
-        s.style.pointerEvents = 'auto';
-        s.style.height = 'auto';
-      });
-      const maxH = Math.max(...Array.from(slides).map(s => s.offsetHeight));
-      track.style.height = maxH + 'px';
-      slides.forEach(s => {
-        s.style.position = '';
-        s.style.opacity = '';
-        s.style.pointerEvents = '';
-        s.style.height = maxH + 'px';
-      });
-    }
-
-    function goTo(n) {
-      slides[current].classList.remove('active');
-      document.querySelectorAll('.carousel-dot')[current].classList.remove('active');
-      current = (n + slides.length) % slides.length;
-      slides[current].classList.add('active');
-      document.querySelectorAll('.carousel-dot')[current].classList.add('active');
-      resetTimer();
-    }
-
-    function resetTimer() {
-      clearInterval(timer);
-      timer = setInterval(() => goTo(current + 1), 5000);
-    }
-
-    document.querySelector('.carousel-prev').addEventListener('click', () => goTo(current - 1));
-    document.querySelector('.carousel-next').addEventListener('click', () => goTo(current + 1));
-
-    slides[0].classList.add('active');
-    resetTimer();
-
-    if (document.readyState === 'complete') {
-      fixHeight();
-    } else {
-      window.addEventListener('load', fixHeight);
-    }
-
-    window.addEventListener('resize', fixHeight);
-  })();
 </script>
 </body>
 </html>
