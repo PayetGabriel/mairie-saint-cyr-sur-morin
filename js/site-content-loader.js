@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initEauAssainissement()
   initSivuInfos()
   initScolaritePeriscolaire()
+  initTransportsEtudes()
 })
 
 /**
@@ -1010,6 +1011,154 @@ async function initScolaritePeriscolaire() {
 
   } catch (err) {
     console.error("Erreur d'initialisation de la page Scolarité :", err)
+  }
+}
+
+/**
+ * 13. Gestion des Transports Scolaires et Études Surveillées
+ */
+async function initTransportsEtudes() {
+  const lignesContainer = document.getElementById('transports-lignes-container')
+  if (!lignesContainer) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'transports_etudes_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const pageData = data.value
+
+    // --- 1. RENDU DES DOCUMENTS DES TRANSPORTS ---
+    const docsContainer = document.getElementById('transports-docs-container')
+    if (docsContainer && pageData.transports_scolaires?.documents) {
+      docsContainer.innerHTML = pageData.transports_scolaires.documents.map(doc => {
+        const btnClass = doc.primary ? 'btn btn-primary' : 'btn btn-outline'
+        return `
+          <a href="${doc.url}" class="${btnClass}" target="_blank" rel="noopener">
+            ${DOWNLOAD_SVG}
+            ${doc.label}
+          </a>`.trim()
+      }).join('\n')
+    }
+
+    // --- 2. RENDU DES LIGNES ET HORAIRES DE BUS ---
+    if (pageData.transports_scolaires?.lignes) {
+      lignesContainer.innerHTML = pageData.transports_scolaires.lignes.map((ligne, index) => {
+        
+        // Gestion de la note de correspondance optionnelle
+        const noteHtml = ligne.note ? `
+          <p style="font-size: 0.8rem; color: var(--gris); font-style: italic; margin-bottom: 1.5rem; display: flex; align-items: flex-start; gap: 5px; line-height: 1.4;">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="margin-top: 2px; flex-shrink: 0;">
+                <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6"/>
+            </svg>
+            ${ligne.note}
+          </p>`.trim() : ''
+
+        // Générateur de lignes de tableau (Matin / Soir)
+        const renderTableRows = (stopsArray) => {
+          return stopsArray.map(stop => {
+            let badgeHtml = ''
+            if (stop.badge) {
+              const iconHtml = stop.icon === 'link' ? ` ${EXTERNAL_LINK_SVG}` : ''
+              badgeHtml = ` <span style="font-size: 0.75rem; color: var(--gris); font-weight: normal; display: inline-flex; align-items: center; gap: 0.25rem;">(${stop.badge})${iconHtml}</span>`
+            }
+            return `<tr><td>${stop.heure}</td><td>${stop.arret}${badgeHtml}</td></tr>`
+          }).join('')
+        }
+
+        // Pour éviter un marginTop inutile sur la toute première ligne injectée
+        const topMargin = index === 0 ? '1rem' : '3.5rem'
+
+        return `
+          <div class="content-block reveal" style="margin-top: ${topMargin};">
+              <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.3rem; color: var(--vert);">
+                  Ligne ${ligne.numero} — ${ligne.nom}
+              </h3>
+              <p style="font-size: 0.9rem; color: var(--vert-clair); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 5px;">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="opacity: 0.7;">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                  Surveillance : ${ligne.surveillance}
+              </p>
+              ${noteHtml}
+          </div>
+          
+          <div class="horaires-grid reveal">
+            <div class="horaire-table">
+              <h4><strong>Matin :</strong> Lundi, mardi, jeudi, vendredi</h4>
+              <table>
+                <thead>
+                  <tr><th>Heure</th><th>Points d'arrêts</th></tr>
+                </thead>
+                <tbody>
+                  ${renderTableRows(ligne.matin)}
+                </tbody>
+              </table>
+            </div>
+            
+            <div class="horaire-table">
+              <h4><strong>Soir :</strong> Lundi, mardi, jeudi, vendredi</h4>
+              <table>
+                <thead>
+                  <tr><th>Heure</th><th>Points d'arrêts</th></tr>
+                </thead>
+                <tbody>
+                  ${renderTableRows(ligne.soir)}
+                </tbody>
+              </table>
+            </div>
+          </div>`.trim()
+      }).join('\n')
+    }
+
+    // --- 3. RENDU DES INFOS DE L'ÉTUDE ---
+    const etudesList = document.getElementById('etudes-details-list')
+    const etudesDocContainer = document.getElementById('etudes-doc-container')
+    
+    if (pageData.etudes_surveillees) {
+      const es = pageData.etudes_surveillees
+
+      if (etudesList) {
+        etudesList.innerHTML = `
+          <li>Elle a lieu <strong>deux fois par semaine</strong> les ${es.jours} de <strong>${es.horaires}</strong> à l'${es.etablissement}.</li>
+          <li>${es.pedibus_details}</li>
+          <li><strong>Tarif :</strong> ${es.tarif}</li>
+          <li><strong>Mode d'inscription :</strong> ${es.inscription_details}</li>
+        `.trim()
+      }
+
+      if (etudesDocContainer && es.reglement_url) {
+        etudesDocContainer.innerHTML = `
+          <a href="${es.reglement_url}" class="doc-card" target="_blank" rel="noopener noreferrer">
+            <svg width="28" height="28" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <div class="doc-info">
+              <strong>Règlement intérieur de l'étude</strong>
+              <span>PDF — À télécharger</span>
+            </div>
+          </a>`.trim()
+      }
+    }
+
+    // --- 4. RELANCER L'INTERSECTION OBSERVER ---
+    // On cible le parent le plus proche qui englobe toutes nos modifications pour rafraîchir les transitions CSS .reveal
+    const parentSection = lignesContainer.closest('.section-inner')
+    if (parentSection) {
+      bindNewReveals(parentSection)
+    }
+    const transportDocsSection = docsContainer?.closest('.section-inner')
+    if (transportDocsSection) {
+      bindNewReveals(transportDocsSection)
+    }
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des transports et des études :", err.message)
   }
 }
 
