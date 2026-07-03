@@ -969,28 +969,7 @@ async function initScolaritePeriscolaire() {
       }
     }
 
-    // 5. Carte Assistantes Maternelles
-    if (localData.assistantes_maternelles) {
-      const am = localData.assistantes_maternelles
-      document.getElementById('card-assistantes-maternelles').innerHTML = `
-        <div class="periscolaire-card-head">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          <span>Assistantes maternelles</span>
-        </div>
-        <div class="periscolaire-card-body">
-          <h4>Mode de garde & nounous</h4>
-          <p>La liste des assistantes maternelles agréées de la commune est mise à jour régulièrement et consultable directement en ligne.</p>
-          <p>Pour toute question ou démarche, vous pouvez aussi contacter le secrétariat de la mairie au <a href="tel:0160238024">01 60 23 80 24</a>.</p>
-          <div style="margin-top: 0.8rem;">
-            <a href="${am.pdf_url}" class="btn btn-outline" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px;">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Télécharger la liste (PDF)
-            </a>
-          </div>
-        </div>`.trim()
-    }
-
-    // 6. Rendu des lignes de Transports Scolaires
+    // 5. Rendu des lignes de Transports Scolaires
     if (localData.transports_scolaires) {
       const renderLignes = (lignesArray, targetId) => {
         const wrapper = document.getElementById(targetId)
