@@ -145,69 +145,54 @@
       font-weight: 500;
     }
 
-    .commerce-tel a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.88rem;
-      color: var(--vert);
-      font-weight: 500;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .commerce-tel a:hover {
-      color: var(--vert-clair);
-    }
-
-    .commerce-tel a svg {
-      stroke: currentColor;
-    }
-
-    .commerce-email a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.85rem;
-      color: var(--vert);
-      font-weight: 500;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .commerce-email a:hover {
-      color: var(--vert-clair);
-    }
-
+    /* En règle générale pour tous les liens du bloc contact */
+    .commerce-tel a,
     .commerce-email a,
-    .commerce-web a {
+    .commerce-web a,
+    .commerce-fb a {
       display: inline-flex;
       align-items: center;
       gap: 0.4rem;
-      font-size: 0.85rem;
       color: var(--vert);
       font-weight: 500;
       text-decoration: none;
       transition: color 0.2s;
     }
 
+    /* Tailles spécifiques pour l'affichage */
+    .commerce-tel a {
+      font-size: 0.88rem;
+    }
+    .commerce-email a,
+    .commerce-web a,
+    .commerce-fb a {
+      font-size: 0.85rem;
+    }
+
+    /* Effet de survol unique pour tous */
+    .commerce-tel a:hover,
     .commerce-email a:hover,
-    .commerce-web a:hover {
+    .commerce-web a:hover,
+    .commerce-fb a:hover {
       color: var(--vert-clair);
     }
     
+    /* Uniformisation des SVG */
+    .commerce-tel a svg,
     .commerce-email a svg,
-    .commerce-web a svg {
+    .commerce-web a svg,
+    .commerce-fb a svg {
       stroke: currentColor;
       flex-shrink: 0;
       vertical-align: middle;
     }
 
+    /* Micro-ajustements de positionnement vertical selon l'icône */
     .commerce-email a svg {
       transform: translateY(0.5px);
     }
-
-    .commerce-web a svg {
+    .commerce-web a svg,
+    .commerce-fb a svg {
       transform: translateY(-0.5px);
     }
 
@@ -684,6 +669,14 @@
               Commande au 07 68 87 93 77
             </a>
           </div>
+          <div class="commerce-fb">
+            <a href="https://www.facebook.com/profile.php?id=61561521460899" target="_blank" rel="noopener">
+              <svg width="14" height="14" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+              </svg>
+              Page Facebook de Onibaku Pizza
+            </a>
+          </div>
         </div>
       </div>
 
@@ -733,6 +726,16 @@
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
               </svg>
               lafermetatimich@gmail.com
+            </a>
+          </div>
+          <div class="commerce-web">
+            <a href="https://www.lafermetatimich.com/" target="_blank" rel="noopener">
+              <svg width="14" height="14" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              Site web de la Ferme TATIMICH
             </a>
           </div>
         </div>
