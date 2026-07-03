@@ -58,7 +58,7 @@ module.exports = async (req, res) => {
 
     // ROUTAGE SIVU : Si le sujet est lié au scolaire/enfance, on bascule sur le SIVU
     if (['cantine', 'inscriptions', 'transports'].includes(sujet)) {
-        destinataire = 'gabrielpayet250509@gmail.com'; // À remplacer par le mail du SIVU à terme
+        destinataire = 'gabrielpayet250509@gmail.com, sivu.stcyrstouen@orange.fr'; // À remplacer par le mail du SIVU à terme
         
         // On écrase les variables avec la charte SIVU Violette
         theme = {
