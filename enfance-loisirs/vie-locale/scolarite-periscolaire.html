@@ -250,71 +250,21 @@
   <div class="page-header-inner">
     <h1>Scolarité</h1>
     <p class="page-intro">Accueil périscolaire, collèges, lycées et transports scolaires pour les familles de la commune.</p>
-    <div class="update-badge">
-      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-      </svg>
-      Mis à jour le 12 février 2026
-    </div>
+    <div class="update-badge" id="scolarite-update-badge">
+      </div>
   </div>
 </header>
 
-
-<!-- ─── ÉCOLES PRIMAIRES — RENVOI SIVU ─── -->
 <section class="section">
   <div class="section-inner">
-
     <div class="section-label reveal" style="margin-bottom: 0.75rem;">Primaire</div>
     <h2 class="section-title reveal" style="margin-bottom: 1.5rem;">Écoles maternelle & élémentaire</h2>
     
     <div class="content-grid reveal" style="margin-top: 2.5rem; margin-bottom: 2.5rem;">
-  
-        <div class="periscolaire-card">
-            <div class="periscolaire-card-head">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-            </svg>
-            <span>Maternelle</span>
-            </div>
-            <div class="periscolaire-card-body">
-            <h4>École Maternelle « Les Petits Aventuriers »</h4>
-            <p style="margin-bottom: 0.5rem;">Passage Guibert</p>
-            <p><strong>Directrice :</strong> A. Curbeira</p>
-            <p style="margin-top: 0.8rem;">
-                <a href="tel:0160238936" style="color: var(--vert); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
-                01 60 23 89 36
-                </a>
-            </p>
-            </div>
+      <div class="periscolaire-card" id="card-maternelle">
         </div>
-
-        <div class="periscolaire-card">
-            <div class="periscolaire-card-head">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
-            </svg>
-            <span>Élémentaire</span>
-            </div>
-            <div class="periscolaire-card-body">
-            <h4>École Élémentaire « Pierre Mac Orlan »</h4>
-            <p style="margin-bottom: 0.5rem;">92 rue des Montgoins <span style="color: var(--gris); font-size: 0.9rem;">(face au Musée)</span></p>
-            <p><strong>Directrice :</strong> Mme Lefranc</p>
-            <p style="margin-top: 0.8rem;">
-                <a href="tel:0160238150" style="color: var(--vert); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
-                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
-                01 60 23 81 50
-                </a>
-            </p>
-            </div>
+      <div class="periscolaire-card" id="card-elementaire">
         </div>
-
     </div>
 
     <div class="sivu-renvoi reveal" style="margin-bottom: 3rem;">
@@ -332,73 +282,24 @@
       </a>
     </div>
 
-
-    <!-- Périscolaire -->
     <div class="section-label reveal" style="margin-bottom: 0.75rem;">Après l'école</div>
     <h2 class="section-title reveal" style="margin-bottom: 1.5rem;">Accueil périscolaire & loisirs</h2>
 
     <div class="periscolaire-layout reveal">
+      <div class="periscolaire-card" id="card-familles-rurales">
+        </div>
 
-      <div class="periscolaire-card">
-        <div class="periscolaire-card-head">
-          <svg width="16" height="16" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          <span>Familles Rurales</span>
+      <div class="periscolaire-card" id="card-etudes-surveillees">
         </div>
-        <div class="periscolaire-card-body">
-          <h4>Accueil de loisirs (St Cyr / St Ouen)</h4>
-          <p>3, avenue Daniel Simon — géré par l'association Familles Rurales St Cyr/St Ouen sur Morin. <strong>Ouvert toute l’année.</strong></p>
-          <p><strong>Périscolaire :</strong> Les jours d'école de <strong>6h30 à 8h30</strong> et de <strong>16h30 à 19h30</strong>. Petit déjeuner et goûter servis. Aide aux devoirs (sauf le vendredi).</p>
-          <p><strong>Mercredis et vacances scolaires :</strong> Accueil complet de <strong>6h30 à 19h30</strong>.</p>
-          <p>Tarifs variables selon le revenu et le nombre d'enfants à charge. Rens. : <a href="tel:0160238195">01 60 23 81 95</a></p>
-        </div>
-      </div>
 
-      <div class="periscolaire-card">
-        <div class="periscolaire-card-head">
-          <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          <span>Élémentaire</span>
+      <div class="periscolaire-card" id="card-assistantes-maternelles" style="grid-column: span 1;">
         </div>
-        <div class="periscolaire-card-body">
-          <h4>Étude surveillée — École Pierre Mac Orlan</h4>
-          <p>Les <strong>lundis et jeudis</strong> de 16h40 à 17h50.</p>
-          <p>Inscription via la fiche distribuée dans les cahiers de liaison le premier jour de la rentrée.</p>
-          <p><strong>Tarif : 1,70 €/jour</strong></p>
-          <p>Un pedibus prend en charge les enfants à 17h55 de l'école vers les locaux de l'accueil de loisirs (Familles Rurales).</p>
-        </div>
-      </div>
-
-      <div class="periscolaire-card" style="grid-column: span 1;">
-        <div class="periscolaire-card-head">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          <span>Assistantes maternelles</span>
-        </div>
-        <div class="periscolaire-card-body">
-          <h4>Mode de garde & nounous</h4>
-          <p>La liste des assistantes maternelles agréées de la commune est mise à jour régulièrement et consultable directement en ligne.</p>
-          <p>Pour toute question ou démarche, vous pouvez aussi contacter le secrétariat de la mairie au <a href="tel:0160238024">01 60 23 80 24</a>.</p>
-          
-          <div style="margin-top: 0.8rem;">
-            <a href="/assets/docs/scolarite/Liste_assistants_maternels.pdf" class="btn btn-outline" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px;">
-              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Télécharger la liste (PDF)
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
-
   </div>
 </section>
 
-
-<!-- ─── COLLÈGES & LYCÉES ─── -->
 <section class="section" style="background: var(--blanc);">
   <div class="section-inner">
-
     <div class="section-label reveal" style="margin-bottom: 0.75rem;">Secondaire</div>
     <h2 class="section-title reveal" style="margin-bottom: 2rem;">Collèges & lycées</h2>
 
@@ -406,118 +307,73 @@
       <strong>Attention</strong> — Tous les tarifs et informations sont susceptibles d'être modifiés d'une année sur l'autre. Contactez les établissements directement pour toute information actualisée.
     </div>
 
-    <!-- Collèges -->
     <div class="etab-section-title reveal">Collèges</div>
     <div class="etab-grid reveal">
-
       <div class="etab-card secteur">
         <span class="etab-badge secteur-badge">Collège de secteur</span>
         <div class="etab-name">Les Creusottes</div>
         <div class="etab-adresse">14 chemin Champ Charron<br>77510 Villeneuve-sur-Bellot</div>
-        <a href="tel:0164048158" class="etab-tel">
-          <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          01 64 04 81 58
-        </a>
+        <a href="tel:0164048158" class="etab-tel">01 64 04 81 58</a>
       </div>
-
       <div class="etab-card">
         <div class="etab-name">La Rochefoucauld</div>
         <div class="etab-adresse">59, rue du Guet<br>77260 La Ferté-sous-Jouarre</div>
-        <a href="tel:0160220733" class="etab-tel">
-          <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          01 60 22 07 33
-        </a>
+        <a href="tel:0160220733" class="etab-tel">01 60 22 07 33</a>
       </div>
-
       <div class="etab-card">
         <div class="etab-name">La Plaine des Glacis</div>
         <div class="etab-adresse">26, avenue de Rebais<br>77260 La Ferté-sous-Jouarre</div>
-        <a href="tel:0160221984" class="etab-tel">
-          <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          01 60 22 19 84
-        </a>
+        <a href="tel:0160221984" class="etab-tel">01 60 22 19 84</a>
       </div>
-
       <div class="etab-card prive">
         <span class="etab-badge prive-badge">Privé</span>
         <div class="etab-name">Institution Sainte-Céline</div>
         <div class="etab-adresse">29, rue Pierre Marx<br>77260 La Ferté-sous-Jouarre</div>
-        <a href="tel:0160220592" class="etab-tel">
-          <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          01 60 22 05 92
-        </a>
+        <a href="tel:0160220592" class="etab-tel">01 60 22 05 92</a>
       </div>
-
     </div>
 
-    <!-- Lycées -->
     <div class="etab-section-title reveal">Lycées</div>
     <div class="etab-grid reveal">
-
       <div class="etab-card secteur">
         <span class="etab-badge secteur-badge">Lycée de secteur</span>
         <div class="etab-name">Samuel Beckett</div>
         <div class="etab-adresse">19, rue du Lion<br>77260 La Ferté-sous-Jouarre</div>
-        <a href="tel:0160242000" class="etab-tel">
-          <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          01 60 24 20 00
-        </a>
+        <a href="tel:0160242000" class="etab-tel">01 60 24 20 00</a>
       </div>
-
       <div class="etab-card">
         <div class="etab-name">Lycée Polyvalent Jules Ferry</div>
         <div class="etab-adresse">4, rue Henri Dunand<br>77120 Coulommiers</div>
-        <a href="tel:0164758844" class="etab-tel">
-          <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          01 64 75 88 44
-        </a>
+        <a href="tel:0164758844" class="etab-tel">01 64 75 88 44</a>
       </div>
-
       <div class="etab-card">
         <div class="etab-name">Lycée Polyvalent Georges Cormier</div>
         <div class="etab-adresse">6, rue des Templiers<br>77120 Coulommiers</div>
-        <a href="tel:0164755300" class="etab-tel">
-          <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          01 64 75 53 00
-        </a>
+        <a href="tel:0164755300" class="etab-tel">01 64 75 53 00</a>
       </div>
-
       <div class="etab-card">
         <div class="etab-name">Lycée agricole et CFA La Bretonnière</div>
         <div class="etab-adresse">Hameau de La Bretonnière<br>77120 Chailly-en-Brie</div>
-        <a href="tel:0164755300" class="etab-tel">
-          <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          01 64 75 53 00
-        </a>
+        <a href="tel:0164755300" class="etab-tel">01 64 75 53 00</a>
       </div>
-
       <div class="etab-card prive">
         <span class="etab-badge prive-badge">Privé</span>
         <div class="etab-name">Institution Sainte-Céline</div>
         <div class="etab-adresse">29, rue Pierre Marx<br>77260 La Ferté-sous-Jouarre</div>
-        <a href="tel:0160220592" class="etab-tel">
-          <svg width="12" height="12" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 8.91a16 16 0 0 0 6 6l.81-.81a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          01 60 22 05 92
-        </a>
+        <a href="tel:0160220592" class="etab-tel">01 60 22 05 92</a>
       </div>
-
     </div>
-
   </div>
 </section>
 
-
-<!-- ─── TRANSPORTS SCOLAIRES ─── -->
 <section class="section" style="background: var(--creme);">
   <div class="section-inner">
-
     <div class="section-label reveal" style="margin-bottom: 0.75rem;">Réseau Transdev Brie &amp; 2 Morin</div>
     <h2 class="section-title reveal" style="margin-bottom: 0.75rem;">Transports scolaires</h2>
     <p class="reveal" style="font-size: 0.88rem; color: var(--gris); margin-bottom: 1.5rem;">
       Pour les horaires à jour, consultez <a href="https://www.iledefrance-mobilites.fr" target="_blank" rel="noopener" style="color: var(--vert); font-weight: 500;">Île-de-France Mobilités</a> ou <a href="https://www.bonjour-ratp.fr" target="_blank" rel="noopener" style="color: var(--vert); font-weight: 500;">Bonjour RATP</a>.
     </p>
 
-    <!-- Imagin'R -->
     <div class="imagin-note reveal">
       <svg width="18" height="18" fill="none" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
       <div>
@@ -525,120 +381,13 @@
       </div>
     </div>
 
-    <!-- Lignes vers La Ferté / Villeneuve -->
     <div class="etab-section-title reveal">Collèges &amp; lycée de La Ferté-sous-Jouarre et Villeneuve-sur-Bellot</div>
-
-    <div class="lignes-grid reveal">
-
-      <div class="ligne-card">
-        <div class="ligne-head">
-          <div class="ligne-num">2483</div>
-          <div class="ligne-head-text">
-            <strong>Montdauphin / Hondevilliers → La Ferté-sous-Jouarre</strong>
-            <span>Desserte du Lycée Samuel Beckett</span>
-          </div>
-          <span class="ligne-badge scolaire">Scolaire</span>
-        </div>
-        <div class="ligne-plan">
-          <img src="/assets/img/2483.png" alt="Plan de la ligne 2483" />
-        </div>
-        <div class="ligne-footer">
-          <a href="https://www.bonjour-ratp.fr/lignes-bus/transdev-brie-et-2-morin-ligne-2483-c00925/" target="_blank" rel="noopener">
-            Horaires &amp; plan
-            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
-        </div>
+    <div class="lignes-grid reveal" id="wrapper-transports-la-ferte">
       </div>
 
-      <div class="ligne-card">
-        <div class="ligne-head">
-          <div class="ligne-num">2484</div>
-          <div class="ligne-head-text">
-            <strong>Saint-Ouen / Saint-Cyr → La Ferté-sous-Jouarre</strong>
-            <span>Desserte des collèges de La Ferté-sous-Jouarre</span>
-          </div>
-          <span class="ligne-badge scolaire">Scolaire</span>
-        </div>
-        <div class="ligne-plan">
-          <img src="/assets/img/2484.png" alt="Plan de la ligne 2484" />
-        </div>
-        <div class="ligne-footer">
-          <a href="https://www.bonjour-ratp.fr/lignes-bus/transdev-brie-et-2-morin-ligne-2484-c02400/" target="_blank" rel="noopener">
-            Horaires &amp; plan
-            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
-        </div>
+    <div class="etab-section-title reveal" style="margin-top: 3rem;">Lycées de Coulommiers</div>
+    <div class="lignes-grid reveal" id="wrapper-transports-coulommiers">
       </div>
-
-      <div class="ligne-card">
-        <div class="ligne-head">
-          <div class="ligne-num">2485</div>
-          <div class="ligne-head-text">
-            <strong>Verdelot / Jouarre / Saint-Cyr → Villeneuve-sur-Bellot</strong>
-            <span>Desserte du collège Les Creusottes</span>
-          </div>
-          <span class="ligne-badge scolaire">Scolaire</span>
-        </div>
-        <div class="ligne-plan">
-          <img src="/assets/img/2485.png" alt="Plan de la ligne 2485" />
-        </div>
-        <div class="ligne-footer">
-          <a href="https://www.bonjour-ratp.fr/lignes-bus/transdev-brie-et-2-morin-ligne-2485-c02401/" target="_blank" rel="noopener">
-            Horaires &amp; plan
-            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Lignes vers Coulommiers -->
-    <div class="etab-section-title reveal">Lycées de Coulommiers</div>
-
-    <div class="lignes-grid reveal">
-
-      <div class="ligne-card">
-        <div class="ligne-head">
-          <div class="ligne-num">2464</div>
-          <div class="ligne-head-text">
-            <strong>Verdelot → Coulommiers</strong>
-            <span>Cité scolaire de Coulommiers (Jules Ferry / Georges Cormier)</span>
-          </div>
-          <span class="ligne-badge scolaire">Scolaire</span>
-        </div>
-        <div class="ligne-plan">
-          <img src="/assets/img/2464.png" alt="Plan de la ligne 2464" />
-        </div>
-        <div class="ligne-footer">
-          <a href="https://www.bonjour-ratp.fr/lignes-bus/transdev-brie-et-2-morin-ligne-2464-c01047/" target="_blank" rel="noopener">
-            Horaires &amp; plan
-            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <div class="ligne-card">
-        <div class="ligne-head">
-          <div class="ligne-num">2463</div>
-          <div class="ligne-head-text">
-            <strong>Coulommiers → La Bretonnière</strong>
-            <span>Lycée agricole et CFA La Bretonnière, depuis Coulommiers</span>
-          </div>
-          <span class="ligne-badge scolaire">Scolaire</span>
-        </div>
-        <div class="ligne-plan">
-          <img src="/assets/img/2463.png" alt="Plan de la ligne 2463" />
-        </div>
-        <div class="ligne-footer">
-          <a href="https://www.bonjour-ratp.fr/lignes-bus/transdev-brie-et-2-morin-ligne-2463-c01046/" target="_blank" rel="noopener">
-            Horaires &amp; plan
-            <svg width="12" height="12" fill="none" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
-        </div>
-      </div>
-
-    </div>
-
   </div>
 </section>
 
@@ -646,6 +395,7 @@
 <div id="footer-placeholder"></div>
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="/js/site-content-loader.js" type="module"></script>
 <script>
   fetch('/components/footer.html')
     .then(r => r.text())

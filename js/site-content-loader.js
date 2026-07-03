@@ -33,6 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initPLU()
   initPermisTravaux()
   initEauAssainissement()
+  initSivuInfos()
+  initScolaritePeriscolaire()
 })
 
 /**
@@ -759,6 +761,276 @@ async function initEauAssainissement() {
 
   } catch (err) {
     console.error('Erreur lors du chargement des données Eau & Assainissement:', err)
+  }
+}
+
+/**
+ * 11. Gestion de la page SIVU - Infos (Enfance & Loisirs)
+ */
+async function initSivuInfos() {
+  if (!document.getElementById('sivu-update-badge') && !document.getElementById('sivu-intervenants-wrapper')) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'sivu_infos_data')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    const pageData = data.value
+
+    // 1. Badge de révision
+    const updateBadge = document.getElementById('sivu-update-badge')
+    if (updateBadge && pageData.updated_at) {
+      updateBadge.innerHTML = `
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+        </svg>Mis à jour le ${pageData.updated_at}`.trim()
+    }
+
+    // 2. Le Bureau
+    if (pageData.bureau) {
+      if (pageData.bureau.president) {
+        document.getElementById('bureau-pres-name').textContent = pageData.bureau.president.name
+        document.getElementById('bureau-pres-info').textContent = pageData.bureau.president.info
+      }
+      if (pageData.bureau.vice_president) {
+        document.getElementById('bureau-vp-name').textContent = pageData.bureau.vice_president.name
+        document.getElementById('bureau-vp-info').textContent = pageData.bureau.vice_president.info
+      }
+    }
+
+    // 3. Tableaux des communes
+    if (pageData.communes) {
+      const renderCommune = (key, listId, countId) => {
+        const container = document.getElementById(listId)
+        const countSpan = document.getElementById(countId)
+        if (!container || !pageData.communes[key]) return
+
+        const { titulaires = [], suppleants = [] } = pageData.communes[key]
+        const totalDelegues = titulaires.length + 1
+        
+        if (countSpan) {
+          countSpan.textContent = `${totalDelegues} délégué${totalDelegues > 1 ? 's' : ''}`
+        }
+
+        const htmlTitulaires = titulaires.map(name => `
+          <div class="personnel-card-mini">
+            <div class="mini-name">${name} <span class="badge-status">Titulaire</span></div>
+          </div>`).join('')
+
+        const htmlSuppleants = suppleants.map(name => `
+          <div class="personnel-card-mini suppleant">
+            <div class="mini-name">${name} <span class="badge-status sp">Suppléante</span></div>
+          </div>`).join('')
+
+        container.innerHTML = (htmlTitulaires + htmlSuppleants).trim()
+      }
+
+      renderCommune('saint_cyr', 'list-cyr', 'count-cyr')
+      renderCommune('saint_ouen', 'list-ouen', 'count-ouen')
+    }
+
+    // 4. Section des intervenants + FIX REVEAL
+    const intervenantsWrapper = document.getElementById('sivu-intervenants-wrapper')
+    if (intervenantsWrapper && pageData.intervenants) {
+      intervenantsWrapper.innerHTML = pageData.intervenants.map(sec => {
+        const itemsHtml = sec.names.map(name => `<div class="personnel-item">${name}</div>`).join('\n        ')
+        return `
+          <div class="personnel-section reveal">
+            <h3 class="personnel-section-title">${sec.category}</h3>
+            <div class="personnel-list">
+              ${itemsHtml}
+            </div>
+          </div>`.trim()
+      }).join('\n\n    ')
+
+      // FIX : On raccroche les nouveaux éléments .reveal au IntersectionObserver global
+      bindNewReveals(intervenantsWrapper)
+    }
+
+  } catch (err) {
+    console.error('Erreur lors du chargement des données SIVU:', err)
+  }
+}
+
+/**
+ * 12. Gestion de la page Scolarité et Périscolaire (Vie Locale + Cross data SIVU)
+ */
+async function initScolaritePeriscolaire() {
+  const badge = document.getElementById('scolarite-update-badge')
+  if (!badge) return
+
+  try {
+    // Appel simultané des deux sources de données distinctes
+    const [resVieLocale, resSivu] = await Promise.all([
+      supabase.from('site_content').select('value').eq('key', 'scolarite_periscolaire_data').single(),
+      supabase.from('site_content').select('value').eq('key', 'transports_etudes_data').single()
+    ])
+
+    if (resVieLocale.error) throw resVieLocale.error
+    const localData = resVieLocale.data?.value
+    const sivuData = resSivu.data?.value // Optionnel s'il n'est pas encore créé
+
+    if (!localData) return
+
+    // 1. Mise à jour du badge de révision
+    if (localData.updated_at) {
+      badge.innerHTML = `
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+        </svg>Mis à jour le ${localData.updated_at}`.trim()
+    }
+
+    // 2. Traitement des cartes Écoles (Maternelle & Élémentaire)
+    if (localData.ecoles) {
+      const { maternelle, elementaire } = localData.ecoles
+      
+      if (maternelle) {
+        document.getElementById('card-maternelle').innerHTML = `
+          <div class="periscolaire-card-head">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg><span>Maternelle</span>
+          </div>
+          <div class="periscolaire-card-body">
+            <h4>${maternelle.title}</h4>
+            <p style="margin-bottom: 0.5rem;">${maternelle.adresse}</p>
+            <p><strong>${maternelle.role_titre || 'Directrice'} :</strong> ${maternelle.name}</p>
+            <p style="margin-top: 0.8rem;">
+              <a href="tel:${maternelle.tel}" style="color: var(--vert); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                ${maternelle.tel_formated}
+              </a>
+            </p>
+          </div>`.trim()
+      }
+
+      if (elementaire) {
+        document.getElementById('card-elementaire').innerHTML = `
+          <div class="periscolaire-card-head">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
+            </svg><span>Élémentaire</span>
+          </div>
+          <div class="periscolaire-card-body">
+            <h4>${elementaire.title}</h4>
+            <p style="margin-bottom: 0.5rem;">${elementaire.adresse}</p>
+            <p><strong>${elementaire.role_titre || 'Directrice'} :</strong> ${elementaire.name}</p>
+            <p style="margin-top: 0.8rem;">
+              <a href="tel:${elementaire.tel}" style="color: var(--vert); font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                ${elementaire.tel_formated}
+              </a>
+            </p>
+          </div>`.trim()
+      }
+    }
+
+    // 3. Carte Familles Rurales
+    if (localData.familles_rurales) {
+      const fr = localData.familles_rurales
+      document.getElementById('card-familles-rurales').innerHTML = `
+        <div class="periscolaire-card-head">
+          <svg width="16" height="16" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span>Familles Rurales</span>
+        </div>
+        <div class="periscolaire-card-body">
+          <h4>Accueil de loisirs (St Cyr / St Ouen)</h4>
+          <p>${fr.adresse} — ${fr.description}</p>
+          <p><strong>Périscolaire :</strong> ${fr.horaires_perisco}</p>
+          <p><strong>Mercredis et vacances scolaires :</strong> ${fr.horaires_mercredis_vacances}</p>
+          <p>${fr.infos_tarifs} Rens. : <a href="tel:${fr.tel}">${fr.tel_formated}</a></p>
+        </div>`.trim()
+    }
+
+    // 4. Carte Études Surveillées (CROISEMENT - Source SIVU)
+    const cardEtudes = document.getElementById('card-etudes-surveillees')
+    if (cardEtudes) {
+      if (sivuData && sivuData.etudes_surveillees) {
+        const es = sivuData.etudes_surveillees
+        cardEtudes.innerHTML = `
+          <div class="periscolaire-card-head">
+            <svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>Élémentaire</span>
+          </div>
+          <div class="periscolaire-card-body">
+            <h4>Étude surveillée — ${es.etablissement}</h4>
+            <p>Les <strong>${es.jours}</strong> de ${es.horaires}.</p>
+            <p>${es.inscription_details}</p>
+            <p><strong>Tarif : ${es.tarif}</strong></p>
+            <p>${es.pedibus_details}</p>
+          </div>`.trim()
+      } else {
+        cardEtudes.innerHTML = `<p style="padding:1.5rem; color:var(--gris);">Données d'étude indisponibles (en attente SIVU).</p>`
+      }
+    }
+
+    // 5. Carte Assistantes Maternelles
+    if (localData.assistantes_maternelles) {
+      const am = localData.assistantes_maternelles
+      document.getElementById('card-assistantes-maternelles').innerHTML = `
+        <div class="periscolaire-card-head">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Assistantes maternelles</span>
+        </div>
+        <div class="periscolaire-card-body">
+          <h4>Mode de garde & nounous</h4>
+          <p>La liste des assistantes maternelles agréées de la commune est mise à jour régulièrement et consultable directement en ligne.</p>
+          <p>Pour toute question ou démarche, vous pouvez aussi contacter le secrétariat de la mairie au <a href="tel:0160238024">01 60 23 80 24</a>.</p>
+          <div style="margin-top: 0.8rem;">
+            <a href="${am.pdf_url}" class="btn btn-outline" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; padding: 0.5rem 1rem; border-radius: 8px;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Télécharger la liste (PDF)
+            </a>
+          </div>
+        </div>`.trim()
+    }
+
+    // 6. Rendu des lignes de Transports Scolaires
+    if (localData.transports_scolaires) {
+      const renderLignes = (lignesArray, targetId) => {
+        const wrapper = document.getElementById(targetId)
+        if (!wrapper || !lignesArray) return
+        
+        wrapper.innerHTML = lignesArray.map(ligne => `
+          <div class="ligne-card">
+            <div class="ligne-head">
+              <div class="ligne-num">${ligne.id}</div>
+              <div class="ligne-head-text">
+                <strong>${ligne.name}</strong>
+                <span>${ligne.dessert}</span>
+              </div>
+              <span class="ligne-badge scolaire">Scolaire</span>
+            </div>
+            <div class="ligne-plan">
+              <img src="${ligne.img_url}" alt="Plan de la ligne ${ligne.id}" />
+            </div>
+            <div class="ligne-footer">
+              <a href="${ligne.url}" target="_blank" rel="noopener">
+                Horaires &amp; plan
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>`.trim()).join('\n')
+      }
+
+      renderLignes(localData.transports_scolaires.la_ferte_villeneuve, 'wrapper-transports-la-ferte')
+      renderLignes(localData.transports_scolaires.coulommiers, 'wrapper-transports-coulommiers')
+    }
+
+    // Raccrocher les conteneurs d'injection au reveal global
+    const mainSection = document.getElementById('card-maternelle').closest('.section')
+    if (mainSection) bindNewReveals(mainSection)
+    
+    const transportSection = document.getElementById('wrapper-transports-la-ferte').closest('.section')
+    if (transportSection) bindNewReveals(transportSection)
+
+  } catch (err) {
+    console.error("Erreur d'initialisation de la page Scolarité :", err)
   }
 }
 

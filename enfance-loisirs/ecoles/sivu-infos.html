@@ -43,11 +43,8 @@
   <div class="page-header-inner">
     <h1>Le Syndicat Scolaire (SIVU)</h1>
     <p class="page-intro">Découvrez le rôle du syndicat intercommunal, l'équipe d'élus et d'agents qui gèrent vos services scolaires, ainsi que nos coordonnées.</p>
-    <div class="update-badge">
-      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-      </svg>
-      Mis à jour le 5 juin 2026
+    <div class="update-badge" id="sivu-update-badge">
+      <!-- Injecté via JS -->
     </div>
   </div>
 </header>
@@ -70,74 +67,42 @@
       <h2 class="section-title">Membres élus du SIVU</h2>
     </div>
 
+    <!-- Le Bureau -->
     <div class="personnel-grid reveal" style="margin-bottom: 3rem;">
       <div class="personnel-card bureau-card">
         <div class="personnel-role">Président du SIVU</div>
-        <div class="personnel-name">Francis Delarue</div>
-        <div class="personnel-info">Maire de Saint-Cyr-sur-Morin</div>
+        <div class="personnel-name" id="bureau-pres-name">-</div>
+        <div class="personnel-info" id="bureau-pres-info">-</div>
       </div>
       <div class="personnel-card bureau-card">
         <div class="personnel-role">Vice-présidente</div>
-        <div class="personnel-name">Nathalie Vibert</div>
-        <div class="personnel-info">Maire de Saint-Ouen-sur-Morin</div>
+        <div class="personnel-name" id="bureau-vp-name">-</div>
+        <div class="personnel-info" id="bureau-vp-info">-</div>
       </div>
     </div>
 
+    <!-- Grille des Communes (Calcul et listes automatiques) -->
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-top: 2rem;" class="sivu-communes-grid">
       
+      <!-- Saint-Cyr -->
       <div class="reveal">
         <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--vert); margin-bottom: 1.25rem; border-bottom: 2px solid var(--vert-pale); padding-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
           Saint-Cyr-sur-Morin
-          <span style="font-family: 'DM Sans', sans-serif; font-size: 0.75rem; background: var(--vert-pale); color: var(--vert); padding: 0.15rem 0.6rem; border-radius: 100px; font-weight: 600;">5 délégués</span>
+          <span style="font-family: 'DM Sans', sans-serif; font-size: 0.75rem; background: var(--vert-pale); color: var(--vert); padding: 0.15rem 0.6rem; border-radius: 100px; font-weight: 600;" id="count-cyr">5 délégués</span>
         </h3>
-        
-        <div class="personnel-grid-mini" style="display: flex; flex-direction: column; gap: 0.85rem;">
-          <div class="personnel-card-mini">
-            <div class="mini-name">Isabelle Varron <span class="badge-status">Titulaire</span></div>
-          </div>
-          <div class="personnel-card-mini">
-            <div class="mini-name">Gurvan Judas <span class="badge-status">Titulaire</span></div>
-          </div>
-          <div class="personnel-card-mini">
-            <div class="mini-name">Anthony Boussaud <span class="badge-status">Titulaire</span></div>
-          </div>
-          <div class="personnel-card-mini">
-            <div class="mini-name">Sandrine Payet <span class="badge-status">Titulaire</span></div>
-          </div>
-          <div class="personnel-card-mini suppleant">
-            <div class="mini-name">Minh-Tuyen Guicheteau <span class="badge-status sp">Suppléante</span></div>
-          </div>
-          <div class="personnel-card-mini suppleant">
-            <div class="mini-name">Catherine Hennepeaux <span class="badge-status sp">Suppléante</span></div>
-          </div>
+        <div class="personnel-grid-mini" style="display: flex; flex-direction: column; gap: 0.85rem;" id="list-cyr">
+          <!-- Injecté via JS -->
         </div>
       </div>
 
+      <!-- Saint-Ouen -->
       <div class="reveal">
         <h3 style="font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--bois, #9c6f3e); margin-bottom: 1.25rem; border-bottom: 2px solid rgba(156,111,62,0.15); padding-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
           Saint-Ouen-sur-Morin
-          <span style="font-family: 'DM Sans', sans-serif; font-size: 0.75rem; background: rgba(156,111,62,0.08); color: var(--bois, #9c6f3e); padding: 0.15rem 0.6rem; border-radius: 100px; font-weight: 600;">5 délégués</span>
+          <span style="font-family: 'DM Sans', sans-serif; font-size: 0.75rem; background: rgba(156,111,62,0.08); color: var(--bois, #9c6f3e); padding: 0.15rem 0.6rem; border-radius: 100px; font-weight: 600;" id="count-ouen">5 délégués</span>
         </h3>
-        
-        <div class="personnel-grid-mini" style="display: flex; flex-direction: column; gap: 0.85rem;">
-          <div class="personnel-card-mini">
-            <div class="mini-name">Auxane Creusat <span class="badge-status">Titulaire</span></div>
-          </div>
-          <div class="personnel-card-mini">
-            <div class="mini-name">Frédéric Arluison <span class="badge-status">Titulaire</span></div>
-          </div>
-          <div class="personnel-card-mini">
-            <div class="mini-name">Laure Thonnon <span class="badge-status">Titulaire</span></div>
-          </div>
-          <div class="personnel-card-mini">
-            <div class="mini-name">Sylvain Pennequin <span class="badge-status">Titulaire</span></div>
-          </div>
-          <div class="personnel-card-mini suppleant">
-            <div class="mini-name">Emmanuel Artiglonde <span class="badge-status sp">Suppléant</span></div>
-          </div>
-          <div class="personnel-card-mini suppleant">
-            <div class="mini-name">Claire Duchemin <span class="badge-status sp">Suppléante</span></div>
-          </div>
+        <div class="personnel-grid-mini" style="display: flex; flex-direction: column; gap: 0.85rem;" id="list-ouen">
+          <!-- Injecté via JS -->
         </div>
       </div>
 
@@ -145,7 +110,7 @@
   </div>
 </section>
 
-<!-- Personnel -->
+<!-- Personnel Intervenant (Structure extensible à l'infini) -->
 <section class="section">
   <div class="section-inner">
     <div class="content-block reveal">
@@ -153,58 +118,8 @@
       <h2 class="section-title">Les intervenants des écoles</h2>
     </div>
     
-    <div class="personnel-section reveal">
-      <h3 class="personnel-section-title">Coordinatrice du SIVU</h3>
-      <div class="personnel-list">
-        <div class="personnel-item">Sabrina Mazo</div>
-      </div>
-    </div>
-    
-    <div class="personnel-section reveal">
-      <h3 class="personnel-section-title">Personnel de cantine / entretien (maternelle)</h3>
-      <div class="personnel-list">
-        <div class="personnel-item">Fabienne Massetti</div>
-        <div class="personnel-item">Paméla Got</div>
-        <div class="personnel-item">Michèle Caillot</div>
-        <div class="personnel-item">Valérie Procot</div>
-        <div class="personnel-item">Margot Clément</div>
-        <div class="personnel-item">Laura Lenroue</div>
-      </div>
-    </div>
-    
-    <div class="personnel-section reveal">
-      <h3 class="personnel-section-title">Personnel de cantine / entretien (élémentaire)</h3>
-      <div class="personnel-list">
-        <div class="personnel-item">Christine Poupaert</div>
-        <div class="personnel-item">Loan Shlesinger</div>
-        <div class="personnel-item">Catherine Palmisano</div>
-        <div class="personnel-item">Corinne Palisse</div>
-        <div class="personnel-item">Élodie Leconte</div>
-      </div>
-    </div>
-    
-    <div class="personnel-section reveal">
-      <h3 class="personnel-section-title">ATSEM</h3>
-      <div class="personnel-list">
-        <div class="personnel-item">Fabienne Massetti</div>
-        <div class="personnel-item">Michèle Caillot</div>
-      </div>
-    </div>
-    
-    <div class="personnel-section reveal">
-      <h3 class="personnel-section-title">Étude</h3>
-      <div class="personnel-list">
-        <div class="personnel-item">Mme Delius</div>
-        <div class="personnel-item">Mme Mazo</div>
-        <div class="personnel-item">M. Lebrun</div>
-      </div>
-    </div>
-    
-    <div class="personnel-section reveal">
-      <h3 class="personnel-section-title">Familles Rurales</h3>
-      <div class="personnel-list">
-        <div class="personnel-item">Bérengère Chablais</div>
-      </div>
+    <div id="sivu-intervenants-wrapper">
+      <!-- Les blocs de catégories et d'agents sont entièrement construits ici -->
     </div>
   </div>
 </section>
@@ -253,6 +168,7 @@
 
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
+<script src="/js/site-content-loader.js" type="module"></script>
 <script>
   fetch('/components/footer.html')
     .then(response => response.text())
