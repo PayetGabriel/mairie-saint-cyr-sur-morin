@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCantine()
   initInscriptions()
   initSivuPracticalDocs()
+  initComptesRendus()
 })
 
 /**
@@ -1361,6 +1362,103 @@ async function initSivuPracticalDocs() {
 
   } catch (err) {
     console.error("Erreur lors du chargement des documents pratiques du SIVU :", err.message)
+  }
+}
+
+/**
+ * 17. Gestion de la section Comptes-Rendus du Conseil Municipal
+ * Regroupe dynamiquement les séances par année, calcule leur nombre et génère des cartes cliquables.
+ */
+async function initComptesRendus() {
+  const container = document.getElementById('comptes-rendus-container')
+  if (!container) return
+
+  try {
+    // Récupération des comptes-rendus publiés, triés par date décroissante
+    const { data, error } = await supabase
+      .from('comptes_rendus')
+      .select('*')
+      .eq('is_draft', false)
+      .order('date_conseil', { ascending: false })
+
+    if (error) throw error
+
+    if (!data || data.length === 0) {
+      container.innerHTML = `<p style="font-size: 0.88rem; color: var(--gris); font-style: italic;">Aucun compte-rendu disponible pour le moment.</p>`
+      return
+    }
+
+    // Regroupement des données par année
+    const groups = {}
+    data.forEach(cr => {
+      // Extraction sécurisée de l'année depuis la chaîne 'YYYY-MM-DD'
+      const year = cr.date_conseil.split('-')[0]
+      if (!groups[year]) {
+        groups[year] = []
+      }
+      groups[year].push(cr)
+    })
+
+    // Tri des années par ordre décroissant
+    const years = Object.keys(groups).sort((a, b) => b - a)
+
+    // Formateur natif pour l'affichage de la date en français (ex: 2 juin 2025)
+    const dateFormatter = new Intl.DateTimeFormat('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    })
+
+    let htmlContent = ''
+
+    years.forEach(year => {
+      const items = groups[year]
+      const seancesCount = items.length
+      const seanceText = seancesCount > 1 ? 'séances' : 'séance'
+
+      htmlContent += `
+      <div class="cr-annee-bloc reveal">
+        <div class="cr-annee-label">${year} <span>${seancesCount} ${seanceText}</span></div>
+        <div class="cr-grid">
+      `
+
+      items.forEach(cr => {
+        // Découpage pour forcer l'interprétation locale de la date et éviter les décalages de fuseaux horaires
+        const [yyyy, mm, dd] = cr.date_conseil.split('-')
+        const localDate = new Date(yyyy, mm - 1, dd)
+        const formattedDate = dateFormatter.format(localDate)
+
+        // Génération de la carte sous forme de lien hypertexte direct vers le PDF hébergé
+        htmlContent += `
+          <a href="${cr.document_url || '#'}" target="_blank" rel="noopener noreferrer" class="cr-card">
+            <svg width="14" height="14" fill="none" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            <div class="cr-card-text">
+              <div class="cr-card-date">${formattedDate}</div>
+            </div>
+          </a>
+        `
+      })
+
+      htmlContent += `
+        </div>
+      </div>
+      `
+    })
+
+    // Injection du HTML complet construit d'un seul coup
+    container.innerHTML = htmlContent
+
+    // Raccrocher les nouveaux éléments injectés à l'IntersectionObserver pour les animations .reveal
+    const parentSection = container.closest('.tab-pane') || container.closest('.section')
+    if (parentSection && typeof bindNewReveals === 'function') {
+      bindNewReveals(parentSection)
+    }
+
+  } catch (err) {
+    console.error("Erreur lors du chargement dynamique des comptes-rendus :", err.message)
   }
 }
 
