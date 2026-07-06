@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initInscriptions()
   initSivuPracticalDocs()
   initComptesRendus()
+  initArretes()
 })
 
 /**
@@ -1459,6 +1460,83 @@ async function initComptesRendus() {
 
   } catch (err) {
     console.error("Erreur lors du chargement dynamique des comptes-rendus :", err.message)
+  }
+}
+
+/**
+ * 18. Gestion des Arrêtés Municipaux
+ */
+async function initArretes() {
+  const container = document.getElementById('arretes-wrapper')
+  if (!container) return
+
+  try {
+    // Récupération des arrêtés non-brouillons triés du plus récent au plus ancien
+    const { data, error } = await supabase
+      .from('arretes')
+      .select('*')
+      .eq('is_draft', false)
+      .order('en_vigueur_le', { ascending: false })
+
+    if (error) throw error
+
+    // Fonction utilitaire locale pour formater les dates à la française (ex: 15 janvier 2026)
+    const formatDate = (dateStr) => {
+      if (!dateStr) return ''
+      const date = new Date(dateStr)
+      return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    }
+
+    // ÉCRAN 1 : Si la table est vide ou s'il n'y a que des brouillons
+    if (!data || data.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state reveal">
+          <svg width="48" height="48" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+          </svg>
+          <h3>Aucun arrêté en vigueur</h3>
+          <p>Il n'y a pas d'arrêté municipal en vigueur actuellement. Cette page sera mise à jour lors de la publication de nouveaux arrêtés.</p>
+          <a href="/contact.html" class="btn btn-outline">
+            Contacter la mairie
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </a>
+        </div>
+      `
+    } else {
+      // ÉCRAN 2 : Si au moins un arrêté publié existe
+      container.innerHTML = `
+        <div class="reveal" style="display: flex; flex-direction: column; gap: 0.75rem;">
+          ${data.map(arrete => `
+            <a href="${arrete.document_url}" target="_blank" class="arrete-card">
+              <div class="arrete-num">${arrete.numero}</div>
+              <div class="arrete-info">
+                <div class="arrete-title">${arrete.titre}</div>
+                <div class="arrete-date">Pris le ${formatDate(arrete.pris_le)} — En vigueur le ${formatDate(arrete.en_vigueur_le)}</div>
+              </div>
+              <div class="arrete-pdf">
+                <svg width="13" height="13" fill="none" stroke-width="2.5" viewBox="0 0 24 24">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" y1="14" x2="21" y2="3"/>
+                </svg>
+                Consulter
+              </div>
+            </a>
+          `).join('\n')}
+        </div>
+      `
+    }
+
+    // Relancer l'Intersection Observer pour préserver les effets d'apparition .reveal
+    bindNewReveals(container)
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des arrêtés municipaux :", err.message)
   }
 }
 
