@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initSivuPracticalDocs()
   initComptesRendus()
   initArretes()
+  initTraitsUnion()
 })
 
 /**
@@ -1537,6 +1538,164 @@ async function initArretes() {
 
   } catch (err) {
     console.error("Erreur lors du chargement des arrêtés municipaux :", err.message)
+  }
+}
+
+/**
+ * 19. Gestion des Bulletins Municipaux (Le Trait d'Union)
+ */
+async function initTraitsUnion() {
+  const archivesContainer = document.getElementById('tu-archives-container')
+  if (!archivesContainer) return
+
+  const badgeElement = document.getElementById('tu-update-badge')
+  const dateElement = document.getElementById('tu-update-date')
+  const featuredContainer = document.getElementById('tu-featured-container')
+
+  try {
+    // Récupération de tous les bulletins ordonnés par date décroissante
+    const { data, error } = await supabase
+      .from('traits_union')
+      .select('*')
+      .eq('is_draft', false)
+      .order('date_publication', { ascending: false })
+
+    if (error) throw error
+    if (!data || data.length === 0) return
+
+    // --- 1. Gestion du badge de mise à jour ---
+    const latestDate = new Date(data[0].date_publication)
+    if (dateElement && badgeElement) {
+      const formattedLatest = latestDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+      dateElement.textContent = `Mis à jour le ${formattedLatest}`
+      badgeElement.style.display = 'inline-flex'
+    }
+
+    // --- 2. Formateur de dates local (gère les cas historiques spécifiques) ---
+    const formatTuDate = (dateStr) => {
+      const date = new Date(dateStr)
+      const year = date.getFullYear()
+      const month = date.getMonth() // 0-11
+
+      // Interceptions spécifiques pour respecter scrupuleusement les archives d'origine
+      if (year === 2016 && month === 10) return "Nov. – Déc. 2016"
+      if (year === 2016 && month === 8)  return "Sept. – Oct. 2016"
+      if (year === 2015 && month === 7)  return "Août – Sept. 2015"
+      if (year === 2015 && month === 4)  return "Mai – Juin 2015"
+
+      const standardLabel = date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })
+      return standardLabel.charAt(0).toUpperCase() + standardLabel.slice(1)
+    }
+
+    // --- 3. Gestion de la mise en avant (Dernier numéro) ---
+    const featured = data[0]
+    if (featuredContainer) {
+      const isSpecial = featured.type_special !== 'Standard'
+      const titleDisplay = isSpecial ? featured.type_special : `Trait d'Union<br>n°${featured.numero}`
+      
+      featuredContainer.innerHTML = `
+        <div class="section-label reveal" style="margin-bottom: 0.75rem;">Dernier numéro</div>
+        <div class="tu-une reveal">
+          <div class="tu-une-cover">
+            <canvas class="pdf-preview" data-pdf="${featured.document_url}"></canvas>
+          </div>
+          <div class="tu-une-body">
+            <div class="tu-une-label">${isSpecial ? 'Édition Spéciale' : 'Bulletin municipal'}</div>
+            <div class="tu-une-title">${titleDisplay}</div>
+            <div class="tu-une-date">${formatTuDate(featured.date_publication)}</div>
+            <a href="${featured.document_url}" target="_blank" class="btn btn-primary">
+              <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              Consulter ce numéro
+            </a>
+          </div>
+        </div>
+      `
+    }
+
+    // --- 4. Groupement automatique des archives par Année ---
+    const groupsByYear = {}
+    data.forEach(item => {
+      const year = new Date(item.date_publication).getFullYear()
+      if (!groupsByYear[year]) groupsByYear[year] = []
+      groupsByYear[year].push(item)
+    })
+
+    // Tri des années du plus récent au plus ancien
+    const sortedYears = Object.keys(groupsByYear).sort((a, b) => b - a)
+
+    // Construction dynamique du code HTML des accordions
+    let htmlContent = ""
+    sortedYears.forEach((year, index) => {
+      const items = groupsByYear[year]
+      
+      // Calcul du badge de description de l'accordéon
+      const standardCount = items.filter(i => i.type_special === 'Standard').length
+      const hasHorsSerie = items.some(i => i.type_special === 'Hors-Série')
+      const hasSupplement = items.some(i => i.type_special === 'Supplément')
+
+      let badgeLabel = `${standardCount} numéro${standardCount > 1 ? 's' : ''}`
+      if (hasHorsSerie) badgeLabel += ' + hors-série'
+      if (hasSupplement) badgeLabel += ' + supplément'
+
+      // Le premier accordéon (année en cours) reste ouvert par défaut via l'attribut 'open'
+      const isOpen = index === 0 ? 'open' : ''
+
+      htmlContent += `
+        <details class="tu-annee-accordion reveal" ${isOpen}>
+          <summary class="tu-annee-summary">
+            <div class="tu-summary-left">
+              ${year} <span class="tu-badge">${badgeLabel}</span>
+            </div>
+            <svg width="14" height="14" fill="none" stroke-width="2.5" viewBox="0 0 24 24" class="tu-chevron">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </summary>
+          <div class="tu-annee-content">
+            <div class="tu-annee-grid">
+              ${items.map(tdu => {
+                const isSpecial = tdu.type_special !== 'Standard'
+                const cardClass = isSpecial ? 'tu-card special' : 'tu-card'
+                const numDisplay = isSpecial ? tdu.type_special : `Trait d'Union n°${tdu.numero}`
+
+                return `
+                  <a href="${tdu.document_url}" target="_blank" class="card-link">
+                    <div class="${cardClass}"> <div class="tu-card-cover">
+                        <canvas class="pdf-preview" data-pdf="${tdu.document_url}"></canvas>
+                      </div>
+                      <div class="tu-card-body">
+                        <div class="tu-card-num">${numDisplay}</div>
+                        <div class="tu-card-date">${formatTuDate(tdu.date_publication)}</div>
+                        <div class="tu-card-btn">
+                          <svg width="11" height="11" fill="none" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                          </svg>
+                          Consulter
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                `
+              }).join('\n')}
+            </div>
+          </div>
+        </details>
+      `
+    })
+
+    archivesContainer.innerHTML = htmlContent
+
+    // Relance de l'Observer d'apparition pour les nouveaux blocs injectés
+    const parentSection = archivesContainer.closest('.section')
+    if (parentSection) bindNewReveals(parentSection)
+
+    // Déclenchement de l'événement personnalisé pour activer l'observer sur les nouveaux canvas
+    window.dispatchEvent(new Event('pdf-preview-reload'));
+
+  } catch (err) {
+    console.error("Erreur lors de l'initialisation des bulletins Trait d'Union :", err.message)
   }
 }
 
