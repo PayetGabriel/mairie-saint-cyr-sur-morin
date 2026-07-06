@@ -37,9 +37,15 @@
       transition: color 0.2s;
     }
 
-    .article-back svg { stroke: currentColor; }
-    .article-back:hover { color: var(--vert); }
+    .article-back svg { 
+      stroke: currentColor; 
+      transform: translateY(-1px); /* Remonte la flèche pour l'aligner sur le milieu optique des majuscules */
+    }
 
+    .article-back:hover {
+      color: var(--vert);
+    }
+    
     /* Meta */
     .article-meta {
       display: flex;
