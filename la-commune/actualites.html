@@ -80,10 +80,10 @@
 
     .actu-une-meta {
       display: flex;
-      align-items: center;
+      align-items: baseline; /* Changé de center à baseline */
       gap: 0.75rem;
     }
-
+    
     .actu-tag {
       display: inline-block;
       background: var(--vert);
@@ -99,6 +99,8 @@
     .actu-une-date {
       font-size: 0.78rem;
       color: var(--pierre-dark);
+      line-height: normal;   /* Laisse la police respirer naturellement */
+      /* transform supprimé */
     }
 
     .actu-une-title {
@@ -194,7 +196,7 @@
 
     .actu-card-meta {
       display: flex;
-      align-items: center;
+      align-items: baseline; /* Changé de center à baseline */
       gap: 0.6rem;
       flex-wrap: wrap;
     }
@@ -202,6 +204,8 @@
     .actu-card-date {
       font-size: 0.73rem;
       color: var(--pierre-dark);
+      line-height: normal;   /* Laisse la police respirer naturellement */
+      /* transform supprimé */
     }
 
     .actu-card-title {
