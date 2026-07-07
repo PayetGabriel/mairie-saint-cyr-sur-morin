@@ -223,8 +223,8 @@
       <img src="assets/img/Maire.jpg" alt="Monsieur le Maire" class="maire-photo" />
       <div class="maire-content">
         <div class="section-label">Mot du maire</div>
-        <blockquote>
-          "En cette fin d'année, la commune continue à mettre en œuvre ses projets de travaux. Nous avançons ensemble, avec le souci constant du bien-vivre de toutes les Saint-Cyriennes et de tous les Saint-Cyriens."
+        <blockquote id="maire-extrait">
+          <!-- Chargé dynamiquement -->
         </blockquote>
         <div class="maire-sig">
           <strong>Francis Delarue</strong>
@@ -247,8 +247,6 @@
     .then(data => {
       document.getElementById('footer-placeholder').innerHTML = data;
     });
-</script>
-
 </script>
 </body>
 </html>

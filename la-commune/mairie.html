@@ -850,27 +850,8 @@
 
         <div class="lettre-salutation">Chères Saint-Cyriennes, chers Saint-Cyriens,</div>
 
-        <div class="lettre-corps">
-
-          <p>Vous habitez une commune qui a une histoire originale et riche ; une commune qui bénéficie d'un environnement naturel relativement préservé. La main de l'homme y est pour beaucoup, et tous les Saint-Cyriens qui nous ont précédés y ont participé tout au long des siècles. Nous avons le devoir de préserver, de valoriser et de développer ce qui fait sa qualité de vie et son charme.</p>
-
-          <div class="lettre-highlight">
-            <p>Nous sommes une commune rurale encore très agricole. C'est l'activité de nos cultivateurs, de nos éleveurs, de nos artisans qui a façonné nos paysages et qui encore l'entretient.</p>
-          </div>
-
-          <p>Les nombreux chemins qui sillonnent la commune attestent de cette vie rurale active où l'on se déplaçait à pied ou en charrette. Tous ces chemins relient les hameaux au bourg. Ils sont encore très utiles. Depuis l'été 2017, des panneaux vous indiquent les noms de chaque chemin. Il ne tient qu'à nous, avec votre concours, que ces chemins et sentes restent accessibles, agréables et propres.</p>
-
-          <p>Nous sommes une commune qui a la chance d'avoir encore quelques commerces dynamiques et de nombreux services et artisans qui valorisent notre village et qui répondent aux besoins de ses habitants. Pensez à les fréquenter régulièrement : vous participerez ainsi au maintien d'emplois locaux et serez acteurs de la vitalité locale. Depuis le printemps 2017, un marché de campagne se tient tous les premiers samedis du mois avec des produits locaux de qualité.</p>
-
-          <p>Nos rues n'ont pas été conçues pour accueillir les nombreux véhicules qui les empruntent et qui y stationnent. Dans la mesure du possible, garez vos véhicules sur votre propriété et surtout pensez aux piétons — enfants et adultes — qui ont besoin de se déplacer en toute sécurité aussi bien dans les hameaux qu'en centre-bourg et aux abords des écoles.</p>
-
-          <p>Votre équipe municipale est soucieuse de soutenir et de favoriser le développement économique, touristique et culturel de la commune, et de favoriser la convivialité et la solidarité de proximité. Elle accompagne les projets et les initiatives de nos associations qui contribuent largement à animer la commune et à faciliter la vie des familles, des jeunes, et des moins jeunes. Elle s'efforce d'apporter les moyens nécessaires à nos écoles pour qu'elles soient accueillantes et de mieux en mieux équipées.</p>
-
-          <p>Elle a la volonté de faire de Saint-Cyr-sur-Morin un village inscrit dans son temps, moderne et économe, mais aussi soucieux de préserver et réhabiliter son patrimoine architectural et naturel. Votre équipe municipale est à l'écoute de chacun, de ses besoins et de ses suggestions pour améliorer notre cadre de vie commun.</p>
-
-          <p>La mairie vous est largement ouverte. Nous avons besoin de votre concours pour faire vivre le climat de convivialité, de sécurité et de bienveillance que nous espérons vous trouverez à Saint-Cyr-sur-Morin. Si vous le pouvez, n'hésitez pas à prendre un peu de votre temps pour la vie des écoles, l'animation du village, pour la mise en valeur de son patrimoine, de ses chemins, pour l'embellissement de ses rues et de ses façades.</p>
-
-          <p>Bienvenue dans notre commune où, nous l'espérons, vous vous sentirez rapidement chez vous.</p>
+        <div class="lettre-corps" id="maire-lettre-corps">
+          <!-- Chargé dynamiquement -->
         </div>
 
         <div class="lettre-signature">
@@ -1227,6 +1208,7 @@
 <script src="/components/navbar.js"></script>
 <script src="/js/scroll-reveal.js"></script>
 <script type="module" src="/js/schedule.js"></script>
+<script src="/js/site-content-loader.js" type="module"></script>
 <script>
   fetch('/components/footer.html')
     .then(r => r.text())

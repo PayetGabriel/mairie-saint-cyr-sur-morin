@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (path === '/' || path === '/index.html' || path.endsWith('/')) {
     initHomeArticles();
   }
-  
+
   initCommissions()
   initPermanences()
   initEtatCivil()
@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initComptesRendus()
   initArretes()
   initTraitsUnion()
+  initMotDuMaire()
 })
 
 /**
@@ -1703,6 +1704,44 @@ async function initTraitsUnion() {
 
   } catch (err) {
     console.error("Erreur lors de l'initialisation des bulletins Trait d'Union :", err.message)
+  }
+}
+
+/**
+ * 20. Gestion du Mot du Maire (Extrait sur l'index et texte complet sur la page mairie)
+ */
+async function initMotDuMaire() {
+  const extraitEl = document.getElementById('maire-extrait')
+  const corpsEl = document.getElementById('maire-lettre-corps')
+
+  // Si aucun des deux éléments n'est présent sur la page actuelle, on stoppe
+  if (!extraitEl && !corpsEl) return
+
+  try {
+    const { data, error } = await supabase
+      .from('site_content')
+      .select('value')
+      .eq('key', 'mot_du_maire')
+      .single()
+
+    if (error) throw error
+    if (!data || !data.value) return
+
+    // Remplissage de l'extrait (Page d'accueil)
+    if (extraitEl && data.value.extrait) {
+      extraitEl.textContent = `"${data.value.extrait}"`
+    }
+
+    // Remplissage de la lettre complète (Page Mairie)
+    if (corpsEl && data.value.complet) {
+      corpsEl.innerHTML = data.value.complet
+      
+      // Relance de l'Intersection Observer pour les animations .reveal internes si besoin
+      bindNewReveals(corpsEl)
+    }
+
+  } catch (err) {
+    console.error("Erreur lors du chargement du mot du maire:", err.message)
   }
 }
 
