@@ -23,6 +23,13 @@ const DOWNLOAD_SVG = `<svg width="15" height="15" fill="none" stroke="currentCol
 const DOC_PACS_SVG = `<svg width="16" height="16" fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`
 
 document.addEventListener('DOMContentLoaded', () => {
+  const path = window.location.pathname;
+
+  // À AJOUTER : Détection de la page d'accueil
+  if (path === '/' || path === '/index.html' || path.endsWith('/')) {
+    initHomeArticles();
+  }
+  
   initCommissions()
   initPermanences()
   initEtatCivil()
@@ -1696,6 +1703,157 @@ async function initTraitsUnion() {
 
   } catch (err) {
     console.error("Erreur lors de l'initialisation des bulletins Trait d'Union :", err.message)
+  }
+}
+
+/**
+ * Initialise les articles de la page d'accueil (Carousel et Dernières actualités)
+ */
+export async function initHomeArticles() {
+  // 1. Récupération parallèle des articles (Carousel mis en avant vs 5 derniers articles)
+  const [featuredRes, latestRes] = await Promise.all([
+    supabase.from('articles').select('*').eq('is_draft', false).eq('is_featured', true).order('created_at', { ascending: false }),
+    supabase.from('articles').select('*').eq('is_draft', false).order('created_at', { ascending: false }).limit(5)
+  ]);
+
+  // 2. Rendu et activation du Carousel
+  if (!featuredRes.error && featuredRes.data && featuredRes.data.length > 0) {
+    renderHomeCarousel(featuredRes.data);
+  } else {
+    const carouselSec = document.querySelector('.carousel-section');
+    if (carouselSec) carouselSec.style.display = 'none';
+  }
+
+  // 3. Rendu de la grille des 5 dernières actualités
+  if (!latestRes.error && latestRes.data && latestRes.data.length > 0) {
+    renderHomeLatestArticles(latestRes.data);
+  }
+}
+
+function renderHomeCarousel(slidesData) {
+  const track = document.querySelector('.carousel-track');
+  const dotsContainer = document.querySelector('.carousel-dots');
+  if (!track || !dotsContainer) return;
+
+  track.innerHTML = '';
+  dotsContainer.innerHTML = '';
+
+  slidesData.forEach((item) => {
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+    const imgUrl = item.image_url || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80';
+
+    slide.innerHTML = `
+      <div class="carousel-text">
+        <span class="actu-tag">${item.tag}</span>
+        <h3>${item.titre}</h3>
+        <p>${item.resume || ''}</p>
+        <a href="/la-commune/actualites/article.html?id=${item.id}" class="carousel-link">En savoir plus →</a>
+      </div>
+      <div class="carousel-img" style="background-image:url('${imgUrl}')"></div>
+    `;
+    track.appendChild(slide);
+  });
+
+  const slides = track.querySelectorAll('.carousel-slide');
+  let current = 0, timer;
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('button');
+    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', `Slide ${i + 1}`);
+    d.addEventListener('click', () => goTo(i));
+    dotsContainer.appendChild(d);
+  });
+
+  function fixHeight() {
+    track.style.height = '';
+    slides.forEach(s => {
+      s.style.position = 'relative'; s.style.opacity = '1'; s.style.pointerEvents = 'auto'; s.style.height = 'auto';
+    });
+    const maxH = Math.max(...Array.from(slides).map(s => s.offsetHeight));
+    track.style.height = maxH + 'px';
+    slides.forEach(s => {
+      s.style.position = ''; s.style.opacity = ''; s.style.pointerEvents = ''; s.style.height = maxH + 'px';
+    });
+  }
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    dotsContainer.querySelectorAll('.carousel-dot')[current].classList.remove('active');
+    current = (n + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dotsContainer.querySelectorAll('.carousel-dot')[current].classList.add('active');
+    resetTimer();
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), 5000);
+  }
+
+  document.querySelector('.carousel-prev').addEventListener('click', () => goTo(current - 1));
+  document.querySelector('.carousel-next').addEventListener('click', () => goTo(current + 1));
+
+  slides[0].classList.add('active');
+  resetTimer();
+
+  if (document.readyState === 'complete') { fixHeight(); } 
+  else { window.addEventListener('load', fixHeight); }
+  window.addEventListener('resize', fixHeight);
+  
+  if (typeof bindNewReveals === 'function') {
+    document.querySelectorAll('.carousel-section .reveal').forEach(el => bindNewReveals(el.parentElement || el));
+  }
+}
+
+function renderHomeLatestArticles(articles) {
+  const gridContainer = document.querySelector('#actualites .actu-grid');
+  if (!gridContainer) return;
+
+  const mainArticle = articles[0];
+  const mainImgUrl = mainArticle.image_url || 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=80';
+  
+  let listHTML = '';
+  const listArticles = articles.slice(1);
+  
+  listArticles.forEach((item, index) => {
+    const displayNum = String(index + 1).padStart(2, '0');
+    // Utilise la fonction formatDate globale déjà présente dans ton fichier
+    const dateStr = typeof formatDate === 'function' ? formatDate(item.created_at) : new Date(item.created_at).toLocaleDateString('fr-FR');
+    
+    listHTML += `
+      <a href="/la-commune/actualites/article.html?id=${item.id}" class="actu-item">
+        <div class="actu-item-num">${displayNum}</div>
+        <div class="actu-item-body">
+          <div class="actu-item-title">${item.titre}</div>
+          <div class="actu-item-date">${dateStr} — ${item.tag}</div>
+        </div>
+      </a>
+    `;
+  });
+
+  const mainDateStr = typeof formatDate === 'function' ? formatDate(mainArticle.created_at) : new Date(mainArticle.created_at).toLocaleDateString('fr-FR');
+
+  gridContainer.innerHTML = `
+    <a href="/la-commune/actualites/article.html?id=${mainArticle.id}" class="actu-main">
+      <div class="actu-main-img" style="background: url('${mainImgUrl}') center/cover;"></div>
+      <div class="actu-main-body">
+        <span class="actu-tag">${mainArticle.tag}</span>
+        <div class="actu-main-title">${mainArticle.titre}</div>
+        <p class="actu-main-text">${mainArticle.resume || ''}</p>
+        <div class="actu-date">${mainDateStr}</div>
+      </div>
+    </a>
+    <div class="actu-list">
+      ${listHTML}
+    </div>
+  `;
+
+  if (typeof bindNewReveals === 'function') {
+    gridContainer.querySelectorAll('.reveal').forEach(el => bindNewReveals(el));
+    const parentReveal = gridContainer.closest('.reveal') || gridContainer;
+    bindNewReveals(parentReveal);
   }
 }
 
