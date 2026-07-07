@@ -85,10 +85,8 @@ input, select, textarea { font-family: 'DM Sans', sans-serif; }
 }
 
 .sidebar-logo {
-  width: 34px;
-  height: 34px;
-  object-fit: contain;
-  filter: brightness(0) invert(1);
+  height: 34px;  /* On cale la hauteur pour l'aligner proprement avec le texte */
+  width: auto;   /* Le blason reprend ses vraies proportions naturelles */
   flex-shrink: 0;
 }
 
