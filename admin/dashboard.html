@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tableau de bord — Administration Saint-Cyr-sur-Morin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+
+  <!-- Loader (affiché pendant la vérification auth) -->
+  <div class="page-loader" id="page-loader">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="admin-layout" id="admin-layout" style="visibility:hidden">
+
+    <!-- Overlay mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar (injecté par auth-guard.js) -->
+    <aside class="sidebar" id="sidebar" role="complementary" aria-label="Navigation"></aside>
+
+    <!-- Contenu -->
+    <main class="main-content">
+
+      <!-- Topbar mobile -->
+      <div class="mobile-topbar">
+        <button class="btn-hamburger" id="btn-hamburger" aria-label="Ouvrir le menu">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/>
+          </svg>
+        </button>
+        <span class="mobile-topbar-title">Administration</span>
+      </div>
+
+      <!-- En-tête -->
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1 class="page-title">Tableau de bord</h1>
+          <p class="page-subtitle" id="page-date"></p>
+        </div>
+      </div>
+
+      <div class="page-content">
+
+        <!-- Carte de bienvenue -->
+        <div class="welcome-card">
+          <div>
+            <p class="welcome-greeting" id="welcome-greeting">Bonjour…</p>
+            <p class="welcome-sub">Bienvenue dans l'espace d'administration de la mairie.</p>
+            <span class="welcome-badge" id="welcome-badge">—</span>
+          </div>
+        </div>
+
+        <!-- Accès rapides -->
+        <p style="font-size:13px;font-weight:600;color:var(--pierre-dark);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px">
+          Accès rapides
+        </p>
+        <div id="quick-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:24px">
+          <!-- Injecté dynamiquement -->
+          <div style="grid-column:1/-1;text-align:center;padding:24px 0">
+            <div class="spinner" style="margin:0 auto 8px"></div>
+            <p class="text-muted text-sm">Chargement…</p>
+          </div>
+        </div>
+
+        <!-- Infos -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Informations</span>
+          </div>
+          <div class="card-body">
+            <p style="font-size:13.5px;color:var(--pierre-dark);line-height:1.7">
+              Ce panel vous permet de gérer le contenu du site de la commune de Saint-Cyr-sur-Morin.<br>
+              En cas de problème technique, contactez l'administrateur.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script type="module">
+    import { supabase }                              from '/admin/js/supabase-config.js'
+    import { requireAuth, buildSidebar, PERMISSIONS } from '/admin/js/auth-guard.js'
+
+    async function init() {
+      const auth = await requireAuth()
+      if (!auth) return
+
+      const { profile } = auth
+      const admin = ['admin', 'super_admin'].includes(profile.role)
+
+      /* Afficher la page */
+      document.getElementById('page-loader').style.display    = 'none'
+      document.getElementById('admin-layout').style.visibility = 'visible'
+
+      /* Sidebar */
+      buildSidebar(profile, 'dashboard')
+
+      /* Date */
+      document.getElementById('page-date').textContent = new Date().toLocaleDateString('fr-FR', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      })
+
+      /* Carte de bienvenue */
+      const prenom = profile.prenom?.trim() || profile.email.split('@')[0]
+      const nom    = profile.nom?.trim()    || ''
+      const fullName = [prenom, nom].filter(Boolean).join(' ')
+
+      document.getElementById('welcome-greeting').textContent = `Bonjour ${fullName}, ravi de vous revoir.`
+
+      const roleLabels = {
+        super_admin: 'Super Administrateur',
+        admin:       'Administrateur',
+        employee:    'Employé',
+      }
+      document.getElementById('welcome-badge').textContent = roleLabels[profile.role] || profile.role
+
+      /* Accès rapides */
+      const items = []
+
+      if (admin || profile.can_manage_publications) {
+        items.push({ icon: '📰', label: 'Publications', desc: 'Actualités & bulletins', href: '#', soon: true })
+      }
+
+      const hasEdit = admin || Object.keys(PERMISSIONS).some(k => profile[k])
+      if (hasEdit) {
+        items.push({ icon: '✏️', label: 'Éditeur No-Code', desc: 'Modifier le contenu du site', href: '#', soon: true })
+      }
+
+      if (admin) {
+        items.push({ icon: '👥', label: 'Utilisateurs', desc: 'Gérer les comptes', href: '/admin/users.html' })
+        items.push({ icon: '📋', label: "Journal d'activité", desc: 'Logs Vercel', href: 'https://vercel.com/dashboard', external: true })
+      }
+
+      const grid = document.getElementById('quick-grid')
+
+      if (items.length === 0) {
+        grid.innerHTML = `<p class="text-muted text-sm" style="grid-column:1/-1">Aucun accès rapide disponible.</p>`
+      } else {
+        grid.innerHTML = items.map(item => `
+          <a href="${item.soon ? '#' : item.href}"
+             class="card quick-card ${item.soon ? 'disabled' : ''}"
+             ${item.external ? 'target="_blank" rel="noopener noreferrer"' : ''}
+             aria-label="${item.label}${item.soon ? ' — bientôt disponible' : ''}">
+            <span class="quick-icon">${item.icon}</span>
+            <div>
+              <p class="quick-label">
+                ${item.label}
+                ${item.soon ? '<span class="text-sm text-muted" style="font-weight:400"> (bientôt)</span>' : ''}
+              </p>
+              <p class="quick-desc">${item.desc}</p>
+            </div>
+          </a>
+        `).join('')
+      }
+    }
+
+    init()
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion — Administration Saint-Cyr-sur-Morin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+
+    <div class="auth-header">
+      <img src="/assets/img/logoSaintCyr_2020.svg" alt="Blason Saint-Cyr-sur-Morin">
+      <div class="auth-header-text">
+        <strong>Saint-Cyr-sur-Morin</strong>
+        <span>Mairie — 77750</span>
+      </div>
+    </div>
+
+    <div class="auth-body">
+      <h1 class="auth-title">Connexion</h1>
+      <p class="auth-subtitle">Accès réservé au personnel autorisé.</p>
+
+      <div id="alert" class="alert alert-error" style="display:none" role="alert"></div>
+
+      <form id="login-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">Adresse email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-input"
+            placeholder="prenom.nom@mairie.fr"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">
+            Mot de passe
+            <a href="/admin/reset-password.html" class="auth-link">Mot de passe oublié ?</a>
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-input"
+            placeholder="••••••••"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="submit-btn"
+          style="width:100%;justify-content:center;margin-top:6px"
+        >
+          Se connecter
+        </button>
+      </form>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { supabase } from '/admin/js/supabase-config.js'
+
+    /* Si déjà connecté → rediriger directement */
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) window.location.replace('/admin/dashboard.html')
+    })
+
+    const form      = document.getElementById('login-form')
+    const alertEl   = document.getElementById('alert')
+    const submitBtn = document.getElementById('submit-btn')
+
+    const ERROR_MESSAGES = {
+      'Invalid login credentials':  'Identifiants incorrects. Vérifiez votre email et mot de passe.',
+      'Email not confirmed':         "Votre compte n'est pas encore confirmé. Vérifiez vos emails.",
+      'Too many requests':           'Trop de tentatives. Réessayez dans quelques minutes.',
+    }
+
+    function showError(msg) {
+      alertEl.textContent = msg
+      alertEl.style.display = 'flex'
+    }
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault()
+      alertEl.style.display = 'none'
+
+      const email    = document.getElementById('email').value.trim()
+      const password = document.getElementById('password').value
+
+      if (!email || !password) {
+        showError('Veuillez remplir tous les champs.')
+        return
+      }
+
+      submitBtn.disabled    = true
+      submitBtn.textContent = 'Connexion…'
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+
+      if (error) {
+        showError(ERROR_MESSAGES[error.message] || 'Une erreur est survenue. Réessayez.')
+        submitBtn.disabled    = false
+        submitBtn.textContent = 'Se connecter'
+        return
+      }
+
+      /* Vérifier que le profil existe dans la table */
+      const { data: profile, error: profileErr } = await supabase
+        .from('profiles')
+        .select('id, role')
+        .eq('id', data.user.id)
+        .single()
+
+      if (profileErr || !profile) {
+        await supabase.auth.signOut()
+        showError("Votre compte n'est pas encore activé. Contactez un administrateur.")
+        submitBtn.disabled    = false
+        submitBtn.textContent = 'Se connecter'
+        return
+      }
+
+      window.location.replace('/admin/dashboard.html')
+    })
+  </script>
+
+</body>
+</html>

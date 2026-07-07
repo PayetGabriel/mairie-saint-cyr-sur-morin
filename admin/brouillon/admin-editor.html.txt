@@ -304,12 +304,18 @@
   ── ONGLETS PRINCIPAUX ──
   
   1. TABLEAU DE BORD
-     Vue d'ensemble synthétique de l'activité et des informations clés
+     Vue d'ensemble synthétique de l'activité et des informations clés (ça s'était avant)
+     Maintenant on va faire simple pour l'instant, je modifierai plus tard si nécessaire :
+     Le Bandeau de Bienvenue & Statut
+      Un bloc épuré en haut de page pour poser le contexte.
+      Le message : "Bonjour Gabriel, ravi de vous revoir." (Dynamisé avec les infos du profil récupérées via Supabase).
+      Le rôle : Une petite pastille indiquant le niveau d'accès (Admin ou Modérateur).
+      Le bouton magique : Un bouton "Déconnexion" bien visible.
   
   2. PUBLICATIONS
      Gestion des actualités et articles publiés sur les pages actualités
-     Création, édition, suppression des publications, visibilité et brouillons
-     Publicatiion des bulletins municipaux (Traits d'union), CR de conseil municipam, arrêtés, événements de médaithèque, etc.
+     Création, édition, suppression des publications, visibilité et brouillons (et affichage des articles mis en avant sur le carousel)
+     Publicatiion des bulletins municipaux (Traits d'union), CR de conseil municipam, arrêtés, événements de médiathèque, etc.
   
   3. ÉDITEUR NO-CODE
      Édition des informations modifiables sur chaque page du site
@@ -321,26 +327,27 @@
      - ! Pas de possibilité de modifier la structure des pages (sections, ordre, etc.) pour éviter les erreurs de mise en page, mais on peut envisager d'ajouter des sections supplémentaires dans le futur si besoin (et encore, peut-être plus juste genre ajouter un composant comme celui à côté maximum, pour simplifier)
      
      Pages disponibles:
-     • Barre de navigation (juste cacher ou rediriger certains liens, sinon trop complexe à gérer)
+     • Barre de navigation (juste cacher ou rediriger certains liens, sinon trop complexe à gérer) (plus dispo pour l'instant)
      • Page d'accueil (Index)
      • Page Scolarité
      • Page Transports
      • Cantine & Menus
      • Périscolaire & Loisirs
      • ... et autres pages du site
+     Tout sera trié par sections dans le même ordre et que la navbar du site pour la facilité
   
   4. JOURNAL D'ACTIVITÉ
-     Historique des modifications et actions effectuées par les utilisateurs
+     Historique des modifications et actions effectuées par les utilisateurs (disponible uniquement pour les admins et y'a juste un lien vercel à faire car l'option existe)
   
   5. MESSAGES (Pour des raisons de pratique, de pj, et de simplicité, cette section ne sera finalement pas faite)
      Gestion des messages/notifications internes
      Badge de notification pour les messages non lus
 
   6. UTILISATEURS
-     Gestion des comptes utilisateurs (accessible principalement en tant qu'admin)
+     Gestion des comptes utilisateurs (accessible principalement en tant qu'admin, avec possibilité de créer, modifier, supprimer des comptes et gérer les rôles et permissions)
   
   7. PARAMÈTRES
-     Configuration du panel, préférences utilisateur, etc.
+     Configuration du panel, préférences utilisateur, etc. (à voir les besoins à mettre)
   
   ── ÉLÉMENTS DE L'INTERFACE ──
   
@@ -365,7 +372,15 @@
   • Typographie: Playfair Display (titres), DM Sans (texte)
   • Mise en page: Sidebar fixe + contenu principal responsive
   • Navigation intuitive avec actifs/inactifs visuellement différenciés
-  • En fait on va se rebaser sur la charte graphique du site pour que ce soit cohérent et facilement intégrable dans le projet
+  • En fait on va se rebaser sur la charte graphique du site pour que ce soit cohérent et facilement intégrable dans le projet, ah et remettre un truc un peu comme la navbar pour rappeler qu'on est sur le site de la mairie, sans lien mais voilà (<a href="/" class="nav-logo">
+    <div class="nav-logo-badge">
+      <img src="/assets/img/logoSaintCyr_2020.svg" alt="Blason Saint-Cyr-sur-Morin">
+    </div>
+    <div class="nav-logo-text">
+      <strong>Saint-Cyr-sur-Morin</strong>
+      <span>Mairie — 77750</span>
+    </div>
+  </a>)
   
   ════════════════════════════════════════════════════════════════════════════════
   -->

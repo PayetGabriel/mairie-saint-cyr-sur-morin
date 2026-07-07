@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilisateurs — Administration Saint-Cyr-sur-Morin</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+
+  <div class="page-loader" id="page-loader">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="admin-layout" id="admin-layout" style="visibility:hidden">
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar" role="complementary" aria-label="Navigation"></aside>
+
+    <main class="main-content">
+
+      <!-- Topbar mobile -->
+      <div class="mobile-topbar">
+        <button class="btn-hamburger" id="btn-hamburger" aria-label="Ouvrir le menu">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/>
+          </svg>
+        </button>
+        <span class="mobile-topbar-title">Utilisateurs</span>
+      </div>
+
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1 class="page-title">Utilisateurs</h1>
+          <p class="page-subtitle">Gérer les comptes et les permissions d'accès au panel.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-open-invite">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+          </svg>
+          Inviter un utilisateur
+        </button>
+      </div>
+
+      <div class="page-content">
+
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Utilisateur</th>
+                    <th>Rôle</th>
+                    <th>Permissions</th>
+                    <th style="text-align:right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="users-tbody">
+                  <tr>
+                    <td colspan="4" style="text-align:center;padding:32px">
+                      <div class="spinner" style="margin:0 auto 8px"></div>
+                      <p class="text-muted text-sm">Chargement des utilisateurs…</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ══ Modal : Inviter un utilisateur ══════════════════════════ -->
+  <div class="modal-backdrop" id="modal-invite" role="dialog" aria-modal="true" aria-labelledby="invite-title">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="invite-title">Inviter un utilisateur</h2>
+        <button class="modal-close" data-close="modal-invite" aria-label="Fermer">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="invite-alert" class="alert alert-error" style="display:none" role="alert"></div>
+        <div class="form-group">
+          <label class="form-label" for="invite-email">Adresse email <span style="color:#dc2626">*</span></label>
+          <input type="email" id="invite-email" class="form-input" placeholder="prenom.nom@mairie.fr" autocomplete="off">
+          <p class="form-hint">Un email d'invitation sera envoyé à cette adresse.</p>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="invite-prenom">Prénom</label>
+            <input type="text" id="invite-prenom" class="form-input" placeholder="Marie">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="invite-nom">Nom</label>
+            <input type="text" id="invite-nom" class="form-input" placeholder="Dupont">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="invite-role">Rôle initial</label>
+          <select id="invite-role" class="form-select">
+            <option value="employee">Employé</option>
+            <option value="admin">Admin</option>
+          </select>
+          <p class="form-hint">Les permissions pourront être affinées après la création.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-close="modal-invite">Annuler</button>
+        <button class="btn btn-primary" id="btn-invite-submit">Envoyer l'invitation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Modal : Modifier les permissions ════════════════════════ -->
+  <div class="modal-backdrop" id="modal-edit" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header">
+        <h2 class="modal-title" id="edit-title">Modifier les accès</h2>
+        <button class="modal-close" data-close="modal-edit" aria-label="Fermer">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-user-id">
+        <div id="edit-alert" class="alert alert-error" style="display:none" role="alert"></div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-role">Rôle</label>
+          <select id="edit-role" class="form-select">
+            <option value="employee">Employé</option>
+            <option value="admin">Admin</option>
+            <option value="super_admin">Super Admin</option>
+          </select>
+        </div>
+
+        <div class="divider"></div>
+
+        <p style="font-size:13px;font-weight:600;margin-bottom:4px">Permissions d'édition</p>
+        <p class="text-sm text-muted" style="margin-bottom:12px">
+          Les admins ont accès à tout automatiquement. Ces permissions s'appliquent aux employés.
+        </p>
+        <div id="permissions-list"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-close="modal-edit">Annuler</button>
+        <button class="btn btn-primary" id="btn-edit-submit">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Modal : Confirmer la suppression ════════════════════════ -->
+  <div class="modal-backdrop" id="modal-delete" role="dialog" aria-modal="true" aria-labelledby="delete-title">
+    <div class="modal" style="max-width:400px">
+      <div class="modal-header">
+        <h2 class="modal-title" id="delete-title">Supprimer le compte</h2>
+        <button class="modal-close" data-close="modal-delete" aria-label="Fermer">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="delete-user-id">
+        <p style="font-size:13.5px;line-height:1.6">
+          Supprimer le compte de <strong id="delete-user-name"></strong> ?
+        </p>
+        <p class="text-sm text-danger" style="margin-top:8px">
+          Action irréversible. L'utilisateur ne pourra plus se connecter.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-close="modal-delete">Annuler</button>
+        <button class="btn btn-danger" id="btn-delete-confirm">Supprimer définitivement</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script type="module">
+    import { supabase } from '/admin/js/supabase-config.js'
+    import {
+      requireAuth, buildSidebar, showToast,
+      openModal, closeModal, initModals,
+      getInitials, getRoleLabel, isAdmin,
+      PERMISSIONS, PERM_KEYS,
+    } from '/admin/js/auth-guard.js'
+
+    /* ── État global ── */
+    let currentUser = null
+    let allUsers    = []
+
+    /* ════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════ */
+    async function init() {
+      /* requireAdmin: true → redirige les non-admins vers le dashboard */
+      const auth = await requireAuth({ requireAdmin: true })
+      if (!auth) return
+
+      currentUser = auth.profile
+
+      document.getElementById('page-loader').style.display     = 'none'
+      document.getElementById('admin-layout').style.visibility = 'visible'
+
+      buildSidebar(currentUser, 'users')
+      initModals()
+      bindButtons()
+      await loadUsers()
+    }
+
+    /* ════════════════════════════════════════
+       CHARGEMENT DES UTILISATEURS
+    ════════════════════════════════════════ */
+    async function loadUsers() {
+      const tbody = document.getElementById('users-tbody')
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" style="text-align:center;padding:32px">
+            <div class="spinner" style="margin:0 auto 8px"></div>
+            <p class="text-muted text-sm">Chargement…</p>
+          </td>
+        </tr>`
+
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .order('role')
+        .order('nom')
+
+      if (error) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align:center;padding:32px">
+              <p class="text-danger text-sm">Erreur lors du chargement : ${escHtml(error.message)}</p>
+            </td>
+          </tr>`
+        return
+      }
+
+      allUsers = data
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align:center;padding:32px">
+              <p class="text-muted text-sm">Aucun utilisateur trouvé.</p>
+            </td>
+          </tr>`
+        return
+      }
+
+      tbody.innerHTML = data.map(renderRow).join('')
+
+      /* Bind boutons de la table */
+      tbody.querySelectorAll('.btn-row-edit').forEach(btn => {
+        btn.addEventListener('click', () => openEditModal(btn.dataset.id))
+      })
+      tbody.querySelectorAll('.btn-row-delete').forEach(btn => {
+        btn.addEventListener('click', () => openDeleteModal(btn.dataset.id, btn.dataset.name))
+      })
+    }
+
+    /* ── Rendu d'une ligne ── */
+    function renderRow(user) {
+      const isSelf    = user.id === currentUser.id
+      const initials  = getInitials(user)
+      const roleLabel = getRoleLabel(user.role)
+      const fullName  = [user.prenom, user.nom].filter(Boolean).join(' ')
+      const displayName = fullName || '—'
+
+      /* Dots de permissions */
+      const dots = PERM_KEYS.map(k => `
+        <span class="perm-dot ${user[k] ? 'on' : ''}" title="${PERMISSIONS[k]}"></span>
+      `).join('')
+
+      const activePerms = PERM_KEYS.filter(k => user[k]).map(k => PERMISSIONS[k])
+      const permText    = isAdmin(user)
+        ? '<span style="font-size:11px;color:var(--vert-clair)">Accès complet</span>'
+        : activePerms.length > 0
+          ? `<span class="perm-names">${activePerms.join(', ')}</span>`
+          : '<span class="perm-names">Aucune</span>'
+
+      /* Couleur avatar selon rôle */
+      const avatarColor = {
+        super_admin: 'var(--bois)',
+        admin:       'var(--vert-clair)',
+        employee:    'var(--pierre-dark)',
+      }[user.role] || 'var(--gris)'
+
+      return `
+        <tr data-id="${user.id}">
+          <td>
+            <div class="td-user">
+              <div class="user-avatar" style="background:${avatarColor}">${escHtml(initials)}</div>
+              <div class="td-user-info">
+                <p>
+                  ${escHtml(displayName)}
+                  ${isSelf ? '<span class="text-muted text-sm"> (vous)</span>' : ''}
+                </p>
+                <p>${escHtml(user.email)}</p>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="badge badge-${user.role}">${roleLabel}</span>
+          </td>
+          <td>
+            <div class="perm-dots">${dots}</div>
+            ${permText}
+          </td>
+          <td style="text-align:right">
+            <div style="display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap">
+              <button
+                class="btn btn-secondary btn-sm btn-row-edit"
+                data-id="${user.id}"
+                aria-label="Modifier ${escHtml(displayName)}"
+              >Modifier</button>
+              ${!isSelf ? `
+                <button
+                  class="btn btn-danger btn-sm btn-row-delete"
+                  data-id="${user.id}"
+                  data-name="${escHtml(fullName || user.email)}"
+                  aria-label="Supprimer ${escHtml(displayName)}"
+                >Supprimer</button>` : ''}
+            </div>
+          </td>
+        </tr>`
+    }
+
+    /* ════════════════════════════════════════
+       MODAL : INVITATION
+    ════════════════════════════════════════ */
+    function bindButtons() {
+      document.getElementById('btn-open-invite').addEventListener('click', () => {
+        /* Reset formulaire */
+        document.getElementById('invite-email').value  = ''
+        document.getElementById('invite-prenom').value = ''
+        document.getElementById('invite-nom').value    = ''
+        document.getElementById('invite-role').value   = 'employee'
+        document.getElementById('invite-alert').style.display = 'none'
+        const btn = document.getElementById('btn-invite-submit')
+        btn.disabled    = false
+        btn.textContent = "Envoyer l'invitation"
+        openModal('modal-invite')
+      })
+
+      document.getElementById('btn-invite-submit').addEventListener('click', handleInvite)
+      document.getElementById('btn-edit-submit').addEventListener('click', handleEditSave)
+      document.getElementById('btn-delete-confirm').addEventListener('click', handleDelete)
+    }
+
+    async function handleInvite() {
+      const email   = document.getElementById('invite-email').value.trim()
+      const prenom  = document.getElementById('invite-prenom').value.trim()
+      const nom     = document.getElementById('invite-nom').value.trim()
+      const role    = document.getElementById('invite-role').value
+      const alertEl = document.getElementById('invite-alert')
+      const btn     = document.getElementById('btn-invite-submit')
+
+      alertEl.style.display = 'none'
+
+      if (!email || !email.includes('@')) {
+        alertEl.textContent   = 'Veuillez entrer une adresse email valide.'
+        alertEl.style.display = 'flex'
+        return
+      }
+
+      btn.disabled    = true
+      btn.textContent = 'Envoi…'
+
+      const { data: { session } } = await supabase.auth.getSession()
+
+      try {
+        const res = await fetch('/api/admin-users', {
+          method: 'POST',
+          headers: {
+            'Content-Type':  'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ action: 'invite', email, prenom, nom, role }),
+        })
+
+        const result = await res.json()
+
+        if (!res.ok) {
+          alertEl.textContent   = result.error || "Erreur lors de l'invitation."
+          alertEl.style.display = 'flex'
+          btn.disabled    = false
+          btn.textContent = "Envoyer l'invitation"
+          return
+        }
+
+        closeModal('modal-invite')
+        showToast(`Invitation envoyée à ${email}`)
+        await loadUsers()
+
+      } catch {
+        alertEl.textContent   = 'Erreur réseau. Vérifiez votre connexion.'
+        alertEl.style.display = 'flex'
+        btn.disabled    = false
+        btn.textContent = "Envoyer l'invitation"
+      }
+    }
+
+    /* ════════════════════════════════════════
+       MODAL : MODIFIER PERMISSIONS
+    ════════════════════════════════════════ */
+    function openEditModal(userId) {
+      const user = allUsers.find(u => u.id === userId)
+      if (!user) return
+
+      document.getElementById('edit-user-id').value = userId
+      const fullName = [user.prenom, user.nom].filter(Boolean).join(' ') || user.email
+      document.getElementById('edit-title').textContent = `Modifier : ${fullName}`
+      document.getElementById('edit-role').value         = user.role
+      document.getElementById('edit-alert').style.display = 'none'
+
+      /* Construire les toggles de permissions */
+      document.getElementById('permissions-list').innerHTML = PERM_KEYS.map(perm => `
+        <div class="permission-row">
+          <span class="permission-label">${PERMISSIONS[perm]}</span>
+          <label class="toggle" aria-label="${PERMISSIONS[perm]}">
+            <input type="checkbox" name="${perm}" ${user[perm] ? 'checked' : ''}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      `).join('')
+
+      /* Reset bouton */
+      const btn = document.getElementById('btn-edit-submit')
+      btn.disabled    = false
+      btn.textContent = 'Enregistrer'
+
+      openModal('modal-edit')
+    }
+
+    async function handleEditSave() {
+      const userId  = document.getElementById('edit-user-id').value
+      const role    = document.getElementById('edit-role').value
+      const alertEl = document.getElementById('edit-alert')
+      const btn     = document.getElementById('btn-edit-submit')
+
+      alertEl.style.display = 'none'
+      btn.disabled    = true
+      btn.textContent = 'Enregistrement…'
+
+      /* Récupérer l'état de chaque permission */
+      const updates = { role }
+      PERM_KEYS.forEach(perm => {
+        const checkbox = document.querySelector(`#permissions-list input[name="${perm}"]`)
+        if (checkbox) updates[perm] = checkbox.checked
+      })
+
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', userId)
+
+      btn.disabled    = false
+      btn.textContent = 'Enregistrer'
+
+      if (error) {
+        const msg = error.message.includes('Interdit')
+          ? "Vous n'avez pas les droits pour effectuer cette modification."
+          : error.message
+        alertEl.textContent   = msg
+        alertEl.style.display = 'flex'
+        return
+      }
+
+      closeModal('modal-edit')
+      showToast('Profil mis à jour.')
+      await loadUsers()
+    }
+
+    /* ════════════════════════════════════════
+       MODAL : SUPPRESSION
+    ════════════════════════════════════════ */
+    function openDeleteModal(userId, userName) {
+      document.getElementById('delete-user-id').value       = userId
+      document.getElementById('delete-user-name').textContent = userName
+      const btn = document.getElementById('btn-delete-confirm')
+      btn.disabled    = false
+      btn.textContent = 'Supprimer définitivement'
+      openModal('modal-delete')
+    }
+
+    async function handleDelete() {
+      const userId = document.getElementById('delete-user-id').value
+      const btn    = document.getElementById('btn-delete-confirm')
+
+      btn.disabled    = true
+      btn.textContent = 'Suppression…'
+
+      const { data: { session } } = await supabase.auth.getSession()
+
+      try {
+        const res = await fetch('/api/admin-users', {
+          method: 'POST',
+          headers: {
+            'Content-Type':  'application/json',
+            'Authorization': `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({ action: 'delete', userId }),
+        })
+
+        const result = await res.json()
+        closeModal('modal-delete')
+
+        if (!res.ok) {
+          showToast(result.error || 'Erreur lors de la suppression.', 'error')
+          btn.disabled    = false
+          btn.textContent = 'Supprimer définitivement'
+          return
+        }
+
+        showToast('Utilisateur supprimé.')
+        await loadUsers()
+
+      } catch {
+        showToast('Erreur réseau.', 'error')
+        closeModal('modal-delete')
+        btn.disabled    = false
+        btn.textContent = 'Supprimer définitivement'
+      }
+    }
+
+    /* ── Échappement HTML ── */
+    function escHtml(str) {
+      if (!str) return ''
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+    }
+
+    init()
+  </script>
+
+</body>
+</html>
