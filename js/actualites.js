@@ -119,6 +119,7 @@ async function fetchAndRender() {
   let articlesForGrid = [...articles];
 
   // Gestion spécifique de la Page 1 (Rendu de l'article à la Une)
+  // Gestion spécifique de la Page 1 (Rendu de l'article à la Une)
   if (currentPage === 1) {
     const uneArticle = articles[0];
     articlesForGrid = articles.slice(1);
@@ -131,10 +132,23 @@ async function fetchAndRender() {
     document.getElementById('actu-une-text').textContent = uneArticle.resume;
     
     const imgElement = document.getElementById('actu-une-img');
+    
     if (uneArticle.image_url) {
+      // S'il y a une image : on l'applique en fond et on nettoie l'intérieur (au cas où un placeholder s'y trouvait)
       imgElement.style.background = `url('${uneArticle.image_url}') center/cover`;
+      imgElement.innerHTML = ''; 
     } else {
-      imgElement.style.background = ''; // Fallback sur le CSS natif si aucun champ configuré
+      // S'il n'y a PAS d'image : on retire le fond et on injecte le bloc placeholder adapté
+      imgElement.style.background = ''; 
+      imgElement.innerHTML = `
+        <div class="actu-une-img-placeholder">
+          <svg width="48" height="48" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+      `;
     }
     uneContainer.style.display = '';
   } else {

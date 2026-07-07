@@ -67,7 +67,21 @@
     .actu-une-img {
       height: 100%;
       min-height: 300px;
-      background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80') center/cover;
+    }
+
+    .actu-une-img-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 300px;
+      background: var(--vert-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .actu-une-img-placeholder svg { 
+      stroke: var(--vert); 
+      opacity: 0.3; 
     }
 
     .actu-une-body {
@@ -270,6 +284,7 @@
         grid-template-columns: 1fr;
       }
       .actu-une-img { min-height: 200px; height: 200px; }
+      .actu-une-img-placeholder { min-height: 200px; height: 200px; }
     }
 
     @media (max-width: 520px) {

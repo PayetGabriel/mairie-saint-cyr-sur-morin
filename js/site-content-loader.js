@@ -1780,7 +1780,22 @@ function renderHomeCarousel(slidesData) {
   slidesData.forEach((item) => {
     const slide = document.createElement('div');
     slide.className = 'carousel-slide';
-    const imgUrl = item.image_url || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&q=80';
+    
+    // MODIFICATION : Gestion conditionnelle de l'image ou du placeholder
+    let imgBlock = '';
+    if (item.image_url) {
+      imgBlock = `<div class="carousel-img" style="background-image:url('${item.image_url}')"></div>`;
+    } else {
+      imgBlock = `
+        <div class="carousel-img carousel-img-placeholder">
+          <svg width="48" height="48" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+        </div>
+      `;
+    }
 
     slide.innerHTML = `
       <div class="carousel-text">
@@ -1789,7 +1804,7 @@ function renderHomeCarousel(slidesData) {
         <p>${item.resume || ''}</p>
         <a href="/la-commune/actualites/article.html?id=${item.id}" class="carousel-link">En savoir plus →</a>
       </div>
-      <div class="carousel-img" style="background-image:url('${imgUrl}')"></div>
+      ${imgBlock}
     `;
     track.appendChild(slide);
   });
@@ -1851,14 +1866,28 @@ function renderHomeLatestArticles(articles) {
   if (!gridContainer) return;
 
   const mainArticle = articles[0];
-  const mainImgUrl = mainArticle.image_url || 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=1200&q=80';
+  
+  // MODIFICATION : Gestion conditionnelle de l'image principale des dernières actualités
+  let mainImgBlock = '';
+  if (mainArticle.image_url) {
+    mainImgBlock = `<div class="actu-main-img" style="background: url('${mainArticle.image_url}') center/cover;"></div>`;
+  } else {
+    mainImgBlock = `
+      <div class="actu-main-img actu-main-img-placeholder">
+        <svg width="40" height="40" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+      </div>
+    `;
+  }
   
   let listHTML = '';
   const listArticles = articles.slice(1);
   
   listArticles.forEach((item, index) => {
     const displayNum = String(index + 1).padStart(2, '0');
-    // Utilise la fonction formatDate globale déjà présente dans ton fichier
     const dateStr = typeof formatDate === 'function' ? formatDate(item.created_at) : new Date(item.created_at).toLocaleDateString('fr-FR');
     
     listHTML += `
@@ -1876,7 +1905,7 @@ function renderHomeLatestArticles(articles) {
 
   gridContainer.innerHTML = `
     <a href="/la-commune/actualites/article.html?id=${mainArticle.id}" class="actu-main">
-      <div class="actu-main-img" style="background: url('${mainImgUrl}') center/cover;"></div>
+      ${mainImgBlock}
       <div class="actu-main-body">
         <span class="actu-tag">${mainArticle.tag}</span>
         <div class="actu-main-title">${mainArticle.titre}</div>

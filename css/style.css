@@ -697,6 +697,16 @@ img {
   transition: transform .5s ease;
 }
 .carousel-slide.active .carousel-img { transform: scale(1); }
+.carousel-img-placeholder {
+  background: var(--vert-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carousel-img-placeholder svg {
+  stroke: var(--vert);
+  opacity: 0.3;
+}
 
 .carousel-arrow {
   flex-shrink: 0;
@@ -822,7 +832,16 @@ img {
 .actu-main:hover { transform: translateY(-3px); }
 .actu-main-img {
   height: 220px;
-  background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80') center/cover;
+}
+.actu-main-img-placeholder {
+  background: var(--vert-pale);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.actu-main-img-placeholder svg {
+  stroke: var(--vert);
+  opacity: 0.3;
 }
 .actu-main-body { padding: 1.8rem; }
 .actu-tag {
