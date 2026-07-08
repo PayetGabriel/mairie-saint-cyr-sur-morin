@@ -116,9 +116,9 @@
               </p>
               <button class="btn btn-ghost" id="btn-disconnect-others">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:15px;height:15px">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/>
                 </svg>
-                Déconnecter les autres appareils
+                <span id="btn-disconnect-text">Déconnecter les autres appareils</span>
               </button>
 
             </div>
@@ -266,17 +266,17 @@
         btn.disabled    = true
         btn.textContent = 'Vérification…'
 
-        /* Vérifier l'ancien mot de passe */
-        const { error: verifyErr } = await supabase.auth.signInWithPassword({
-          email: currentProfile.email, password: current
-        })
+        /* Vérifier l'ancien mot de passe de manière propre */
+        const { error: verifyErr } = await supabase.auth.reauthenticate({ 
+        password: current 
+        });
 
         if (verifyErr) {
-          alertEl.textContent   = 'Mot de passe actuel incorrect.'
-          alertEl.style.display = 'flex'
-          btn.disabled    = false
-          btn.textContent = 'Modifier le mot de passe'
-          return
+        alertEl.textContent   = 'Mot de passe actuel incorrect.';
+        alertEl.style.display = 'flex';
+        btn.disabled          = false;
+        btn.textContent       = 'Modifier le mot de passe';
+        return;
         }
 
         btn.textContent = 'Modification…'
@@ -301,13 +301,15 @@
       /* Déconnecter les autres appareils */
       document.getElementById('btn-disconnect-others').addEventListener('click', async () => {
         const btn = document.getElementById('btn-disconnect-others')
-        btn.disabled    = true
-        btn.textContent = 'Déconnexion…'
+        const btnText = document.getElementById('btn-disconnect-text');
+
+        btn.disabled = true;
+        btnText.textContent = 'Déconnexion…';
 
         const { error } = await supabase.auth.signOut({ scope: 'others' })
 
-        btn.disabled    = false
-        btn.textContent = 'Déconnecter les autres appareils'
+        btn.disabled = false;
+        btnText.textContent = 'Déconnecter les autres appareils';
 
         if (error) { showToast('Erreur lors de la déconnexion.', 'error'); return }
         showToast('Autres appareils déconnectés.')
