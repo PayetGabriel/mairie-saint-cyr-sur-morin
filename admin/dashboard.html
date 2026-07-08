@@ -129,12 +129,12 @@
       const items = []
 
       if (admin || profile.can_manage_publications) {
-        items.push({ icon: '📰', label: 'Publications', desc: 'Actualités & bulletins', href: '#', soon: false })
+        items.push({ icon: '📰', label: 'Publications', desc: 'Actualités & bulletins', href: '/admin/publications.html', soon: false })
       }
 
       const hasEdit = admin || Object.keys(PERMISSIONS).some(k => profile[k])
       if (hasEdit) {
-        items.push({ icon: '✏️', label: 'Éditeur No-Code', desc: 'Modifier le contenu du site', href: '#', soon: false })
+        items.push({ icon: '✏️', label: 'Éditeur No-Code', desc: 'Modifier le contenu du site', href: '/admin/editor.html', soon: false })
       }
 
       if (admin) {
