@@ -311,8 +311,13 @@
         btn.disabled = false;
         btnText.textContent = 'Déconnecter les autres appareils';
 
-        if (error) { showToast('Erreur lors de la déconnexion.', 'error'); return }
-        showToast('Autres appareils déconnectés.')
+        if (error) {
+            console.error("Détails de l'erreur Supabase :", error);
+            showToast(`Erreur : ${error.message}`, 'error');
+            return;
+        }
+        
+        showToast('Autres appareils déconnectés (la session peut mettre quelques minutes à expirer chez eux).');
       })
     }
 
