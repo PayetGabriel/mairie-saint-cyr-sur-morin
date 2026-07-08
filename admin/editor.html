@@ -13,26 +13,46 @@
 
     /* ── Content nav ── */
     .content-nav {
-      width:196px; flex-shrink:0;
+      width:200px; flex-shrink:0;
       background:var(--blanc); border:1px solid rgba(0,0,0,.06);
       border-radius:var(--radius-lg); box-shadow:var(--shadow);
       position:sticky; top:16px;
-      max-height:calc(100vh - 110px); overflow-y:auto;
+      max-height:calc(100vh - 110px); overflow-y:auto; overflow-x:hidden;
     }
+    .cn-inner { padding-bottom:10px; }
+
     .cn-section {
-      padding:10px 13px 3px;
+      display:flex; align-items:center; gap:7px;
+      padding:10px 13px 5px;
       font-size:9.5px; font-weight:700; text-transform:uppercase;
-      letter-spacing:.08em; color:var(--gris);
+      letter-spacing:.08em; color:var(--pierre-dark);
     }
+    /* Séparateur entre sections */
+    .cn-section.sep {
+      border-top:1px solid rgba(0,0,0,.07);
+      margin-top:4px;
+      padding-top:12px;
+    }
+
     .cn-item {
-      display:block; padding:7px 14px; width:100%; text-align:left;
+      display:block;
+      padding:6px 12px 6px 24px; /* indent hiérarchique */
+      width:100%; text-align:left;
       font-size:13px; color:var(--pierre-dark); border:none; background:none;
       cursor:pointer; font-family:'DM Sans',sans-serif;
       transition:background .12s, color .12s;
+      position:relative;
     }
-    .cn-item:hover  { background:var(--creme); color:var(--texte); }
-    .cn-item.active { background:var(--vert-pale); color:var(--vert); font-weight:500; }
-    .cn-inner       { padding-bottom:8px; }
+    .cn-item:hover { background:var(--creme); color:var(--texte); }
+    .cn-item.active {
+      background:var(--vert-pale); color:var(--vert); font-weight:500;
+    }
+    .cn-item.active::before {
+      content:'';
+      position:absolute; left:0; top:0; bottom:0;
+      width:3px; background:var(--vert-clair);
+      border-radius:0 2px 2px 0;
+    }
 
     /* ── Editor area ── */
     .editor-area { flex:1; min-width:0; }
@@ -142,19 +162,17 @@
     @media (max-width:900px) {
       .editor-layout { flex-direction:column; }
       .content-nav {
-        width:100%; position:static; max-height:none;
-        border-radius:var(--radius); overflow:visible;
+        width:100%; position:static;
+        max-height:200px; overflow-y:auto; overflow-x:hidden;
+        border-radius:var(--radius);
       }
-      .cn-section { display:none; }
-      .cn-inner {
-        display:flex; flex-wrap:wrap; gap:5px; padding:10px;
-        border-bottom:none;
-      }
-      .cn-item {
-        width:auto; padding:5px 11px; font-size:12.5px;
-        border:1px solid var(--pierre); border-radius:20px;
-      }
-      .cn-item.active { border-color:var(--vert-clair); }
+      .cn-section { padding:7px 11px 3px; font-size:9px; }
+      .cn-section.sep { padding-top:9px; margin-top:3px; }
+      .cn-item { padding:5px 10px 5px 18px; font-size:12.5px; }
+    }
+    @media (max-width:480px) {
+      .content-nav { max-height:160px; }
+      .cn-item { font-size:12px; }
     }
     @media (max-width:640px) {
       .li-g2   { grid-template-columns:1fr; }
@@ -1293,10 +1311,25 @@
     ════════════════════════════════════════════════════════ */
     async function loadAllContent() {
       const { data, error } = await supabase.from('site_content').select('key,value')
-      if (error) { showToast('Erreur de chargement.', 'error'); return }
+      if (error) {
+        console.error('[Editor] Erreur site_content:', error)
+        showToast('Impossible de charger le contenu. Vérifiez les RLS de site_content.', 'error')
+        return
+      }
+      if (!data?.length) {
+        console.warn('[Editor] site_content vide ou inaccessible pour cet utilisateur.')
+        showToast('Aucun contenu trouvé. Vérifiez les politiques SELECT de site_content.', 'info')
+        return
+      }
       data.forEach(row => {
-        try { allContent[row.key] = JSON.parse(row.value) } catch {}
+        try {
+          /* Supabase retourne jsonb comme objet JS déjà parsé, text comme string */
+          allContent[row.key] = typeof row.value === 'string' ? JSON.parse(row.value) : row.value
+        } catch(e) {
+          console.error('[Editor] Parse error pour la clé:', row.key, e)
+        }
       })
+      console.log('[Editor] Clés chargées:', Object.keys(allContent))
     }
 
     function openEditor(key) {
@@ -1363,22 +1396,23 @@
       const admin = isAdmin(profile)
       const inner = document.getElementById('cn-inner')
       inner.innerHTML = ''
+      let firstSec = true
 
       SECTIONS.forEach(sec => {
         const hasAccess = admin || !!profile[sec.perm]
         if (!hasAccess) return
 
-        // Section header (desktop)
         const hd = document.createElement('p')
-        hd.className = 'cn-section'
+        hd.className = firstSec ? 'cn-section' : 'cn-section sep'
         hd.textContent = sec.label
         inner.appendChild(hd)
+        firstSec = false
 
         sec.pages.forEach(page => {
           const btn = document.createElement('button')
-          btn.className     = 'cn-item'
-          btn.textContent   = page.label
-          btn.dataset.key   = page.key
+          btn.className   = 'cn-item'
+          btn.textContent = page.label
+          btn.dataset.key = page.key
           btn.addEventListener('click', () => openEditor(page.key))
           inner.appendChild(btn)
         })
