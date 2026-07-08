@@ -1374,9 +1374,11 @@
       try { newData = serializer() }
       catch(e) { showToast('Erreur de lecture du formulaire : ' + e.message, 'error'); btn.disabled=false; btn.textContent='Enregistrer'; return }
 
+      /* La colonne value est jsonb — Supabase sérialise lui-même.
+         Ne pas passer JSON.stringify() sinon double-encodage. */
       const { error } = await supabase
         .from('site_content')
-        .update({ value: JSON.stringify(newData) })
+        .update({ value: newData })
         .eq('key', currentKey)
 
       btn.disabled    = false
