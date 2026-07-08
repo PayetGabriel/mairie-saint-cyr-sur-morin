@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Éditeur No-Code — Administration Saint-Cyr-sur-Morin</title>
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <link rel="apple-touch-icon" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+  <style>
+    .editor-layout { display:flex; gap:16px; align-items:flex-start; }
+
+    /* ── Content nav ── */
+    .content-nav {
+      width:196px; flex-shrink:0;
+      background:var(--blanc); border:1px solid rgba(0,0,0,.06);
+      border-radius:var(--radius-lg); box-shadow:var(--shadow);
+      position:sticky; top:16px;
+      max-height:calc(100vh - 110px); overflow-y:auto;
+    }
+    .cn-section {
+      padding:10px 13px 3px;
+      font-size:9.5px; font-weight:700; text-transform:uppercase;
+      letter-spacing:.08em; color:var(--gris);
+    }
+    .cn-item {
+      display:block; padding:7px 14px; width:100%; text-align:left;
+      font-size:13px; color:var(--pierre-dark); border:none; background:none;
+      cursor:pointer; font-family:'DM Sans',sans-serif;
+      transition:background .12s, color .12s;
+    }
+    .cn-item:hover  { background:var(--creme); color:var(--texte); }
+    .cn-item.active { background:var(--vert-pale); color:var(--vert); font-weight:500; }
+    .cn-inner       { padding-bottom:8px; }
+
+    /* ── Editor area ── */
+    .editor-area { flex:1; min-width:0; }
+    .editor-empty {
+      background:var(--blanc); border:1px solid rgba(0,0,0,.06);
+      border-radius:var(--radius-lg); box-shadow:var(--shadow);
+      padding:52px 24px; text-align:center; color:var(--gris);
+    }
+    .editor-form-wrap {
+      display:none;
+      background:var(--blanc); border:1px solid rgba(0,0,0,.06);
+      border-radius:var(--radius-lg); box-shadow:var(--shadow); overflow:hidden;
+    }
+    .editor-form-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:13px 20px; border-bottom:1px solid rgba(0,0,0,.06);
+      position:sticky; top:0; background:var(--blanc); z-index:10;
+      gap:12px;
+    }
+    .editor-form-title { font-size:14.5px; font-weight:600; font-family:'DM Sans',sans-serif; }
+    .editor-form-body  { padding:20px; }
+
+    /* ── List editor ── */
+    .list-editor { display:flex; flex-direction:column; gap:7px; }
+    .list-item {
+      display:flex; gap:7px; align-items:flex-start;
+      background:var(--creme); border:1px solid rgba(0,0,0,.06);
+      border-radius:var(--radius); padding:9px;
+    }
+    .list-item-fields { flex:1; display:flex; flex-direction:column; gap:6px; }
+    .li-g2 { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+    .fi-g  { display:flex; flex-direction:column; gap:3px; }
+    .fi-g .form-label { font-size:11.5px; margin:0; }
+    .fi-g .form-input,.fi-g .form-select { font-size:13px; padding:5px 9px; }
+    .fi-inline { display:flex; align-items:center; gap:8px; }
+    .fi-inline .form-label { margin:0; font-size:12.5px; white-space:nowrap; }
+    .list-item-btns { display:flex; flex-direction:column; gap:3px; }
+    .li-btn {
+      width:24px; height:24px; display:flex; align-items:center; justify-content:center;
+      border:1px solid var(--pierre); border-radius:4px; background:var(--blanc);
+      cursor:pointer; font-size:11px; color:var(--gris); transition:all .12s; line-height:1;
+    }
+    .li-btn:hover { background:var(--creme); color:var(--texte); }
+    .li-btn.li-del:hover { background:#fee2e2; color:#dc2626; border-color:#fecaca; }
+
+    /* ── Section headers inside editor ── */
+    .ed-hd {
+      font-size:11px; font-weight:700; text-transform:uppercase;
+      letter-spacing:.06em; color:var(--gris);
+      margin:20px 0 10px; padding-bottom:6px; border-bottom:1px solid rgba(0,0,0,.06);
+    }
+    .ed-hd:first-child { margin-top:0; }
+
+    /* ── RTE (mot du maire) ── */
+    .rte-wrap { border:1px solid var(--pierre); border-radius:var(--radius); overflow:hidden; }
+    .rte-toolbar {
+      display:flex; gap:2px; padding:5px 8px;
+      background:#faf9f7; border-bottom:1px solid var(--pierre);
+      flex-wrap:wrap; align-items:center;
+    }
+    .rte-btn {
+      display:inline-flex; align-items:center; justify-content:center;
+      min-width:28px; height:26px; padding:0 6px;
+      border:1px solid transparent; border-radius:4px;
+      background:transparent; cursor:pointer; font-size:12.5px; color:var(--texte);
+      transition:all .12s; font-family:'DM Sans',sans-serif; white-space:nowrap;
+    }
+    .rte-btn:hover  { background:var(--blanc); border-color:var(--pierre); }
+    .rte-btn.active { background:var(--vert-pale); border-color:var(--vert-clair); color:var(--vert); }
+    .rte-sep { width:1px; height:18px; background:var(--pierre); margin:0 3px; flex-shrink:0; }
+    .rte-content {
+      min-height:260px; max-height:520px; overflow-y:auto;
+      padding:14px 16px; font-size:14px; line-height:1.75; color:var(--texte); outline:none;
+    }
+    .rte-content:focus-visible { box-shadow:inset 0 0 0 2px rgba(106,148,105,.15); }
+    .rte-content h2 { font-family:'Playfair Display',serif; font-size:1.2em; margin:.8em 0 .3em; }
+    .rte-content p  { margin:.4em 0; }
+    .rte-content blockquote { border-left:3px solid var(--pierre); padding-left:12px; margin:.5em 0; color:var(--pierre-dark); }
+    .rte-content .lettre-highlight { background:var(--vert-pale); border-left:3px solid var(--vert-clair); padding:10px 14px; margin:.5em 0; border-radius:0 var(--radius) var(--radius) 0; }
+
+    /* ── Contenteditable paragraphe ── */
+    .para-item {
+      padding:9px 12px; border:1px solid var(--pierre); border-radius:var(--radius);
+      font-size:13.5px; line-height:1.65; min-height:52px; background:var(--blanc); outline:none;
+    }
+    .para-item:focus-visible { border-color:var(--vert-clair); box-shadow:0 0 0 3px rgba(106,148,105,.13); }
+    .para-mini-toolbar { display:flex; gap:3px; margin-bottom:5px; }
+
+    /* ── Permanences ── */
+    .perm-table   { display:flex; flex-direction:column; gap:4px; }
+    .perm-row     { display:flex; align-items:center; gap:8px; padding:5px 9px; background:var(--creme); border-radius:var(--radius); }
+    .perm-day     { font-size:13px; font-weight:500; min-width:72px; flex-shrink:0; }
+    .perm-row .form-input { flex:1; padding:5px 8px; font-size:13px; }
+
+    /* ── Prix grid ── */
+    .price-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .price-block { background:var(--creme); border-radius:var(--radius); padding:12px; }
+    .price-block-title { font-size:12px; font-weight:600; margin-bottom:8px; color:var(--texte); }
+
+    /* ── PLU sections ── */
+    .plu-section-card {
+      border:1px solid rgba(0,0,0,.07); border-radius:var(--radius); padding:12px;
+      margin-bottom:8px; background:var(--creme);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width:900px) {
+      .editor-layout { flex-direction:column; }
+      .content-nav {
+        width:100%; position:static; max-height:none;
+        border-radius:var(--radius); overflow:visible;
+      }
+      .cn-section { display:none; }
+      .cn-inner {
+        display:flex; flex-wrap:wrap; gap:5px; padding:10px;
+        border-bottom:none;
+      }
+      .cn-item {
+        width:auto; padding:5px 11px; font-size:12.5px;
+        border:1px solid var(--pierre); border-radius:20px;
+      }
+      .cn-item.active { border-color:var(--vert-clair); }
+    }
+    @media (max-width:640px) {
+      .li-g2   { grid-template-columns:1fr; }
+      .price-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-loader" id="page-loader"><div class="spinner"></div></div>
+
+  <div class="admin-layout" id="admin-layout" style="visibility:hidden">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+      <div class="mobile-topbar">
+        <button class="btn-hamburger" id="btn-hamburger" aria-label="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/>
+          </svg>
+        </button>
+        <span class="mobile-topbar-title">Éditeur</span>
+      </div>
+
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1 class="page-title">Éditeur No-Code</h1>
+          <p class="page-subtitle">Modifiez le contenu des pages du site.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-save" disabled style="margin-top:4px">Enregistrer</button>
+      </div>
+
+      <div class="page-content">
+        <div class="editor-layout">
+
+          <!-- ── Navigation contenu ── -->
+          <nav class="content-nav" id="content-nav" aria-label="Pages modifiables">
+            <div class="cn-inner" id="cn-inner">
+              <div style="padding:16px;color:var(--gris);font-size:13px">Chargement…</div>
+            </div>
+          </nav>
+
+          <!-- ── Zone éditeur ── -->
+          <div class="editor-area">
+            <div class="editor-empty" id="editor-empty">
+              <p style="font-size:14px;font-weight:500;color:var(--texte);margin-bottom:6px">Sélectionnez une page</p>
+              <p class="text-sm text-muted">Choisissez un élément dans le menu pour commencer à éditer.</p>
+            </div>
+            <div class="editor-form-wrap" id="editor-form-wrap">
+              <div class="editor-form-header">
+                <span class="editor-form-title" id="editor-form-title">—</span>
+                <span class="text-sm text-muted" id="editor-save-status" style="white-space:nowrap"></span>
+              </div>
+              <div class="editor-form-body" id="editor-form-body"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script type="module">
+    import { supabase }                                      from '/admin/js/supabase-config.js'
+    import { requireAuth, buildSidebar, showToast, isAdmin, PERMISSIONS } from '/admin/js/auth-guard.js'
+
+    /* ════════════════════════════════════════════════════════
+       SECTIONS CONFIG (ordre navbar)
+    ════════════════════════════════════════════════════════ */
+    const SECTIONS = [
+      { label:'La Commune', perm:'can_manage_commune', pages:[
+        {key:'mot_du_maire',     label:'Mot du Maire'},
+        {key:'commissions_data', label:'Commissions'},
+        {key:'permanences_data', label:'Horaires & Permanences'},
+      ]},
+      { label:'Vie Pratique', perm:'can_manage_vie_pratique', pages:[
+        {key:'dechets_data',         label:'Collecte des déchets'},
+        {key:'etat_civil_data',      label:'État Civil'},
+        {key:'salle_polyvalente_data',label:'Salle Polyvalente'},
+        {key:'transports_lignes_data',label:'Transports en commun'},
+        {key:'vie_quotidienne_data',  label:'Numéros utiles'},
+      ]},
+      { label:'Urbanisme', perm:'can_manage_urbanisme', pages:[
+        {key:'eau_assainissement_data',label:'Eau & Assainissement'},
+        {key:'permis_travaux_data',    label:'Permis & Travaux'},
+        {key:'plu_data',              label:'PLU'},
+      ]},
+      { label:'SIVU', perm:'can_manage_sivu', pages:[
+        {key:'sivu_infos_data',        label:'Infos SIVU'},
+        {key:'cantine_data',           label:'Cantine'},
+        {key:'inscriptions_data',      label:'Inscriptions'},
+        {key:'transports_etudes_data', label:'Transports & Études'},
+        {key:'sivu_practical_data',    label:'Documents SIVU'},
+      ]},
+      { label:'Vie Locale', perm:'can_manage_vie_locale', pages:[
+        {key:'scolarite_periscolaire_data',label:'Scolarité & Périscolaire'},
+      ]},
+    ]
+
+    const PAGE_LABELS = {}
+    SECTIONS.forEach(s => s.pages.forEach(p => PAGE_LABELS[p.key] = p.label))
+
+    /* ── State ── */
+    let profile      = null
+    let currentKey   = null
+    let currentData  = null
+    let allContent   = {}
+    let rteInstance  = null  // For mot_du_maire
+
+    /* ════════════════════════════════════════════════════════
+       HELPERS
+    ════════════════════════════════════════════════════════ */
+    const escH    = s => s == null ? '' : String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    const escAttr = s => s == null ? '' : String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')
+    const fVal    = id => document.getElementById(id)?.value  ?? ''
+    const fNum    = id => parseFloat(document.getElementById(id)?.value) || 0
+    const fHTML   = id => document.getElementById(id)?.innerHTML ?? ''
+    const fChk    = id => document.getElementById(id)?.checked  ?? false
+
+    const fld = (id, label, val='', opts={}) => `
+      <div class="form-group" style="${opts.style||''}">
+        <label class="form-label">${label}</label>
+        <input type="${opts.type||'text'}" id="${id}" class="form-input" value="${escAttr(val)}"
+          placeholder="${escAttr(opts.ph||'')}" ${opts.readonly?'readonly style="opacity:.55;background:var(--creme)"':''}>
+        ${opts.hint?`<p class="form-hint">${opts.hint}</p>`:''}
+      </div>`
+
+    const ta = (id, label, val='', opts={}) => `
+      <div class="form-group" style="${opts.style||''}">
+        <label class="form-label">${label}</label>
+        <textarea id="${id}" class="form-input" rows="${opts.rows||2}" style="min-height:${opts.h||60}px">${escH(val)}</textarea>
+        ${opts.hint?`<p class="form-hint">${opts.hint}</p>`:''}
+      </div>`
+
+    const numFld = (id, label, val, suffix='') => `
+      <div class="form-group">
+        <label class="form-label">${label}</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="number" id="${id}" class="form-input" value="${escAttr(val)}" style="max-width:130px">
+          ${suffix?`<span class="text-sm text-muted">${suffix}</span>`:''}
+        </div>
+      </div>`
+
+    const edHd = t => `<p class="ed-hd">${t}</p>`
+
+    const toggleRow = (id, label, checked, sub='') => `
+      <div class="permission-row">
+        <div>
+          <span class="permission-label">${label}</span>
+          ${sub?`<p class="text-sm text-muted">${sub}</p>`:''}
+        </div>
+        <label class="toggle"><input type="checkbox" id="${id}" ${checked?'checked':''}><span class="toggle-slider"></span></label>
+      </div>`
+
+    /* ── List item HTML ── */
+    const fieldInItem = (f, data) => {
+      const v = data?.[f.key] ?? f.default ?? ''
+      if (f.type === 'checkbox') return `
+        <div class="fi-inline">
+          <label class="toggle"><input type="checkbox" data-field="${f.key}" ${v?'checked':''}><span class="toggle-slider"></span></label>
+          <label class="form-label">${f.label}</label>
+        </div>`
+      if (f.type === 'select') return `
+        <div class="fi-g">
+          <label class="form-label">${f.label}</label>
+          <select data-field="${f.key}" class="form-select">
+            ${(f.opts||[]).map(o=>`<option value="${o.v}" ${v===o.v?'selected':''}>${o.l}</option>`).join('')}
+          </select>
+        </div>`
+      if (f.type === 'textarea') return `
+        <div class="fi-g">
+          <label class="form-label">${f.label}</label>
+          <textarea data-field="${f.key}" class="form-input" rows="${f.rows||2}">${escH(v)}</textarea>
+        </div>`
+      return `
+        <div class="fi-g">
+          <label class="form-label">${f.label}</label>
+          <input type="${f.type||'text'}" data-field="${f.key}" class="form-input" value="${escAttr(String(v))}">
+        </div>`
+    }
+
+    const itemHTML = (fields, data={}) => `
+      <div class="list-item">
+        <div class="list-item-fields">${fields.map(f=>fieldInItem(f,data)).join('')}</div>
+        <div class="list-item-btns">
+          <button type="button" class="li-btn li-up" title="Monter">↑</button>
+          <button type="button" class="li-btn li-down" title="Descendre">↓</button>
+          <button type="button" class="li-btn li-del" title="Supprimer">×</button>
+        </div>
+      </div>`
+
+    const listHTML = (id, items, fields, addLabel='Ajouter') => `
+      <div class="list-editor" id="${id}">${(items||[]).map(item=>itemHTML(fields,item)).join('')}</div>
+      <button type="button" class="btn btn-secondary btn-sm" id="${id}-add" style="margin-top:7px">+ ${addLabel}</button>`
+
+    /* ── List management ── */
+    function initListEditor(id, fields, defaultData={}) {
+      const c   = document.getElementById(id)
+      const btn = document.getElementById(id+'-add')
+      if (!c) return
+
+      const attach = item => {
+        item.querySelector('.li-up')?.addEventListener('click', () => {
+          const p = item.previousElementSibling
+          if (p?.classList.contains('list-item')) c.insertBefore(item, p)
+        })
+        item.querySelector('.li-down')?.addEventListener('click', () => {
+          const n = item.nextElementSibling
+          if (n?.classList.contains('list-item')) c.insertBefore(n, item)
+        })
+        item.querySelector('.li-del')?.addEventListener('click', () => item.remove())
+      }
+
+      c.querySelectorAll('.list-item').forEach(attach)
+      btn?.addEventListener('click', () => {
+        const div = document.createElement('div')
+        div.innerHTML = itemHTML(fields, defaultData)
+        const ni = div.firstElementChild
+        c.appendChild(ni)
+        attach(ni)
+      })
+    }
+
+    function collectList(id, fields) {
+      return [...document.querySelectorAll(`#${id} .list-item`)].map(item => {
+        const obj = {}
+        fields.forEach(f => {
+          const el = item.querySelector(`[data-field="${f.key}"]`)
+          if (!el) return
+          obj[f.key] = f.type === 'checkbox' ? el.checked
+                     : f.type === 'number'   ? (parseFloat(el.value)||0)
+                     : el.value
+        })
+        return obj
+      })
+    }
+
+    /* ════════════════════════════════════════════════════════
+       MINI RTE (Mot du Maire uniquement)
+    ════════════════════════════════════════════════════════ */
+    class MiniRTE {
+      constructor(id) {
+        this.wrap = document.getElementById(id)
+        if (!this.wrap) return
+        this.wrap.innerHTML = `
+          <div class="rte-toolbar">
+            <button type="button" class="rte-btn" data-cmd="bold"><b>G</b></button>
+            <button type="button" class="rte-btn" data-cmd="italic"><em>I</em></button>
+            <span class="rte-sep"></span>
+            <button type="button" class="rte-btn" data-cmd="highlight" title="Encadré lettre-highlight">✦ Encadré</button>
+          </div>
+          <div class="rte-content" contenteditable="true" spellcheck="true"></div>`
+        const toolbar  = this.wrap.querySelector('.rte-toolbar')
+        this.editor    = this.wrap.querySelector('.rte-content')
+        toolbar.addEventListener('mousedown', e => e.preventDefault())
+        toolbar.addEventListener('click', e => {
+          const btn = e.target.closest('[data-cmd]'); if (!btn) return
+          e.preventDefault(); this._exec(btn.dataset.cmd)
+        })
+      }
+      _exec(cmd) {
+        this.editor.focus()
+        if (cmd === 'highlight') {
+          const sel = window.getSelection()
+          if (!sel.rangeCount || sel.isCollapsed) { showToast('Sélectionnez le texte à encadrer.', 'info'); return }
+          const range = sel.getRangeAt(0)
+          const frag = range.extractContents()
+          const div = document.createElement('div')
+          div.className = 'lettre-highlight'
+          const p = document.createElement('p')
+          p.appendChild(frag)
+          div.appendChild(p)
+          range.insertNode(div)
+          sel.removeAllRanges()
+        } else {
+          document.execCommand(cmd, false, null)
+        }
+      }
+      getValue() { return this.editor?.innerHTML || '' }
+      setValue(html) { if (this.editor) this.editor.innerHTML = html || '' }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       FIELD DEFINITIONS (shared)
+    ════════════════════════════════════════════════════════ */
+    const DOC_FIELDS  = [
+      {key:'title',    label:'Titre',      type:'text'},
+      {key:'subtitle', label:'Sous-titre', type:'text'},
+      {key:'url',      label:'Lien (URL)', type:'url'},
+    ]
+    const VQ_FIELDS   = [
+      {key:'name',         label:'Nom / Service', type:'text'},
+      {key:'number',       label:'Numéro',        type:'text'},
+      {key:'is_emergency', label:'Urgence',        type:'checkbox'},
+    ]
+    const ROLE_FIELDS = [
+      {key:'role',  label:'Rôle',  type:'text'},
+      {key:'names', label:'Noms (séparés par virgules)', type:'text'},
+    ]
+    const LINK_FIELDS = [
+      {key:'label', label:'Libellé', type:'text'},
+      {key:'url',   label:'URL',     type:'url'},
+      {key:'type',  label:'Type', type:'select', opts:[
+        {v:'sp-link',l:'Service-public'},{v:'outil-en-ligne',l:'Outil en ligne'},{v:'telecharger',l:'Télécharger'},
+      ]},
+    ]
+    const ARRET_FIELDS= [{key:'heure',label:'Heure',type:'text'},{key:'arret',label:'Arrêt',type:'text'}]
+    const COMM_KEYS   = ['cao','pnr','ccas','cdid','plui','clect','sdesm','cimetiere','elections','urbanisme','festivites','gendarmerie','petit_morin','sivu_ecoles']
+    const COMM_LABELS = {
+      cao:'Commission d\'Appel d\'Offres',pnr:'Parc Naturel Régional',ccas:'CCAS',
+      cdid:'Comm. Dép. Impôts Directs',plui:'PLUi',clect:'CLECT',sdesm:'SDESM',
+      cimetiere:'Commission Cimetière',elections:'Commission Élections',
+      urbanisme:'Commission Urbanisme',festivites:'Commission Festivités',
+      gendarmerie:'Gendarmerie',petit_morin:'Syndicat du Petit Morin',sivu_ecoles:'SIVU Écoles',
+    }
+    const PERM_LINK_CARDS = {
+      fiscalite:'Fiscalité & Taxe d\'aménagement',
+      transfert:'Transfert de permis',
+      certificat:'Certificat d\'urbanisme',
+      construire:'Permis de construire',
+      declaration:'Déclaration préalable',
+      modificatif:'Permis modificatif',
+      contestation:'Recours & Contestation',
+    }
+    const PERM_LINK_TYPES = [
+      {v:'service-public',l:'Service-public'},{v:'outil-en-ligne',l:'Outil en ligne'},{v:'telecharger',l:'Télécharger'},
+    ]
+    const PDAYS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']
+    const EC_SECTION_LABELS = {
+      cni:'Carte d\'Identité & Passeport',recensement:'Recensement militaire',
+      'sortie-territoire':'Sortie du territoire',mariage:'Mariage & PACS',
+      parrainage:'Parrainage civil',
+      'listes-electorales':'Listes électorales',
+      procuration:'Procuration',
+      'attestation-accueil':'Attestation d\'accueil',
+    }
+
+    /* ════════════════════════════════════════════════════════
+       RENDER FUNCTIONS
+    ════════════════════════════════════════════════════════ */
+
+    /* ── 1. Mot du Maire ── */
+    function renderMotDuMaire(d) {
+      return `
+        ${edHd('Extrait (page d\'accueil)')}
+        ${ta('mdm-extrait','Texte court affiché sur la page d\'accueil',d.extrait||'',{rows:3})}
+        ${edHd('Mot complet')}
+        <p class="form-hint" style="margin-bottom:8px">Utilisez <b>G</b> pour le gras et ✦ Encadré pour les blocs mis en valeur.</p>
+        <div class="rte-wrap" id="mdm-rte"></div>`
+    }
+    function serializeMotDuMaire() {
+      return { extrait: fVal('mdm-extrait'), complet: rteInstance?.getValue() || fHTML('mdm-rte') }
+    }
+
+    /* ── 2. Commissions ── */
+    function renderCommissions(d) {
+      return COMM_KEYS.map(key => {
+        const c = d[key] || {type:'roles',content:[]}
+        const isR = c.type === 'roles'
+        const rolesHTML = isR ? (c.content||[]).map(r => itemHTML(ROLE_FIELDS,r)).join('') : ''
+        const txtVal    = !isR ? (typeof c.content === 'string' ? c.content : '') : ''
+        return `
+          <div style="margin-bottom:12px;border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:var(--creme)">
+              <span style="font-size:13px;font-weight:600">${COMM_LABELS[key]}</span>
+              <select class="form-select" data-comm-type="${key}" style="width:auto;padding:4px 28px 4px 9px;font-size:12px">
+                <option value="roles" ${isR?'selected':''}>Rôles</option>
+                <option value="text"  ${!isR?'selected':''}>Texte libre</option>
+              </select>
+            </div>
+            <div style="padding:10px">
+              <div data-comm-roles="${key}" ${!isR?'style="display:none"':''}>
+                <div class="list-editor" id="comm-${key}">${rolesHTML}</div>
+                <button type="button" class="btn btn-secondary btn-sm" id="comm-${key}-add" style="margin-top:6px">+ Ajouter un rôle</button>
+              </div>
+              <div data-comm-text="${key}" ${isR?'style="display:none"':''}>
+                <textarea class="form-input" id="comm-text-${key}" rows="3">${escH(txtVal)}</textarea>
+              </div>
+            </div>
+          </div>`
+      }).join('')
+    }
+    function serializeCommissions() {
+      const res = {}
+      COMM_KEYS.forEach(key => {
+        const type = document.querySelector(`[data-comm-type="${key}"]`)?.value || 'roles'
+        res[key] = type === 'roles'
+          ? {type:'roles', content: collectList(`comm-${key}`, ROLE_FIELDS)}
+          : {type:'text',  content: fVal(`comm-text-${key}`)}
+      })
+      return res
+    }
+
+    /* ── 3. Permanences ── */
+    const PERM_SECTIONS = [{key:'mairie',label:'Mairie'},{key:'secretariat',label:'Secrétariat SIVU'},{key:'urbanisme',label:'Urbanisme'},{key:'ccas',label:'CCAS'}]
+    function renderPermanences(d) {
+      return PERM_SECTIONS.map(s => {
+        const sec = d[s.key] || {note:null,rows:[]}
+        const rowMap = {}
+        ;(sec.rows||[]).forEach(r => rowMap[r.day] = r)
+        return `
+          ${edHd(s.label)}
+          ${fld(`perm-${s.key}-note`,'Note (optionnelle)', sec.note||'', {ph:'Ex: Également sur rendez-vous'})}
+          <div class="perm-table">
+            ${PDAYS.map(day => {
+              const row = rowMap[day] || {day,hours:'',closed:false}
+              const cl  = !!row.closed
+              return `
+                <div class="perm-row" data-ps="${s.key}" data-pd="${day}">
+                  <span class="perm-day">${day}</span>
+                  <input type="text" class="form-input perm-hours" value="${escAttr(row.hours||'')}"
+                    placeholder="09:00–12:30" ${cl?'style="opacity:.4;pointer-events:none"':''}>
+                  <label class="toggle" title="Fermé">
+                    <input type="checkbox" class="perm-closed" ${cl?'checked':''}>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>`
+            }).join('')}
+          </div>`
+      }).join('')
+    }
+    function serializePermanences() {
+      const res = {}
+      PERM_SECTIONS.forEach(s => {
+        const note = fVal(`perm-${s.key}-note`).trim() || null
+        const rows = PDAYS.map(day => {
+          const row    = document.querySelector(`[data-ps="${s.key}"][data-pd="${day}"]`)
+          const closed = row?.querySelector('.perm-closed')?.checked || false
+          const hours  = row?.querySelector('.perm-hours')?.value || ''
+          return {day, hours: closed ? 'Fermé' : hours, closed}
+        })
+        res[s.key] = {note, rows}
+      })
+      return res
+    }
+
+    /* ── 4. Cantine ── */
+    const MENU_FIELDS = [{key:'title',label:'Titre',type:'text'},{key:'url',label:'URL du PDF',type:'url'}]
+    function renderCantine(d) {
+      const tarifs = d.tarifs || {}
+      const items  = tarifs.items || []
+      return `
+        ${edHd('Menus de la semaine')}
+        ${listHTML('cantine-menus', d.menus||[], MENU_FIELDS, 'Ajouter un menu')}
+        ${edHd('Tarifs')}
+        ${fld('cantine-annee','Année scolaire', tarifs.annee||'')}
+        <p class="form-label" style="margin-bottom:8px">Prix par tarif</p>
+        ${items.map((item,i)=>`
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
+            <span style="flex:1;font-size:13px;color:var(--pierre-dark)">${escH(item.label)}</span>
+            <input type="text" id="cantine-price-${i}" class="form-input" value="${escAttr(item.price||'')}" style="max-width:90px">
+          </div>`).join('')}
+        ${edHd('Règlement intérieur')}
+        ${fld('cantine-reg-label','Libellé du lien', d.reglement?.label||'')}
+        ${fld('cantine-reg-url','URL (PDF)', d.reglement?.url||'', {type:'url'})}`
+    }
+    function serializeCantine() {
+      const items = (currentData?.tarifs?.items||[]).map((item,i)=>({label:item.label, price:fVal(`cantine-price-${i}`)}))
+      return {
+        menus:     collectList('cantine-menus', MENU_FIELDS),
+        tarifs:    {note:currentData?.tarifs?.note, annee:fVal('cantine-annee'), items},
+        reglement: {url:fVal('cantine-reg-url'), label:fVal('cantine-reg-label')},
+      }
+    }
+
+    /* ── 5. Déchets ── */
+    const ORG_FIELDS  = [{key:'name',label:'Nom',type:'text'},{key:'url',label:'Site web',type:'url'},{key:'desc',label:'Description',type:'textarea',rows:2}]
+    function renderDechets(d) {
+      const fiches = d.fiches || []
+      const cal    = d.calendrier || {}
+      return `
+        ${edHd('Fiches de tri (liens PDF uniquement)')}
+        ${fiches.map((f,i)=>`
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
+            <span style="min-width:130px;font-size:13px;font-weight:500">${escH(f.name)}</span>
+            <input type="url" id="dechet-pdf-${i}" class="form-input" value="${escAttr(f.pdf_url||'')}" placeholder="/assets/docs/dechets/...">
+          </div>`).join('')}
+        ${edHd('Calendrier de collecte')}
+        ${fld('dechet-cal-title','Titre principal', cal.main_title||'')}
+        ${fld('dechet-cal-url','URL du PDF', cal.pdf_url||'', {type:'url'})}
+        ${edHd('Organismes')}
+        ${listHTML('dechet-orgs', d.organismes||[], ORG_FIELDS, 'Ajouter un organisme')}`
+    }
+    function serializeDechets() {
+      const fiches = (currentData?.fiches||[]).map((f,i)=>({...f, pdf_url:fVal(`dechet-pdf-${i}`)}))
+      return {
+        fiches,
+        calendrier: {...(currentData?.calendrier||{}), main_title:fVal('dechet-cal-title'), pdf_url:fVal('dechet-cal-url')},
+        organismes: collectList('dechet-orgs', ORG_FIELDS),
+      }
+    }
+
+    /* ── 6. Eau & Assainissement ── */
+    function renderEauAssainissement(d) {
+      const pf = d.pfac_tarifs || {}
+      const sp = d.spanc_tarifs || {}
+      return `
+        ${edHd('Prix de l\'eau')}
+        ${fld('eau-prix','Prix du m³ TTC', d.prix_eau_m3||'')}
+        ${edHd('Tarifs PFAC')}
+        ${fld('pfac-neuf','Construction neuve', pf.neuf||'')}
+        ${fld('pfac-appart','Appartement', pf.appartement||'')}
+        ${fld('pfac-copro-p','Copropriété — principal', pf.copro_principal||'')}
+        ${fld('pfac-copro-s','Copropriété — supplémentaire', pf.copro_supp||'')}
+        ${edHd('Tarifs SPANC')}
+        ${fld('spanc-etude','Étude de sol', sp.etude||'')}
+        ${fld('spanc-visite','Visite de réception', sp.visite||'')}
+        ${fld('spanc-chantier','Visite de chantier', sp.chantier||'')}`
+    }
+    function serializeEauAssainissement() {
+      return {
+        prix_eau_m3:  fVal('eau-prix'),
+        pfac_tarifs:  {neuf:fVal('pfac-neuf'), appartement:fVal('pfac-appart'), copro_principal:fVal('pfac-copro-p'), copro_supp:fVal('pfac-copro-s')},
+        spanc_tarifs: {etude:fVal('spanc-etude'), visite:fVal('spanc-visite'), chantier:fVal('spanc-chantier')},
+      }
+    }
+
+    /* ── 7. État Civil ── */
+    function renderEtatCivil(d) {
+      const sections = d.sections || {}
+      const order    = d.sections_order || Object.keys(sections)
+      return `
+        ${fld('ec-update-date','Date de mise à jour', d.update_date||'')}
+        ${edHd('Ordre d\'affichage des sections')}
+        <p class="form-hint" style="margin-bottom:8px">Utilisez ↑↓ pour réorganiser l'affichage des sections.</p>
+        <div class="list-editor" id="ec-order">
+          ${order.map(key=>`
+            <div class="list-item" data-section="${key}">
+              <div class="list-item-fields">
+                <span style="font-size:13.5px;font-weight:500">${EC_SECTION_LABELS[key]||key}</span>
+              </div>
+              <div class="list-item-btns">
+                <button type="button" class="li-btn li-up">↑</button>
+                <button type="button" class="li-btn li-down">↓</button>
+              </div>
+            </div>`).join('')}
+        </div>
+        ${order.map(key => {
+          const sec = sections[key] || {}
+          const hasLinks = key !== 'recensement' && key !== 'attestation-accueil'
+          const hasPieces = ['recensement','parrainage','listes-electorales','procuration','attestation-accueil'].includes(key)
+          const hasNote   = ['mariage','sortie-territoire','listes-electorales','procuration'].includes(key)
+          const note = sec.note || {}
+          return `
+            <div style="margin-top:18px;border:1px solid rgba(0,0,0,.07);border-radius:var(--radius-lg);overflow:hidden">
+              <div style="padding:10px 14px;background:var(--creme);font-weight:600;font-size:13.5px">${EC_SECTION_LABELS[key]||key}</div>
+              <div style="padding:14px">
+                ${hasPieces?`
+                  ${edHd('Pièces à fournir')}
+                  <div class="list-editor" id="ec-pieces-${key}">
+                    ${(sec.pieces||[]).map(p=>`<div class="list-item"><div class="list-item-fields"><input type="text" data-field="val" class="form-input" value="${escAttr(p)}" style="font-size:13px;padding:5px 9px"></div><div class="list-item-btns"><button class="li-btn li-up">↑</button><button class="li-btn li-down">↓</button><button class="li-btn li-del">×</button></div></div>`).join('')}
+                  </div>
+                  <button type="button" class="btn btn-secondary btn-sm" id="ec-pieces-${key}-add" style="margin-top:6px">+ Ajouter</button>`:''}
+                ${hasNote?`
+                  ${edHd('Note')}
+                  ${ta(`ec-note-text-${key}`,'Texte de la note', note.text||'')}
+                  ${toggleRow(`ec-note-alert-${key}`,'Afficher comme alerte (fond jaune)', !!note.is_alert)}`:''}
+                ${key==='cni'?fld('ec-bio-cni','Mairies équipées biométrie', sec.biometrie||''):''}
+                ${key==='mariage'?`
+                  ${edHd('Bouton principal (dossier mariage)')}
+                  ${fld('ec-main-btn-url-mariage','URL du PDF', sec.main_btn?.url||'', {type:'url'})}
+                  ${fld('ec-main-btn-label-mariage','Libellé', sec.main_btn?.label||'')}
+                  ${edHd('Liens PACS (3 fixes — URL uniquement)')}
+                  ${(sec.pacs_links||[]).map((l,i)=>`
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
+                      <span style="min-width:130px;font-size:12.5px;color:var(--pierre-dark)">${escH(l.label)}</span>
+                      <input type="url" id="ec-pacs-${i}" class="form-input" value="${escAttr(l.url||'')}">
+                    </div>`).join('')}`:''}
+                ${hasLinks && key!=='mariage'?`
+                  ${edHd('Liens')}
+                  ${listHTML(`ec-links-${key}`, sec.links||[], LINK_FIELDS, 'Ajouter un lien')}`:''}
+                ${edHd('Paragraphes')}
+                <div class="para-mini-toolbar">
+                  <button type="button" class="rte-btn" onclick="document.execCommand('bold')" style="height:24px;min-width:24px"><b>G</b></button>
+                  <button type="button" class="rte-btn" onclick="document.execCommand('italic')" style="height:24px;min-width:24px"><em>I</em></button>
+                </div>
+                <div id="ec-paras-${key}" style="display:flex;flex-direction:column;gap:6px">
+                  ${(sec.paragraphs||[]).map(p=>`<div class="para-item" contenteditable="true">${p}</div>`).join('')}
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" id="ec-para-add-${key}" style="margin-top:6px">+ Ajouter un paragraphe</button>
+              </div>
+            </div>`
+        }).join('')}`
+    }
+    function serializeEtatCivil() {
+      const order = [...document.querySelectorAll('#ec-order .list-item')].map(el => el.dataset.section)
+      const sections = {}
+      const origSections = currentData?.sections || {}
+      order.forEach(key => {
+        const sec = {...(origSections[key]||{})}
+        sec.paragraphs = [...document.querySelectorAll(`#ec-paras-${key} .para-item`)].map(el => el.innerHTML)
+        const hasPieces = ['recensement','parrainage','listes-electorales','procuration','attestation-accueil'].includes(key)
+        if (hasPieces) sec.pieces = [...document.querySelectorAll(`#ec-pieces-${key} .list-item`)].map(el => el.querySelector('[data-field="val"]')?.value || '')
+        const hasNote = ['mariage','sortie-territoire','listes-electorales','procuration'].includes(key)
+        if (hasNote) sec.note = {text: fVal(`ec-note-text-${key}`), is_alert: fChk(`ec-note-alert-${key}`)}
+        if (key === 'cni') sec.biometrie = fVal('ec-bio-cni')
+        if (key === 'mariage') {
+          sec.main_btn   = {url: fVal('ec-main-btn-url-mariage'), label: fVal('ec-main-btn-label-mariage')}
+          sec.pacs_links = (origSections.mariage?.pacs_links||[]).map((l,i)=>({...l, url:fVal(`ec-pacs-${i}`)}))
+        }
+        const hasLinks = key !== 'recensement' && key !== 'attestation-accueil' && key !== 'mariage'
+        if (hasLinks) sec.links = collectList(`ec-links-${key}`, LINK_FIELDS)
+        sections[key] = sec
+      })
+      return {update_date: fVal('ec-update-date'), sections_order: order, sections}
+    }
+
+    /* ── 8. Inscriptions ── */
+    function renderInscriptions(d) {
+      return `
+        ${edHd('Documents — Étude surveillée')}
+        ${listHTML('ins-etude', d.etude_docs||[], DOC_FIELDS, 'Ajouter un document')}
+        ${edHd('Documents — Cantine')}
+        ${listHTML('ins-cantine', d.cantine_docs||[], DOC_FIELDS, 'Ajouter un document')}`
+    }
+    function serializeInscriptions() {
+      return {etude_docs: collectList('ins-etude', DOC_FIELDS), cantine_docs: collectList('ins-cantine', DOC_FIELDS)}
+    }
+
+    /* ── 9. Permis & Travaux ── */
+    const PT_LINK_FIELDS = [
+      {key:'label',label:'Libellé',type:'text'},
+      {key:'url',  label:'URL',    type:'url'},
+      {key:'type', label:'Type',   type:'select', opts:PERM_LINK_TYPES},
+    ]
+    function renderPermisTravaux(d) {
+      const cards = d.cards_links || {}
+      return `
+        ${fld('pt-voirie-url','Document voirie communale (URL)', d.voirie_document_url||'', {type:'url'})}
+        ${Object.entries(PERM_LINK_CARDS).map(([key,label])=>`
+          ${edHd(label)}
+          ${listHTML(`pt-card-${key}`, cards[key]||[], PT_LINK_FIELDS, 'Ajouter un lien')}`).join('')}`
+    }
+    function serializePermisTravaux() {
+      const cards = {}
+      Object.keys(PERM_LINK_CARDS).forEach(key => { cards[key] = collectList(`pt-card-${key}`, PT_LINK_FIELDS) })
+      return {voirie_document_url: fVal('pt-voirie-url'), cards_links: cards}
+    }
+
+    /* ── 10. PLU ── */
+    const PLU_DOC_FIELDS = [{key:'label',label:'Libellé',type:'text'},{key:'url',label:'URL',type:'url'}]
+    function renderPlu(d) {
+      const zones  = d.zones  || {}
+      const groups = d.groups || []
+      const g0 = groups[0] || {sections:[]}
+      const g1 = groups[1] || {sections:[]}
+      return `
+        ${fld('plu-date','Date d\'application', d.applicable_date||'')}
+        ${edHd('Zones (liens vers PDF)')}
+        ${['A','N','U','AUX'].map(z=>`${fld(`plu-zone-${z}`,'Zone '+z, zones[z]||'', {type:'url'})}`).join('')}
+        ${edHd('Documents graphiques — sections fixes')}
+        ${(g0.sections||[]).map((sec,si)=>`
+          <div class="plu-section-card">
+            <p style="font-size:12px;font-weight:600;margin-bottom:8px">${escH(sec.section_label)}</p>
+            ${listHTML(`plu-g0s${si}`, sec.docs||[], PLU_DOC_FIELDS, 'Ajouter un document')}
+          </div>`).join('')}
+        ${edHd('Documents complémentaires — sections modifiables')}
+        <div id="plu-g1-sections">
+          ${(g1.sections||[]).map((sec,si)=>`
+            <div class="plu-section-card" data-plu-g1-sec>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                <input type="text" data-plu-sec-label class="form-input" value="${escAttr(sec.section_label||'')}" placeholder="Nom de la section" style="font-size:13px;padding:5px 9px">
+                <button type="button" class="li-btn li-del" title="Supprimer cette section">×</button>
+              </div>
+              ${listHTML(`plu-g1s${si}`, sec.docs||[], PLU_DOC_FIELDS, 'Ajouter un document')}
+            </div>`).join('')}
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="plu-g1-add" style="margin-top:7px">+ Ajouter une section</button>`
+    }
+    function serializePlu() {
+      const zones = {}
+      ;['A','N','U','AUX'].forEach(z => zones[z] = fVal(`plu-zone-${z}`))
+      const g0 = currentData?.groups?.[0] || {label:'Documents graphiques',title:'Plans de zonage & règlement',sections:[]}
+      const g0Sections = (g0.sections||[]).map((sec,si)=>({...sec, docs: collectList(`plu-g0s${si}`, PLU_DOC_FIELDS)}))
+      const g1 = currentData?.groups?.[1] || {label:'Documents complémentaires',title:'Dossier complet du PLU',sections:[]}
+      const g1SecCards = document.querySelectorAll('[data-plu-g1-sec]')
+      const g1Sections = [...g1SecCards].map((card,si)=>({
+        section_label: card.querySelector('[data-plu-sec-label]')?.value || '',
+        docs: collectList(`plu-g1s${si}`, PLU_DOC_FIELDS),
+      }))
+      return {
+        zones, applicable_date: fVal('plu-date'), application_date: fVal('plu-date'),
+        groups: [{...g0, sections:g0Sections}, {...g1, sections:g1Sections}],
+      }
+    }
+
+    /* ── 11. Salle Polyvalente ── */
+    function renderSallePolyvalente(d) {
+      const t = d.tarifs || {}; const e = t.ete||{}; const h = t.hiver||{}
+      const ec = e.commune||{}; const ee = e.exterieur||{}
+      const hc = h.commune||{}; const he = h.exterieur||{}
+      const ca = d.cautions || {}
+      return `
+        ${edHd('Tarifs été')}
+        <div class="price-grid">
+          <div class="price-block"><p class="price-block-title">Habitants de la commune</p>
+            ${numFld('sp-ee-c-1j','1 jour',ec.un_jour,'€')}
+            ${numFld('sp-ee-c-2j','2 jours',ec.deux_jours,'€')}
+            ${numFld('sp-ee-c-vh','Vin d\'honneur',ec.vin_honneur,'€')}
+          </div>
+          <div class="price-block"><p class="price-block-title">Extérieur à la commune</p>
+            ${numFld('sp-ee-e-1j','1 jour',ee.un_jour,'€')}
+            ${numFld('sp-ee-e-2j','2 jours',ee.deux_jours,'€')}
+            ${numFld('sp-ee-e-vh','Vin d\'honneur',ee.vin_honneur,'€')}
+          </div>
+        </div>
+        ${edHd('Tarifs hiver')}
+        <div class="price-grid">
+          <div class="price-block"><p class="price-block-title">Habitants de la commune</p>
+            ${numFld('sp-hv-c-1j','1 jour',hc.un_jour,'€')}
+            ${numFld('sp-hv-c-2j','2 jours',hc.deux_jours,'€')}
+            ${numFld('sp-hv-c-vh','Vin d\'honneur',hc.vin_honneur,'€')}
+          </div>
+          <div class="price-block"><p class="price-block-title">Extérieur à la commune</p>
+            ${numFld('sp-hv-e-1j','1 jour',he.un_jour,'€')}
+            ${numFld('sp-hv-e-2j','2 jours',he.deux_jours,'€')}
+            ${numFld('sp-hv-e-vh','Vin d\'honneur',he.vin_honneur,'€')}
+          </div>
+        </div>
+        ${edHd('Cautions')}
+        ${numFld('sp-caut-men','Ménage',ca.menage,'€')}
+        ${numFld('sp-caut-mat','Matériel',ca.materiel,'€')}`
+    }
+    function serializeSallePolyvalente() {
+      return {
+        tarifs:{
+          ete:{commune:{un_jour:fNum('sp-ee-c-1j'),deux_jours:fNum('sp-ee-c-2j'),vin_honneur:fNum('sp-ee-c-vh')}, exterieur:{un_jour:fNum('sp-ee-e-1j'),deux_jours:fNum('sp-ee-e-2j'),vin_honneur:fNum('sp-ee-e-vh')}},
+          hiver:{commune:{un_jour:fNum('sp-hv-c-1j'),deux_jours:fNum('sp-hv-c-2j'),vin_honneur:fNum('sp-hv-c-vh')}, exterieur:{un_jour:fNum('sp-hv-e-1j'),deux_jours:fNum('sp-hv-e-2j'),vin_honneur:fNum('sp-hv-e-vh')}},
+        },
+        cautions:{menage:fNum('sp-caut-men'),materiel:fNum('sp-caut-mat')},
+      }
+    }
+
+    /* ── 12. Scolarité & Périscolaire ── */
+    const SCOL_LIGNE_FIELDS=[{key:'id',label:'N° ligne',type:'text'},{key:'name',label:'Nom',type:'text'},{key:'dessert',label:'Desserte',type:'text'},{key:'url',label:'Lien',type:'url'},{key:'img_url',label:'Image',type:'url'}]
+    function renderScolarite(d) {
+      const ec = d.ecoles || {}; const mat = ec.maternelle||{}; const elem = ec.elementaire||{}
+      const fr = d.familles_rurales || {}
+      const tr = d.transports_scolaires || {}
+      return `
+        ${edHd('École Maternelle')}
+        ${fld('scol-mat-name','Directeur·trice', mat.name||'')}
+        ${fld('scol-mat-role','Titre (Directeur/Directrice)', mat.role_titre||'')}
+        ${fld('scol-mat-tel','Téléphone', mat.tel_formated||'')}
+        ${edHd('École Élémentaire')}
+        ${fld('scol-elem-name','Directeur·trice', elem.name||'')}
+        ${fld('scol-elem-role','Titre', elem.role_titre||'')}
+        ${fld('scol-elem-tel','Téléphone', elem.tel_formated||'')}
+        ${fld('scol-updated','Date mise à jour', d.updated_at||'')}
+        ${edHd('Familles Rurales (Périscolaire)')}
+        ${fld('scol-fr-tel','Téléphone', fr.tel_formated||'')}
+        ${ta('scol-fr-desc','Description', fr.description||'')}
+        ${ta('scol-fr-tarifs','Informations tarifs', fr.infos_tarifs||'')}
+        ${ta('scol-fr-perisco','Horaires périscolaire', fr.horaires_perisco||'')}
+        ${ta('scol-fr-merc','Horaires mercredis/vacances', fr.horaires_mercredis_vacances||'')}
+        ${edHd('Lignes — vers Coulommiers')}
+        ${listHTML('scol-tr-coul', tr.coulommiers||[], SCOL_LIGNE_FIELDS, 'Ajouter une ligne')}
+        ${edHd('Lignes — vers La Ferté / Villeneuve')}
+        ${listHTML('scol-tr-fert', tr.la_ferte_villeneuve||[], SCOL_LIGNE_FIELDS, 'Ajouter une ligne')}`
+    }
+    function serializeScolarite() {
+      const mat  = currentData?.ecoles?.maternelle||{}
+      const elem = currentData?.ecoles?.elementaire||{}
+      const fr   = currentData?.familles_rurales||{}
+      return {
+        ecoles:{
+          maternelle: {...mat, name:fVal('scol-mat-name'), role_titre:fVal('scol-mat-role'), tel_formated:fVal('scol-mat-tel'), tel:(fVal('scol-mat-tel')||'').replace(/\D/g,'')},
+          elementaire:{...elem,name:fVal('scol-elem-name'),role_titre:fVal('scol-elem-role'),tel_formated:fVal('scol-elem-tel'),tel:(fVal('scol-elem-tel')||'').replace(/\D/g,'')},
+        },
+        updated_at: fVal('scol-updated'),
+        familles_rurales:{...fr,tel_formated:fVal('scol-fr-tel'),tel:(fVal('scol-fr-tel')||'').replace(/\D/g,''),description:fVal('scol-fr-desc'),infos_tarifs:fVal('scol-fr-tarifs'),horaires_perisco:fVal('scol-fr-perisco'),horaires_mercredis_vacances:fVal('scol-fr-merc')},
+        transports_scolaires:{coulommiers:collectList('scol-tr-coul',SCOL_LIGNE_FIELDS),la_ferte_villeneuve:collectList('scol-tr-fert',SCOL_LIGNE_FIELDS)},
+      }
+    }
+
+    /* ── 13. Infos SIVU ── */
+    const NOM_FIELDS=[{key:'name',label:'Nom',type:'text'}]
+    const INTERV_CAT_FIELDS=[{key:'category',label:'Catégorie',type:'text'}]
+    function renderSivuInfos(d) {
+      const bur  = d.bureau || {}; const pr = bur.president||{}; const vp = bur.vice_president||{}
+      const comm = d.communes || {}; const sc = comm.saint_cyr||{}; const so = comm.saint_ouen||{}
+      const interv = d.intervenants || []
+      return `
+        ${edHd('Bureau')}
+        ${fld('sivu-pr-name','Président — Nom', pr.name||'')}
+        ${fld('sivu-pr-info','Président — Titre', pr.info||'')}
+        ${fld('sivu-vp-name','Vice-Président — Nom', vp.name||'')}
+        ${fld('sivu-vp-info','Vice-Président — Titre', vp.info||'')}
+        ${fld('sivu-updated','Date mise à jour', d.updated_at||'')}
+        ${edHd('Saint-Cyr-sur-Morin — Titulaires')}
+        ${listHTML('sivu-sc-tit', (sc.titulaires||[]).map(n=>({name:n})), NOM_FIELDS, 'Ajouter')}
+        ${edHd('Saint-Cyr-sur-Morin — Suppléants')}
+        ${listHTML('sivu-sc-sup', (sc.suppleants||[]).map(n=>({name:n})), NOM_FIELDS, 'Ajouter')}
+        ${edHd('Saint-Ouen-sur-Morin — Titulaires')}
+        ${listHTML('sivu-so-tit', (so.titulaires||[]).map(n=>({name:n})), NOM_FIELDS, 'Ajouter')}
+        ${edHd('Saint-Ouen-sur-Morin — Suppléants')}
+        ${listHTML('sivu-so-sup', (so.suppleants||[]).map(n=>({name:n})), NOM_FIELDS, 'Ajouter')}
+        ${edHd('Intervenants')}
+        <p class="form-hint" style="margin-bottom:8px">Chaque catégorie peut contenir plusieurs noms séparés par des virgules.</p>
+        <div class="list-editor" id="sivu-interv">
+          ${interv.map(item=>`
+            <div class="list-item">
+              <div class="list-item-fields">
+                <div class="fi-g"><label class="form-label">Catégorie</label><input type="text" data-field="category" class="form-input" value="${escAttr(item.category||'')}"></div>
+                <div class="fi-g"><label class="form-label">Noms (séparés par virgules)</label><input type="text" data-field="names_str" class="form-input" value="${escAttr((item.names||[]).join(', '))}"></div>
+              </div>
+              <div class="list-item-btns">
+                <button class="li-btn li-up">↑</button><button class="li-btn li-down">↓</button><button class="li-btn li-del">×</button>
+              </div>
+            </div>`).join('')}
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="sivu-interv-add" style="margin-top:7px">+ Ajouter une catégorie</button>`
+    }
+    function serializeSivuInfos() {
+      const interv = [...document.querySelectorAll('#sivu-interv .list-item')].map(item=>({
+        category: item.querySelector('[data-field="category"]')?.value || '',
+        names:   (item.querySelector('[data-field="names_str"]')?.value||'').split(',').map(s=>s.trim()).filter(Boolean),
+      }))
+      return {
+        bureau:{president:{name:fVal('sivu-pr-name'),info:fVal('sivu-pr-info')},vice_president:{name:fVal('sivu-vp-name'),info:fVal('sivu-vp-info')}},
+        communes:{
+          saint_cyr: {titulaires:collectList('sivu-sc-tit',NOM_FIELDS).map(x=>x.name),suppleants:collectList('sivu-sc-sup',NOM_FIELDS).map(x=>x.name)},
+          saint_ouen:{titulaires:collectList('sivu-so-tit',NOM_FIELDS).map(x=>x.name),suppleants:collectList('sivu-so-sup',NOM_FIELDS).map(x=>x.name)},
+        },
+        intervenants: interv,
+        updated_at: fVal('sivu-updated'),
+      }
+    }
+
+    /* ── 14. Documents SIVU ── */
+    function renderSivuPractical(d) {
+      return `${edHd('Documents')}${listHTML('sivup-docs', d.docs||[], DOC_FIELDS, 'Ajouter un document')}`
+    }
+    function serializeSivuPractical() { return {docs: collectList('sivup-docs', DOC_FIELDS)} }
+
+    /* ── 15. Transports & Études ── */
+    const TE_DOC_FIELDS=[{key:'label',label:'Libellé',type:'text'},{key:'url',label:'URL',type:'url'},{key:'primary',label:'Principal',type:'checkbox'}]
+    function renderTransportsEtudes(d) {
+      const et = d.etudes_surveillees || {}
+      const lignes = d.transports_scolaires?.lignes || []
+      return `
+        ${edHd('Études surveillées')}
+        ${fld('te-jours','Jours', et.jours||'')}
+        ${fld('te-horaires','Horaires', et.horaires||'')}
+        ${fld('te-tarif','Tarif', et.tarif||'')}
+        ${fld('te-etab','Établissement', et.etablissement||'')}
+        ${fld('te-reg-url','URL règlement intérieur', et.reglement_url||'', {type:'url'})}
+        ${ta('te-pedibus','Informations pedibus', et.pedibus_details||'')}
+        ${ta('te-inscription','Informations inscription', et.inscription_details||'')}
+        ${edHd('Documents')}
+        ${listHTML('te-docs', d.documents||[], TE_DOC_FIELDS, 'Ajouter un document')}
+        ${edHd('Lignes de transport')}
+        ${[0,1,2].map(i => {
+          const l = lignes[i] || {}
+          return `
+            <div style="border:1px solid rgba(0,0,0,.07);border-radius:var(--radius-lg);padding:12px;margin-bottom:12px">
+              <div class="li-g2" style="margin-bottom:10px">
+                ${fld(`te-l${i}-nom`,'Nom de la ligne', l.nom||'')}
+                ${fld(`te-l${i}-num`,'N°', l.numero||'')}
+              </div>
+              <div class="li-g2" style="margin-bottom:10px">
+                ${fld(`te-l${i}-surv`,'Surveillant·e', l.surveillance||'')}
+                ${ta(`te-l${i}-note`,'Note (optionnelle)', l.note||'',{rows:1,h:36})}
+              </div>
+              <div class="li-g2">
+                <div>
+                  <p style="font-size:12px;font-weight:600;margin-bottom:6px">Matin ↗</p>
+                  ${listHTML(`te-l${i}-matin`, l.matin||[], ARRET_FIELDS, 'Arrêt')}
+                </div>
+                <div>
+                  <p style="font-size:12px;font-weight:600;margin-bottom:6px">Soir ↙</p>
+                  ${listHTML(`te-l${i}-soir`, l.soir||[], ARRET_FIELDS, 'Arrêt')}
+                </div>
+              </div>
+            </div>`
+        }).join('')}`
+    }
+    function serializeTransportsEtudes() {
+      const et = currentData?.etudes_surveillees || {}
+      const lignes = [0,1,2].map(i => ({
+        ...(currentData?.transports_scolaires?.lignes?.[i]||{}),
+        nom:         fVal(`te-l${i}-nom`),
+        numero:      fVal(`te-l${i}-num`),
+        surveillance:fVal(`te-l${i}-surv`),
+        note:        fVal(`te-l${i}-note`) || null,
+        matin:       collectList(`te-l${i}-matin`, ARRET_FIELDS),
+        soir:        collectList(`te-l${i}-soir`,  ARRET_FIELDS),
+      }))
+      return {
+        etudes_surveillees:{...et,jours:fVal('te-jours'),horaires:fVal('te-horaires'),tarif:fVal('te-tarif'),etablissement:fVal('te-etab'),reglement_url:fVal('te-reg-url'),pedibus_details:fVal('te-pedibus'),inscription_details:fVal('te-inscription')},
+        documents:collectList('te-docs',TE_DOC_FIELDS),
+        transports_scolaires:{...(currentData?.transports_scolaires||{}),lignes},
+      }
+    }
+
+    /* ── 16. Transports en commun (lignes) ── */
+    const TR_LIGNE_FIELDS=[
+      {key:'id',label:'N° de ligne',type:'text'},
+      {key:'name',label:'Nom',type:'text'},
+      {key:'dessert',label:'Desserte',type:'text'},
+      {key:'url',label:'Lien officiel',type:'url'},
+      {key:'img_url',label:'Image plan',type:'url'},
+      {key:'badge_type',label:'Type',type:'select',opts:[{v:'reguliere',l:'Régulière'},{v:'scolaire',l:'Scolaire'}]},
+    ]
+    function renderTransportsLignes(d) {
+      return `${edHd('Lignes de bus')}${listHTML('trl-lignes', d.lignes||[], TR_LIGNE_FIELDS, 'Ajouter une ligne')}`
+    }
+    function serializeTransportsLignes() { return {lignes: collectList('trl-lignes', TR_LIGNE_FIELDS)} }
+
+    /* ── 17. Vie Quotidienne ── */
+    function renderVieQuotidienne(d) {
+      return `
+        <p class="form-hint" style="margin-bottom:10px">Utilisez ↑↓ pour réorganiser. Activez "Urgence" pour les numéros de secours.</p>
+        ${listHTML('vq-list', d||[], VQ_FIELDS, 'Ajouter un numéro')}`
+    }
+    function serializeVieQuotidienne() { return collectList('vq-list', VQ_FIELDS) }
+
+    /* ════════════════════════════════════════════════════════
+       DISPATCH
+    ════════════════════════════════════════════════════════ */
+    const RENDERERS = {
+      mot_du_maire:              renderMotDuMaire,
+      commissions_data:          renderCommissions,
+      permanences_data:          renderPermanences,
+      cantine_data:              renderCantine,
+      dechets_data:              renderDechets,
+      eau_assainissement_data:   renderEauAssainissement,
+      etat_civil_data:           renderEtatCivil,
+      inscriptions_data:         renderInscriptions,
+      permis_travaux_data:       renderPermisTravaux,
+      plu_data:                  renderPlu,
+      salle_polyvalente_data:    renderSallePolyvalente,
+      scolarite_periscolaire_data: renderScolarite,
+      sivu_infos_data:           renderSivuInfos,
+      sivu_practical_data:       renderSivuPractical,
+      transports_etudes_data:    renderTransportsEtudes,
+      transports_lignes_data:    renderTransportsLignes,
+      vie_quotidienne_data:      renderVieQuotidienne,
+    }
+    const SERIALIZERS = {
+      mot_du_maire:              serializeMotDuMaire,
+      commissions_data:          serializeCommissions,
+      permanences_data:          serializePermanences,
+      cantine_data:              serializeCantine,
+      dechets_data:              serializeDechets,
+      eau_assainissement_data:   serializeEauAssainissement,
+      etat_civil_data:           serializeEtatCivil,
+      inscriptions_data:         serializeInscriptions,
+      permis_travaux_data:       serializePermisTravaux,
+      plu_data:                  serializePlu,
+      salle_polyvalente_data:    serializeSallePolyvalente,
+      scolarite_periscolaire_data: serializeScolarite,
+      sivu_infos_data:           serializeSivuInfos,
+      sivu_practical_data:       serializeSivuPractical,
+      transports_etudes_data:    serializeTransportsEtudes,
+      transports_lignes_data:    serializeTransportsLignes,
+      vie_quotidienne_data:      serializeVieQuotidienne,
+    }
+
+    /* ════════════════════════════════════════════════════════
+       INIT COMPORTEMENTS DYNAMIQUES POST-RENDER
+    ════════════════════════════════════════════════════════ */
+    function initEditorBehavior(key, data) {
+      switch(key) {
+        case 'mot_du_maire':
+          rteInstance = new MiniRTE('mdm-rte')
+          rteInstance.setValue(data.complet || '')
+          break
+
+        case 'commissions_data':
+          COMM_KEYS.forEach(k => {
+            document.querySelector(`[data-comm-type="${k}"]`)?.addEventListener('change', e => {
+              document.querySelector(`[data-comm-roles="${k}"]`).style.display = e.target.value==='roles'?'':'none'
+              document.querySelector(`[data-comm-text="${k}"]`).style.display  = e.target.value==='text' ?'':'none'
+            })
+            initListEditor(`comm-${k}`, ROLE_FIELDS)
+          })
+          break
+
+        case 'permanences_data':
+          document.querySelectorAll('.perm-closed').forEach(chk => {
+            chk.addEventListener('change', () => {
+              const row    = chk.closest('.perm-row')
+              const inp    = row.querySelector('.perm-hours')
+              if (chk.checked) { inp.value='Fermé'; inp.style.opacity='.4'; inp.style.pointerEvents='none' }
+              else { if(inp.value==='Fermé')inp.value=''; inp.style.opacity=''; inp.style.pointerEvents=''; }
+            })
+          })
+          break
+
+        case 'cantine_data':
+          initListEditor('cantine-menus', MENU_FIELDS)
+          break
+
+        case 'dechets_data':
+          initListEditor('dechet-orgs', ORG_FIELDS)
+          break
+
+        case 'etat_civil_data': {
+          // Order list
+          const orderC = document.getElementById('ec-order')
+          const attachO = item => {
+            item.querySelector('.li-up')?.addEventListener('click', () => {
+              const p = item.previousElementSibling
+              if (p?.classList.contains('list-item')) orderC.insertBefore(item, p)
+            })
+            item.querySelector('.li-down')?.addEventListener('click', () => {
+              const n = item.nextElementSibling
+              if (n?.classList.contains('list-item')) orderC.insertBefore(n, item)
+            })
+          }
+          orderC?.querySelectorAll('.list-item').forEach(attachO)
+          // Per-section inits
+          const order = data.sections_order || Object.keys(data.sections||{})
+          order.forEach(key => {
+            const sec = data.sections?.[key] || {}
+            const hasPieces=['recensement','parrainage','listes-electorales','procuration','attestation-accueil'].includes(key)
+            if (hasPieces) {
+              const pc = document.getElementById(`ec-pieces-${key}`)
+              const pa = document.getElementById(`ec-pieces-${key}-add`)
+              const attachP = item => {
+                item.querySelector('.li-up')?.addEventListener('click',()=>{const p=item.previousElementSibling;if(p?.classList.contains('list-item'))pc.insertBefore(item,p)})
+                item.querySelector('.li-down')?.addEventListener('click',()=>{const n=item.nextElementSibling;if(n?.classList.contains('list-item'))pc.insertBefore(n,item)})
+                item.querySelector('.li-del')?.addEventListener('click',()=>item.remove())
+              }
+              pc?.querySelectorAll('.list-item').forEach(attachP)
+              pa?.addEventListener('click',()=>{const d=document.createElement('div');d.innerHTML=`<div class="list-item"><div class="list-item-fields"><input type="text" data-field="val" class="form-input" value="" style="font-size:13px;padding:5px 9px"></div><div class="list-item-btns"><button class="li-btn li-up">↑</button><button class="li-btn li-down">↓</button><button class="li-btn li-del">×</button></div></div>`;const ni=d.firstElementChild;pc.appendChild(ni);attachP(ni)})
+            }
+            const hasLinks = key!=='recensement'&&key!=='attestation-accueil'&&key!=='mariage'
+            if (hasLinks) initListEditor(`ec-links-${key}`, LINK_FIELDS)
+            // Para add button
+            const paraC = document.getElementById(`ec-paras-${key}`)
+            document.getElementById(`ec-para-add-${key}`)?.addEventListener('click', () => {
+              const div = document.createElement('div')
+              div.className = 'para-item'
+              div.contentEditable = 'true'
+              paraC?.appendChild(div)
+              div.focus()
+            })
+          })
+          break
+        }
+
+        case 'inscriptions_data':
+          initListEditor('ins-etude',   DOC_FIELDS)
+          initListEditor('ins-cantine', DOC_FIELDS)
+          break
+
+        case 'permis_travaux_data':
+          Object.keys(PERM_LINK_CARDS).forEach(k => initListEditor(`pt-card-${k}`, PT_LINK_FIELDS))
+          break
+
+        case 'plu_data': {
+          const g0 = (data.groups?.[0]?.sections||[])
+          g0.forEach((_,si) => initListEditor(`plu-g0s${si}`, PLU_DOC_FIELDS))
+          const g1 = (data.groups?.[1]?.sections||[])
+          g1.forEach((_,si) => initListEditor(`plu-g1s${si}`, PLU_DOC_FIELDS))
+          // Delete section
+          document.querySelectorAll('[data-plu-g1-sec] .li-del').forEach(btn => {
+            btn.addEventListener('click', () => btn.closest('[data-plu-g1-sec]').remove())
+          })
+          // Add section
+          document.getElementById('plu-g1-add')?.addEventListener('click', () => {
+            const idx = document.querySelectorAll('[data-plu-g1-sec]').length
+            const div = document.createElement('div')
+            div.setAttribute('data-plu-g1-sec','')
+            div.className = 'plu-section-card'
+            div.innerHTML = `
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                <input type="text" data-plu-sec-label class="form-input" placeholder="Nom de la section" style="font-size:13px;padding:5px 9px">
+                <button type="button" class="li-btn li-del">×</button>
+              </div>
+              <div class="list-editor" id="plu-g1s${idx}"></div>
+              <button type="button" class="btn btn-secondary btn-sm" id="plu-g1s${idx}-add" style="margin-top:7px">+ Ajouter un document</button>`
+            document.getElementById('plu-g1-sections').appendChild(div)
+            div.querySelector('.li-del').addEventListener('click', () => div.remove())
+            initListEditor(`plu-g1s${idx}`, PLU_DOC_FIELDS)
+          })
+          break
+        }
+
+        case 'scolarite_periscolaire_data':
+          initListEditor('scol-tr-coul', SCOL_LIGNE_FIELDS)
+          initListEditor('scol-tr-fert', SCOL_LIGNE_FIELDS)
+          break
+
+        case 'sivu_infos_data': {
+          initListEditor('sivu-sc-tit', NOM_FIELDS)
+          initListEditor('sivu-sc-sup', NOM_FIELDS)
+          initListEditor('sivu-so-tit', NOM_FIELDS)
+          initListEditor('sivu-so-sup', NOM_FIELDS)
+          const SFIELDS=[{key:'category',label:'Catégorie',type:'text'},{key:'names_str',label:'Noms',type:'text'}]
+          const ic = document.getElementById('sivu-interv')
+          const ia = document.getElementById('sivu-interv-add')
+          const attachI = item => {
+            item.querySelector('.li-up')?.addEventListener('click',()=>{const p=item.previousElementSibling;if(p?.classList.contains('list-item'))ic.insertBefore(item,p)})
+            item.querySelector('.li-down')?.addEventListener('click',()=>{const n=item.nextElementSibling;if(n?.classList.contains('list-item'))ic.insertBefore(n,item)})
+            item.querySelector('.li-del')?.addEventListener('click',()=>item.remove())
+          }
+          ic?.querySelectorAll('.list-item').forEach(attachI)
+          ia?.addEventListener('click',()=>{
+            const d2=document.createElement('div')
+            d2.innerHTML=`<div class="list-item"><div class="list-item-fields"><div class="fi-g"><label class="form-label">Catégorie</label><input type="text" data-field="category" class="form-input" value=""></div><div class="fi-g"><label class="form-label">Noms (séparés par virgules)</label><input type="text" data-field="names_str" class="form-input" value=""></div></div><div class="list-item-btns"><button class="li-btn li-up">↑</button><button class="li-btn li-down">↓</button><button class="li-btn li-del">×</button></div></div>`
+            const ni=d2.firstElementChild; ic.appendChild(ni); attachI(ni)
+          })
+          break
+        }
+
+        case 'sivu_practical_data':
+          initListEditor('sivup-docs', DOC_FIELDS)
+          break
+
+        case 'transports_etudes_data':
+          initListEditor('te-docs', TE_DOC_FIELDS)
+          ;[0,1,2].forEach(i => {
+            initListEditor(`te-l${i}-matin`, ARRET_FIELDS)
+            initListEditor(`te-l${i}-soir`,  ARRET_FIELDS)
+          })
+          break
+
+        case 'transports_lignes_data':
+          initListEditor('trl-lignes', TR_LIGNE_FIELDS)
+          break
+
+        case 'vie_quotidienne_data':
+          initListEditor('vq-list', VQ_FIELDS)
+          break
+      }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       FRAMEWORK
+    ════════════════════════════════════════════════════════ */
+    async function loadAllContent() {
+      const { data, error } = await supabase.from('site_content').select('key,value')
+      if (error) { showToast('Erreur de chargement.', 'error'); return }
+      data.forEach(row => {
+        try { allContent[row.key] = JSON.parse(row.value) } catch {}
+      })
+    }
+
+    function openEditor(key) {
+      currentKey  = key
+      currentData = allContent[key]
+      rteInstance = null
+
+      if (!currentData) {
+        showToast('Contenu introuvable pour cette clé.', 'error')
+        return
+      }
+
+      const renderer = RENDERERS[key]
+      if (!renderer) {
+        document.getElementById('editor-form-body').innerHTML = `<p class="text-muted text-sm">Éditeur non disponible pour "${key}".</p>`
+        return
+      }
+
+      document.getElementById('editor-form-body').innerHTML   = renderer(currentData)
+      document.getElementById('editor-form-title').textContent = PAGE_LABELS[key] || key
+      document.getElementById('editor-save-status').textContent = ''
+      document.getElementById('editor-empty').style.display   = 'none'
+      document.getElementById('editor-form-wrap').style.display = 'block'
+      document.getElementById('btn-save').disabled = false
+
+      document.querySelectorAll('.cn-item').forEach(i => i.classList.toggle('active', i.dataset.key === key))
+
+      requestAnimationFrame(() => initEditorBehavior(key, currentData))
+    }
+
+    async function save() {
+      if (!currentKey) return
+      const serializer = SERIALIZERS[currentKey]
+      if (!serializer) { showToast('Serializer manquant.', 'error'); return }
+
+      const btn    = document.getElementById('btn-save')
+      const status = document.getElementById('editor-save-status')
+      btn.disabled    = true
+      btn.textContent = 'Enregistrement…'
+
+      let newData
+      try { newData = serializer() }
+      catch(e) { showToast('Erreur de lecture du formulaire : ' + e.message, 'error'); btn.disabled=false; btn.textContent='Enregistrer'; return }
+
+      const { error } = await supabase
+        .from('site_content')
+        .update({ value: JSON.stringify(newData) })
+        .eq('key', currentKey)
+
+      btn.disabled    = false
+      btn.textContent = 'Enregistrer'
+
+      if (error) { showToast('Erreur : ' + error.message, 'error'); return }
+
+      allContent[currentKey] = newData
+      currentData = newData
+      status.textContent = 'Enregistré ✓'
+      setTimeout(() => { status.textContent = '' }, 3000)
+      showToast('Contenu enregistré.')
+    }
+
+    /* ── Navigation ── */
+    function buildNav(profile) {
+      const admin = isAdmin(profile)
+      const inner = document.getElementById('cn-inner')
+      inner.innerHTML = ''
+
+      SECTIONS.forEach(sec => {
+        const hasAccess = admin || !!profile[sec.perm]
+        if (!hasAccess) return
+
+        // Section header (desktop)
+        const hd = document.createElement('p')
+        hd.className = 'cn-section'
+        hd.textContent = sec.label
+        inner.appendChild(hd)
+
+        sec.pages.forEach(page => {
+          const btn = document.createElement('button')
+          btn.className     = 'cn-item'
+          btn.textContent   = page.label
+          btn.dataset.key   = page.key
+          btn.addEventListener('click', () => openEditor(page.key))
+          inner.appendChild(btn)
+        })
+      })
+    }
+
+    /* ════════════════════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════════════════════ */
+    async function init() {
+      const auth = await requireAuth()
+      if (!auth) return
+
+      profile = auth.profile
+
+      const hasAnyEdit = isAdmin(profile) || Object.keys(PERMISSIONS).some(k => profile[k])
+      if (!hasAnyEdit) { window.location.replace('/admin/dashboard.html'); return }
+
+      document.getElementById('page-loader').style.display     = 'none'
+      document.getElementById('admin-layout').style.visibility = 'visible'
+
+      buildSidebar(profile, 'editor')
+      buildNav(profile)
+
+      document.getElementById('btn-save').addEventListener('click', save)
+
+      await loadAllContent()
+    }
+
+    init()
+  </script>
+
+</body>
+</html>

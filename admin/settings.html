@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paramètres — Administration Saint-Cyr-sur-Morin</title>
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <link rel="apple-touch-icon" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+  <style>
+    .settings-wrap { max-width: 680px; display: flex; flex-direction: column; gap: 14px; }
+
+    .s-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--gris);
+      margin-bottom: 12px;
+    }
+
+    .perm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+      gap: 7px;
+    }
+
+    .perm-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border-radius: var(--radius);
+      background: var(--creme);
+      font-size: 13px;
+      color: var(--pierre-dark);
+      border: 1px solid transparent;
+    }
+
+    .perm-chip.on {
+      background: var(--vert-pale);
+      color: var(--vert);
+      border-color: rgba(58,90,64,.15);
+    }
+
+    .perm-chip-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--pierre);
+      flex-shrink: 0;
+    }
+
+    .perm-chip.on .perm-chip-dot { background: var(--vert-clair); }
+  </style>
+</head>
+<body>
+
+  <div class="page-loader" id="page-loader"><div class="spinner"></div></div>
+
+  <div class="admin-layout" id="admin-layout" style="visibility:hidden">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+      <div class="mobile-topbar">
+        <button class="btn-hamburger" id="btn-hamburger" aria-label="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/>
+          </svg>
+        </button>
+        <span class="mobile-topbar-title">Paramètres</span>
+      </div>
+
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1 class="page-title">Paramètres</h1>
+          <p class="page-subtitle">Gérez votre profil et la sécurité de votre compte.</p>
+        </div>
+      </div>
+
+      <div class="page-content">
+        <div class="settings-wrap">
+
+          <!-- ── Informations personnelles ── -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Informations personnelles</span>
+            </div>
+            <div class="card-body">
+              <div id="profile-alert"   class="alert alert-error"   style="display:none" role="alert"></div>
+              <div id="profile-success" class="alert alert-success" style="display:none" role="status"></div>
+
+              <form id="profile-form" novalidate>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="s-prenom">Prénom</label>
+                    <input type="text" id="s-prenom" class="form-input" autocomplete="given-name">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="s-nom">Nom</label>
+                    <input type="text" id="s-nom" class="form-input" autocomplete="family-name">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="s-email">Adresse email</label>
+                  <input type="email" id="s-email" class="form-input" readonly
+                    style="opacity:.55;cursor:default;background:var(--creme)">
+                  <p class="form-hint">L'email ne peut pas être modifié depuis ce panel.</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btn-profile-save">
+                  Enregistrer les modifications
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- ── Sécurité ── -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Sécurité & Authentification</span>
+            </div>
+            <div class="card-body">
+
+              <p class="s-label">Changer de mot de passe</p>
+              <div id="pwd-alert"   class="alert alert-error"   style="display:none" role="alert"></div>
+              <div id="pwd-success" class="alert alert-success" style="display:none" role="status"></div>
+
+              <form id="pwd-form" novalidate>
+                <div class="form-group">
+                  <label class="form-label" for="pwd-current">Mot de passe actuel</label>
+                  <input type="password" id="pwd-current" class="form-input" autocomplete="current-password">
+                </div>
+                <div class="grid-2">
+                  <div class="form-group">
+                    <label class="form-label" for="pwd-new">Nouveau mot de passe</label>
+                    <input type="password" id="pwd-new" class="form-input"
+                      autocomplete="new-password" minlength="8">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="pwd-confirm">Confirmation</label>
+                    <input type="password" id="pwd-confirm" class="form-input" autocomplete="new-password">
+                  </div>
+                </div>
+                <p class="form-hint" style="margin-bottom:12px">
+                  Minimum 8 caractères. La modification déconnectera automatiquement vos autres appareils.
+                </p>
+                <button type="submit" class="btn btn-primary" id="btn-pwd-save">
+                  Modifier le mot de passe
+                </button>
+              </form>
+
+              <div class="divider"></div>
+
+              <p class="s-label">Sessions actives</p>
+              <p class="text-sm text-muted" style="margin-bottom:12px">
+                Déconnectez immédiatement tous vos autres appareils (téléphone, autre ordinateur)
+                sans terminer cette session.
+              </p>
+              <button class="btn btn-ghost" id="btn-disconnect-others">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:15px;height:15px">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"/>
+                </svg>
+                Déconnecter les autres appareils
+              </button>
+
+            </div>
+          </div>
+
+          <!-- ── Mes droits ── -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Mes droits & autorisations</span>
+            </div>
+            <div class="card-body">
+
+              <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:18px">
+                <span style="font-size:13.5px">Mon rôle :</span>
+                <span class="badge" id="my-role-badge">—</span>
+                <span class="text-sm text-muted" id="role-desc"></span>
+              </div>
+
+              <p class="s-label">Modules accessibles</p>
+              <div class="perm-grid" id="perms-list"></div>
+
+              <p class="text-sm text-muted" style="margin-top:12px">
+                Les rôles et permissions sont gérés par un administrateur.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script type="module">
+    import { supabase }                                      from '/admin/js/supabase-config.js'
+    import { requireAuth, buildSidebar, showToast, PERMISSIONS } from '/admin/js/auth-guard.js'
+
+    let currentProfile = null
+
+    /* ── Init ── */
+    async function init() {
+      const auth = await requireAuth()
+      if (!auth) return
+
+      currentProfile = auth.profile
+
+      document.getElementById('page-loader').style.display     = 'none'
+      document.getElementById('admin-layout').style.visibility = 'visible'
+
+      buildSidebar(currentProfile, 'settings')
+      fillProfile()
+      fillPermissions()
+      bindForms()
+    }
+
+    /* ── Remplir le formulaire de profil ── */
+    function fillProfile() {
+      const p = currentProfile
+      document.getElementById('s-prenom').value = p.prenom || ''
+      document.getElementById('s-nom').value    = p.nom    || ''
+      document.getElementById('s-email').value  = p.email  || ''
+    }
+
+    /* ── Afficher le rôle et les permissions ── */
+    function fillPermissions() {
+      const p     = currentProfile
+      const admin = ['admin', 'super_admin'].includes(p.role)
+
+      const badge = document.getElementById('my-role-badge')
+      badge.textContent = { super_admin: 'Super Admin', admin: 'Admin', employee: 'Employé' }[p.role] || p.role
+      badge.className   = `badge badge-${p.role}`
+
+      if (admin) {
+        document.getElementById('role-desc').textContent = 'Accès complet à tous les modules.'
+      }
+
+      const grid = document.getElementById('perms-list')
+      grid.innerHTML = Object.entries(PERMISSIONS).map(([key, label]) => {
+        const has = admin || !!p[key]
+        return `
+          <div class="perm-chip ${has ? 'on' : ''}">
+            <span class="perm-chip-dot"></span>
+            <span>${label}</span>
+            <span style="margin-left:auto;font-size:12px;opacity:.7">${has ? '✓' : '—'}</span>
+          </div>`
+      }).join('')
+    }
+
+    /* ── Formulaires ── */
+    function bindForms() {
+
+      /* Profil */
+      document.getElementById('profile-form').addEventListener('submit', async e => {
+        e.preventDefault()
+        const alertEl   = document.getElementById('profile-alert')
+        const successEl = document.getElementById('profile-success')
+        const btn       = document.getElementById('btn-profile-save')
+
+        alertEl.style.display = successEl.style.display = 'none'
+        btn.disabled    = true
+        btn.textContent = 'Enregistrement…'
+
+        const prenom = document.getElementById('s-prenom').value.trim()
+        const nom    = document.getElementById('s-nom').value.trim()
+
+        const { error } = await supabase
+          .from('profiles')
+          .update({ prenom, nom })
+          .eq('id', currentProfile.id)
+
+        btn.disabled    = false
+        btn.textContent = 'Enregistrer les modifications'
+
+        if (error) {
+          alertEl.textContent   = error.message
+          alertEl.style.display = 'flex'
+          return
+        }
+
+        currentProfile.prenom  = prenom
+        currentProfile.nom     = nom
+        successEl.textContent  = 'Profil mis à jour.'
+        successEl.style.display = 'flex'
+        showToast('Profil enregistré.')
+      })
+
+      /* Mot de passe */
+      document.getElementById('pwd-form').addEventListener('submit', async e => {
+        e.preventDefault()
+        const alertEl   = document.getElementById('pwd-alert')
+        const successEl = document.getElementById('pwd-success')
+        const btn       = document.getElementById('btn-pwd-save')
+
+        alertEl.style.display = successEl.style.display = 'none'
+
+        const current = document.getElementById('pwd-current').value
+        const newPwd  = document.getElementById('pwd-new').value
+        const confirm = document.getElementById('pwd-confirm').value
+
+        if (!current) { alertEl.textContent = 'Entrez votre mot de passe actuel.'; alertEl.style.display = 'flex'; return }
+        if (newPwd.length < 8) { alertEl.textContent = 'Le nouveau mot de passe doit contenir au moins 8 caractères.'; alertEl.style.display = 'flex'; return }
+        if (newPwd !== confirm) { alertEl.textContent = 'Les mots de passe ne correspondent pas.'; alertEl.style.display = 'flex'; return }
+
+        btn.disabled    = true
+        btn.textContent = 'Vérification…'
+
+        /* Vérifier l'ancien mot de passe */
+        const { error: verifyErr } = await supabase.auth.signInWithPassword({
+          email: currentProfile.email, password: current
+        })
+
+        if (verifyErr) {
+          alertEl.textContent   = 'Mot de passe actuel incorrect.'
+          alertEl.style.display = 'flex'
+          btn.disabled    = false
+          btn.textContent = 'Modifier le mot de passe'
+          return
+        }
+
+        btn.textContent = 'Modification…'
+
+        const { error: updateErr } = await supabase.auth.updateUser({ password: newPwd })
+
+        btn.disabled    = false
+        btn.textContent = 'Modifier le mot de passe'
+
+        if (updateErr) {
+          alertEl.textContent   = updateErr.message
+          alertEl.style.display = 'flex'
+          return
+        }
+
+        document.getElementById('pwd-form').reset()
+        successEl.textContent  = 'Mot de passe modifié. Vos autres appareils ont été déconnectés.'
+        successEl.style.display = 'flex'
+        showToast('Mot de passe modifié.')
+      })
+
+      /* Déconnecter les autres appareils */
+      document.getElementById('btn-disconnect-others').addEventListener('click', async () => {
+        const btn = document.getElementById('btn-disconnect-others')
+        btn.disabled    = true
+        btn.textContent = 'Déconnexion…'
+
+        const { error } = await supabase.auth.signOut({ scope: 'others' })
+
+        btn.disabled    = false
+        btn.textContent = 'Déconnecter les autres appareils'
+
+        if (error) { showToast('Erreur lors de la déconnexion.', 'error'); return }
+        showToast('Autres appareils déconnectés.')
+      })
+    }
+
+    init()
+  </script>
+
+</body>
+</html>

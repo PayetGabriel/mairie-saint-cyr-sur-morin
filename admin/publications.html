@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publications — Administration Saint-Cyr-sur-Morin</title>
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <link rel="apple-touch-icon" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+  <style>
+    /* ── Tabs ── */
+    .tab-bar {
+      display: flex;
+      gap: 2px;
+      border-bottom: 1px solid rgba(0,0,0,.07);
+      margin-bottom: 18px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      padding: 9px 16px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--gris);
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color .15s, border-color .15s;
+      white-space: nowrap;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .tab-btn.active  { color: var(--vert); border-bottom-color: var(--vert); }
+    .tab-btn:hover:not(.active) { color: var(--texte); }
+
+    /* ── Status badges ── */
+    .badge-draft { background: #fef9c3; color: #854d0e; }
+    .badge-pub   { background: var(--vert-pale); color: var(--vert); }
+    .badge-feat  { background: rgba(156,111,62,.12); color: var(--bois); }
+
+    /* ── Rich text editor ── */
+    .rte-wrap { border: 1px solid var(--pierre); border-radius: var(--radius); overflow: hidden; }
+    .rte-toolbar {
+      display: flex;
+      gap: 2px;
+      padding: 5px 8px;
+      background: #faf9f7;
+      border-bottom: 1px solid var(--pierre);
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .rte-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 26px;
+      padding: 0 6px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: transparent;
+      cursor: pointer;
+      font-size: 12.5px;
+      color: var(--texte);
+      transition: all .13s;
+      font-family: 'DM Sans', sans-serif;
+      white-space: nowrap;
+    }
+    .rte-btn:hover  { background: var(--blanc); border-color: var(--pierre); }
+    .rte-btn.active { background: var(--vert-pale); border-color: var(--vert-clair); color: var(--vert); }
+    .rte-sep { width: 1px; height: 18px; background: var(--pierre); margin: 0 3px; flex-shrink: 0; }
+    .rte-content {
+      min-height: 300px;
+      max-height: 550px;
+      overflow-y: auto;
+      padding: 14px 16px;
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--texte);
+      outline: none;
+    }
+    .rte-content:focus-visible { box-shadow: inset 0 0 0 2px rgba(106,148,105,.2); }
+    .rte-content h2 { font-family: 'Playfair Display',serif; font-size: 1.2em; margin: .8em 0 .3em; }
+    .rte-content h3 { font-family: 'DM Sans',sans-serif; font-size: 1.05em; font-weight: 600; margin: .7em 0 .25em; }
+    .rte-content ul, .rte-content ol { padding-left: 1.4em; margin: .4em 0; }
+    .rte-content li { margin: .15em 0; }
+    .rte-content blockquote { border-left: 3px solid var(--pierre); padding-left: 12px; margin: .5em 0; color: var(--pierre-dark); font-style: italic; }
+    .rte-content a { color: var(--vert-clair); text-decoration: underline; }
+
+    /* ── Article edit layout ── */
+    .art-edit-grid {
+      display: grid;
+      grid-template-columns: 1fr 240px;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .art-edit-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: var(--radius);
+      background: var(--creme);
+    }
+    .toggle-row-label { font-size: 13.5px; font-weight: 500; }
+    .toggle-row-sub   { font-size: 11.5px; color: var(--gris); margin-top: 1px; }
+
+    /* ── Table responsive ── */
+    @media (max-width: 640px) {
+      .hide-mobile { display: none !important; }
+      .art-edit-grid { grid-template-columns: 1fr; }
+      .art-edit-sidebar { order: -1; }
+    }
+    @media (max-width: 480px) {
+      .tab-btn { padding: 8px 12px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-loader" id="page-loader"><div class="spinner"></div></div>
+
+  <div class="admin-layout" id="admin-layout" style="visibility:hidden">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+
+      <div class="mobile-topbar">
+        <button class="btn-hamburger" id="btn-hamburger" aria-label="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/>
+          </svg>
+        </button>
+        <span class="mobile-topbar-title" id="mobile-title">Publications</span>
+      </div>
+
+      <!-- En-tête mode liste -->
+      <div class="page-header" id="list-header">
+        <div class="page-header-left">
+          <h1 class="page-title">Publications</h1>
+          <p class="page-subtitle">Gérez les contenus publiés sur le site.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new" style="margin-top:4px">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
+          </svg>
+          <span id="btn-new-label">Nouvel article</span>
+        </button>
+      </div>
+
+      <!-- En-tête mode édition article -->
+      <div class="page-header" id="edit-header" style="display:none">
+        <div class="page-header-left" style="display:flex;align-items:center;gap:12px">
+          <button class="btn btn-ghost btn-sm" id="btn-back">← Retour</button>
+          <h1 class="page-title" id="edit-page-title" style="font-size:17px">Nouvel article</h1>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+          <button class="btn btn-ghost" id="btn-save-draft">Enregistrer le brouillon</button>
+          <button class="btn btn-primary" id="btn-publish">Publier</button>
+        </div>
+      </div>
+
+      <div class="page-content">
+
+        <!-- Tabs (masqués en mode édition) -->
+        <div class="tab-bar" id="tab-bar" role="tablist">
+          <button class="tab-btn active" data-tab="articles" role="tab">Articles</button>
+          <button class="tab-btn" data-tab="arretes" role="tab">Arrêtés</button>
+          <button class="tab-btn" data-tab="cr" role="tab">Comptes-rendus</button>
+          <button class="tab-btn" data-tab="tdu" role="tab">Trait d'Union</button>
+        </div>
+
+        <!-- ══ Liste : Articles ══════════════════════════════ -->
+        <div id="list-articles">
+          <div class="card">
+            <div class="card-body" style="padding:0">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Titre</th>
+                      <th class="hide-mobile">Tag</th>
+                      <th class="hide-mobile">Date</th>
+                      <th>Statut</th>
+                      <th style="text-align:right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-articles">
+                    <tr><td colspan="5" style="text-align:center;padding:32px"><div class="spinner" style="margin:0 auto 8px"></div><p class="text-muted text-sm">Chargement…</p></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ Liste : Arrêtés ════════════════════════════════ -->
+        <div id="list-arretes" style="display:none">
+          <div class="card">
+            <div class="card-body" style="padding:0">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>N°</th>
+                      <th>Titre</th>
+                      <th class="hide-mobile">Pris le</th>
+                      <th class="hide-mobile">En vigueur</th>
+                      <th>Statut</th>
+                      <th style="text-align:right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-arretes">
+                    <tr><td colspan="6" style="text-align:center;padding:32px"><div class="spinner" style="margin:0 auto 8px"></div></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ Liste : Comptes-rendus ═════════════════════════ -->
+        <div id="list-cr" style="display:none">
+          <div class="card">
+            <div class="card-body" style="padding:0">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date du conseil</th>
+                      <th class="hide-mobile">Document</th>
+                      <th>Statut</th>
+                      <th style="text-align:right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-cr">
+                    <tr><td colspan="4" style="text-align:center;padding:32px"><div class="spinner" style="margin:0 auto 8px"></div></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ Liste : Trait d'Union ══════════════════════════ -->
+        <div id="list-tdu" style="display:none">
+          <div class="card">
+            <div class="card-body" style="padding:0">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>N°</th>
+                      <th class="hide-mobile">Date publication</th>
+                      <th>Statut</th>
+                      <th style="text-align:right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-tdu">
+                    <tr><td colspan="5" style="text-align:center;padding:32px"><div class="spinner" style="margin:0 auto 8px"></div></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ══ Formulaire article ═════════════════════════════ -->
+        <div id="view-edit" style="display:none">
+          <div class="art-edit-grid">
+
+            <!-- Champs principaux -->
+            <div>
+              <div class="form-group">
+                <label class="form-label" for="art-titre">Titre <span style="color:#dc2626">*</span></label>
+                <input type="text" id="art-titre" class="form-input" placeholder="Titre de l'article">
+              </div>
+              <div class="grid-2">
+                <div class="form-group">
+                  <label class="form-label" for="art-tag">Catégorie</label>
+                  <select id="art-tag" class="form-select">
+                    <option value="Travaux">Travaux</option>
+                    <option value="Conseil municipal">Conseil municipal</option>
+                    <option value="Événements">Événements</option>
+                    <option value="Culture">Culture</option>
+                    <option value="Prévention">Prévention</option>
+                    <option value="Bulletin">Bulletin</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="art-auteur">Auteur</label>
+                  <input type="text" id="art-auteur" class="form-input" placeholder="La Mairie">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="art-image">URL de l'image de couverture</label>
+                <input type="url" id="art-image" class="form-input" placeholder="https://…">
+                <p class="form-hint">Lien direct vers l'image (Unsplash, Drive, etc.)</p>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="art-resume">Résumé</label>
+                <textarea id="art-resume" class="form-input" rows="2"
+                  placeholder="Court résumé affiché dans la liste des articles…" style="min-height:64px"></textarea>
+              </div>
+            </div>
+
+            <!-- Sidebar options -->
+            <div class="art-edit-sidebar">
+              <div class="toggle-row">
+                <div>
+                  <p class="toggle-row-label">Mis en avant</p>
+                  <p class="toggle-row-sub">Affiché dans le carousel</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="art-featured">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="toggle-row">
+                <div>
+                  <p class="toggle-row-label">Brouillon</p>
+                  <p class="toggle-row-sub">Non visible sur le site</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="art-draft">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="card" style="padding:12px;font-size:12.5px;color:var(--gris);line-height:1.6">
+                <strong style="color:var(--texte)">Contenu riche</strong><br>
+                Utilisez la barre d'outils pour formater le texte. Les listes, titres H2/H3, liens et encadrés sont supportés.
+              </div>
+            </div>
+          </div>
+
+          <!-- Éditeur de texte -->
+          <div class="form-group">
+            <label class="form-label">Contenu de l'article</label>
+            <div class="rte-wrap" id="art-rte-wrap"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ══ Modal : Arrêté ═══════════════════════════════════════ -->
+  <div class="modal-backdrop" id="modal-arrete" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:500px">
+      <div class="modal-header">
+        <h2 class="modal-title" id="arrete-modal-title">Nouvel arrêté</h2>
+        <button class="modal-close" data-close="modal-arrete">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="arrete-alert" class="alert alert-error" style="display:none"></div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="ar-numero">N° de l'arrêté</label>
+            <input type="text" id="ar-numero" class="form-input" placeholder="2026-001">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ar-titre">Titre <span style="color:#dc2626">*</span></label>
+            <input type="text" id="ar-titre" class="form-input" placeholder="Objet de l'arrêté">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="ar-url">Lien du document (PDF)</label>
+          <input type="url" id="ar-url" class="form-input" placeholder="/assets/docs/arretes/...">
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label" for="ar-pris-le">Pris le</label>
+            <input type="date" id="ar-pris-le" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ar-vigueur">En vigueur le</label>
+            <input type="date" id="ar-vigueur" class="form-input">
+          </div>
+        </div>
+        <div class="permission-row">
+          <span class="permission-label">Brouillon (non visible)</span>
+          <label class="toggle"><input type="checkbox" id="ar-draft"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-close="modal-arrete">Annuler</button>
+        <button class="btn btn-primary" id="btn-save-arrete">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Modal : Compte-rendu ══════════════════════════════════ -->
+  <div class="modal-backdrop" id="modal-cr" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:440px">
+      <div class="modal-header">
+        <h2 class="modal-title" id="cr-modal-title">Nouveau compte-rendu</h2>
+        <button class="modal-close" data-close="modal-cr">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="cr-alert" class="alert alert-error" style="display:none"></div>
+        <div class="form-group">
+          <label class="form-label" for="cr-date">Date du conseil <span style="color:#dc2626">*</span></label>
+          <input type="date" id="cr-date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cr-url">Lien du compte-rendu (PDF) <span style="color:#dc2626">*</span></label>
+          <input type="url" id="cr-url" class="form-input" placeholder="/documents/comptes-rendus/...">
+        </div>
+        <div class="permission-row">
+          <span class="permission-label">Brouillon (non visible)</span>
+          <label class="toggle"><input type="checkbox" id="cr-draft"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-close="modal-cr">Annuler</button>
+        <button class="btn btn-primary" id="btn-save-cr">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Modal : Trait d'Union ═════════════════════════════════ -->
+  <div class="modal-backdrop" id="modal-tdu" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:440px">
+      <div class="modal-header">
+        <h2 class="modal-title" id="tdu-modal-title">Nouveau Trait d'Union</h2>
+        <button class="modal-close" data-close="modal-tdu">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="tdu-alert" class="alert alert-error" style="display:none"></div>
+        <div class="form-group">
+          <label class="form-label" for="tdu-type">Type</label>
+          <select id="tdu-type" class="form-select">
+            <option value="Standard">Standard</option>
+            <option value="Supplément">Supplément</option>
+            <option value="Hors-Série">Hors-Série</option>
+          </select>
+        </div>
+        <div class="form-group" id="tdu-numero-group">
+          <label class="form-label" for="tdu-numero">Numéro</label>
+          <input type="text" id="tdu-numero" class="form-input" placeholder="ex: 16">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="tdu-date">Date de publication <span style="color:#dc2626">*</span></label>
+          <input type="date" id="tdu-date" class="form-input">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="tdu-url">Lien du document (PDF) <span style="color:#dc2626">*</span></label>
+          <input type="url" id="tdu-url" class="form-input" placeholder="/assets/docs/TDU/...">
+        </div>
+        <div class="permission-row">
+          <span class="permission-label">Brouillon (non visible)</span>
+          <label class="toggle"><input type="checkbox" id="tdu-draft"><span class="toggle-slider"></span></label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-close="modal-tdu">Annuler</button>
+        <button class="btn btn-primary" id="btn-save-tdu">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ Modal : Confirmation suppression ══════════════════════ -->
+  <div class="modal-backdrop" id="modal-delete" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:380px">
+      <div class="modal-header">
+        <h2 class="modal-title">Supprimer</h2>
+        <button class="modal-close" data-close="modal-delete">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13.5px" id="delete-label">Supprimer cet élément ?</p>
+        <p class="text-sm text-danger" style="margin-top:8px">Action irréversible.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" data-close="modal-delete">Annuler</button>
+        <button class="btn btn-danger" id="btn-confirm-delete">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script type="module">
+    import { supabase } from '/admin/js/supabase-config.js'
+    import {
+      requireAuth, buildSidebar, showToast,
+      openModal, closeModal, initModals, isAdmin,
+    } from '/admin/js/auth-guard.js'
+
+    /* ── Constantes ── */
+    const TAGS = ['Travaux', 'Conseil municipal', 'Événements', 'Culture', 'Prévention', 'Bulletin']
+
+    const TAB_LABELS = {
+      articles: { title: 'Nouvel article',       id: 'articles' },
+      arretes:  { title: 'Nouvel arrêté',         id: 'arretes'  },
+      cr:       { title: 'Nouveau compte-rendu',  id: 'cr'       },
+      tdu:      { title: "Nouveau Trait d'Union", id: 'tdu'      },
+    }
+
+    /* ── State ── */
+    let profile      = null
+    let currentTab   = 'articles'
+    let editingId    = { articles: null, arretes: null, cr: null, tdu: null }
+    let pendingDel   = { table: null, id: null }
+    let rte          = null
+    let allData      = { articles: [], arretes: [], cr: [], tdu: [] }
+
+    /* ════════════════════════════════════════════════════════
+       MINI RICH TEXT EDITOR
+    ════════════════════════════════════════════════════════ */
+    class MiniRTE {
+      constructor(containerId) {
+        this.wrap   = document.getElementById(containerId)
+        this.editor = null
+        this._build()
+      }
+
+      _build() {
+        this.wrap.innerHTML = `
+          <div class="rte-toolbar">
+            <button type="button" class="rte-btn" data-cmd="bold"   title="Gras (Ctrl+B)"><b>G</b></button>
+            <button type="button" class="rte-btn" data-cmd="italic" title="Italique (Ctrl+I)"><em>I</em></button>
+            <span class="rte-sep"></span>
+            <button type="button" class="rte-btn" data-cmd="h2" title="Titre H2">H2</button>
+            <button type="button" class="rte-btn" data-cmd="h3" title="Titre H3">H3</button>
+            <span class="rte-sep"></span>
+            <button type="button" class="rte-btn" data-cmd="insertUnorderedList" title="Liste à puces">• Liste</button>
+            <button type="button" class="rte-btn" data-cmd="insertOrderedList" title="Liste numérotée">1. Liste</button>
+            <button type="button" class="rte-btn" data-cmd="blockquote" title="Encadré / citation">❝ Encadré</button>
+            <button type="button" class="rte-btn" data-cmd="link" title="Insérer un lien">🔗 Lien</button>
+          </div>
+          <div class="rte-content" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" aria-label="Contenu de l'article"></div>`
+
+        const toolbar    = this.wrap.querySelector('.rte-toolbar')
+        this.editor      = this.wrap.querySelector('.rte-content')
+
+        toolbar.addEventListener('mousedown', e => e.preventDefault())
+        toolbar.addEventListener('click', e => {
+          const btn = e.target.closest('[data-cmd]')
+          if (!btn) return
+          e.preventDefault()
+          this._exec(btn.dataset.cmd)
+        })
+
+        this.editor.addEventListener('keyup',   () => this._updateState(toolbar))
+        this.editor.addEventListener('mouseup', () => this._updateState(toolbar))
+      }
+
+      _exec(cmd) {
+        this.editor.focus()
+        switch (cmd) {
+          case 'h2':        document.execCommand('formatBlock', false, 'h2');        break
+          case 'h3':        document.execCommand('formatBlock', false, 'h3');        break
+          case 'blockquote': document.execCommand('formatBlock', false, 'blockquote'); break
+          case 'link': {
+            const url = prompt('URL du lien (ex: https://…) :')
+            if (url) document.execCommand('createLink', false, url)
+            break
+          }
+          default: document.execCommand(cmd, false, null)
+        }
+        this._updateState(this.wrap.querySelector('.rte-toolbar'))
+      }
+
+      _updateState(toolbar) {
+        toolbar.querySelectorAll('[data-cmd]').forEach(btn => {
+          try { btn.classList.toggle('active', document.queryCommandState(btn.dataset.cmd)) } catch {}
+        })
+      }
+
+      getValue() { return this.editor?.innerHTML || '' }
+      setValue(html) { if (this.editor) this.editor.innerHTML = html || '' }
+      clear()    { if (this.editor) this.editor.innerHTML = '' }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════════════════════ */
+    async function init() {
+      const auth = await requireAuth()
+      if (!auth) return
+
+      profile = auth.profile
+      const canPublish = isAdmin(profile) || profile.can_manage_publications
+      if (!canPublish) { window.location.replace('/admin/dashboard.html'); return }
+
+      document.getElementById('page-loader').style.display     = 'none'
+      document.getElementById('admin-layout').style.visibility = 'visible'
+
+      buildSidebar(profile, 'publications')
+      initModals()
+      bindTabs()
+      bindButtons()
+      await loadAll()
+      renderCurrentList()
+
+      /* TDU type → show/hide numéro */
+      document.getElementById('tdu-type').addEventListener('change', e => {
+        document.getElementById('tdu-numero-group').style.display =
+          e.target.value === 'Standard' ? 'block' : 'none'
+      })
+    }
+
+    /* ════════════════════════════════════════════════════════
+       TABS
+    ════════════════════════════════════════════════════════ */
+    function setTab(tab) {
+      currentTab = tab
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab))
+      ;['articles','arretes','cr','tdu'].forEach(t => {
+        document.getElementById(`list-${t}`).style.display = t === tab ? 'block' : 'none'
+      })
+      document.getElementById('btn-new-label').textContent = TAB_LABELS[tab].title
+      document.getElementById('mobile-title').textContent  = tab === 'articles' ? 'Publications' :
+        tab === 'arretes' ? 'Arrêtés' : tab === 'cr' ? 'Comptes-rendus' : "Trait d'Union"
+    }
+
+    function bindTabs() {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => setTab(btn.dataset.tab))
+      })
+    }
+
+    /* ════════════════════════════════════════════════════════
+       CHARGEMENT DONNÉES
+    ════════════════════════════════════════════════════════ */
+    async function loadAll() {
+      const [a, ar, c, t] = await Promise.all([
+        supabase.from('articles').select('*').order('created_at', { ascending: false }),
+        supabase.from('arretes').select('*').order('created_at', { ascending: false }),
+        supabase.from('comptes_rendus').select('*').order('date_conseil', { ascending: false }),
+        supabase.from('traits_union').select('*').order('date_publication', { ascending: false }),
+      ])
+      allData.articles = a.data  || []
+      allData.arretes  = ar.data || []
+      allData.cr       = c.data  || []
+      allData.tdu      = t.data  || []
+    }
+
+    function renderCurrentList() {
+      renderArticlesList()
+      renderArretesList()
+      renderCRList()
+      renderTDUList()
+    }
+
+    /* ── Helpers ── */
+    function fmtDate(d) {
+      if (!d) return '—'
+      return new Date(d).toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' })
+    }
+    function escH(s) {
+      if (!s) return ''
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+    }
+    function statusBadge(isDraft) {
+      return isDraft
+        ? `<span class="badge badge-draft">Brouillon</span>`
+        : `<span class="badge badge-pub">Publié</span>`
+    }
+    function actionBtns(table, id, label='') {
+      return `
+        <div style="display:flex;justify-content:flex-end;gap:6px">
+          <button class="btn btn-secondary btn-sm" onclick="editItem('${table}',${id})">Modifier</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteItem('${table}',${id},'${escH(label)}')">Supprimer</button>
+        </div>`
+    }
+
+    /* ── Articles ── */
+    function renderArticlesList() {
+      const tbody = document.getElementById('tbody-articles')
+      if (!allData.articles.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px"><p class="text-muted text-sm">Aucun article.</p></td></tr>'
+        return
+      }
+      tbody.innerHTML = allData.articles.map(a => `
+        <tr>
+          <td>
+            <p style="font-weight:500;color:var(--texte)">${escH(a.titre)}</p>
+            ${a.is_featured ? '<span class="badge badge-feat" style="margin-top:3px">⭐ Mis en avant</span>' : ''}
+          </td>
+          <td class="hide-mobile"><span class="badge" style="background:var(--creme);color:var(--pierre-dark)">${escH(a.tag)}</span></td>
+          <td class="hide-mobile" style="color:var(--gris);font-size:13px">${fmtDate(a.created_at)}</td>
+          <td>${statusBadge(a.is_draft)}</td>
+          <td>${actionBtns('articles', a.id, a.titre)}</td>
+        </tr>`).join('')
+    }
+
+    /* ── Arrêtés ── */
+    function renderArretesList() {
+      const tbody = document.getElementById('tbody-arretes')
+      if (!allData.arretes.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px"><p class="text-muted text-sm">Aucun arrêté.</p></td></tr>'
+        return
+      }
+      tbody.innerHTML = allData.arretes.map(a => `
+        <tr>
+          <td style="font-weight:500;white-space:nowrap">${escH(a.numero) || '—'}</td>
+          <td>${escH(a.titre)}</td>
+          <td class="hide-mobile" style="color:var(--gris);font-size:13px">${fmtDate(a.pris_le)}</td>
+          <td class="hide-mobile" style="color:var(--gris);font-size:13px">${fmtDate(a.en_vigueur_le)}</td>
+          <td>${statusBadge(a.is_draft)}</td>
+          <td>${actionBtns('arretes', a.id, a.titre)}</td>
+        </tr>`).join('')
+    }
+
+    /* ── Comptes-rendus ── */
+    function renderCRList() {
+      const tbody = document.getElementById('tbody-cr')
+      if (!allData.cr.length) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px"><p class="text-muted text-sm">Aucun compte-rendu.</p></td></tr>'
+        return
+      }
+      tbody.innerHTML = allData.cr.map(c => `
+        <tr>
+          <td style="font-weight:500">${fmtDate(c.date_conseil)}</td>
+          <td class="hide-mobile">
+            ${c.document_url
+              ? `<a href="${escH(c.document_url)}" target="_blank" rel="noopener" style="color:var(--vert-clair);font-size:13px">Voir le document ↗</a>`
+              : '<span class="text-muted text-sm">—</span>'}
+          </td>
+          <td>${statusBadge(c.is_draft)}</td>
+          <td>${actionBtns('cr', c.id, 'Conseil du ' + fmtDate(c.date_conseil))}</td>
+        </tr>`).join('')
+    }
+
+    /* ── Traits d'Union ── */
+    function renderTDUList() {
+      const tbody = document.getElementById('tbody-tdu')
+      if (!allData.tdu.length) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:32px"><p class="text-muted text-sm">Aucun Trait d\'Union.</p></td></tr>'
+        return
+      }
+      tbody.innerHTML = allData.tdu.map(t => `
+        <tr>
+          <td><span class="badge" style="background:var(--creme);color:var(--pierre-dark)">${escH(t.type_special)}</span></td>
+          <td style="font-weight:500">${t.numero ? 'N°' + escH(t.numero) : '—'}</td>
+          <td class="hide-mobile" style="color:var(--gris);font-size:13px">${fmtDate(t.date_publication)}</td>
+          <td>${statusBadge(t.is_draft)}</td>
+          <td>${actionBtns('tdu', t.id, t.type_special + (t.numero ? ' N°' + t.numero : ''))}</td>
+        </tr>`).join('')
+    }
+
+    /* ════════════════════════════════════════════════════════
+       ARTICLE : ÉDITION PLEIN ÉCRAN
+    ════════════════════════════════════════════════════════ */
+    function openArticleEdit(art = null) {
+      editingId.articles = art?.id || null
+
+      document.getElementById('list-header').style.display = 'none'
+      document.getElementById('edit-header').style.display = 'flex'
+      document.getElementById('tab-bar').style.display     = 'none'
+      ;['articles','arretes','cr','tdu'].forEach(t => document.getElementById(`list-${t}`).style.display = 'none')
+      document.getElementById('view-edit').style.display   = 'block'
+      document.getElementById('mobile-title').textContent  = art ? 'Modifier l\'article' : 'Nouvel article'
+
+      document.getElementById('edit-page-title').textContent = art
+        ? `Modifier : ${art.titre?.slice(0,50) || ''}…`
+        : 'Nouvel article'
+
+      /* Pré-remplir */
+      document.getElementById('art-titre').value    = art?.titre    || ''
+      document.getElementById('art-tag').value      = art?.tag      || TAGS[0]
+      document.getElementById('art-image').value    = art?.image_url|| ''
+      document.getElementById('art-resume').value   = art?.resume   || ''
+      document.getElementById('art-auteur').value   = art?.auteur   || 'La Mairie'
+      document.getElementById('art-featured').checked = !!art?.is_featured
+      document.getElementById('art-draft').checked    = art ? !!art.is_draft : true
+
+      /* RTE */
+      if (!rte) rte = new MiniRTE('art-rte-wrap')
+      rte.setValue(art?.contenu || '')
+    }
+
+    function closeArticleEdit() {
+      editingId.articles = null
+      document.getElementById('list-header').style.display = 'flex'
+      document.getElementById('edit-header').style.display = 'none'
+      document.getElementById('tab-bar').style.display     = 'flex'
+      document.getElementById('view-edit').style.display   = 'none'
+      setTab(currentTab)
+      document.getElementById('mobile-title').textContent  = 'Publications'
+    }
+
+    async function saveArticle(isDraft) {
+      const titre    = document.getElementById('art-titre').value.trim()
+      if (!titre) { showToast('Le titre est obligatoire.', 'error'); return }
+
+      const payload = {
+        titre,
+        tag:         document.getElementById('art-tag').value,
+        image_url:   document.getElementById('art-image').value.trim(),
+        resume:      document.getElementById('art-resume').value.trim(),
+        auteur:      document.getElementById('art-auteur').value.trim() || 'La Mairie',
+        is_featured: document.getElementById('art-featured').checked,
+        is_draft:    isDraft,
+        contenu:     rte?.getValue() || '',
+      }
+
+      const saveLbl = isDraft ? 'Brouillon enregistré.' : 'Article publié.'
+      let error
+
+      if (editingId.articles) {
+        ;({ error } = await supabase.from('articles').update(payload).eq('id', editingId.articles))
+      } else {
+        ;({ error } = await supabase.from('articles').insert(payload))
+      }
+
+      if (error) { showToast('Erreur : ' + error.message, 'error'); return }
+      showToast(saveLbl)
+      await loadAll()
+      renderCurrentList()
+      closeArticleEdit()
+    }
+
+    /* ════════════════════════════════════════════════════════
+       AUTRES TYPES : SAVE VIA MODALS
+    ════════════════════════════════════════════════════════ */
+    async function saveArrete() {
+      const titre = document.getElementById('ar-titre').value.trim()
+      if (!titre) {
+        document.getElementById('arrete-alert').textContent = 'Le titre est obligatoire.'
+        document.getElementById('arrete-alert').style.display = 'flex'
+        return
+      }
+      const payload = {
+        numero:        document.getElementById('ar-numero').value.trim() || null,
+        titre,
+        document_url:  document.getElementById('ar-url').value.trim() || null,
+        pris_le:       document.getElementById('ar-pris-le').value || null,
+        en_vigueur_le: document.getElementById('ar-vigueur').value || null,
+        is_draft:      document.getElementById('ar-draft').checked,
+      }
+      let error
+      if (editingId.arretes) {
+        ;({ error } = await supabase.from('arretes').update(payload).eq('id', editingId.arretes))
+      } else {
+        ;({ error } = await supabase.from('arretes').insert(payload))
+      }
+      if (error) { showToast('Erreur.', 'error'); return }
+      closeModal('modal-arrete')
+      showToast('Arrêté enregistré.')
+      await loadAll()
+      renderArretesList()
+    }
+
+    async function saveCR() {
+      const date = document.getElementById('cr-date').value
+      const url  = document.getElementById('cr-url').value.trim()
+      if (!date || !url) {
+        document.getElementById('cr-alert').textContent = 'La date et le lien sont obligatoires.'
+        document.getElementById('cr-alert').style.display = 'flex'
+        return
+      }
+      const payload = { titre: 'Conseil Municipal', date_conseil: date, document_url: url, is_draft: document.getElementById('cr-draft').checked }
+      let error
+      if (editingId.cr) {
+        ;({ error } = await supabase.from('comptes_rendus').update(payload).eq('id', editingId.cr))
+      } else {
+        ;({ error } = await supabase.from('comptes_rendus').insert(payload))
+      }
+      if (error) { showToast('Erreur.', 'error'); return }
+      closeModal('modal-cr')
+      showToast('Compte-rendu enregistré.')
+      await loadAll()
+      renderCRList()
+    }
+
+    async function saveTDU() {
+      const type = document.getElementById('tdu-type').value
+      const date = document.getElementById('tdu-date').value
+      const url  = document.getElementById('tdu-url').value.trim()
+      if (!date || !url) {
+        document.getElementById('tdu-alert').textContent = 'La date et le lien sont obligatoires.'
+        document.getElementById('tdu-alert').style.display = 'flex'
+        return
+      }
+      const payload = {
+        type_special:     type,
+        numero:           type === 'Standard' ? (document.getElementById('tdu-numero').value.trim() || null) : null,
+        date_publication: date,
+        document_url:     url,
+        is_draft:         document.getElementById('tdu-draft').checked,
+      }
+      let error
+      if (editingId.tdu) {
+        ;({ error } = await supabase.from('traits_union').update(payload).eq('id', editingId.tdu))
+      } else {
+        ;({ error } = await supabase.from('traits_union').insert(payload))
+      }
+      if (error) { showToast('Erreur.', 'error'); return }
+      closeModal('modal-tdu')
+      showToast("Trait d'Union enregistré.")
+      await loadAll()
+      renderTDUList()
+    }
+
+    /* ════════════════════════════════════════════════════════
+       ÉDITION ET SUPPRESSION (appelées via onclick)
+    ════════════════════════════════════════════════════════ */
+    window.editItem = function(table, id) {
+      const item = allData[table]?.find(x => x.id === id)
+      if (!item) return
+
+      if (table === 'articles') {
+        openArticleEdit(item)
+        return
+      }
+
+      editingId[table] = id
+
+      if (table === 'arretes') {
+        document.getElementById('arrete-modal-title').textContent = 'Modifier l\'arrêté'
+        document.getElementById('ar-numero').value    = item.numero      || ''
+        document.getElementById('ar-titre').value     = item.titre       || ''
+        document.getElementById('ar-url').value       = item.document_url|| ''
+        document.getElementById('ar-pris-le').value   = item.pris_le     || ''
+        document.getElementById('ar-vigueur').value   = item.en_vigueur_le || ''
+        document.getElementById('ar-draft').checked   = !!item.is_draft
+        document.getElementById('arrete-alert').style.display = 'none'
+        openModal('modal-arrete')
+      }
+
+      if (table === 'cr') {
+        document.getElementById('cr-modal-title').textContent = 'Modifier le compte-rendu'
+        document.getElementById('cr-date').value  = item.date_conseil || ''
+        document.getElementById('cr-url').value   = item.document_url || ''
+        document.getElementById('cr-draft').checked = !!item.is_draft
+        document.getElementById('cr-alert').style.display = 'none'
+        openModal('modal-cr')
+      }
+
+      if (table === 'tdu') {
+        document.getElementById('tdu-modal-title').textContent = "Modifier le Trait d'Union"
+        document.getElementById('tdu-type').value   = item.type_special || 'Standard'
+        document.getElementById('tdu-numero').value = item.numero       || ''
+        document.getElementById('tdu-date').value   = item.date_publication || ''
+        document.getElementById('tdu-url').value    = item.document_url || ''
+        document.getElementById('tdu-draft').checked = !!item.is_draft
+        document.getElementById('tdu-numero-group').style.display =
+          item.type_special === 'Standard' ? 'block' : 'none'
+        document.getElementById('tdu-alert').style.display = 'none'
+        openModal('modal-tdu')
+      }
+    }
+
+    window.deleteItem = function(table, id, label) {
+      pendingDel = { table, id }
+      document.getElementById('delete-label').textContent = `Supprimer "${label}" ?`
+      openModal('modal-delete')
+    }
+
+    /* ════════════════════════════════════════════════════════
+       BINDING DES BOUTONS
+    ════════════════════════════════════════════════════════ */
+    function bindButtons() {
+      /* Nouveau */
+      document.getElementById('btn-new').addEventListener('click', () => {
+        if (currentTab === 'articles') {
+          openArticleEdit(null)
+        } else if (currentTab === 'arretes') {
+          editingId.arretes = null
+          document.getElementById('arrete-modal-title').textContent = 'Nouvel arrêté'
+          ;['ar-numero','ar-titre','ar-url','ar-pris-le','ar-vigueur'].forEach(id => document.getElementById(id).value = '')
+          document.getElementById('ar-draft').checked = true
+          document.getElementById('arrete-alert').style.display = 'none'
+          openModal('modal-arrete')
+        } else if (currentTab === 'cr') {
+          editingId.cr = null
+          document.getElementById('cr-modal-title').textContent = 'Nouveau compte-rendu'
+          ;['cr-date','cr-url'].forEach(id => document.getElementById(id).value = '')
+          document.getElementById('cr-draft').checked = true
+          document.getElementById('cr-alert').style.display = 'none'
+          openModal('modal-cr')
+        } else if (currentTab === 'tdu') {
+          editingId.tdu = null
+          document.getElementById('tdu-modal-title').textContent = "Nouveau Trait d'Union"
+          ;['tdu-numero','tdu-date','tdu-url'].forEach(id => document.getElementById(id).value = '')
+          document.getElementById('tdu-type').value = 'Standard'
+          document.getElementById('tdu-numero-group').style.display = 'block'
+          document.getElementById('tdu-draft').checked = true
+          document.getElementById('tdu-alert').style.display = 'none'
+          openModal('modal-tdu')
+        }
+      })
+
+      document.getElementById('btn-back').addEventListener('click', closeArticleEdit)
+      document.getElementById('btn-save-draft').addEventListener('click', () => saveArticle(true))
+      document.getElementById('btn-publish').addEventListener('click',    () => saveArticle(false))
+
+      document.getElementById('btn-save-arrete').addEventListener('click', saveArrete)
+      document.getElementById('btn-save-cr').addEventListener('click', saveCR)
+      document.getElementById('btn-save-tdu').addEventListener('click', saveTDU)
+
+      document.getElementById('btn-confirm-delete').addEventListener('click', async () => {
+        const { table, id } = pendingDel
+        if (!table || !id) return
+        const btn = document.getElementById('btn-confirm-delete')
+        btn.disabled = true; btn.textContent = 'Suppression…'
+
+        const tableMap = { articles: 'articles', arretes: 'arretes', cr: 'comptes_rendus', tdu: 'traits_union' }
+        const { error } = await supabase.from(tableMap[table]).delete().eq('id', id)
+
+        btn.disabled = false; btn.textContent = 'Supprimer'
+        closeModal('modal-delete')
+
+        if (error) { showToast('Erreur lors de la suppression.', 'error'); return }
+        showToast('Élément supprimé.')
+        await loadAll()
+        renderCurrentList()
+      })
+    }
+
+    init()
+  </script>
+
+</body>
+</html>
