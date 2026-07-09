@@ -588,7 +588,7 @@ input, select, textarea { font-family: 'DM Sans', sans-serif; }
    TABLE
    ============================================================ */
 
-.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px) 0 0; overflow: hidden; }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px) 0 0; }
 
 table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
 
