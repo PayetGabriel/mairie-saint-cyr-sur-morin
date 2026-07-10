@@ -113,6 +113,15 @@
     let currentData  = null
     let allContent   = {}
     let rteInstance  = null  // For mot_du_maire
+    let isDirty = false
+
+    // Bloquer la fermeture/rafraîchissement du navigateur si des modifications sont en cours
+    window.addEventListener('beforeunload', (e) => {
+    if (isDirty) {
+        e.preventDefault()
+        e.returnValue = '' // Requis par les navigateurs modernes pour afficher l'alerte standard
+    }
+    })
 
     /* ════════════════════════════════════════════════════════
        HELPERS
@@ -470,7 +479,7 @@
     }
 
     /* ── 3. Permanences ── */
-    const PERM_SECTIONS = [{key:'mairie',label:'Mairie'},{key:'secretariat',label:'Secrétariat SIVU'},{key:'urbanisme',label:'Urbanisme'},{key:'ccas',label:'CCAS'}]
+    const PERM_SECTIONS = [{key:'mairie',label:'Mairie'},{key:'secretariat',label:'Secrétariat'},{key:'urbanisme',label:'Urbanisme'},{key:'ccas',label:'CCAS'}]
     function renderPermanences(d) {
       return PERM_SECTIONS.map(s => {
         const sec = d[s.key] || {note:null,rows:[]}
