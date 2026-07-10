@@ -526,8 +526,8 @@
     let allData      = { articles: [], arretes: [], cr: [], tdu: [] }
 
     /* ════════════════════════════════════════════════════════
-   MINI RICH TEXT EDITOR (Avec Modale de Lien Intégrée)
-   ════════════════════════════════════════════════════════ */
+    MINI RICH TEXT EDITOR (Avec Modale de Lien Intégrée)
+    ════════════════════════════════════════════════════════ */
     class MiniRTE {
         constructor(containerId) {
             this.wrap       = document.getElementById(containerId)
@@ -582,22 +582,22 @@
 
             /* ── Écouteurs de la modale ── */
             this.modalBackdrop.querySelectorAll('[data-rte-close]').forEach(btn => {
-            btn.addEventListener('click', () => this._closeLinkModal())
+                btn.addEventListener('click', () => this._closeLinkModal())
             })
 
             this.modalBackdrop.querySelector('.rte-link-confirm').addEventListener('click', () => this._confirmLink())
             
             this.modalBackdrop.querySelector('.rte-link-input').addEventListener('keydown', e => {
-            if (e.key === 'Enter') { e.preventDefault(); this._confirmLink(); }
+                if (e.key === 'Enter') { e.preventDefault(); this._confirmLink(); }
             })
 
             /* ── Écouteurs de la toolbar classique ── */
             toolbar.addEventListener('mousedown', e => e.preventDefault())
             toolbar.addEventListener('click', e => {
-            const btn = e.target.closest('[data-cmd]')
-            if (!btn) return
-            e.preventDefault()
-            this._exec(btn.dataset.cmd)
+                const btn = e.target.closest('[data-cmd]')
+                if (!btn) return
+                e.preventDefault()
+                this._exec(btn.dataset.cmd)
             })
 
             this.editor.addEventListener('keyup',   () => this._updateState(toolbar))
@@ -607,27 +607,41 @@
         _exec(cmd) {
             this.editor.focus()
             switch (cmd) {
-            case 'h2':         document.execCommand('formatBlock', false, 'h2');        break
-            case 'h3':         document.execCommand('formatBlock', false, 'h3');        break
-            case 'blockquote': document.execCommand('formatBlock', false, 'blockquote'); break
-            case 'link': {
-                this._openLinkModal()
-                break
-            }
-            default: document.execCommand(cmd, false, null)
+                // Gestion intelligente du Toggle pour les blocs (H2, H3, Blockquote)
+                case 'h2':
+                case 'h3':
+                case 'blockquote': {
+                    const sel = window.getSelection()
+                    if (sel.rangeCount > 0) {
+                        let node = sel.getRangeAt(0).commonAncestorContainer
+                        if (node.nodeType === Node.TEXT_NODE) node = node.parentNode
+                        
+                        // Si on est déjà dans ce tag précis, on applique 'p' pour l'enlever et redevenir normal
+                        if (node.closest(cmd)) {
+                            document.execCommand('formatBlock', false, 'p')
+                        } else {
+                            document.execCommand('formatBlock', false, cmd)
+                        }
+                    }
+                    break
+                }
+                case 'link': {
+                    this._openLinkModal()
+                    break
+                }
+                default: document.execCommand(cmd, false, null)
             }
             this._updateState(this.wrap.querySelector('.rte-toolbar'))
         }
 
         /* ── Gestionnaires de la modale de lien ── */
         _openLinkModal() {
-            // Sauvegarde de la sélection textuelle courante
             const sel = window.getSelection()
             this.savedRange = sel.rangeCount > 0 ? sel.getRangeAt(0) : null
 
             const input = this.modalBackdrop.querySelector('.rte-link-input')
             input.value = ''
-            this.modalBackdrop.classList.add('open') // Utilise l'animation native d'admin.css
+            this.modalBackdrop.classList.add('open')
             
             setTimeout(() => input.focus(), 60)
         }
@@ -642,15 +656,14 @@
             const url = this.modalBackdrop.querySelector('.rte-link-input').value.trim()
             
             if (url) {
-            // Restauration de la sélection de texte initiale
-            if (this.savedRange) {
-                const sel = window.getSelection()
-                sel.removeAllRanges()
-                sel.addRange(this.savedRange)
-            }
-            
-            this.editor.focus()
-            document.execCommand('createLink', false, url)
+                if (this.savedRange) {
+                    const sel = window.getSelection()
+                    sel.removeAllRanges()
+                    sel.addRange(this.savedRange)
+                }
+                
+                this.editor.focus()
+                document.execCommand('createLink', false, url)
             }
             
             this._closeLinkModal()
@@ -658,8 +671,26 @@
         }
 
         _updateState(toolbar) {
+            // On récupère le nœud parent de la sélection actuelle pour checker les balises de bloc
+            const sel = window.getSelection()
+            let parentNode = null
+            if (sel.rangeCount > 0) {
+                parentNode = sel.getRangeAt(0).commonAncestorContainer
+                if (parentNode.nodeType === Node.TEXT_NODE) parentNode = parentNode.parentNode
+            }
+
             toolbar.querySelectorAll('[data-cmd]').forEach(btn => {
-            try { btn.classList.toggle('active', document.queryCommandState(btn.dataset.cmd)) } catch {}
+                const cmd = btn.dataset.cmd
+                try {
+                    if (['h2', 'h3', 'blockquote'].includes(cmd)) {
+                        // Pour les blocs, on regarde si un parent correspond à la commande active (ex: parentNode.closest('blockquote'))
+                        const isActive = parentNode ? !!parentNode.closest(cmd) : false
+                        btn.classList.toggle('active', isActive)
+                    } else {
+                        // Pour le reste (Gras, Italique, Listes), le comportement natif fonctionne très bien
+                        btn.classList.toggle('active', document.queryCommandState(cmd))
+                    }
+                } catch {}
             })
         }
 

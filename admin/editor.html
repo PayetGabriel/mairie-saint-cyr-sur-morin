@@ -414,48 +414,119 @@
     }
 
     /* ════════════════════════════════════════════════════════
-       MINI RTE (Mot du Maire uniquement)
+    MINI RTE (Mot du Maire uniquement — Version Corrigée)
     ════════════════════════════════════════════════════════ */
     class MiniRTE {
-      constructor(id) {
+    constructor(id) {
         this.wrap = document.getElementById(id)
         if (!this.wrap) return
+        
         this.wrap.innerHTML = `
-          <div class="rte-toolbar">
-            <button type="button" class="rte-btn" data-cmd="bold"><b>G</b></button>
-            <button type="button" class="rte-btn" data-cmd="italic"><em>I</em></button>
+        <div class="rte-toolbar">
+            <button type="button" class="rte-btn" data-cmd="bold" title="Gras"><b>G</b></button>
+            <button type="button" class="rte-btn" data-cmd="italic" title="Italique"><em>I</em></button>
             <span class="rte-sep"></span>
             <button type="button" class="rte-btn" data-cmd="highlight" title="Encadré lettre-highlight">✦ Encadré</button>
-          </div>
-          <div class="rte-content" contenteditable="true" spellcheck="true"></div>`
+        </div>
+        <div class="rte-content" contenteditable="true" spellcheck="true"></div>`
+        
         const toolbar  = this.wrap.querySelector('.rte-toolbar')
         this.editor    = this.wrap.querySelector('.rte-content')
+        
+        // Événements de la toolbar
         toolbar.addEventListener('mousedown', e => e.preventDefault())
         toolbar.addEventListener('click', e => {
-          const btn = e.target.closest('[data-cmd]'); if (!btn) return
-          e.preventDefault(); this._exec(btn.dataset.cmd)
+        const btn = e.target.closest('[data-cmd]'); if (!btn) return
+        e.preventDefault(); this._exec(btn.dataset.cmd)
         })
-      }
-      _exec(cmd) {
+
+        // Écouteurs pour synchroniser l'état actif des boutons
+        this.editor.addEventListener('keyup',   () => this._updateState(toolbar))
+        this.editor.addEventListener('mouseup', () => this._updateState(toolbar))
+    }
+
+    _exec(cmd) {
         this.editor.focus()
+        
         if (cmd === 'highlight') {
-          const sel = window.getSelection()
-          if (!sel.rangeCount || sel.isCollapsed) { showToast('Sélectionnez le texte à encadrer.', 'info'); return }
-          const range = sel.getRangeAt(0)
-          const frag = range.extractContents()
-          const div = document.createElement('div')
-          div.className = 'lettre-highlight'
-          const p = document.createElement('p')
-          p.appendChild(frag)
-          div.appendChild(p)
-          range.insertNode(div)
-          sel.removeAllRanges()
+        const sel = window.getSelection()
+        if (!sel.rangeCount) return
+
+        let node = sel.getRangeAt(0).commonAncestorContainer
+        if (node.nodeType === Node.TEXT_NODE) node = node.parentNode
+        
+        // On cherche si on est déjà dans un encadré
+        const existingHighlight = node.closest('.lettre-highlight')
+
+        if (existingHighlight) {
+            // TOGGLE OFF : On extrait le contenu pour casser l'encadré
+            const parent = existingHighlight.parentNode
+            while (existingHighlight.firstChild) {
+            parent.insertBefore(existingHighlight.firstChild, existingHighlight)
+            }
+            parent.removeChild(existingHighlight)
         } else {
-          document.execCommand(cmd, false, null)
+            // TOGGLE ON : Comportement automatique style "Blockquote"
+            // On remonte le DOM pour trouver le paragraphe complet (<p>, <h2>...) sous le curseur
+            let targetBlock = node
+            while (targetBlock && targetBlock.parentNode !== this.editor && targetBlock !== this.editor) {
+            targetBlock = targetBlock.parentNode
+            }
+
+            // Si on a trouvé le paragraphe/bloc parent dans l'éditeur
+            if (targetBlock && targetBlock !== this.editor) {
+            const div = document.createElement('div')
+            div.className = 'lettre-highlight'
+            
+            // On insère le faux-bloc div juste avant le paragraphe actuel
+            targetBlock.parentNode.insertBefore(div, targetBlock)
+            // On déplace le paragraphe ENTIER à l'intérieur du div
+            div.appendChild(targetBlock)
+            } else {
+            // Sécurité si l'éditeur est totalement vide ou texte brut sans balise
+            const div = document.createElement('div')
+            div.className = 'lettre-highlight'
+            div.innerHTML = `<p>${this.editor.innerHTML || '<br>'}</p>`
+            this.editor.innerHTML = ''
+            this.editor.appendChild(div)
+            }
+            
+            // On nettoie la sélection visuelle pour éviter les bugs de curseur
+            sel.removeAllRanges()
         }
-      }
-      getValue() { return this.editor?.innerHTML || '' }
-      setValue(html) { if (this.editor) this.editor.innerHTML = html || '' }
+        } else {
+        // Commandes de base (Gras / Italique)
+        document.execCommand(cmd, false, null)
+        }
+        
+        this._updateState(this.wrap.querySelector('.rte-toolbar'))
+    }
+
+    _updateState(toolbar) {
+        const sel = window.getSelection()
+        let parentNode = null
+        if (sel.rangeCount > 0) {
+        parentNode = sel.getRangeAt(0).commonAncestorContainer
+        if (parentNode.nodeType === Node.TEXT_NODE) parentNode = parentNode.parentNode
+        }
+
+        toolbar.querySelectorAll('[data-cmd]').forEach(btn => {
+        const cmd = btn.dataset.cmd
+        try {
+            if (cmd === 'highlight') {
+            // Si le curseur a un parent .lettre-highlight, on active le bouton
+            const isActive = parentNode ? !!parentNode.closest('.lettre-highlight') : false
+            btn.classList.toggle('active', isActive)
+            } else {
+            // Gestion native pour bold et italic
+            btn.classList.toggle('active', document.queryCommandState(cmd))
+            }
+        } catch {}
+        })
+    }
+
+    getValue() { return this.editor?.innerHTML || '' }
+    setValue(html) { if (this.editor) this.editor.innerHTML = html || '' }
     }
 
     /* ════════════════════════════════════════════════════════
