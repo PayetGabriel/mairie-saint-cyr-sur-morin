@@ -207,7 +207,7 @@
 
     const listHTML = (id, items, fields, addLabel='Ajouter') => `
       <div class="list-editor" id="${id}">${(items||[]).map(item=>itemHTML(fields,item)).join('')}</div>
-      <button type="button" class="btn btn-secondary btn-sm" id="${id}-add" style="margin-top:7px">+ ${addLabel}</button>`
+      <button type="button" class="btn btn-secondary btn-sm" id="${id}-add" style="margin-top:12px">+ ${addLabel}</button>`
 
     /* ── List management ── */
     function initListEditor(id, fields, defaultData={}) {
@@ -458,7 +458,7 @@
             <div style="padding:10px">
               <div data-comm-roles="${key}" ${!isR?'style="display:none"':''}>
                 <div class="list-editor" id="comm-${key}">${rolesHTML}</div>
-                <button type="button" class="btn btn-secondary btn-sm" id="comm-${key}-add" style="margin-top:6px">+ Ajouter un rôle</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="comm-${key}-add" style="margin-top:12px">+ Ajouter un rôle</button>
               </div>
               <div data-comm-text="${key}" ${isR?'style="display:none"':''}>
                 <textarea class="form-input" id="comm-text-${key}" rows="3">${escH(txtVal)}</textarea>
@@ -637,7 +637,7 @@
                   <div class="list-editor" id="ec-pieces-${key}">
                     ${(sec.pieces||[]).map(p=>`<div class="list-item"><div class="list-item-fields"><input type="text" data-field="val" class="form-input" value="${escAttr(p)}" style="font-size:13px;padding:5px 9px"></div><div class="list-item-btns"><button class="li-btn li-up">↑</button><button class="li-btn li-down">↓</button><button class="li-btn li-del">×</button></div></div>`).join('')}
                   </div>
-                  <button type="button" class="btn btn-secondary btn-sm" id="ec-pieces-${key}-add" style="margin-top:6px">+ Ajouter</button>`:''}
+                  <button type="button" class="btn btn-secondary btn-sm" id="ec-pieces-${key}-add" style="margin-top:12px">+ Ajouter</button>`:''}
                 ${hasNote?`
                   ${edHd('Note')}
                   ${ta(`ec-note-text-${key}`,'Texte de la note', note.text||'')}
@@ -664,7 +664,7 @@
                 <div id="ec-paras-${key}" style="display:flex;flex-direction:column;gap:6px">
                   ${(sec.paragraphs||[]).map(p=>`<div class="para-item" contenteditable="true">${p}</div>`).join('')}
                 </div>
-                <button type="button" class="btn btn-secondary btn-sm" id="ec-para-add-${key}" style="margin-top:6px">+ Ajouter un paragraphe</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="ec-para-add-${key}" style="margin-top:12px">+ Ajouter un paragraphe</button>
               </div>
             </div>`
         }).join('')}`
@@ -752,7 +752,7 @@
               ${listHTML(`plu-g1s${si}`, sec.docs||[], PLU_DOC_FIELDS, 'Ajouter un document')}
             </div>`).join('')}
         </div>
-        <button type="button" class="btn btn-secondary btn-sm" id="plu-g1-add" style="margin-top:7px">+ Ajouter une section</button>`
+        <button type="button" class="btn btn-secondary btn-sm" id="plu-g1-add" style="margin-top:12px">+ Ajouter une section</button>`
     }
     function serializePlu() {
       const zones = {}
@@ -896,7 +896,7 @@
               </div>
             </div>`).join('')}
         </div>
-        <button type="button" class="btn btn-secondary btn-sm" id="sivu-interv-add" style="margin-top:7px">+ Ajouter une catégorie</button>`
+        <button type="button" class="btn btn-secondary btn-sm" id="sivu-interv-add" style="margin-top:12px">+ Ajouter une catégorie</button>`
     }
     function serializeSivuInfos() {
       const interv = [...document.querySelectorAll('#sivu-interv .list-item')].map(item=>({
@@ -1158,7 +1158,7 @@
                 <button type="button" class="li-btn li-del">×</button>
               </div>
               <div class="list-editor" id="plu-g1s${idx}"></div>
-              <button type="button" class="btn btn-secondary btn-sm" id="plu-g1s${idx}-add" style="margin-top:7px">+ Ajouter un document</button>`
+              <button type="button" class="btn btn-secondary btn-sm" id="plu-g1s${idx}-add" style="margin-top:12px">+ Ajouter un document</button>`
             document.getElementById('plu-g1-sections').appendChild(div)
             div.querySelector('.li-del').addEventListener('click', () => div.remove())
             initListEditor(`plu-g1s${idx}`, PLU_DOC_FIELDS)
