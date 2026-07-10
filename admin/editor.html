@@ -1242,6 +1242,15 @@
     }
 
     function openEditor(key) {
+      if (isDirty) {
+        const confirmLeave = confirm("Attention : Vous avez des modifications non enregistrées. Voulez-vous vraiment changer de page et perdre vos modifications ?")
+        if (!confirmLeave) {
+          return
+        }
+      }
+      
+      isDirty = false
+
       currentKey  = key
       currentData = allContent[key]
       rteInstance = null
@@ -1300,6 +1309,9 @@
       status.textContent = 'Enregistré ✓'
       setTimeout(() => { status.textContent = '' }, 3000)
       showToast('Contenu enregistré.')
+      
+      // ─── RÉINITIALISATION DU FLAG APRÈS SAUVEGARDE RÉUSSIE ───
+      isDirty = false 
     }
 
     /* ── Navigation ── */
@@ -1351,6 +1363,22 @@
       document.getElementById('btn-save').addEventListener('click', save)
 
       await loadAllContent()
+    }
+
+    // ─── CAPTURE DES MODIFICATIONS GLOBALISÉE ───
+    const formWrap = document.getElementById('editor-form-wrap')
+    if (formWrap) {
+        // 1. Détecte quand l'utilisateur tape du texte ou change la valeur d'un select/checkbox
+        formWrap.addEventListener('input', () => { isDirty = true })
+        formWrap.addEventListener('change', () => { isDirty = true })
+
+        // 2. Détecte quand l'utilisateur interagit avec tes listes dynamiques (Permanences, PLU, etc.)
+        formWrap.addEventListener('click', (e) => {
+            // Si on clique sur un bouton de déplacement/suppression (.li-btn) ou d'ajout (dont l'ID finit par -add)
+            if (e.target.closest('.li-btn') || e.target.closest('[id$="-add"]')) {
+            isDirty = true
+            }
+        })
     }
 
     init()
