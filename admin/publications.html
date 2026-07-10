@@ -526,119 +526,146 @@
     let allData      = { articles: [], arretes: [], cr: [], tdu: [] }
 
     /* ════════════════════════════════════════════════════════
-       MINI RICH TEXT EDITOR
+    MINI RICH TEXT EDITOR (Avec Modale de Lien Intégrée)
     ════════════════════════════════════════════════════════ */
     class MiniRTE {
-      constructor(containerId) {
-        this.wrap   = document.getElementById(containerId)
-        this.editor = null
-        this._build()
-      }
-
-      _build() {
-        this.wrap.innerHTML = `
-          <div class="rte-toolbar">
-            <button type="button" class="rte-btn" data-cmd="bold"   title="Gras (Ctrl+B)"><b>G</b></button>
-            <button type="button" class="rte-btn" data-cmd="italic" title="Italique (Ctrl+I)"><em>I</em></button>
-            <span class="rte-sep"></span>
-            <button type="button" class="rte-btn" data-cmd="h2" title="Titre H2">H2</button>
-            <button type="button" class="rte-btn" data-cmd="h3" title="Titre H3">H3</button>
-            <span class="rte-sep"></span>
-            <button type="button" class="rte-btn" data-cmd="insertUnorderedList" title="Liste à puces">• Liste</button>
-            <button type="button" class="rte-btn" data-cmd="insertOrderedList" title="Liste numérotée">1. Liste</button>
-            <button type="button" class="rte-btn" data-cmd="blockquote" title="Encadré / citation">❝ Encadré</button>
-            <button type="button" class="rte-btn" data-cmd="link" title="Insérer un lien">🔗 Lien</button>
-          </div>
-          <div class="rte-content" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" aria-label="Contenu de l'article"></div>`
-
-        const toolbar    = this.wrap.querySelector('.rte-toolbar')
-        this.editor      = this.wrap.querySelector('.rte-content')
-
-        toolbar.addEventListener('mousedown', e => e.preventDefault())
-        toolbar.addEventListener('click', e => {
-          const btn = e.target.closest('[data-cmd]')
-          if (!btn) return
-          e.preventDefault()
-          this._exec(btn.dataset.cmd)
-        })
-
-        this.editor.addEventListener('keyup',   () => this._updateState(toolbar))
-        this.editor.addEventListener('mouseup', () => this._updateState(toolbar))
-      }
-
-      _exec(cmd) {
-        this.editor.focus()
-        switch (cmd) {
-          case 'h2':        document.execCommand('formatBlock', false, 'h2');        break
-          case 'h3':        document.execCommand('formatBlock', false, 'h3');        break
-          case 'blockquote': document.execCommand('formatBlock', false, 'blockquote'); break
-          case 'link': {
-            const url = prompt('URL du lien (ex: https://…) :')
-            if (url) document.execCommand('createLink', false, url)
-            break
-          }
-          default: document.execCommand(cmd, false, null)
+        constructor(containerId) {
+            this.wrap       = document.getElementById(containerId)
+            this.editor     = null
+            this.modalBackdrop = null
+            this.savedRange    = null // Permet de conserver la sélection de texte
+            this._build()
         }
-        this._updateState(this.wrap.querySelector('.rte-toolbar'))
-      }
 
-      _updateState(toolbar) {
-        toolbar.querySelectorAll('[data-cmd]').forEach(btn => {
-          try { btn.classList.toggle('active', document.queryCommandState(btn.dataset.cmd)) } catch {}
-        })
-      }
+        _build() {
+            this.wrap.innerHTML = `
+            <div class="rte-toolbar">
+                <button type="button" class="rte-btn" data-cmd="bold"   title="Gras (Ctrl+B)"><b>G</b></button>
+                <button type="button" class="rte-btn" data-cmd="italic" title="Italique (Ctrl+I)"><em>I</em></button>
+                <span class="rte-sep"></span>
+                <button type="button" class="rte-btn" data-cmd="h2" title="Titre H2">H2</button>
+                <button type="button" class="rte-btn" data-cmd="h3" title="Titre H3">H3</button>
+                <span class="rte-sep"></span>
+                <button type="button" class="rte-btn" data-cmd="insertUnorderedList" title="Liste à puces">• Liste</button>
+                <button type="button" class="rte-btn" data-cmd="insertOrderedList" title="Liste numérotée">1. Liste</button>
+                <button type="button" class="rte-btn" data-cmd="blockquote" title="Encadré / citation">❝ Encadré</button>
+                <button type="button" class="rte-btn" data-cmd="link" title="Insérer un lien">🔗 Lien</button>
+            </div>
+            <div class="rte-content" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" aria-label="Contenu de l'article"></div>`
 
-      getValue() { return this.editor?.innerHTML || '' }
-      setValue(html) { if (this.editor) this.editor.innerHTML = html || '' }
-      clear()    { if (this.editor) this.editor.innerHTML = '' }
-    }
+            const toolbar   = this.wrap.querySelector('.rte-toolbar')
+            this.editor      = this.wrap.querySelector('.rte-content')
 
-    /* ════════════════════════════════════════════════════════
-       INIT
-    ════════════════════════════════════════════════════════ */
-    async function init() {
-      const auth = await requireAuth()
-      if (!auth) return
+            /* ── Création et injection de la modale personnalisée (Style Mairie) ── */
+            this.modalBackdrop = document.createElement('div')
+            this.modalBackdrop.className = 'modal-backdrop'
+            this.modalBackdrop.innerHTML = `
+            <div class="modal" style="max-width: 420px;">
+                <div class="modal-header">
+                <h3 class="modal-title">Insérer un lien hypertexte</h3>
+                <button type="button" class="modal-close" data-rte-close>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+                </div>
+                <div class="modal-body">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label class="form-label">Adresse URL du lien</label>
+                    <input type="url" class="form-input rte-link-input" placeholder="https://exemple.fr" style="width:100%;">
+                </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-ghost" data-rte-close>Annuler</button>
+                <button type="button" class="btn btn-primary rte-link-confirm">Insérer le lien</button>
+                </div>
+            </div>`
+            document.body.appendChild(this.modalBackdrop)
 
-      profile = auth.profile
-      const canPublish = isAdmin(profile) || profile.can_manage_publications
-      if (!canPublish) { window.location.replace('/admin/dashboard.html'); return }
+            /* ── Écouteurs de la modale ── */
+            this.modalBackdrop.querySelectorAll('[data-rte-close]').forEach(btn => {
+            btn.addEventListener('click', () => this._closeLinkModal())
+            })
 
-      document.getElementById('page-loader').style.display     = 'none'
-      document.getElementById('admin-layout').style.visibility = 'visible'
+            this.modalBackdrop.querySelector('.rte-link-confirm').addEventListener('click', () => this._confirmLink())
+            
+            this.modalBackdrop.querySelector('.rte-link-input').addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); this._confirmLink(); }
+            })
 
-      buildSidebar(profile, 'publications')
-      initModals()
-      bindTabs()
-      bindButtons()
-      await loadAll()
-      renderCurrentList()
+            /* ── Écouteurs de la toolbar classique ── */
+            toolbar.addEventListener('mousedown', e => e.preventDefault())
+            toolbar.addEventListener('click', e => {
+            const btn = e.target.closest('[data-cmd]')
+            if (!btn) return
+            e.preventDefault()
+            this._exec(btn.dataset.cmd)
+            })
 
-      /* TDU type → show/hide numéro */
-      document.getElementById('tdu-type').addEventListener('change', e => {
-        document.getElementById('tdu-numero-group').style.display =
-          e.target.value === 'Standard' ? 'block' : 'none'
-      })
-    }
+            this.editor.addEventListener('keyup',   () => this._updateState(toolbar))
+            this.editor.addEventListener('mouseup', () => this._updateState(toolbar))
+        }
 
-    /* ════════════════════════════════════════════════════════
-       TABS
-    ════════════════════════════════════════════════════════ */
-    function setTab(tab) {
-      currentTab = tab
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab))
-      ;['articles','arretes','cr','tdu'].forEach(t => {
-        document.getElementById(`list-${t}`).style.display = t === tab ? 'block' : 'none'
-      })
-      document.getElementById('btn-new-label').textContent = TAB_LABELS[tab].title
-      document.getElementById('mobile-title').textContent  = tab === 'articles' ? 'Publications' :
-        tab === 'arretes' ? 'Arrêtés' : tab === 'cr' ? 'Comptes-rendus' : "Trait d'Union"
-    }
+        _exec(cmd) {
+            this.editor.focus()
+            switch (cmd) {
+            case 'h2':         document.execCommand('formatBlock', false, 'h2');        break
+            case 'h3':         document.execCommand('formatBlock', false, 'h3');        break
+            case 'blockquote': document.execCommand('formatBlock', false, 'blockquote'); break
+            case 'link': {
+                this._openLinkModal()
+                break
+            }
+            default: document.execCommand(cmd, false, null)
+            }
+            this._updateState(this.wrap.querySelector('.rte-toolbar'))
+        }
 
-    function bindTabs() {
-      document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.addEventListener('click', () => setTab(btn.dataset.tab))
-      })
+        /* ── Gestionnaires de la modale de lien ── */
+        _openLinkModal() {
+            // Sauvegarde de la sélection textuelle courante
+            const sel = window.getSelection()
+            this.savedRange = sel.rangeCount > 0 ? sel.getRangeAt(0) : null
+
+            const input = this.modalBackdrop.querySelector('.rte-link-input')
+            input.value = ''
+            this.modalBackdrop.classList.add('open') // Utilise l'animation native d'admin.css
+            
+            setTimeout(() => input.focus(), 60)
+        }
+
+        _closeLinkModal() {
+            this.modalBackdrop.classList.remove('open')
+            this.savedRange = null
+            this.editor.focus()
+        }
+
+        _confirmLink() {
+            const url = this.modalBackdrop.querySelector('.rte-link-input').value.trim()
+            
+            if (url) {
+            // Restauration de la sélection de texte initiale
+            if (this.savedRange) {
+                const sel = window.getSelection()
+                sel.removeAllRanges()
+                sel.addRange(this.savedRange)
+            }
+            
+            this.editor.focus()
+            document.execCommand('createLink', false, url)
+            }
+            
+            this._closeLinkModal()
+            this._updateState(this.wrap.querySelector('.rte-toolbar'))
+        }
+
+        _updateState(toolbar) {
+            toolbar.querySelectorAll('[data-cmd]').forEach(btn => {
+            try { btn.classList.toggle('active', document.queryCommandState(btn.dataset.cmd)) } catch {}
+            })
+        }
+
+        getValue() { return this.editor?.innerHTML || '' }
+        setValue(html) { if (this.editor) this.editor.innerHTML = html || '' }
+        clear()    { if (this.editor) this.editor.innerHTML = '' }
     }
 
     /* ════════════════════════════════════════════════════════
