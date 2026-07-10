@@ -526,8 +526,8 @@
     let allData      = { articles: [], arretes: [], cr: [], tdu: [] }
 
     /* ════════════════════════════════════════════════════════
-    MINI RICH TEXT EDITOR (Avec Modale de Lien Intégrée)
-    ════════════════════════════════════════════════════════ */
+   MINI RICH TEXT EDITOR (Avec Modale de Lien Intégrée)
+   ════════════════════════════════════════════════════════ */
     class MiniRTE {
         constructor(containerId) {
             this.wrap       = document.getElementById(containerId)
@@ -666,6 +666,54 @@
         getValue() { return this.editor?.innerHTML || '' }
         setValue(html) { if (this.editor) this.editor.innerHTML = html || '' }
         clear()    { if (this.editor) this.editor.innerHTML = '' }
+    }
+
+    /* ════════════════════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════════════════════ */
+    async function init() {
+      const auth = await requireAuth()
+      if (!auth) return
+
+      profile = auth.profile
+      const canPublish = isAdmin(profile) || profile.can_manage_publications
+      if (!canPublish) { window.location.replace('/admin/dashboard.html'); return }
+
+      document.getElementById('page-loader').style.display     = 'none'
+      document.getElementById('admin-layout').style.visibility = 'visible'
+
+      buildSidebar(profile, 'publications')
+      initModals()
+      bindTabs()
+      bindButtons()
+      await loadAll()
+      renderCurrentList()
+
+      /* TDU type → show/hide numéro */
+      document.getElementById('tdu-type').addEventListener('change', e => {
+        document.getElementById('tdu-numero-group').style.display =
+          e.target.value === 'Standard' ? 'block' : 'none'
+      })
+    }
+
+    /* ════════════════════════════════════════════════════════
+       TABS
+    ════════════════════════════════════════════════════════ */
+    function setTab(tab) {
+      currentTab = tab
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab))
+      ;['articles','arretes','cr','tdu'].forEach(t => {
+        document.getElementById(`list-${t}`).style.display = t === tab ? 'block' : 'none'
+      })
+      document.getElementById('btn-new-label').textContent = TAB_LABELS[tab].title
+      document.getElementById('mobile-title').textContent  = tab === 'articles' ? 'Publications' :
+        tab === 'arretes' ? 'Arrêtés' : tab === 'cr' ? 'Comptes-rendus' : "Trait d'Union"
+    }
+
+    function bindTabs() {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => setTab(btn.dataset.tab))
+      })
     }
 
     /* ════════════════════════════════════════════════════════
