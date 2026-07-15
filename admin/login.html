@@ -132,6 +132,14 @@
         return
       }
 
+      try {
+        await supabase.from('activity_logs').insert({
+          user_id:    data.user.id,
+          user_email: data.user.email,
+          user_name:  data.user.email,
+          action:     'SIGNIN',
+        })
+      } catch {}
       window.location.replace('/admin/dashboard.html')
     })
   </script>
