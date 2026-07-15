@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal d'activité — Administration Saint-Cyr-sur-Morin</title>
+  <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <link rel="apple-touch-icon" href="/assets/img/logoSaintCyr_2020-favicon.png">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="/admin/css/admin.css">
+  <style>
+    /* ── Filtres ── */
+    .filter-bar {
+      background: var(--blanc);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      padding: 16px 20px;
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gris);
+      white-space: nowrap;
+      min-width: 72px;
+    }
+
+    .chip-group { display: flex; gap: 5px; flex-wrap: wrap; }
+
+    .chip {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 500;
+      border: 1px solid var(--pierre);
+      background: none;
+      cursor: pointer;
+      color: var(--pierre-dark);
+      transition: all .13s;
+      font-family: 'DM Sans', sans-serif;
+      white-space: nowrap;
+    }
+    .chip:hover { background: var(--creme); border-color: var(--pierre-dark); }
+    .chip.active { background: var(--vert); border-color: var(--vert); color: var(--blanc); }
+
+    /* ── Badges d'action ── */
+    .badge-INSERT  { background: #dcfce7; color: #166534; }
+    .badge-UPDATE  { background: #fef9c3; color: #854d0e; }
+    .badge-DELETE  { background: #fee2e2; color: #991b1b; }
+    .badge-SIGNIN  { background: #dbeafe; color: #1e40af; }
+    .badge-SIGNOUT { background: rgba(0,0,0,.05); color: var(--pierre-dark); }
+
+    /* ── Meta barre ── */
+    .meta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .meta-count {
+      font-size: 13px;
+      color: var(--gris);
+    }
+
+    /* ── Table ── */
+    .td-user p:first-child { font-size: 13.5px; font-weight: 500; }
+    .td-user p:last-child  { font-size: 11.5px; color: var(--gris); margin-top: 1px; }
+
+    .td-date {
+      white-space: nowrap;
+      font-size: 12.5px;
+      color: var(--gris);
+      vertical-align: middle;
+    }
+
+    .td-details {
+      font-size: 12.5px;
+      color: var(--gris);
+      max-width: 260px;
+    }
+
+    /* ── Load more ── */
+    #btn-load-more {
+      display: none;
+      width: 100%;
+      margin-top: 14px;
+      justify-content: center;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .filter-label { min-width: auto; }
+      .hide-tablet  { display: none !important; }
+    }
+    @media (max-width: 480px) {
+      .filter-bar { padding: 12px 14px; }
+      .hide-mobile { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-loader" id="page-loader"><div class="spinner"></div></div>
+
+  <div class="admin-layout" id="admin-layout" style="visibility:hidden">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main-content">
+
+      <div class="mobile-topbar">
+        <button class="btn-hamburger" id="btn-hamburger" aria-label="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5"/>
+          </svg>
+        </button>
+        <span class="mobile-topbar-title">Journal d'activité</span>
+      </div>
+
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1 class="page-title">Journal d'activité</h1>
+          <p class="page-subtitle">Modifications du contenu, connexions et déconnexions.</p>
+        </div>
+        <button class="btn btn-ghost" id="btn-refresh" style="margin-top:4px" title="Rafraîchir">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" style="width:16px;height:16px">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
+          </svg>
+          Rafraîchir
+        </button>
+      </div>
+
+      <div class="page-content">
+
+        <!-- ── Filtres ── -->
+        <div class="filter-bar">
+
+          <!-- Actions -->
+          <div class="filter-row">
+            <span class="filter-label">Action</span>
+            <div class="chip-group" id="action-chips">
+              <button class="chip active" data-action="">Tout</button>
+              <button class="chip" data-action="INSERT">Création</button>
+              <button class="chip" data-action="UPDATE">Modification</button>
+              <button class="chip" data-action="DELETE">Suppression</button>
+              <button class="chip" data-action="SIGNIN">Connexion</button>
+              <button class="chip" data-action="SIGNOUT">Déconnexion</button>
+            </div>
+          </div>
+
+          <!-- Table + dates -->
+          <div class="filter-row">
+            <span class="filter-label">Section</span>
+            <select id="filter-table" class="form-select" style="width:auto;max-width:220px;font-size:13px;padding:5px 28px 5px 9px">
+              <option value="">Toutes</option>
+              <option value="site_content">Éditeur No-Code</option>
+              <option value="articles">Articles</option>
+              <option value="arretes">Arrêtés</option>
+              <option value="comptes_rendus">Comptes-rendus</option>
+              <option value="traits_union">Trait d'Union</option>
+            </select>
+
+            <span class="filter-label" style="margin-left:8px">Du</span>
+            <input type="date" id="filter-from" class="form-input" style="width:auto;font-size:13px;padding:5px 9px">
+
+            <span class="filter-label">Au</span>
+            <input type="date" id="filter-to" class="form-input" style="width:auto;font-size:13px;padding:5px 9px">
+
+            <button class="btn btn-secondary btn-sm" id="btn-clear-filters">Réinitialiser</button>
+          </div>
+
+        </div>
+
+        <!-- ── Meta barre ── -->
+        <div class="meta-bar">
+          <p class="meta-count" id="logs-count"></p>
+        </div>
+
+        <!-- ── Table ── -->
+        <div class="card">
+          <div class="card-body" style="padding:0">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date & heure</th>
+                    <th>Utilisateur</th>
+                    <th>Action</th>
+                    <th class="hide-tablet">Section</th>
+                    <th class="hide-tablet">Détails</th>
+                  </tr>
+                </thead>
+                <tbody id="logs-tbody">
+                  <tr>
+                    <td colspan="5" style="text-align:center;padding:36px">
+                      <div class="spinner" style="margin:0 auto 8px"></div>
+                      <p class="text-muted text-sm">Chargement…</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Load more ── -->
+        <button class="btn btn-ghost" id="btn-load-more">Charger plus…</button>
+
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script type="module">
+    import { supabase }                           from '/admin/js/supabase-config.js'
+    import { requireAuth, buildSidebar, showToast } from '/admin/js/auth-guard.js'
+
+    /* ════════════════════════════════════════════════════════
+       CONSTANTES
+    ════════════════════════════════════════════════════════ */
+    const PAGE_SIZE = 50
+
+    const ACTION_INFO = {
+      INSERT:  { label: 'Création',     cls: 'badge-INSERT'  },
+      UPDATE:  { label: 'Modification', cls: 'badge-UPDATE'  },
+      DELETE:  { label: 'Suppression',  cls: 'badge-DELETE'  },
+      SIGNIN:  { label: 'Connexion',    cls: 'badge-SIGNIN'  },
+      SIGNOUT: { label: 'Déconnexion',  cls: 'badge-SIGNOUT' },
+    }
+
+    const TABLE_LABELS = {
+      site_content:   'Éditeur No-Code',
+      articles:       'Articles',
+      arretes:        'Arrêtés',
+      comptes_rendus: 'Comptes-rendus',
+      traits_union:   "Trait d'Union",
+    }
+
+    /* ── State ── */
+    let logs       = []
+    let total      = 0
+    let offset     = 0
+    let loading    = false
+
+    const filters = { action: '', table: '', dateFrom: '', dateTo: '' }
+
+    /* ════════════════════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════════════════════ */
+    async function init() {
+      const auth = await requireAuth({ requireAdmin: true })
+      if (!auth) return
+
+      document.getElementById('page-loader').style.display     = 'none'
+      document.getElementById('admin-layout').style.visibility = 'visible'
+
+      buildSidebar(auth.profile, 'journal')
+      bindFilters()
+
+      document.getElementById('btn-refresh').addEventListener('click', () => loadLogs(true))
+      document.getElementById('btn-load-more').addEventListener('click', () => loadLogs(false))
+
+      await loadLogs(true)
+    }
+
+    /* ════════════════════════════════════════════════════════
+       CHARGEMENT
+    ════════════════════════════════════════════════════════ */
+    async function loadLogs(reset = true) {
+      if (loading) return
+      loading = true
+
+      if (reset) { offset = 0; logs = []; renderLoading() }
+
+      let q = supabase
+        .from('activity_logs')
+        .select('*', { count: 'exact' })
+        .order('created_at', { ascending: false })
+        .range(offset, offset + PAGE_SIZE - 1)
+
+      if (filters.action)   q = q.eq('action',     filters.action)
+      if (filters.table)    q = q.eq('table_name', filters.table)
+      if (filters.dateFrom) q = q.gte('created_at', filters.dateFrom + 'T00:00:00+00:00')
+      if (filters.dateTo)   q = q.lte('created_at', filters.dateTo   + 'T23:59:59+00:00')
+
+      const { data, count, error } = await q
+      loading = false
+
+      if (error) {
+        showToast('Erreur de chargement : ' + error.message, 'error')
+        renderEmpty('Erreur lors du chargement des logs.')
+        return
+      }
+
+      const newRows = data || []
+      logs   = reset ? newRows : [...logs, ...newRows]
+      total  = count ?? 0
+      offset = logs.length
+
+      renderLogs()
+    }
+
+    /* ════════════════════════════════════════════════════════
+       RENDU
+    ════════════════════════════════════════════════════════ */
+    function renderLoading() {
+      document.getElementById('logs-tbody').innerHTML = `
+        <tr>
+          <td colspan="5" style="text-align:center;padding:36px">
+            <div class="spinner" style="margin:0 auto 8px"></div>
+            <p class="text-muted text-sm">Chargement…</p>
+          </td>
+        </tr>`
+      document.getElementById('logs-count').textContent = ''
+      document.getElementById('btn-load-more').style.display = 'none'
+    }
+
+    function renderEmpty(msg = 'Aucun événement pour ces filtres.') {
+      document.getElementById('logs-tbody').innerHTML = `
+        <tr>
+          <td colspan="5" style="text-align:center;padding:36px">
+            <p class="text-muted text-sm">${escH(msg)}</p>
+          </td>
+        </tr>`
+      document.getElementById('logs-count').textContent = '0 événement'
+      document.getElementById('btn-load-more').style.display = 'none'
+    }
+
+    function renderLogs() {
+      if (!logs.length) { renderEmpty(); return }
+
+      document.getElementById('logs-tbody').innerHTML = logs.map(renderRow).join('')
+      document.getElementById('logs-count').textContent =
+        `${total.toLocaleString('fr-FR')} événement${total !== 1 ? 's' : ''} — ${logs.length} affiché${logs.length !== 1 ? 's' : ''}`
+
+      const remaining = total - logs.length
+      const btn = document.getElementById('btn-load-more')
+      if (remaining > 0) {
+        btn.style.display = 'flex'
+        btn.textContent   = `Charger ${Math.min(remaining, PAGE_SIZE)} de plus (${remaining.toLocaleString('fr-FR')} restant${remaining !== 1 ? 's' : ''})`
+      } else {
+        btn.style.display = 'none'
+      }
+    }
+
+    function renderRow(log) {
+      const info    = ACTION_INFO[log.action] || { label: log.action, cls: '' }
+      const table   = TABLE_LABELS[log.table_name] || log.table_name || '—'
+      const userName = log.user_name || log.user_email || 'Système'
+      const showEmail = log.user_email && log.user_name && log.user_email !== log.user_name
+
+      return `
+        <tr>
+          <td class="td-date">${fmtDatetime(log.created_at)}</td>
+          <td class="td-user">
+            <p>${escH(userName)}</p>
+            ${showEmail ? `<p>${escH(log.user_email)}</p>` : ''}
+          </td>
+          <td><span class="badge ${info.cls}">${info.label}</span></td>
+          <td class="hide-tablet" style="font-size:13px;color:var(--texte)">${escH(table)}</td>
+          <td class="td-details hide-tablet">${escH(fmtDetails(log))}</td>
+        </tr>`
+    }
+
+    /* ════════════════════════════════════════════════════════
+       FILTRES
+    ════════════════════════════════════════════════════════ */
+    function bindFilters() {
+      /* Chips action */
+      document.getElementById('action-chips').addEventListener('click', e => {
+        const chip = e.target.closest('.chip')
+        if (!chip) return
+        document.querySelectorAll('#action-chips .chip').forEach(c => c.classList.remove('active'))
+        chip.classList.add('active')
+        filters.action = chip.dataset.action
+        loadLogs(true)
+      })
+
+      /* Table select */
+      document.getElementById('filter-table').addEventListener('change', e => {
+        filters.table = e.target.value
+        loadLogs(true)
+      })
+
+      /* Dates */
+      document.getElementById('filter-from').addEventListener('change', e => {
+        filters.dateFrom = e.target.value
+        loadLogs(true)
+      })
+
+      document.getElementById('filter-to').addEventListener('change', e => {
+        filters.dateTo = e.target.value
+        loadLogs(true)
+      })
+
+      /* Réinitialiser */
+      document.getElementById('btn-clear-filters').addEventListener('click', () => {
+        filters.action = ''; filters.table = ''; filters.dateFrom = ''; filters.dateTo = ''
+        document.querySelectorAll('#action-chips .chip').forEach(c => c.classList.remove('active'))
+        document.querySelector('#action-chips .chip[data-action=""]').classList.add('active')
+        document.getElementById('filter-table').value = ''
+        document.getElementById('filter-from').value  = ''
+        document.getElementById('filter-to').value    = ''
+        loadLogs(true)
+      })
+    }
+
+    /* ════════════════════════════════════════════════════════
+       HELPERS
+    ════════════════════════════════════════════════════════ */
+    function fmtDatetime(iso) {
+      if (!iso) return '—'
+      const d = new Date(iso)
+      return d.toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' })
+        + ' à '
+        + d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' })
+    }
+
+    function fmtDetails(log) {
+      if (!log.details) return '—'
+      const d = log.details
+      const t = log.table_name
+
+      if (t === 'site_content') {
+        return `Page « ${d.page || ''} » — ${d.cle || ''}`
+      }
+      if (t === 'articles') {
+        const draft = d.brouillon === 'true' ? ' (brouillon)' : ''
+        return (d.titre || '—') + draft
+      }
+      if (t === 'arretes') {
+        return [d.numero ? 'N°' + d.numero : '', d.titre || ''].filter(Boolean).join(' — ') || '—'
+      }
+      if (t === 'comptes_rendus') {
+        return d.date ? 'Conseil du ' + new Date(d.date).toLocaleDateString('fr-FR') : '—'
+      }
+      if (t === 'traits_union') {
+        return [d.type || '', d.numero ? 'N°' + d.numero : ''].filter(Boolean).join(' ') || '—'
+      }
+      return JSON.stringify(d)
+    }
+
+    const escH = s => s == null ? '' : String(s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+
+    init()
+  </script>
+
+</body>
+</html>
