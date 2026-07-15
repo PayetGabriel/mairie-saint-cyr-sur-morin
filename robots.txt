@@ -3,6 +3,7 @@ Allow: /
 
 # Sécurité : On bloque absolument tout ce qui est dans le dossier admin
 Disallow: /admin/
+Disallow: /admin
 
 # Lien direct vers ton sitemap
 Sitemap: https://www.saint-cyr-sur-morin.fr/sitemap.xml
