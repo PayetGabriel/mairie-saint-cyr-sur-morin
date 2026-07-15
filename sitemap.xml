@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Pages principales -->
+  <url><loc>https://www.saint-cyr-sur-morin.fr/</loc><priority>1.0</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/contact.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/plan-du-site.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/accessibilite.html</loc><priority>0.5</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/mentions-legales.html</loc><priority>0.5</priority></url>
+
+  <!-- La commune -->
+  <url><loc>https://www.saint-cyr-sur-morin.fr/la-commune/mairie.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/la-commune/conseil-municipal.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/la-commune/horaires-permanences.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/la-commune/trait-d-union.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/la-commune/arretes.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/la-commune/actualites.html</loc><priority>0.8</priority></url>
+
+  <!-- Services & vie pratique -->
+  <url><loc>https://www.saint-cyr-sur-morin.fr/vie-pratique/etat-civil.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/vie-pratique/dechets.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/vie-pratique/transports.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/vie-pratique/commerces.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/vie-pratique/vie-quotidienne.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/vie-pratique/salle-polyvalente.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/vie-pratique/sante.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/vie-pratique/ccas-social.html</loc><priority>0.7</priority></url>
+
+  <!-- Urbanisme -->
+  <url><loc>https://www.saint-cyr-sur-morin.fr/urbanisme/urbanisme.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/urbanisme/permis-travaux.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/urbanisme/plu.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/urbanisme/eau-assainissement.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/urbanisme/inondations.html</loc><priority>0.6</priority></url>
+
+  <!-- Enfance & loisirs -->
+  <url><loc>https://www.saint-cyr-sur-morin.fr/enfance-loisirs/ecoles/sivu.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/enfance-loisirs/ecoles/cantine.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/enfance-loisirs/ecoles/transports.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/enfance-loisirs/ecoles/inscriptions.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/enfance-loisirs/ecoles/sivu-infos.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/enfance-loisirs/vie-locale/scolarite.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/enfance-loisirs/vie-locale/associations-clubs.html</loc><priority>0.7</priority></url>
+
+  <!-- Découvrir -->
+  <url><loc>https://www.saint-cyr-sur-morin.fr/decouvrir/decouvrir.html</loc><priority>0.8</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/decouvrir/tourisme-hebergement.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/decouvrir/patrimoine-culture.html</loc><priority>0.7</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/decouvrir/randonnees.html</loc><priority>0.6</priority></url>
+  <url><loc>https://www.saint-cyr-sur-morin.fr/decouvrir/mediatheque.html</loc><priority>0.7</priority></url>
+</urlset>
