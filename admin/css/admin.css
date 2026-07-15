@@ -967,7 +967,6 @@ tbody tr:hover { background: rgba(0,0,0,0.015); }
 
 /* Media queries issues de Publications */
 @media (max-width: 640px) {
-  .hide-mobile { display: none !important; }
   .art-edit-grid { grid-template-columns: 1fr; }
   .art-edit-sidebar { order: -1; }
 }
@@ -1357,6 +1356,4 @@ td.td-user {
 @media (max-width: 480px) {
   .grid-2 { grid-template-columns: 1fr; }
   .auth-body, .auth-header { padding: 20px; }
-  thead th:nth-child(3) { display: none; }
-  tbody td:nth-child(3) { display: none; }
 }
