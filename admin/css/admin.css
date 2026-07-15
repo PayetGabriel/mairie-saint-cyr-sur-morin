@@ -1097,11 +1097,9 @@ td.td-user {
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .filter-label { min-width: auto; }
-  .hide-tablet  { display: none !important; }
 }
 @media (max-width: 480px) {
   .filter-bar { padding: 12px 14px; }
-  .hide-mobile { display: none !important; }
 }
 
 /* ============================================================
