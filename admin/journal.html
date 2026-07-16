@@ -86,6 +86,7 @@
               <option value="arretes">Arrêtés</option>
               <option value="comptes_rendus">Comptes-rendus</option>
               <option value="traits_union">Trait d'Union</option>
+              <option value="mediatheque_events">Médiathèque</option>
             </select>
 
             <span class="filter-label" style="margin-left:8px">Du</span>
@@ -158,11 +159,12 @@
     }
 
     const TABLE_LABELS = {
-      site_content:   'Éditeur No-Code',
-      articles:       'Articles',
-      arretes:        'Arrêtés',
-      comptes_rendus: 'Comptes-rendus',
-      traits_union:   "Trait d'Union",
+      site_content:       'Éditeur No-Code',
+      articles:           'Articles',
+      arretes:            'Arrêtés',
+      comptes_rendus:     'Comptes-rendus',
+      traits_union:       "Trait d'Union",
+      mediatheque_events: 'Médiathèque',
     }
 
     /* ── State ── */
@@ -365,6 +367,10 @@
       }
       if (t === 'traits_union') {
         return [d.type || '', d.numero ? 'N°' + d.numero : ''].filter(Boolean).join(' ') || '—'
+      }
+      if (t === 'mediatheque_events') {
+        const date = d.date ? new Date(d.date).toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' }) : ''
+        return [d.titre || '—', date].filter(Boolean).join(' — ')
       }
       return JSON.stringify(d)
     }

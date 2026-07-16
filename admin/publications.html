@@ -297,8 +297,8 @@
                 <input type="text" id="med-titre" class="form-input" placeholder="Intitulé de l'événement">
               </div>
               <div class="form-group">
-                <label class="form-label" for="med-date">Date & heure <span style="color:#dc2626">*</span></label>
-                <input type="datetime-local" id="med-date" class="form-input">
+                <label class="form-label" for="med-date">Date de l'événement <span style="color:#dc2626">*</span></label>
+                <input type="date" id="med-date" class="form-input">
               </div>
               <div class="form-group">
                 <label class="form-label" for="med-desc">Description courte <span style="color:#dc2626">*</span></label>
@@ -804,8 +804,8 @@
     }
     function toDatetimeLocal(iso) {
       if (!iso) return ''
-      // Convertit "2026-07-13 00:00:00+00" → "2026-07-13T00:00" pour datetime-local
-      return String(iso).replace(' ', 'T').slice(0, 16)
+      // On extrait seulement la date YYYY-MM-DD pour l'input type="date"
+      return String(iso).slice(0, 10)
     }
     function escH(s) {
       if (!s) return ''
@@ -918,7 +918,7 @@
             <p style="font-weight:500;color:var(--texte)">${escH(ev.titre)}</p>
             <p style="font-size:12px;color:var(--gris);margin-top:2px">${escH(ev.description_courte?.slice(0,60))}${(ev.description_courte?.length||0)>60?'…':''}</p>
           </td>
-          <td style="color:var(--gris);font-size:13px;white-space:nowrap">${fmtDatetime(ev.date_evenement)}</td>
+          <td style="color:var(--gris);font-size:13px;white-space:nowrap">${fmtDate(ev.date_evenement)}</td>
           <td>${statusBadge(ev.is_draft)}</td>
           <td>${actionBtns('media', ev.id, ev.titre)}</td>
         </tr>`).join('')
