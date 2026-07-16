@@ -153,6 +153,12 @@
             <input type="tel" id="telephone" name="telephone" />
           </div>
 
+          <!-- Champ Honeypot invisible pour contrer les robots spammeurs -->
+          <div style="display: none !important; visibility: hidden !important;" aria-hidden="true">
+            <label for="website">Ne pas remplir ce champ si vous êtes un humain :</label>
+            <input type="text" id="website" name="website" autocomplete="off" tabindex="-1">
+          </div>
+
           <div class="form-group">
             <label for="sujet">Sujet <span class="required">*</span></label>
             <div class="custom-select-container">

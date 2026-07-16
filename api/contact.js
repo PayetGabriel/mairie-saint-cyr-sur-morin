@@ -13,7 +13,15 @@ module.exports = async (req, res) => {
     }
 
     // Récupération des champs exacts de ton HTML
-    const { prenom, nom, email, telephone, sujet, message } = req.body;
+    const { prenom, nom, email, telephone, sujet, message, website } = req.body;
+
+    // --- SÉCURITÉ ANTI-SPAM (HONEYPOT) ---
+    // Si le champ caché est rempli, c'est un bot.
+    // On renvoie un faux succès (200 OK) pour décourager le robot, mais on n'envoie rien.
+    if (website && website.trim() !== "") {
+        console.warn("Spam bloqué avec succès via Honeypot.");
+        return res.status(200).json({ success: true });
+    }
 
     // Vérification des champs obligatoires
     if (!prenom || !nom || !email || !sujet || !message) {
