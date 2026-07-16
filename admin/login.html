@@ -90,19 +90,30 @@
   <script type="module">
     import { supabase } from '/admin/js/supabase-config.js'
 
-    /* Si déjà connecté → rediriger directement */
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) window.location.replace('/admin/dashboard.html')
-    })
-
     const form      = document.getElementById('login-form')
     const alertEl   = document.getElementById('alert')
     const submitBtn = document.getElementById('submit-btn')
 
+    // 1. Éviter le "flash" visuel le temps de vérifier la session
+    document.body.style.opacity = '0'
+
+    /* Vérification de la session active */
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        // Déjà connecté -> redirection immédiate
+        window.location.replace('/admin/dashboard.html')
+      } else {
+        // Non connecté -> apparition en douceur du formulaire
+        document.body.style.transition = 'opacity 0.2s ease-in-out'
+        document.body.style.opacity = '1'
+      }
+    })
+
+    // Dictionnaire de traduction des erreurs de Supabase Auth
     const ERROR_MESSAGES = {
-      'Invalid login credentials':  'Identifiants incorrects. Vérifiez votre email et mot de passe.',
-      'Email not confirmed':         "Votre compte n'est pas encore confirmé. Vérifiez vos emails.",
-      'Too many requests':           'Trop de tentatives. Réessayez dans quelques minutes.',
+      'Invalid login credentials': 'Identifiants incorrects. Vérifiez votre email et mot de passe.',
+      'Email not confirmed':        "Votre compte n'est pas encore confirmé. Vérifiez vos emails.",
+      'Too many requests':          'Trop de tentatives. Réessayez dans quelques minutes.',
     }
 
     function showError(msg) {
@@ -110,6 +121,7 @@
       alertEl.style.display = 'flex'
     }
 
+    /* Gestion de la soumission du formulaire */
     form.addEventListener('submit', async e => {
       e.preventDefault()
       alertEl.style.display = 'none'
@@ -122,9 +134,11 @@
         return
       }
 
+      // Feedback visuel de chargement
       submitBtn.disabled    = true
       submitBtn.textContent = 'Connexion…'
 
+      // Tentative de connexion via Supabase Auth
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 
       if (error) {
@@ -134,13 +148,14 @@
         return
       }
 
-      /* Vérifier que le profil existe dans la table */
+      /* 🛡️ OPTIMISATION : Une seule requête pour valider le profil + préparer les logs */
       const { data: profile, error: profileErr } = await supabase
         .from('profiles')
-        .select('id, role')
+        .select('id, role, prenom, nom, email')
         .eq('id', data.user.id)
         .single()
 
+      // Si le compte n'a pas de profil correspondant en base (compte suspendu / non activé)
       if (profileErr || !profile) {
         await supabase.auth.signOut()
         showError("Votre compte n'est pas encore activé. Contactez un administrateur.")
@@ -149,19 +164,21 @@
         return
       }
 
+      // Écriture du log d'activité (non bloquant : si ça échoue, on redirige quand même)
       try {
-        const { data: prof } = await supabase
-          .from('profiles').select('prenom,nom,email').eq('id', data.user.id).single()
-        const name = prof
-          ? ([prof.prenom, prof.nom].filter(Boolean).join(' ') || prof.email)
-          : data.user.email
+        const displayName = [profile.prenom, profile.nom].filter(Boolean).join(' ') || profile.email
+        
         await supabase.from('activity_logs').insert({
           user_id:    data.user.id,
-          user_email: prof?.email || data.user.email,
-          user_name:  name,
+          user_email: profile.email || data.user.email,
+          user_name:  displayName,
           action:     'SIGNIN',
         })
-      } catch {}
+      } catch (logErr) {
+        console.warn("Impossible d'enregistrer le log de connexion :", logErr)
+      }
+
+      // Redirection finale vers l'espace collaborateur
       window.location.replace('/admin/dashboard.html')
     })
   </script>
