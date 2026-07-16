@@ -93,8 +93,12 @@ export function isAdmin(profile) {
  */
 export function buildSidebar(profile, activePage) {
   const admin = isAdmin(profile)
-  const EDITOR_KEYS = PERM_KEYS.filter(k => k !== 'can_manage_publications' && k !== 'can_manage_mediatheque')
-  const hasAnyEdit = admin || EDITOR_KEYS.some(k => profile[k])
+  const hasPublications = admin || profile.can_manage_publications || profile.can_manage_mediatheque
+  /* can_manage_publications et can_manage_mediatheque → onglet Publications uniquement,
+     pas l'éditeur no-code. On les exclut du calcul hasAnyEdit. */
+  const hasAnyEdit = admin || PERM_KEYS
+    .filter(k => k !== 'can_manage_publications' && k !== 'can_manage_mediatheque')
+    .some(k => profile[k])
 
   const initials = getInitials(profile)
   const roleLabel = getRoleLabel(profile.role)

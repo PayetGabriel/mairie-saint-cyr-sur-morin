@@ -155,7 +155,9 @@
         })
       }
 
-      const EDITOR_PERMS = Object.keys(PERMISSIONS).filter(k => k !== 'can_manage_publications' && k !== 'can_manage_mediatheque')
+      /* can_manage_publications et can_manage_mediatheque → Publications, pas l'éditeur */
+      const EDITOR_PERMS = ['can_manage_commune','can_manage_vie_pratique','can_manage_urbanisme',
+                            'can_manage_sivu','can_manage_vie_locale','can_manage_decouvrir']
       const hasEdit = admin || EDITOR_PERMS.some(k => profile[k])
       if (hasEdit) {
         items.push({ 
