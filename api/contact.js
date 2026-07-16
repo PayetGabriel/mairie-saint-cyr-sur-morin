@@ -53,7 +53,7 @@ module.exports = async (req, res) => {
     const sujetPropre = sujetsTraduits[sujet] || sujet;
 
     // --- CONFIGURATION DYNAMIQUE DU THÈME & ROUTAGE ---
-    let destinataire = 'gabrielpayet@hotmail.com'; // Mairie par défaut
+    let destinataire = 'gabrielpayet@hotmail.com, mairie.stcyrsurmorin@orange.fr'; // Mairie par défaut
     
     // Définition des couleurs du thème Mairie (Par défaut)
     let theme = {
