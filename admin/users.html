@@ -439,7 +439,11 @@
       return
     }
 
-    
+    if (role === 'super_admin' && currentUser.role !== 'super_admin') {
+      alertEl.textContent   = "Vous n'avez pas l'autorisation d'inviter un Super Administrateur."
+      alertEl.style.display = 'flex'
+      return
+    }
 
     btn.disabled    = true
     btn.textContent = 'Envoi…'
@@ -483,7 +487,10 @@
   ════════════════════════════════════════ */
   function openEditModal(userId) {
     const user = allUsers.find(u => u.id === userId)
-    if (!user) return
+    if (!user) {
+      showToast("Impossible de trouver l'utilisateur sélectionné.", "error")
+      return
+    }
 
     // SÉCURITÉ : Bloquer l'ouverture si un malin tente de modifier un Super Admin sans en être un
     if (user.role === 'super_admin' && currentUser.role !== 'super_admin') {
@@ -523,6 +530,14 @@
     const btn     = document.getElementById('btn-edit-submit')
 
     alertEl.style.display = 'none'
+
+    // 🛡️ SÉCURITÉ : Empêcher l'attribution du rôle Super Admin par un simple Admin
+    if (role === 'super_admin' && currentUser.role !== 'super_admin') {
+      alertEl.textContent   = "Vous n'avez pas l'autorisation d'attribuer le rôle Super Administrateur."
+      alertEl.style.display = 'flex'
+      return
+    }
+
     btn.disabled    = true
     btn.textContent = 'Enregistrement…'
 
