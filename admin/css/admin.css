@@ -415,11 +415,23 @@ input, select, textarea { font-family: 'DM Sans', sans-serif; }
   pointer-events: none;
 }
 
+/* Style des icônes SVG dans les accès rapides */
 .quick-icon {
-  font-size: 20px;
-  line-height: 1;
-  flex-shrink: 0;
-  margin-top: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;          /* Taille du conteneur de l'icône */
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(58, 90, 64, 0.08); /* Fond léger vert transparent */
+  color: var(--vert);   /* Couleur principale de ton SVG */
+  flex-shrink: 0;       /* Évite que l'icône s'écrase sur petits écrans */
+}
+
+.quick-icon svg {
+  width: 22px;          /* Taille du tracé vectoriel */
+  height: 22px;
+  stroke: currentColor; /* Hérite de la couleur du parent (.quick-icon) */
 }
 
 .quick-label {
