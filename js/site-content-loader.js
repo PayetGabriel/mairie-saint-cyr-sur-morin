@@ -50,6 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initArretes()
   initTraitsUnion()
   initMotDuMaire()
+  initMediathequeEvents()
 })
 
 /**
@@ -1742,6 +1743,136 @@ async function initMotDuMaire() {
 
   } catch (err) {
     console.error("Erreur lors du chargement du mot du maire:", err.message)
+  }
+}
+
+/**
+ * 21. Gestion des Événements de la Médiathèque
+ */
+async function initMediathequeEvents() {
+  const gridContainer = document.querySelector('.events-grid')
+  const placeholder = document.getElementById('events-empty-placeholder')
+  
+  if (!gridContainer && !placeholder) return
+
+  try {
+    // Récupération des événements publiés classés par ordre chronologique
+    const { data, error } = await supabase
+      .from('mediatheque_events')
+      .select('*')
+      .eq('is_draft', false)
+      .order('date_evenement', { ascending: true })
+
+    if (error) throw error
+
+    // Si la table est vide ou s'il n'y a que des brouillons
+    if (!data || data.length === 0) {
+      if (gridContainer) gridContainer.style.display = 'none'
+      if (placeholder) {
+        placeholder.style.display = 'flex'
+        placeholder.style.flexDirection = 'column'
+        placeholder.style.alignItems = 'center'
+      }
+      return
+    }
+
+    // Affichage de la grille et masquage du placeholder
+    if (gridContainer) gridContainer.style.display = 'grid'
+    if (placeholder) placeholder.style.display = 'none'
+
+    // Formateur de date robuste (Évite les bugs de décalage UTC et respecte la grammaire française)
+    const formatEventDate = (dateStr) => {
+      if (!dateStr) return ''
+      const parts = dateStr.split(' ')[0].split('-') // ['2026', '07', '13']
+      if (parts.length !== 3) return ''
+      
+      const year = parseInt(parts[0], 10)
+      const monthIndex = parseInt(parts[1], 10) - 1
+      const day = parseInt(parts[2], 10)
+      
+      const date = new Date(year, monthIndex, day)
+      let monthLabel = date.toLocaleDateString('fr-FR', { month: 'short' }) // ex: "juil." ou "août"
+      
+      // On passe juste la première lettre en majuscule, sans toucher au reste
+      monthLabel = monthLabel.charAt(0).toUpperCase() + monthLabel.slice(1)
+      
+      return `${day} ${monthLabel} ${year}`
+    }
+
+    // Remplissage de la grille
+    gridContainer.innerHTML = data.map(eventItem => {
+      const dateBadgeText = formatEventDate(eventItem.date_evenement)
+      
+      // Découpage propre des paragraphes du contenu complet
+      const formattedFullContent = eventItem.contenu_complet
+        ? eventItem.contenu_complet.split('\n').filter(p => p.trim() !== '').map(p => `<p>${p.trim()}</p>`).join('')
+        : ''
+
+      // Branchement conditionnel du template d'image
+      let imgWrapperHTML = ''
+      if (eventItem.image_url && eventItem.image_url.trim() !== '') {
+        imgWrapperHTML = `
+          <div class="event-img-wrapper">
+            <span class="event-date-badge">${dateBadgeText}</span>
+            <img src="${eventItem.image_url}" alt="Affiche événement" class="event-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <!-- Placeholder de secours si l'image ne charge pas -->
+            <div class="event-img-fallback" style="display: none;">
+              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+            </div>
+          </div>
+        `.trim()
+      } else {
+        imgWrapperHTML = `
+          <div class="event-img-wrapper no-image">
+            <span class="event-date-badge">${dateBadgeText}</span>
+            <div class="event-img-placeholder">
+              <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              <span>Médiathèque</span>
+            </div>
+          </div>
+        `.trim()
+      }
+
+      return `
+        <article class="event-card reveal" onclick="openEventModal(${eventItem.id})">
+          ${imgWrapperHTML}
+          <div class="event-body">
+            <h3 class="event-card-title">${eventItem.titre}</h3>
+            <p class="event-desc">${eventItem.description_courte}</p>
+            <div class="event-footer">
+              <span class="event-action">
+                En savoir plus 
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+            </div>
+          </div>
+          <!-- Données cachées lues par la modale (Phase 2 ready) -->
+          <template class="event-full-content">
+            ${formattedFullContent}
+          </template>
+        </article>
+      `.trim()
+    }).join('\n')
+
+    // Raccrocher les nouveaux éléments .reveal au système de transition
+    const parentSection = gridContainer.closest('.section')
+    if (parentSection && typeof bindNewReveals === 'function') {
+      bindNewReveals(parentSection)
+    }
+
+  } catch (err) {
+    console.error("Erreur lors du chargement des événements de la médiathèque :", err.message)
   }
 }
 
