@@ -93,7 +93,7 @@ export function isAdmin(profile) {
  */
 export function buildSidebar(profile, activePage) {
   const admin = isAdmin(profile)
-  const hasPublications = admin || profile.can_manage_publications
+  const hasPublications = admin || profile.can_manage_publications || profile.can_manage_mediatheque
   const hasAnyEdit = admin || PERM_KEYS.some(k => profile[k])
 
   const initials = getInitials(profile)

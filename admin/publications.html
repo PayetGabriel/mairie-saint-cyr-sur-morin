@@ -71,6 +71,18 @@
         </div>
       </div>
 
+      <!-- En-tête mode édition médiathèque -->
+      <div class="page-header" id="edit-header-media" style="display:none">
+        <div class="page-header-left" style="display:flex;align-items:center;gap:12px">
+          <button class="btn btn-ghost btn-sm" id="btn-back-media">← Retour</button>
+          <h1 class="page-title" id="edit-media-title" style="font-size:17px">Nouvel événement</h1>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+          <button class="btn btn-ghost" id="btn-save-media-draft">Enregistrer le brouillon</button>
+          <button class="btn btn-primary" id="btn-publish-media">Publier</button>
+        </div>
+      </div>
+
       <div class="page-content">
 
         <!-- Tabs (masqués en mode édition) -->
@@ -79,6 +91,7 @@
           <button class="tab-btn" data-tab="arretes" role="tab">Arrêtés</button>
           <button class="tab-btn" data-tab="cr" role="tab">Comptes-rendus</button>
           <button class="tab-btn" data-tab="tdu" role="tab">Trait d'Union</button>
+          <button class="tab-btn" data-tab="mediatheque" role="tab">Médiathèque</button>
         </div>
 
         <!-- ══ Liste : Articles ══════════════════════════════ -->
@@ -177,6 +190,29 @@
           </div>
         </div>
 
+        <!-- ══ Liste : Médiathèque ═══════════════════════════ -->
+        <div id="list-mediatheque" style="display:none">
+          <div class="card">
+            <div class="card-body" style="padding:0">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Événement</th>
+                      <th>Date</th>
+                      <th>Statut</th>
+                      <th style="text-align:right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tbody-media">
+                    <tr><td colspan="4" style="text-align:center;padding:32px"><div class="spinner" style="margin:0 auto 8px"></div><p class="text-muted text-sm">Chargement…</p></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- ══ Formulaire article ═════════════════════════════ -->
         <div id="view-edit" style="display:none">
           <div class="art-edit-grid">
@@ -249,6 +285,55 @@
           <div class="form-group">
             <label class="form-label">Contenu de l'article</label>
             <div class="rte-wrap" id="art-rte-wrap"></div>
+          </div>
+        </div>
+
+        <!-- ══ Formulaire médiathèque ═══════════════════════════ -->
+        <div id="view-edit-media" style="display:none">
+          <div class="art-edit-grid">
+            <div>
+              <div class="form-group">
+                <label class="form-label" for="med-titre">Titre <span style="color:#dc2626">*</span></label>
+                <input type="text" id="med-titre" class="form-input" placeholder="Intitulé de l'événement">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="med-date">Date & heure <span style="color:#dc2626">*</span></label>
+                <input type="datetime-local" id="med-date" class="form-input">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="med-desc">Description courte <span style="color:#dc2626">*</span></label>
+                <textarea id="med-desc" class="form-input" rows="3"
+                  placeholder="Résumé affiché dans les listings…" style="min-height:72px"></textarea>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="med-image">URL de l'image (optionnelle)</label>
+                <input type="url" id="med-image" class="form-input"
+                  placeholder="/assets/img/mediatheque_affiche_x.jpg">
+              </div>
+            </div>
+            <div class="art-edit-sidebar">
+              <div class="toggle-row">
+                <div>
+                  <p class="toggle-row-label">Brouillon</p>
+                  <p class="toggle-row-sub">Non visible sur le site</p>
+                </div>
+                <label class="toggle">
+                  <input type="checkbox" id="med-draft">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="card" style="padding:12px;font-size:12.5px;color:var(--gris);line-height:1.6">
+                <strong style="color:var(--texte)">Image</strong><br>
+                Laissez vide pour utiliser l'image par défaut.
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="med-contenu">Contenu complet <span style="color:#dc2626">*</span></label>
+            <textarea id="med-contenu" class="form-input" rows="7"
+              placeholder="Détails, horaires, informations pratiques…"
+              style="min-height:180px"></textarea>
+            <p class="form-hint">Texte libre affiché sur la page de l'événement.</p>
           </div>
         </div>
 
@@ -410,19 +495,22 @@
     const TAGS = ['Travaux', 'Conseil municipal', 'Événements', 'Culture', 'Prévention', 'Bulletin']
 
     const TAB_LABELS = {
-      articles: { title: 'Nouvel article',       id: 'articles' },
-      arretes:  { title: 'Nouvel arrêté',         id: 'arretes'  },
-      cr:       { title: 'Nouveau compte-rendu',  id: 'cr'       },
-      tdu:      { title: "Nouveau Trait d'Union", id: 'tdu'      },
+      articles: { title: 'Nouvel article',        id: 'articles'    },
+      arretes:  { title: 'Nouvel arrêté',          id: 'arretes'     },
+      cr:       { title: 'Nouveau compte-rendu',   id: 'cr'          },
+      tdu:      { title: "Nouveau Trait d'Union",  id: 'tdu'         },
+      mediatheque: { title: 'Nouvel événement',    id: 'mediatheque' },
     }
 
     /* ── State ── */
-    let profile      = null
-    let currentTab   = 'articles'
-    let editingId    = { articles: null, arretes: null, cr: null, tdu: null }
-    let pendingDel   = { table: null, id: null }
-    let rte          = null
-    let allData      = { articles: [], arretes: [], cr: [], tdu: [] }
+    let profile          = null
+    let currentTab       = 'articles'
+    let hasPublications  = false
+    let hasMediatheque   = false
+    let editingId        = { articles: null, arretes: null, cr: null, tdu: null, media: null }
+    let pendingDel       = { table: null, id: null }
+    let rte              = null
+    let allData          = { articles: [], arretes: [], cr: [], tdu: [], media: [] }
 
     /* ════════════════════════════════════════════════════════
     MINI RICH TEXT EDITOR (Avec Modale de Lien Intégrée)
@@ -605,19 +693,40 @@
       const auth = await requireAuth()
       if (!auth) return
 
-      profile = auth.profile
-      const canPublish = isAdmin(profile) || profile.can_manage_publications
-      if (!canPublish) { window.location.replace('/admin/dashboard.html'); return }
+      profile         = auth.profile
+      hasPublications = isAdmin(profile) || profile.can_manage_publications
+      hasMediatheque  = isAdmin(profile) || profile.can_manage_mediatheque
+
+      if (!hasPublications && !hasMediatheque) {
+        window.location.replace('/admin/dashboard.html')
+        return
+      }
 
       document.getElementById('page-loader').style.display     = 'none'
       document.getElementById('admin-layout').style.visibility = 'visible'
 
       buildSidebar(profile, 'publications')
       initModals()
+
+      /* Masquer les onglets non accessibles */
+      if (!hasPublications) {
+        ;['articles','arretes','cr','tdu'].forEach(tab => {
+          const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`)
+          if (btn) btn.style.display = 'none'
+        })
+      }
+      if (!hasMediatheque) {
+        const btn = document.querySelector('.tab-btn[data-tab="mediatheque"]')
+        if (btn) btn.style.display = 'none'
+      }
+
+      currentTab = hasPublications ? 'articles' : 'mediatheque'
+
       bindTabs()
       bindButtons()
       await loadAll()
       renderCurrentList()
+      setTab(currentTab)
 
       /* TDU type → show/hide numéro */
       document.getElementById('tdu-type').addEventListener('change', e => {
@@ -632,12 +741,16 @@
     function setTab(tab) {
       currentTab = tab
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab))
-      ;['articles','arretes','cr','tdu'].forEach(t => {
-        document.getElementById(`list-${t}`).style.display = t === tab ? 'block' : 'none'
+      ;['articles','arretes','cr','tdu','mediatheque'].forEach(t => {
+        const el = document.getElementById(`list-${t}`)
+        if (el) el.style.display = t === tab ? 'block' : 'none'
       })
-      document.getElementById('btn-new-label').textContent = TAB_LABELS[tab].title
-      document.getElementById('mobile-title').textContent  = tab === 'articles' ? 'Publications' :
-        tab === 'arretes' ? 'Arrêtés' : tab === 'cr' ? 'Comptes-rendus' : "Trait d'Union"
+      document.getElementById('btn-new-label').textContent = TAB_LABELS[tab]?.title || 'Nouveau'
+      const titles = {
+        articles:'Publications', arretes:'Arrêtés', cr:'Comptes-rendus',
+        tdu:"Trait d'Union", mediatheque:'Médiathèque',
+      }
+      document.getElementById('mobile-title').textContent = titles[tab] || 'Publications'
     }
 
     function bindTabs() {
@@ -650,29 +763,49 @@
        CHARGEMENT DONNÉES
     ════════════════════════════════════════════════════════ */
     async function loadAll() {
-      const [a, ar, c, t] = await Promise.all([
-        supabase.from('articles').select('*').order('created_at', { ascending: false }),
-        supabase.from('arretes').select('*').order('created_at', { ascending: false }),
-        supabase.from('comptes_rendus').select('*').order('date_conseil', { ascending: false }),
-        supabase.from('traits_union').select('*').order('date_publication', { ascending: false }),
+      const pubQ  = hasPublications
+      const medQ  = hasMediatheque
+      const empty = Promise.resolve({ data: [] })
+
+      const [a, ar, c, t, m] = await Promise.all([
+        pubQ ? supabase.from('articles').select('*').order('created_at', { ascending: false })              : empty,
+        pubQ ? supabase.from('arretes').select('*').order('created_at', { ascending: false })               : empty,
+        pubQ ? supabase.from('comptes_rendus').select('*').order('date_conseil', { ascending: false })      : empty,
+        pubQ ? supabase.from('traits_union').select('*').order('date_publication', { ascending: false })    : empty,
+        medQ ? supabase.from('mediatheque_events').select('*').order('date_evenement', { ascending: false }): empty,
       ])
       allData.articles = a.data  || []
       allData.arretes  = ar.data || []
       allData.cr       = c.data  || []
       allData.tdu      = t.data  || []
+      allData.media    = m.data  || []
     }
 
     function renderCurrentList() {
-      renderArticlesList()
-      renderArretesList()
-      renderCRList()
-      renderTDUList()
+      if (hasPublications) {
+        renderArticlesList()
+        renderArretesList()
+        renderCRList()
+        renderTDUList()
+      }
+      if (hasMediatheque) renderMediathequeList()
     }
 
     /* ── Helpers ── */
     function fmtDate(d) {
       if (!d) return '—'
       return new Date(d).toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' })
+    }
+    function fmtDatetime(d) {
+      if (!d) return '—'
+      const dt = new Date(d)
+      return dt.toLocaleDateString('fr-FR', { day:'numeric', month:'short', year:'numeric' })
+        + ' à ' + dt.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' })
+    }
+    function toDatetimeLocal(iso) {
+      if (!iso) return ''
+      // Convertit "2026-07-13 00:00:00+00" → "2026-07-13T00:00" pour datetime-local
+      return String(iso).replace(' ', 'T').slice(0, 16)
     }
     function escH(s) {
       if (!s) return ''
@@ -772,6 +905,25 @@
         </tr>`).join('')
     }
 
+    /* ── Médiathèque ── */
+    function renderMediathequeList() {
+      const tbody = document.getElementById('tbody-media')
+      if (!allData.media.length) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:32px"><p class="text-muted text-sm">Aucun événement.</p></td></tr>'
+        return
+      }
+      tbody.innerHTML = allData.media.map(ev => `
+        <tr>
+          <td>
+            <p style="font-weight:500;color:var(--texte)">${escH(ev.titre)}</p>
+            <p style="font-size:12px;color:var(--gris);margin-top:2px">${escH(ev.description_courte?.slice(0,60))}${(ev.description_courte?.length||0)>60?'…':''}</p>
+          </td>
+          <td style="color:var(--gris);font-size:13px;white-space:nowrap">${fmtDatetime(ev.date_evenement)}</td>
+          <td>${statusBadge(ev.is_draft)}</td>
+          <td>${actionBtns('media', ev.id, ev.titre)}</td>
+        </tr>`).join('')
+    }
+
     /* ════════════════════════════════════════════════════════
        ARTICLE : ÉDITION PLEIN ÉCRAN
     ════════════════════════════════════════════════════════ */
@@ -781,7 +933,10 @@
       document.getElementById('list-header').style.display = 'none'
       document.getElementById('edit-header').style.display = 'flex'
       document.getElementById('tab-bar').style.display     = 'none'
-      ;['articles','arretes','cr','tdu'].forEach(t => document.getElementById(`list-${t}`).style.display = 'none')
+      ;['articles','arretes','cr','tdu','mediatheque'].forEach(t => {
+        const el = document.getElementById(`list-${t}`)
+        if (el) el.style.display = 'none'
+      })
       document.getElementById('view-edit').style.display   = 'block'
       document.getElementById('mobile-title').textContent  = art ? 'Modifier l\'article' : 'Nouvel article'
 
@@ -842,6 +997,79 @@
       await loadAll()
       renderCurrentList()
       closeArticleEdit()
+    }
+
+    /* ════════════════════════════════════════════════════════
+       MÉDIATHÈQUE : ÉDITION PLEIN ÉCRAN
+    ════════════════════════════════════════════════════════ */
+    function openMediathequeEdit(evt = null) {
+      editingId.media = evt?.id || null
+
+      document.getElementById('list-header').style.display       = 'none'
+      document.getElementById('edit-header-media').style.display = 'flex'
+      document.getElementById('tab-bar').style.display           = 'none'
+      ;['articles','arretes','cr','tdu','mediatheque'].forEach(t => {
+        const el = document.getElementById(`list-${t}`)
+        if (el) el.style.display = 'none'
+      })
+      document.getElementById('view-edit-media').style.display = 'block'
+      document.getElementById('mobile-title').textContent      = evt ? "Modifier l'événement" : 'Nouvel événement'
+      document.getElementById('edit-media-title').textContent  = evt
+        ? `Modifier : ${evt.titre?.slice(0, 50) || ''}…`
+        : 'Nouvel événement'
+
+      document.getElementById('med-titre').value  = evt?.titre               || ''
+      document.getElementById('med-date').value   = toDatetimeLocal(evt?.date_evenement)
+      document.getElementById('med-desc').value   = evt?.description_courte  || ''
+      document.getElementById('med-image').value  = evt?.image_url           || ''
+      document.getElementById('med-contenu').value= evt?.contenu_complet     || ''
+      document.getElementById('med-draft').checked = evt ? !!evt.is_draft : true
+    }
+
+    function closeMediathequeEdit() {
+      editingId.media = null
+      document.getElementById('list-header').style.display       = 'flex'
+      document.getElementById('edit-header-media').style.display = 'none'
+      document.getElementById('tab-bar').style.display           = 'flex'
+      document.getElementById('view-edit-media').style.display   = 'none'
+      setTab(currentTab)
+      document.getElementById('mobile-title').textContent = 'Publications'
+    }
+
+    async function saveMedia(isDraft) {
+      const titre   = document.getElementById('med-titre').value.trim()
+      const date    = document.getElementById('med-date').value
+      const desc    = document.getElementById('med-desc').value.trim()
+      const contenu = document.getElementById('med-contenu').value.trim()
+
+      if (!titre)   { showToast('Le titre est obligatoire.', 'error'); return }
+      if (!date)    { showToast('La date est obligatoire.', 'error');  return }
+      if (!desc)    { showToast('La description courte est obligatoire.', 'error'); return }
+      if (!contenu) { showToast('Le contenu complet est obligatoire.', 'error'); return }
+
+      const image_url = document.getElementById('med-image').value.trim() || null
+
+      const payload = {
+        titre,
+        description_courte: desc,
+        contenu_complet:    contenu,
+        date_evenement:     date,
+        image_url,
+        is_draft: isDraft,
+      }
+
+      let error
+      if (editingId.media) {
+        ;({ error } = await supabase.from('mediatheque_events').update(payload).eq('id', editingId.media))
+      } else {
+        ;({ error } = await supabase.from('mediatheque_events').insert(payload))
+      }
+
+      if (error) { showToast('Erreur : ' + error.message, 'error'); return }
+      showToast(isDraft ? 'Brouillon enregistré.' : 'Événement publié.')
+      await loadAll()
+      renderCurrentList()
+      closeMediathequeEdit()
     }
 
     /* ════════════════════════════════════════════════════════
@@ -933,10 +1161,8 @@
       const item = allData[table]?.find(x => x.id === id)
       if (!item) return
 
-      if (table === 'articles') {
-        openArticleEdit(item)
-        return
-      }
+      if (table === 'articles') { openArticleEdit(item); return }
+      if (table === 'media')    { openMediathequeEdit(item); return }
 
       editingId[table] = id
 
@@ -1012,12 +1238,18 @@
           document.getElementById('tdu-draft').checked = true
           document.getElementById('tdu-alert').style.display = 'none'
           openModal('modal-tdu')
+        } else if (currentTab === 'mediatheque') {
+          openMediathequeEdit(null)
         }
       })
 
       document.getElementById('btn-back').addEventListener('click', closeArticleEdit)
       document.getElementById('btn-save-draft').addEventListener('click', () => saveArticle(true))
       document.getElementById('btn-publish').addEventListener('click',    () => saveArticle(false))
+
+      document.getElementById('btn-back-media').addEventListener('click', closeMediathequeEdit)
+      document.getElementById('btn-save-media-draft').addEventListener('click', () => saveMedia(true))
+      document.getElementById('btn-publish-media').addEventListener('click',    () => saveMedia(false))
 
       document.getElementById('btn-save-arrete').addEventListener('click', saveArrete)
       document.getElementById('btn-save-cr').addEventListener('click', saveCR)
@@ -1029,7 +1261,7 @@
         const btn = document.getElementById('btn-confirm-delete')
         btn.disabled = true; btn.textContent = 'Suppression…'
 
-        const tableMap = { articles: 'articles', arretes: 'arretes', cr: 'comptes_rendus', tdu: 'traits_union' }
+        const tableMap = { articles: 'articles', arretes: 'arretes', cr: 'comptes_rendus', tdu: 'traits_union', media: 'mediatheque_events' }
         const { error } = await supabase.from(tableMap[table]).delete().eq('id', id)
 
         btn.disabled = false; btn.textContent = 'Supprimer'
