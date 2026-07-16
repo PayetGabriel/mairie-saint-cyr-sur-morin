@@ -1,6 +1,16 @@
 // Fichier : /api/contact.js
 const nodemailer = require('nodemailer');
 
+function escapeHtml(text) {
+    if (!text) return '';
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
 module.exports = async (req, res) => {
     // On n'accepte que les requêtes POST
     if (req.method !== 'POST') {
@@ -16,12 +26,16 @@ module.exports = async (req, res) => {
     const { prenom, nom, email, telephone, sujet, message, website } = req.body;
 
     // --- SÉCURITÉ ANTI-SPAM (HONEYPOT) ---
-    // Si le champ caché est rempli, c'est un bot.
-    // On renvoie un faux succès (200 OK) pour décourager le robot, mais on n'envoie rien.
     if (website && website.trim() !== "") {
         console.warn("Spam bloqué avec succès via Honeypot.");
         return res.status(200).json({ success: true });
     }
+
+    const safePrenom    = escapeHtml(prenom);
+    const safeNom       = escapeHtml(nom);
+    const safeEmail     = escapeHtml(email);
+    const safeTelephone = escapeHtml(telephone);
+    const safeMessage   = escapeHtml(message);
 
     // Vérification des champs obligatoires
     if (!prenom || !nom || !email || !sujet || !message) {
@@ -114,9 +128,9 @@ module.exports = async (req, res) => {
         <div style="background: #ffffff; padding: 35px 30px;">
             <div style="margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #f0ece6;">
                 <p style="margin: 0 0 5px; font-size: 12px; color: #888078; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Expéditeur</p>
-                <p style="margin: 0; color: #2a2520; font-size: 16px; font-weight: 500;">${prenom} ${nom}</p>
-                <p style="margin: 5px 0 0; color: ${theme.primary}; font-size: 14px;"><a href="mailto:${email}" style="color: ${theme.primary}; text-decoration: none;">${email}</a></p>
-                ${telephone ? `<p style="margin: 5px 0 0; color: #555555; font-size: 14px;"><span style="color: ${theme.primary}; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 5px;">Tél. :</span> <a href="tel:${telephone}" style="color: #2a2520; text-decoration: none;">${telephone}</a></p>` : ''}
+                <p style="margin: 0; color: #2a2520; font-size: 16px; font-weight: 500;">${safePrenom} ${safeNom}</p>
+                <p style="margin: 5px 0 0; color: ${theme.primary}; font-size: 14px;"><a href="mailto:${safeEmail}" style="color: ${theme.primary}; text-decoration: none;">${safeEmail}</a></p>
+                ${safeTelephone ? `<p style="margin: 5px 0 0; color: #555555; font-size: 14px;"><span style="color: ${theme.primary}; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-right: 5px;">Tél. :</span> <a href="tel:${safeTelephone}" style="color: #2a2520; text-decoration: none;">${safeTelephone}</a></p>` : ''}
             </div>
             <div style="margin-bottom: 25px;">
                 <p style="margin: 0 0 5px; font-size: 12px; color: #888078; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Sujet de la demande</p>
@@ -127,7 +141,7 @@ module.exports = async (req, res) => {
             <div style="margin-bottom: 35px;">
                 <p style="margin: 0 0 10px; font-size: 12px; color: #888078; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Message</p>
                 <div style="background: #fcfbf9; border: 1px solid #f0ece6; border-radius: 8px; padding: 20px; color: #2a2520; font-size: 15px; line-height: 1.6;">
-                    ${message.replace(/\n/g, '<br>')}
+                    ${safeMessage.replace(/\n/g, '<br>')}
                 </div>
             </div>
         </div>
@@ -141,7 +155,7 @@ module.exports = async (req, res) => {
             from: `"Formulaire contact — Mairie Saint-Cyr-sur-Morin" <${process.env.MAIL_USER}>`,
             to: destinataire,
             replyTo: email,
-            subject: `[Contact Site] ${sujetPropre} - ${prenom} ${nom}`,
+            subject: `[Contact Site] ${sujetPropre} - ${safePrenom} ${safeNom}`,
             html: htmlContent
 
             // --- AJOUT DE DESTINATAIRES SUPPLÉMENTAIRES (Options) ---
