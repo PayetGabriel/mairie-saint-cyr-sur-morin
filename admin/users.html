@@ -23,7 +23,7 @@
   <!-- Favicons -->
   <link rel="icon" type="image/png" href="/assets/img/logoSaintCyr_2020-favicon.png">
   <link rel="apple-touch-icon" href="/assets/img/logoSaintCyr_2020-favicon.png">
-  
+
   <link rel="stylesheet" href="/admin/css/admin.css">
 </head>
 <body>
@@ -122,8 +122,7 @@
         <div class="form-group">
           <label class="form-label" for="invite-role">Rôle initial</label>
           <select id="invite-role" class="form-select">
-            <option value="employee">Employé</option>
-            <option value="admin">Admin</option>
+            <!-- Rempli dynamiquement par JS -->
           </select>
           <p class="form-hint">Les permissions pourront être affinées après la création.</p>
         </div>
@@ -151,9 +150,7 @@
         <div class="form-group">
           <label class="form-label" for="edit-role">Rôle</label>
           <select id="edit-role" class="form-select">
-            <option value="employee">Employé</option>
-            <option value="admin">Admin</option>
-            <option value="super_admin">Super Admin</option>
+            <!-- Rempli dynamiquement par JS -->
           </select>
         </div>
 
@@ -200,366 +197,437 @@
   <div id="toast-container" class="toast-container"></div>
 
   <script type="module">
-    import { supabase } from '/admin/js/supabase-config.js'
-    import {
-      requireAuth, buildSidebar, showToast,
-      openModal, closeModal, initModals,
-      getInitials, getRoleLabel, isAdmin,
-      PERMISSIONS, PERM_KEYS,
-    } from '/admin/js/auth-guard.js'
+  import { supabase } from '/admin/js/supabase-config.js'
+  import {
+    requireAuth, buildSidebar, showToast,
+    openModal, closeModal, initModals,
+    getInitials, getRoleLabel, isAdmin,
+    PERMISSIONS, PERM_KEYS,
+  } from '/admin/js/auth-guard.js'
 
-    /* ── État global ── */
-    let currentUser = null
-    let allUsers    = []
+  /* ── État global ── */
+  let currentUser = null
+  let allUsers    = []
 
-    /* ════════════════════════════════════════
-       INIT
-    ════════════════════════════════════════ */
-    async function init() {
-      /* requireAdmin: true → redirige les non-admins vers le dashboard */
-      const auth = await requireAuth({ requireAdmin: true })
-      if (!auth) return
+  /* ════════════════════════════════════════
+     INIT
+  ════════════════════════════════════════ */
+  async function init() {
+    /* requireAdmin: true → redirige les non-admins vers le dashboard */
+    const auth = await requireAuth({ requireAdmin: true })
+    if (!auth) return
 
-      currentUser = auth.profile
+    currentUser = auth.profile
 
-      document.getElementById('page-loader').style.display     = 'none'
-      document.getElementById('admin-layout').style.visibility = 'visible'
+    document.getElementById('page-loader').style.display     = 'none'
+    document.getElementById('admin-layout').style.visibility = 'visible'
 
-      buildSidebar(currentUser, 'users')
-      initModals()
-      bindButtons()
-      await loadUsers()
+    buildSidebar(currentUser, 'users')
+    
+    // NOUVEAU : Configuration dynamique des rôles selon l'utilisateur connecté
+    setupRoleDropdowns()
+    
+    initModals()
+    bindButtons()
+    await loadUsers()
+  }
+
+  /* ════════════════════════════════════════
+     CONFIGURATION DYNAMIQUE DE L'UI SELON LE RÔLE
+  ════════════════════════════════════════ */
+  function setupRoleDropdowns() {
+    const inviteSelect = document.getElementById('invite-role')
+    const editSelect = document.getElementById('edit-role')
+    
+    const isSuperAdmin = currentUser.role === 'super_admin'
+
+    // Options par défaut (accessibles par tout admin)
+    let optionsHtml = `
+      <option value="employee">Employé</option>
+      <option value="admin">Admin</option>
+    `
+
+    // Option réservée exclusivement aux super admins
+    if (isSuperAdmin) {
+      optionsHtml += `<option value="super_admin">Super Admin</option>`
     }
 
-    /* ════════════════════════════════════════
-       CHARGEMENT DES UTILISATEURS
-    ════════════════════════════════════════ */
-    async function loadUsers() {
-      const tbody = document.getElementById('users-tbody')
+    if (inviteSelect) inviteSelect.innerHTML = optionsHtml
+    if (editSelect) editSelect.innerHTML = optionsHtml
+  }
+
+  /* ════════════════════════════════════════
+     CHARGEMENT DES UTILISATEURS
+  ════════════════════════════════════════ */
+  async function loadUsers() {
+    const tbody = document.getElementById('users-tbody')
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" style="text-align:center;padding:32px">
+          <div class="spinner" style="margin:0 auto 8px"></div>
+          <p class="text-muted text-sm">Chargement…</p>
+        </td>
+      </tr>`
+
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .order('role')
+      .order('nom')
+
+    if (error) {
       tbody.innerHTML = `
         <tr>
           <td colspan="4" style="text-align:center;padding:32px">
-            <div class="spinner" style="margin:0 auto 8px"></div>
-            <p class="text-muted text-sm">Chargement…</p>
+            <p class="text-danger text-sm">Erreur lors du chargement : ${escHtml(error.message)}</p>
           </td>
         </tr>`
-
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('role')
-        .order('nom')
-
-      if (error) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="4" style="text-align:center;padding:32px">
-              <p class="text-danger text-sm">Erreur lors du chargement : ${escHtml(error.message)}</p>
-            </td>
-          </tr>`
-        return
-      }
-
-      allUsers = data
-
-      if (!data || data.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="4" style="text-align:center;padding:32px">
-              <p class="text-muted text-sm">Aucun utilisateur trouvé.</p>
-            </td>
-          </tr>`
-        return
-      }
-
-      tbody.innerHTML = data.map(renderRow).join('')
-
-      /* Bind boutons de la table */
-      tbody.querySelectorAll('.btn-row-edit').forEach(btn => {
-        btn.addEventListener('click', () => openEditModal(btn.dataset.id))
-      })
-      tbody.querySelectorAll('.btn-row-delete').forEach(btn => {
-        btn.addEventListener('click', () => openDeleteModal(btn.dataset.id, btn.dataset.name))
-      })
+      return
     }
 
-    /* ── Rendu d'une ligne ── */
-    function renderRow(user) {
-      const isSelf    = user.id === currentUser.id
-      const initials  = getInitials(user)
-      const roleLabel = getRoleLabel(user.role)
-      const fullName  = [user.prenom, user.nom].filter(Boolean).join(' ')
-      const displayName = fullName || '—'
+    allUsers = data
 
-      /* Dots de permissions */
-      const dots = PERM_KEYS.map(k => `
-        <span class="perm-dot ${user[k] ? 'on' : ''}" title="${PERMISSIONS[k]}"></span>
-      `).join('')
-
-      const activePerms = PERM_KEYS.filter(k => user[k]).map(k => PERMISSIONS[k])
-      const permText    = isAdmin(user)
-        ? '<span style="font-size:11px;color:var(--vert-clair)">Accès complet</span>'
-        : activePerms.length > 0
-          ? `<span class="perm-names">${activePerms.join(', ')}</span>`
-          : '<span class="perm-names">Aucune</span>'
-
-      /* Couleur avatar selon rôle */
-      const avatarColor = {
-        super_admin: 'var(--bois)',
-        admin:       'var(--vert-clair)',
-        employee:    'var(--pierre-dark)',
-      }[user.role] || 'var(--gris)'
-
-      return `
-        <tr data-id="${user.id}">
-          <td>
-            <div class="td-user">
-              <div class="user-avatar" style="background:${avatarColor}">${escHtml(initials)}</div>
-              <div class="td-user-info">
-                <p>
-                  ${escHtml(displayName)}
-                  ${isSelf ? '<span class="text-muted text-sm"> (vous)</span>' : ''}
-                </p>
-                <p>${escHtml(user.email)}</p>
-              </div>
-            </div>
-          </td>
-          <td>
-            <span class="badge badge-${user.role}">${roleLabel}</span>
-          </td>
-          <td>
-            <div class="perm-dots">${dots}</div>
-            ${permText}
-          </td>
-          <td style="text-align:right">
-            <div style="display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap">
-              <button
-                class="btn btn-secondary btn-sm btn-row-edit"
-                data-id="${user.id}"
-                aria-label="Modifier ${escHtml(displayName)}"
-              >Modifier</button>
-              ${!isSelf ? `
-                <button
-                  class="btn btn-danger btn-sm btn-row-delete"
-                  data-id="${user.id}"
-                  data-name="${escHtml(fullName || user.email)}"
-                  aria-label="Supprimer ${escHtml(displayName)}"
-                >Supprimer</button>` : ''}
-            </div>
+    if (!data || data.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" style="text-align:center;padding:32px">
+            <p class="text-muted text-sm">Aucun utilisateur trouvé.</p>
           </td>
         </tr>`
+      return
     }
 
-    /* ════════════════════════════════════════
-       MODAL : INVITATION
-    ════════════════════════════════════════ */
-    function bindButtons() {
-      document.getElementById('btn-open-invite').addEventListener('click', () => {
-        /* Reset formulaire */
-        document.getElementById('invite-email').value  = ''
-        document.getElementById('invite-prenom').value = ''
-        document.getElementById('invite-nom').value    = ''
-        document.getElementById('invite-role').value   = 'employee'
-        document.getElementById('invite-alert').style.display = 'none'
-        const btn = document.getElementById('btn-invite-submit')
-        btn.disabled    = false
-        btn.textContent = "Envoyer l'invitation"
-        openModal('modal-invite')
+    tbody.innerHTML = data.map(renderRow).join('')
+
+    /* Bind boutons de la table */
+    tbody.querySelectorAll('.btn-row-edit').forEach(btn => {
+      btn.addEventListener('click', () => openEditModal(btn.dataset.id))
+    })
+    tbody.querySelectorAll('.btn-row-delete').forEach(btn => {
+      btn.addEventListener('click', () => openDeleteModal(btn.dataset.id, btn.dataset.name))
+    })
+  }
+
+  /* ── Rendu d'une ligne ── */
+  function renderRow(user) {
+    const isSelf    = user.id === currentUser.id
+    const initials  = getInitials(user)
+    const roleLabel = getRoleLabel(user.role)
+    const fullName  = [user.prenom, user.nom].filter(Boolean).join(' ')
+    const displayName = fullName || '—'
+
+    /* Dots de permissions */
+    const dots = PERM_KEYS.map(k => `
+      <span class="perm-dot ${user[k] ? 'on' : ''}" title="${PERMISSIONS[k]}"></span>
+    `).join('')
+
+    const activePerms = PERM_KEYS.filter(k => user[k]).map(k => PERMISSIONS[k])
+    const permText    = isAdmin(user)
+      ? '<span style="font-size:11px;color:var(--vert-clair)">Accès complet</span>'
+      : activePerms.length > 0
+        ? `<span class="perm-names">${activePerms.join(', ')}</span>`
+        : '<span class="perm-names">Aucune</span>'
+
+    /* Couleur avatar selon rôle */
+    const avatarColor = {
+      super_admin: 'var(--bois)',
+      admin:       'var(--vert-clair)',
+      employee:    'var(--pierre-dark)',
+    }[user.role] || 'var(--gris)'
+
+    // --- UX : Seuls les super_admins peuvent toucher aux super_admins ---
+    const isTargetSuperAdmin = user.role === 'super_admin'
+    const isCurrentUserSuper = currentUser.role === 'super_admin'
+    const canModify          = isCurrentUserSuper || !isTargetSuperAdmin
+
+    let actionButtons = ''
+
+    if (canModify) {
+      actionButtons += `
+        <button
+          class="btn btn-secondary btn-sm btn-row-edit"
+          data-id="${user.id}"
+          aria-label="Modifier ${escHtml(displayName)}"
+        >Modifier</button>
+      `
+      if (!isSelf) {
+        actionButtons += `
+          <button
+            class="btn btn-danger btn-sm btn-row-delete"
+            data-id="${user.id}"
+            data-name="${escHtml(fullName || user.email)}"
+            aria-label="Supprimer ${escHtml(displayName)}"
+          >Supprimer</button>
+        `
+      }
+    } else {
+      // Un simple admin voit ce badge lecture seule sans boutons sur les comptes Super Admins
+      actionButtons = `
+        <span class="text-muted text-xs" style="font-size:11px; display:inline-flex; align-items:center; gap:4px; padding: 4px 8px;">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width:13px; height:13px;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          Lecture seule
+        </span>
+      `
+    }
+
+    return `
+      <tr data-id="${user.id}">
+        <td>
+          <div class="td-user">
+            <div class="user-avatar" style="background:${avatarColor}">${escHtml(initials)}</div>
+            <div class="td-user-info">
+              <p>
+                ${escHtml(displayName)}
+                ${isSelf ? '<span class="text-muted text-sm"> (vous)</span>' : ''}
+              </p>
+              <p>${escHtml(user.email)}</p>
+            </div>
+          </div>
+        </td>
+        <td>
+          <span class="badge badge-${user.role}">${roleLabel}</span>
+        </td>
+        <td>
+          <div class="perm-dots">${dots}</div>
+          ${permText}
+        </td>
+        <td style="text-align:right">
+          <div style="display:flex;justify-content:flex-end;gap:6px;align-items:center;flex-wrap:wrap">
+            ${actionButtons}
+          </div>
+        </td>
+      </tr>`
+  }
+
+  /* ════════════════════════════════════════
+     MODAL : INVITATION
+  ════════════════════════════════════════ */
+  function bindButtons() {
+    document.getElementById('btn-open-invite').addEventListener('click', () => {
+      /* Reset formulaire */
+      document.getElementById('invite-email').value  = ''
+      document.getElementById('invite-prenom').value = ''
+      document.getElementById('invite-nom').value    = ''
+      document.getElementById('invite-role').value   = 'employee'
+      document.getElementById('invite-alert').style.display = 'none'
+      const btn = document.getElementById('btn-invite-submit')
+      btn.disabled    = false
+      btn.textContent = "Envoyer l'invitation"
+      openModal('modal-invite')
+    })
+
+    document.getElementById('btn-invite-submit').addEventListener('click', handleInvite)
+    document.getElementById('btn-edit-submit').addEventListener('click', handleEditSave)
+    document.getElementById('btn-delete-confirm').addEventListener('click', handleDelete)
+  }
+
+  async function handleInvite() {
+    const email   = document.getElementById('invite-email').value.trim()
+    const prenom  = document.getElementById('invite-prenom').value.trim()
+    const nom     = document.getElementById('invite-nom').value.trim()
+    const role    = document.getElementById('invite-role').value
+    const alertEl = document.getElementById('invite-alert')
+    const btn     = document.getElementById('btn-invite-submit')
+
+    alertEl.style.display = 'none'
+
+    if (!email || !email.includes('@')) {
+      alertEl.textContent   = 'Veuillez entrer une adresse email valide.'
+      alertEl.style.display = 'flex'
+      return
+    }
+
+    
+
+    btn.disabled    = true
+    btn.textContent = 'Envoi…'
+
+    const { data: { session } } = await supabase.auth.getSession()
+
+    try {
+      const res = await fetch('/api/admin-users', {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ action: 'invite', email, prenom, nom, role }),
       })
 
-      document.getElementById('btn-invite-submit').addEventListener('click', handleInvite)
-      document.getElementById('btn-edit-submit').addEventListener('click', handleEditSave)
-      document.getElementById('btn-delete-confirm').addEventListener('click', handleDelete)
-    }
+      const result = await res.json()
 
-    async function handleInvite() {
-      const email   = document.getElementById('invite-email').value.trim()
-      const prenom  = document.getElementById('invite-prenom').value.trim()
-      const nom     = document.getElementById('invite-nom').value.trim()
-      const role    = document.getElementById('invite-role').value
-      const alertEl = document.getElementById('invite-alert')
-      const btn     = document.getElementById('btn-invite-submit')
-
-      alertEl.style.display = 'none'
-
-      if (!email || !email.includes('@')) {
-        alertEl.textContent   = 'Veuillez entrer une adresse email valide.'
+      if (!res.ok) {
+        alertEl.textContent   = result.error || "Erreur lors de l'invitation."
         alertEl.style.display = 'flex'
+        btn.disabled    = false
+        btn.textContent = "Envoyer l'invitation"
         return
       }
 
-      btn.disabled    = true
-      btn.textContent = 'Envoi…'
-
-      const { data: { session } } = await supabase.auth.getSession()
-
-      try {
-        const res = await fetch('/api/admin-users', {
-          method: 'POST',
-          headers: {
-            'Content-Type':  'application/json',
-            'Authorization': `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({ action: 'invite', email, prenom, nom, role }),
-        })
-
-        const result = await res.json()
-
-        if (!res.ok) {
-          alertEl.textContent   = result.error || "Erreur lors de l'invitation."
-          alertEl.style.display = 'flex'
-          btn.disabled    = false
-          btn.textContent = "Envoyer l'invitation"
-          return
-        }
-
-        closeModal('modal-invite')
-        showToast(`Invitation envoyée à ${email}`)
-        await loadUsers()
-
-      } catch {
-        alertEl.textContent   = 'Erreur réseau. Vérifiez votre connexion.'
-        alertEl.style.display = 'flex'
-        btn.disabled    = false
-        btn.textContent = "Envoyer l'invitation"
-      }
-    }
-
-    /* ════════════════════════════════════════
-       MODAL : MODIFIER PERMISSIONS
-    ════════════════════════════════════════ */
-    function openEditModal(userId) {
-      const user = allUsers.find(u => u.id === userId)
-      if (!user) return
-
-      document.getElementById('edit-user-id').value = userId
-      const fullName = [user.prenom, user.nom].filter(Boolean).join(' ') || user.email
-      document.getElementById('edit-title').textContent = `Modifier : ${fullName}`
-      document.getElementById('edit-role').value         = user.role
-      document.getElementById('edit-alert').style.display = 'none'
-
-      /* Construire les toggles de permissions */
-      document.getElementById('permissions-list').innerHTML = PERM_KEYS.map(perm => `
-        <div class="permission-row">
-          <span class="permission-label">${PERMISSIONS[perm]}</span>
-          <label class="toggle" aria-label="${PERMISSIONS[perm]}">
-            <input type="checkbox" name="${perm}" ${user[perm] ? 'checked' : ''}>
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-      `).join('')
-
-      /* Reset bouton */
-      const btn = document.getElementById('btn-edit-submit')
-      btn.disabled    = false
-      btn.textContent = 'Enregistrer'
-
-      openModal('modal-edit')
-    }
-
-    async function handleEditSave() {
-      const userId  = document.getElementById('edit-user-id').value
-      const role    = document.getElementById('edit-role').value
-      const alertEl = document.getElementById('edit-alert')
-      const btn     = document.getElementById('btn-edit-submit')
-
-      alertEl.style.display = 'none'
-      btn.disabled    = true
-      btn.textContent = 'Enregistrement…'
-
-      /* Récupérer l'état de chaque permission */
-      const updates = { role }
-      PERM_KEYS.forEach(perm => {
-        const checkbox = document.querySelector(`#permissions-list input[name="${perm}"]`)
-        if (checkbox) updates[perm] = checkbox.checked
-      })
-
-      const { error } = await supabase
-        .from('profiles')
-        .update(updates)
-        .eq('id', userId)
-
-      btn.disabled    = false
-      btn.textContent = 'Enregistrer'
-
-      if (error) {
-        const msg = error.message.includes('Interdit')
-          ? "Vous n'avez pas les droits pour effectuer cette modification."
-          : error.message
-        alertEl.textContent   = msg
-        alertEl.style.display = 'flex'
-        return
-      }
-
-      closeModal('modal-edit')
-      showToast('Profil mis à jour.')
+      closeModal('modal-invite')
+      showToast(`Invitation envoyée à ${email}`)
       await loadUsers()
-    }
 
-    /* ════════════════════════════════════════
-       MODAL : SUPPRESSION
-    ════════════════════════════════════════ */
-    function openDeleteModal(userId, userName) {
-      document.getElementById('delete-user-id').value       = userId
-      document.getElementById('delete-user-name').textContent = userName
-      const btn = document.getElementById('btn-delete-confirm')
+    } catch {
+      alertEl.textContent   = 'Erreur réseau. Vérifiez votre connexion.'
+      alertEl.style.display = 'flex'
       btn.disabled    = false
-      btn.textContent = 'Supprimer définitivement'
-      openModal('modal-delete')
+      btn.textContent = "Envoyer l'invitation"
+    }
+  }
+
+  /* ════════════════════════════════════════
+     MODAL : MODIFIER PERMISSIONS
+  ════════════════════════════════════════ */
+  function openEditModal(userId) {
+    const user = allUsers.find(u => u.id === userId)
+    if (!user) return
+
+    // SÉCURITÉ : Bloquer l'ouverture si un malin tente de modifier un Super Admin sans en être un
+    if (user.role === 'super_admin' && currentUser.role !== 'super_admin') {
+      showToast("Action non autorisée sur un compte Super Administrateur.", "error")
+      return
     }
 
-    async function handleDelete() {
-      const userId = document.getElementById('delete-user-id').value
-      const btn    = document.getElementById('btn-delete-confirm')
+    document.getElementById('edit-user-id').value = userId
+    const fullName = [user.prenom, user.nom].filter(Boolean).join(' ') || user.email
+    document.getElementById('edit-title').textContent = `Modifier : ${fullName}`
+    document.getElementById('edit-role').value         = user.role
+    document.getElementById('edit-alert').style.display = 'none'
 
-      btn.disabled    = true
-      btn.textContent = 'Suppression…'
+    /* Construire les toggles de permissions */
+    document.getElementById('permissions-list').innerHTML = PERM_KEYS.map(perm => `
+      <div class="permission-row">
+        <span class="permission-label">${PERMISSIONS[perm]}</span>
+        <label class="toggle" aria-label="${PERMISSIONS[perm]}">
+          <input type="checkbox" name="${perm}" ${user[perm] ? 'checked' : ''}>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    `).join('')
 
-      const { data: { session } } = await supabase.auth.getSession()
+    /* Reset bouton */
+    const btn = document.getElementById('btn-edit-submit')
+    btn.disabled    = false
+    btn.textContent = 'Enregistrer'
 
-      try {
-        const res = await fetch('/api/admin-users', {
-          method: 'POST',
-          headers: {
-            'Content-Type':  'application/json',
-            'Authorization': `Bearer ${session.access_token}`,
-          },
-          body: JSON.stringify({ action: 'delete', userId }),
-        })
+    openModal('modal-edit')
+  }
 
-        const result = await res.json()
-        closeModal('modal-delete')
+  async function handleEditSave() {
+    const userId  = document.getElementById('edit-user-id').value
+    const role    = document.getElementById('edit-role').value
+    const alertEl = document.getElementById('edit-alert')
+    const btn     = document.getElementById('btn-edit-submit')
 
-        if (!res.ok) {
-          showToast(result.error || 'Erreur lors de la suppression.', 'error')
-          btn.disabled    = false
-          btn.textContent = 'Supprimer définitivement'
-          return
-        }
+    alertEl.style.display = 'none'
+    btn.disabled    = true
+    btn.textContent = 'Enregistrement…'
 
-        showToast('Utilisateur supprimé.')
-        await loadUsers()
+    /* Récupérer l'état de chaque permission */
+    const updates = { role }
+    PERM_KEYS.forEach(perm => {
+      const checkbox = document.querySelector(`#permissions-list input[name="${perm}"]`)
+      if (checkbox) updates[perm] = checkbox.checked
+    })
 
-      } catch {
-        showToast('Erreur réseau.', 'error')
-        closeModal('modal-delete')
+    const { error } = await supabase
+      .from('profiles')
+      .update(updates)
+      .eq('id', userId)
+
+    btn.disabled    = false
+    btn.textContent = 'Enregistrer'
+
+    if (error) {
+      const msg = error.message.includes('Interdit')
+        ? "Vous n'avez pas les droits pour effectuer cette modification."
+        : error.message
+      alertEl.textContent   = msg
+      alertEl.style.display = 'flex'
+      return
+    }
+
+    closeModal('modal-edit')
+    showToast('Profil mis à jour.')
+    await loadUsers()
+  }
+
+  /* ════════════════════════════════════════
+     MODAL : SUPPRESSION
+  ════════════════════════════════════════ */
+  function openDeleteModal(userId, userName) {
+    const user = allUsers.find(u => u.id === userId)
+    if (!user) return
+
+    // SÉCURITÉ : Empêcher un admin de supprimer un Super Admin via JS
+    if (user.role === 'super_admin' && currentUser.role !== 'super_admin') {
+      showToast("Action non autorisée sur un compte Super Administrateur.", "error")
+      return
+    }
+
+    document.getElementById('delete-user-id').value       = userId
+    document.getElementById('delete-user-name').textContent = userName
+    const btn = document.getElementById('btn-delete-confirm')
+    btn.disabled    = false
+    btn.textContent = 'Supprimer définitivement'
+    openModal('modal-delete')
+  }
+
+  async function handleDelete() {
+    const userId = document.getElementById('delete-user-id').value
+    const btn    = document.getElementById('btn-delete-confirm')
+
+    btn.disabled    = true
+    btn.textContent = 'Suppression…'
+
+    const { data: { session } } = await supabase.auth.getSession()
+
+    try {
+      const res = await fetch('/api/admin-users', {
+        method: 'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
+        body: JSON.stringify({ action: 'delete', userId }),
+      })
+
+      const result = await res.json()
+      closeModal('modal-delete')
+
+      if (!res.ok) {
+        showToast(result.error || 'Erreur lors de la suppression.', 'error')
         btn.disabled    = false
         btn.textContent = 'Supprimer définitivement'
+        return
       }
-    }
 
-    /* ── Échappement HTML ── */
-    function escHtml(str) {
-      if (!str) return ''
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-    }
+      showToast('Utilisateur supprimé.')
+      await loadUsers()
 
-    init()
-  </script>
+    } catch {
+      showToast('Erreur réseau.', 'error')
+      closeModal('modal-delete')
+      btn.disabled    = false
+      btn.textContent = 'Supprimer définitivement'
+    }
+  }
+
+  /* ── Échappement HTML ── */
+  function escHtml(str) {
+    if (!str) return ''
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+  }
+
+  init()
+</script>
 
 </body>
 </html>
