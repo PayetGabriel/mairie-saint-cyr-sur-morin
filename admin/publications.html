@@ -511,6 +511,14 @@
     let pendingDel       = { table: null, id: null }
     let rte              = null
     let allData          = { articles: [], arretes: [], cr: [], tdu: [], media: [] }
+    let isDirty          = false
+
+    window.addEventListener('beforeunload', (e) => {
+      if (isDirty) {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    })
 
     /* ════════════════════════════════════════════════════════
     MINI RICH TEXT EDITOR (Avec Modale de Lien Intégrée)
@@ -928,6 +936,7 @@
        ARTICLE : ÉDITION PLEIN ÉCRAN
     ════════════════════════════════════════════════════════ */
     function openArticleEdit(art = null) {
+      isDirty = false
       editingId.articles = art?.id || null
 
       document.getElementById('list-header').style.display = 'none'
@@ -993,6 +1002,7 @@
       }
 
       if (error) { showToast('Erreur : ' + error.message, 'error'); return }
+      isDirty = false
       showToast(saveLbl)
       await loadAll()
       renderCurrentList()
@@ -1003,6 +1013,7 @@
        MÉDIATHÈQUE : ÉDITION PLEIN ÉCRAN
     ════════════════════════════════════════════════════════ */
     function openMediathequeEdit(evt = null) {
+      isDirty = false
       editingId.media = evt?.id || null
 
       document.getElementById('list-header').style.display       = 'none'
@@ -1066,6 +1077,7 @@
       }
 
       if (error) { showToast('Erreur : ' + error.message, 'error'); return }
+      isDirty = false
       showToast(isDraft ? 'Brouillon enregistré.' : 'Événement publié.')
       await loadAll()
       renderCurrentList()
@@ -1243,11 +1255,23 @@
         }
       })
 
-      document.getElementById('btn-back').addEventListener('click', closeArticleEdit)
+      document.getElementById('btn-back').addEventListener('click', () => {
+        if (isDirty && !confirm("Attention : Vous avez des modifications non enregistrées. Voulez-vous vraiment quitter et perdre vos modifications ?")) {
+          return
+        }
+        isDirty = false
+        closeArticleEdit()
+      })
       document.getElementById('btn-save-draft').addEventListener('click', () => saveArticle(true))
       document.getElementById('btn-publish').addEventListener('click',    () => saveArticle(false))
 
-      document.getElementById('btn-back-media').addEventListener('click', closeMediathequeEdit)
+      document.getElementById('btn-back-media').addEventListener('click', () => {
+        if (isDirty && !confirm("Attention : Vous avez des modifications non enregistrées. Voulez-vous vraiment quitter et perdre vos modifications ?")) {
+          return
+        }
+        isDirty = false
+        closeMediathequeEdit()
+      })
       document.getElementById('btn-save-media-draft').addEventListener('click', () => saveMedia(true))
       document.getElementById('btn-publish-media').addEventListener('click',    () => saveMedia(false))
 
@@ -1273,6 +1297,15 @@
         renderCurrentList()
       })
     }
+    
+    // ─── CAPTURE DES MODIFICATIONS GLOBALISÉE ───
+    ;['view-edit', 'view-edit-media'].forEach(id => {
+      const container = document.getElementById(id)
+      if (container) {
+        container.addEventListener('input', () => { isDirty = true })
+        container.addEventListener('change', () => { isDirty = true })
+      }
+    })
 
     init()
   </script>
