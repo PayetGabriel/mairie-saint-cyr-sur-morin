@@ -177,6 +177,7 @@ export function buildSidebar(profile, activePage) {
   if (!sidebarEl) return
 
   sidebarEl.innerHTML = `
+    <!-- On laisse le header brut pour que son border-bottom et son padding CSS s'appliquent parfaitement -->
     <div class="sidebar-header">
       <img class="sidebar-logo" src="/assets/img/logoSaintCyr_2020.svg" alt="Blason Saint-Cyr-sur-Morin">
       <div class="sidebar-header-text">
@@ -185,12 +186,19 @@ export function buildSidebar(profile, activePage) {
       </div>
     </div>
 
+    <!-- Conteneur avec du recul (12px) pour détacher le bouton du séparateur du header -->
+    <div style="padding: 12px 16px 4px 16px;">
+      <a href="/" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 6px 10px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 4px; color: rgba(255,255,255,0.8); text-decoration: none; font-size: 0.8rem; font-weight: 500; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.12)'; this.style.borderColor='rgba(255,255,255,0.25)'; this.style.color='#ffffff'" onmouseout="this.style.background='rgba(255,255,255,0.06)'; this.style.borderColor='rgba(255,255,255,0.12)'; this.style.color='rgba(255,255,255,0.8)'">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" style="width: 12px; height: 12px;"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg>
+        <span>Voir le site public</span>
+      </a>
+    </div>
+
     <nav class="sidebar-nav" role="navigation" aria-label="Menu principal">
       ${navHTML}
     </nav>
 
     <div class="sidebar-footer">
-      <div class="sidebar-status" id="sidebar-status">Supabase connecté</div>
       <div class="sidebar-user">
         <div class="user-avatar avatar-${profile.role}">${initials}</div>
         <div class="sidebar-user-info">
