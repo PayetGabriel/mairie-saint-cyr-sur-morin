@@ -1339,6 +1339,20 @@ td.td-user {
 
 .btn-hamburger svg { width: 21px; height: 21px; }
 
+@media (min-width: 1024px) {
+  .settings-wrap {
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .settings-wrap > .card:nth-child(3) {
+    grid-column: span 2;
+  }
+}
+
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
