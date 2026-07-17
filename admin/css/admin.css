@@ -993,6 +993,8 @@ tbody tr:hover { background: rgba(0,0,0,0.015); }
   .cn-section { padding: 7px 11px 3px; font-size: 9px; }
   .cn-section.sep { padding-top: 9px; margin-top: 3px; }
   .cn-item { padding: 5px 10px 5px 18px; font-size: 12.5px; }
+  .editor-area { width: 100%; min-width: 100%; flex: none; }
+  .editor-form-wrap { width: 100%; }
 }
 @media (max-width: 640px) {
   .li-g2 { grid-template-columns: 1fr; }
