@@ -148,7 +148,7 @@
         return
       }
 
-      /* 🛡️ OPTIMISATION : Une seule requête pour valider le profil + préparer les logs */
+      /* OPTIMISATION : Une seule requête pour valider le profil + préparer les logs */
       const { data: profile, error: profileErr } = await supabase
         .from('profiles')
         .select('id, role, prenom, nom, email')

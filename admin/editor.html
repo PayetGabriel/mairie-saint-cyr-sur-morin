@@ -129,14 +129,13 @@
     let currentKey   = null
     let currentData  = null
     let allContent   = {}
-    let rteInstance  = null  // For mot_du_maire
+    let rteInstance  = null
     let isDirty = false
 
-    // Bloquer la fermeture/rafraîchissement du navigateur si des modifications sont en cours
     window.addEventListener('beforeunload', (e) => {
     if (isDirty) {
         e.preventDefault()
-        e.returnValue = '' // Requis par les navigateurs modernes pour afficher l'alerte standard
+        e.returnValue = ''
     }
     })
 
@@ -288,14 +287,12 @@
         const toolbar  = this.wrap.querySelector('.rte-toolbar')
         this.editor    = this.wrap.querySelector('.rte-content')
         
-        // Événements de la toolbar
         toolbar.addEventListener('mousedown', e => e.preventDefault())
         toolbar.addEventListener('click', e => {
         const btn = e.target.closest('[data-cmd]'); if (!btn) return
         e.preventDefault(); this._exec(btn.dataset.cmd)
         })
 
-        // Écouteurs pour synchroniser l'état actif des boutons
         this.editor.addEventListener('keyup',   () => this._updateState(toolbar))
         this.editor.addEventListener('mouseup', () => this._updateState(toolbar))
     }
@@ -310,35 +307,27 @@
         let node = sel.getRangeAt(0).commonAncestorContainer
         if (node.nodeType === Node.TEXT_NODE) node = node.parentNode
         
-        // On cherche si on est déjà dans un encadré
         const existingHighlight = node.closest('.lettre-highlight')
 
         if (existingHighlight) {
-            // TOGGLE OFF : On extrait le contenu pour casser l'encadré
             const parent = existingHighlight.parentNode
             while (existingHighlight.firstChild) {
             parent.insertBefore(existingHighlight.firstChild, existingHighlight)
             }
             parent.removeChild(existingHighlight)
         } else {
-            // TOGGLE ON : Comportement automatique style "Blockquote"
-            // On remonte le DOM pour trouver le paragraphe complet (<p>, <h2>...) sous le curseur
             let targetBlock = node
             while (targetBlock && targetBlock.parentNode !== this.editor && targetBlock !== this.editor) {
             targetBlock = targetBlock.parentNode
             }
 
-            // Si on a trouvé le paragraphe/bloc parent dans l'éditeur
             if (targetBlock && targetBlock !== this.editor) {
             const div = document.createElement('div')
             div.className = 'lettre-highlight'
             
-            // On insère le faux-bloc div juste avant le paragraphe actuel
             targetBlock.parentNode.insertBefore(div, targetBlock)
-            // On déplace le paragraphe ENTIER à l'intérieur du div
             div.appendChild(targetBlock)
             } else {
-            // Sécurité si l'éditeur est totalement vide ou texte brut sans balise
             const div = document.createElement('div')
             div.className = 'lettre-highlight'
             div.innerHTML = `<p>${this.editor.innerHTML || '<br>'}</p>`
@@ -346,11 +335,9 @@
             this.editor.appendChild(div)
             }
             
-            // On nettoie la sélection visuelle pour éviter les bugs de curseur
             sel.removeAllRanges()
         }
         } else {
-        // Commandes de base (Gras / Italique)
         document.execCommand(cmd, false, null)
         }
         
@@ -369,11 +356,9 @@
         const cmd = btn.dataset.cmd
         try {
             if (cmd === 'highlight') {
-            // Si le curseur a un parent .lettre-highlight, on active le bouton
             const isActive = parentNode ? !!parentNode.closest('.lettre-highlight') : false
             btn.classList.toggle('active', isActive)
             } else {
-            // Gestion native pour bold et italic
             btn.classList.toggle('active', document.queryCommandState(cmd))
             }
         } catch {}
@@ -1390,13 +1375,10 @@
     // ─── CAPTURE DES MODIFICATIONS GLOBALISÉE ───
     const formWrap = document.getElementById('editor-form-wrap')
     if (formWrap) {
-        // 1. Détecte quand l'utilisateur tape du texte ou change la valeur d'un select/checkbox
         formWrap.addEventListener('input', () => { isDirty = true })
         formWrap.addEventListener('change', () => { isDirty = true })
 
-        // 2. Détecte quand l'utilisateur interagit avec tes listes dynamiques (Permanences, PLU, etc.)
         formWrap.addEventListener('click', (e) => {
-            // Si on clique sur un bouton de déplacement/suppression (.li-btn) ou d'ajout (dont l'ID finit par -add)
             if (e.target.closest('.li-btn') || e.target.closest('[id$="-add"]')) {
             isDirty = true
             }

@@ -213,7 +213,6 @@
      INIT
   ════════════════════════════════════════ */
   async function init() {
-    /* requireAdmin: true → redirige les non-admins vers le dashboard */
     const auth = await requireAuth({ requireAdmin: true })
     if (!auth) return
 
@@ -224,7 +223,6 @@
 
     buildSidebar(currentUser, 'users')
     
-    // NOUVEAU : Configuration dynamique des rôles selon l'utilisateur connecté
     setupRoleDropdowns()
     
     initModals()
@@ -531,7 +529,7 @@
 
     alertEl.style.display = 'none'
 
-    // 🛡️ SÉCURITÉ : Empêcher l'attribution du rôle Super Admin par un simple Admin
+    // SÉCURITÉ : Empêcher l'attribution du rôle Super Admin par un simple Admin
     if (role === 'super_admin' && currentUser.role !== 'super_admin') {
       alertEl.textContent   = "Vous n'avez pas l'autorisation d'attribuer le rôle Super Administrateur."
       alertEl.style.display = 'flex'

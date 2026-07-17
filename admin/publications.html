@@ -602,7 +602,6 @@
         _exec(cmd) {
             this.editor.focus()
             switch (cmd) {
-                // Gestion intelligente du Toggle pour les blocs (H2, H3, Blockquote)
                 case 'h2':
                 case 'h3':
                 case 'blockquote': {
@@ -611,7 +610,6 @@
                         let node = sel.getRangeAt(0).commonAncestorContainer
                         if (node.nodeType === Node.TEXT_NODE) node = node.parentNode
                         
-                        // Si on est déjà dans ce tag précis, on applique 'p' pour l'enlever et redevenir normal
                         if (node.closest(cmd)) {
                             document.execCommand('formatBlock', false, 'p')
                         } else {
@@ -666,7 +664,6 @@
         }
 
         _updateState(toolbar) {
-            // On récupère le nœud parent de la sélection actuelle pour checker les balises de bloc
             const sel = window.getSelection()
             let parentNode = null
             if (sel.rangeCount > 0) {
@@ -678,11 +675,9 @@
                 const cmd = btn.dataset.cmd
                 try {
                     if (['h2', 'h3', 'blockquote'].includes(cmd)) {
-                        // Pour les blocs, on regarde si un parent correspond à la commande active (ex: parentNode.closest('blockquote'))
                         const isActive = parentNode ? !!parentNode.closest(cmd) : false
                         btn.classList.toggle('active', isActive)
                     } else {
-                        // Pour le reste (Gras, Italique, Listes), le comportement natif fonctionne très bien
                         btn.classList.toggle('active', document.queryCommandState(cmd))
                     }
                 } catch {}
@@ -716,7 +711,6 @@
       buildSidebar(profile, 'publications')
       initModals()
 
-      /* Masquer les onglets non accessibles */
       if (!hasPublications) {
         ;['articles','arretes','cr','tdu'].forEach(tab => {
           const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`)
@@ -736,7 +730,6 @@
       renderCurrentList()
       setTab(currentTab)
 
-      /* TDU type → show/hide numéro */
       document.getElementById('tdu-type').addEventListener('change', e => {
         document.getElementById('tdu-numero-group').style.display =
           e.target.value === 'Standard' ? 'block' : 'none'
@@ -812,7 +805,6 @@
     }
     function toDatetimeLocal(iso) {
       if (!iso) return ''
-      // On extrait seulement la date YYYY-MM-DD pour l'input type="date"
       return String(iso).slice(0, 10)
     }
     function escH(s) {
