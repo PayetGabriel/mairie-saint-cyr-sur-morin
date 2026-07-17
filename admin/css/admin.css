@@ -1224,7 +1224,7 @@ td.td-user {
    PAGE SETTINGS
    ============================================================ */
 
-.settings-wrap { max-width: 680px; display: flex; flex-direction: column; gap: 14px; }
+.settings-wrap { width: 100%; display: flex; flex-direction: column; gap: 14px; }
 
 .s-label {
   font-size: 11.5px;
