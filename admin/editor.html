@@ -507,13 +507,17 @@
           ${fld(`perm-${s.key}-note`,'Note (optionnelle)', sec.note||'', {ph:'Ex: Également sur rendez-vous'})}
           <div class="perm-table">
             ${PDAYS.map(day => {
-              const row = rowMap[day] || {day,hours:'',closed:false}
+              const row = rowMap[day] || {day,hours:'',details:'',closed:false}
               const cl  = !!row.closed
               return `
                 <div class="perm-row" data-ps="${s.key}" data-pd="${day}">
                   <span class="perm-day">${day}</span>
-                  <input type="text" class="form-input perm-hours" value="${escAttr(row.hours||'')}"
-                    placeholder="09:00–12:30" ${cl?'style="opacity:.4;pointer-events:none"':''}>
+                  <div style="display: flex; flex-direction: column; gap: 4px; flex: 1;">
+                    <input type="text" class="form-input perm-hours" value="${escAttr(row.hours||'')}"
+                      placeholder="09:00–12:30" ${cl?'style="opacity:.4;pointer-events:none"':''}>
+                    <input type="text" class="form-input perm-details" value="${escAttr(row.details||'')}"
+                      placeholder="Précision (ex: semaines paires)" style="font-size: 0.8rem; height: 28px; ${cl?'opacity:.4;pointer-events:none':''}">
+                  </div>
                   <label class="toggle" title="Fermé">
                     <input type="checkbox" class="perm-closed" ${cl?'checked':''}>
                     <span class="toggle-slider"></span>
@@ -531,7 +535,8 @@
           const row    = document.querySelector(`[data-ps="${s.key}"][data-pd="${day}"]`)
           const closed = row?.querySelector('.perm-closed')?.checked || false
           const hours  = row?.querySelector('.perm-hours')?.value || ''
-          return {day, hours: closed ? 'Fermé' : hours, closed}
+          const details = row?.querySelector('.perm-details')?.value || ''
+          return {day, hours: closed ? 'Fermé' : hours, details: closed ? '' : details, closed}
         })
         res[s.key] = {note, rows}
       })

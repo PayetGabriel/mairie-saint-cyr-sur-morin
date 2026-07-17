@@ -108,11 +108,33 @@ async function initPermanences() {
         permData.rows.forEach(row => {
           const rowDiv = document.createElement('div')
           rowDiv.className = 'perm-horaire-row'
-          const daySpan = `<span class="perm-day">${row.day}</span>`
-          let hoursSpan = row.closed 
-            ? `<span class="perm-hours" style="color:var(--gris); font-style:italic;">${row.hours}</span>`
-            : `<span class="perm-hours">${row.hours}</span>`
-          rowDiv.innerHTML = daySpan + hoursSpan
+
+          // 1. Nom du jour
+          const daySpan = document.createElement('span')
+          daySpan.className = 'perm-day'
+          daySpan.textContent = row.day
+          rowDiv.appendChild(daySpan)
+
+          // 2. Horaires
+          const hoursSpan = document.createElement('span')
+          hoursSpan.className = 'perm-hours'
+          hoursSpan.textContent = row.hours
+          if (row.closed) {
+            hoursSpan.style.color = 'var(--gris)'
+            hoursSpan.style.fontStyle = 'italic'
+          }
+          rowDiv.appendChild(hoursSpan)
+
+          // 3. Ajout du complément (semaines paires/impaires) si présent
+          if (row.details && row.details.trim() !== '' && !row.closed) {
+            const smallText = document.createElement('small')
+            smallText.style.color = 'var(--gris)'
+            smallText.style.fontWeight = 'normal'
+            smallText.style.marginLeft = '6px'
+            smallText.textContent = `(${row.details})`
+            hoursSpan.appendChild(smallText)
+          }
+
           horairesContainer.appendChild(rowDiv)
         })
       }
