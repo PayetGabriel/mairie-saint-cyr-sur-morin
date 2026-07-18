@@ -1931,10 +1931,10 @@ function renderHomeCarousel(slidesData) {
   dotsContainer.innerHTML = '';
 
   slidesData.forEach((item) => {
-    const slide = document.createElement('div');
+    const slide = document.createElement('a');
     slide.className = 'carousel-slide';
+    slide.href = `/la-commune/actualites/article.html?id=${item.id}`;
     
-    // MODIFICATION : Gestion conditionnelle de l'image ou du placeholder
     let imgBlock = '';
     if (item.image_url) {
       imgBlock = `<div class="carousel-img" style="background-image:url('${item.image_url}')"></div>`;
@@ -1955,7 +1955,7 @@ function renderHomeCarousel(slidesData) {
         <span class="actu-tag">${item.tag}</span>
         <h3>${item.titre}</h3>
         <p>${item.resume || ''}</p>
-        <a href="/la-commune/actualites/article.html?id=${item.id}" class="carousel-link">En savoir plus →</a>
+        <span class="carousel-link">En savoir plus →</span>
       </div>
       ${imgBlock}
     `;

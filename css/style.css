@@ -664,11 +664,16 @@ img {
   top: 0; left: 0; width: 100%;
   pointer-events: none;
   transition: opacity .5s ease;
+  text-decoration: none;
+  cursor: pointer;
 }
 .carousel-slide.active {
   opacity: 1;
   position: relative;
   pointer-events: auto;
+}
+.carousel-slide:hover .carousel-link { 
+  color: var(--vert-clair); 
 }
 
 .carousel-text {
@@ -689,7 +694,6 @@ img {
   color: var(--vert); text-decoration: none;
   transition: color .2s;
 }
-.carousel-link:hover { color: var(--vert-clair); }
 
 .carousel-img {
   background-size: cover; background-position: center;
