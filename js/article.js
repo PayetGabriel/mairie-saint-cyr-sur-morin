@@ -78,28 +78,47 @@ function renderArticle(data) {
 
 function setupShareButton() {
   const shareBtn = document.getElementById('share-link-btn');
-  if (shareBtn) {
-    shareBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(window.location.href)
-        .then(() => {
-          const oldTitle = shareBtn.getAttribute('title') || 'Copier le lien';
-          shareBtn.setAttribute('title', 'Lien copié !');
-          
-          const spanText = shareBtn.parentElement.querySelector('span');
-          if (spanText) {
-            const originalText = spanText.textContent;
-            spanText.textContent = 'Copié !';
-            spanText.style.color = 'var(--vert)';
-            setTimeout(() => {
-              spanText.textContent = originalText;
-              spanText.style.color = '';
-              shareBtn.setAttribute('title', oldTitle);
-            }, 2000);
-          }
-        })
-        .catch(err => console.error('Erreur lors de la copie du lien : ', err));
-    });
-  }
+  if (!shareBtn) return;
+
+  // Ajuste l'infobulle native selon la compatibilité
+  shareBtn.setAttribute('title', navigator.share ? 'Partager cet article' : 'Copier le lien');
+
+  shareBtn.addEventListener('click', async () => {
+    const shareData = {
+      title: document.title,
+      url: window.location.href
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+
+      const oldTitle = shareBtn.getAttribute('title') || 'Partager';
+      shareBtn.setAttribute('title', 'Lien copié !');
+
+      const spanText = shareBtn.parentElement.querySelector('span');
+      if (spanText) {
+        const originalText = spanText.textContent;
+        spanText.textContent = 'Copié !';
+        spanText.style.color = 'var(--vert)';
+        setTimeout(() => {
+          spanText.textContent = originalText;
+          spanText.style.color = '';
+          shareBtn.setAttribute('title', oldTitle);
+        }, 2000);
+      }
+    } catch (err) {
+      console.error('Erreur lors de la copie du lien : ', err);
+    }
+  });
 }
 
 async function fetchAndRenderRelated(currentArticle) {
