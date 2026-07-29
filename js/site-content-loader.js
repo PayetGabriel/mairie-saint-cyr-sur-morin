@@ -1975,9 +1975,17 @@ function renderBentoUne(articles) {
     const metaBlock = `
       <div class="bento-meta">
         <span class="bento-date">${dateStr}</span>
-        ${isHero ? '<span class="bento-link">En savoir plus →</span>' : ''}
+        ${isHero ? `
+          <span class="bento-action">
+            En savoir plus 
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </span>
+        ` : ''}
       </div>`;
- 
+      
     const cardClass = `bento-card ${isHero ? 'bento-hero' : 'bento-item'}${!hasImage ? ' bento-noimg' : ''}`;
  
     return `
