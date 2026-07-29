@@ -53,41 +53,12 @@ function renderArticle(data) {
   document.getElementById('article-loading').style.display = 'none';
   document.getElementById('article-content').style.display = 'block';
 
-  // 1. Définition des valeurs dynamiques (avec fallbacks)
-  const defaultImage = 'https://mairie-saint-cyr-sur-morin.vercel.app/assets/img/logoSaintCyr_2020_web.png';
-  const pageTitle = data.titre + ' — Saint-Cyr-sur-Morin';
-  const pageDesc = data.resume || data.titre || "Découvrez les détails de cette actualité ou de cet événement sur le site officiel de la commune de Saint-Cyr-sur-Morin.";
-  const pageImage = (data.image_url && data.image_url.trim() !== '') ? data.image_url : defaultImage;
-  const pageUrl = window.location.href;
-
-  // 2. Mise à jour du <title>
-  document.title = pageTitle;
-
-  // 3. Mise à jour des balises Meta SEO et Open Graph
-  const metaDesc = document.querySelector('meta[name="description"]');
-  if (metaDesc) metaDesc.setAttribute('content', pageDesc);
-
-  const ogTitle = document.querySelector('meta[property="og:title"]');
-  if (ogTitle) ogTitle.setAttribute('content', pageTitle);
-
-  const ogDesc = document.querySelector('meta[property="og:description"]');
-  if (ogDesc) ogDesc.setAttribute('content', pageDesc);
-
-  const ogImage = document.querySelector('meta[property="og:image"]');
-  if (ogImage) ogImage.setAttribute('content', pageImage);
-
-  // Optionnel mais recommandé : Mettre à jour l'URL Open Graph de la page active
-  let ogUrl = document.querySelector('meta[property="og:url"]');
-  if (ogUrl) {
-    ogUrl.setAttribute('content', pageUrl);
-  } else {
-    ogUrl = document.createElement('meta');
-    ogUrl.setAttribute('property', 'og:url');
-    ogUrl.setAttribute('content', pageUrl);
-    document.head.appendChild(ogUrl);
+  document.title = data.titre + ' — Saint-Cyr-sur-Morin';
+  const metaDesc = document.getElementById('page-description');
+  if (metaDesc) {
+    metaDesc.content = data.resume || data.titre;
   }
 
-  // 4. Rendu visuel du contenu de l'article dans la page
   document.getElementById('art-tag').textContent = data.tag || 'Actualité';
   document.getElementById('art-date').textContent = formatDate(data.created_at);
   document.getElementById('art-title').textContent = data.titre;
@@ -96,7 +67,7 @@ function renderArticle(data) {
 
   const heroWrap = document.getElementById('art-hero-wrap');
   const heroImg = document.getElementById('art-hero');
-  if (data.image_url && data.image_url.trim() !== '') {
+  if (data.image_url) {
     heroImg.src = data.image_url;
     heroImg.alt = data.titre;
     heroWrap.style.display = 'block';
