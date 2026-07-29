@@ -1899,183 +1899,162 @@ async function initMediathequeEvents() {
 }
 
 /**
- * Initialise les articles de la page d'accueil (Carousel et Dernières actualités)
+ * Point d'entrée — charge les articles en parallèle et orchestre le rendu.
  */
 export async function initHomeArticles() {
-  // 1. Récupération parallèle des articles (Carousel mis en avant vs 5 derniers articles)
   const [featuredRes, latestRes] = await Promise.all([
-    supabase.from('articles').select('*').eq('is_draft', false).eq('is_featured', true).order('created_at', { ascending: false }),
-    supabase.from('articles').select('*').eq('is_draft', false).order('created_at', { ascending: false }).limit(5)
+    supabase
+      .from('articles')
+      .select('*')
+      .eq('is_draft', false)
+      .eq('is_featured', true)
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('articles')
+      .select('*')
+      .eq('is_draft', false)
+      .order('created_at', { ascending: false })
+      .limit(6),
   ]);
-
-  // 2. Rendu et activation du Carousel
-  if (!featuredRes.error && featuredRes.data && featuredRes.data.length > 0) {
-    renderHomeCarousel(featuredRes.data);
+ 
+  const featured = featuredRes.data || [];
+  const latest   = latestRes.data  || [];
+ 
+  // IDs des articles déjà affichés dans le bento → à exclure des récents
+  const featuredIds = new Set(featured.map(a => a.id));
+ 
+  // ── Bento "À la une" ──────────────────────────────────────
+  if (featured.length > 0) {
+    renderBentoUne(featured.slice(0, 8)); // max 8 tuiles
   } else {
-    const carouselSec = document.querySelector('.carousel-section');
-    if (carouselSec) carouselSec.style.display = 'none';
+    const el = document.getElementById('bento-une');
+    if (el) el.style.display = 'none';
   }
-
-  // 3. Rendu de la grille des 5 dernières actualités
-  if (!latestRes.error && latestRes.data && latestRes.data.length > 0) {
-    renderHomeLatestArticles(latestRes.data);
+ 
+  // ── Articles récents (excluant ceux déjà dans le bento) ──
+  const recents = latest.filter(a => !featuredIds.has(a.id)).slice(0, 3);
+  if (recents.length > 0) {
+    renderRecentArticles(recents);
+  } else {
+    const el = document.getElementById('actu-recents');
+    if (el) el.style.display = 'none';
   }
 }
-
-function renderHomeCarousel(slidesData) {
-  const track = document.querySelector('.carousel-track');
-  const dotsContainer = document.querySelector('.carousel-dots');
-  if (!track || !dotsContainer) return;
-
-  track.innerHTML = '';
-  dotsContainer.innerHTML = '';
-
-  slidesData.forEach((item) => {
-    const slide = document.createElement('a');
-    slide.className = 'carousel-slide';
-    slide.href = `/la-commune/actualites/article.html?id=${item.id}`;
-    
-    let imgBlock = '';
-    if (item.image_url) {
-      imgBlock = `<div class="carousel-img" style="background-image:url('${item.image_url}')"></div>`;
-    } else {
-      imgBlock = `
-        <div class="carousel-img carousel-img-placeholder">
-          <svg width="48" height="48" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
-            <rect x="3" y="3" width="18" height="18" rx="2"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-            <polyline points="21 15 16 10 5 21"/>
-          </svg>
+ 
+ 
+/**
+ * Construit le bento asymétrique selon le nombre d'articles.
+ * @param {Array} articles — articles is_featured (max 6)
+ */
+function renderBentoUne(articles) {
+  const container = document.getElementById('bento-une');
+  if (!container) return;
+ 
+  const count = articles.length;
+  container.setAttribute('data-count', count);
+  container.style.display = '';
+ 
+  container.innerHTML = articles.map((art, i) => {
+    const isHero    = i === 0;
+    const hasImage  = !!art.image_url;
+    const dateStr   = _fmtDate(art.created_at);
+    const url       = `/la-commune/actualites/article.html?id=${art.id}`;
+ 
+    const imgBlock  = hasImage
+      ? `<div class="bento-img" style="background-image:url('${art.image_url}')"></div>`
+      : '';
+ 
+    const tagBlock  = `<span class="bento-tag">${art.tag}</span>`;
+ 
+    const titleBlock = `<h3 class="bento-title">${art.titre}</h3>`;
+ 
+    const resumeBlock = (isHero && art.resume)
+      ? `<p class="bento-resume">${art.resume}</p>`
+      : '';
+ 
+    const metaBlock = `
+      <div class="bento-meta">
+        <span class="bento-date">${dateStr}</span>
+        ${isHero ? '<span class="bento-link">En savoir plus →</span>' : ''}
+      </div>`;
+ 
+    const cardClass = `bento-card ${isHero ? 'bento-hero' : 'bento-item'}${!hasImage ? ' bento-noimg' : ''}`;
+ 
+    return `
+      <a href="${url}" class="${cardClass}">
+        ${imgBlock}
+        <div class="bento-body">
+          ${tagBlock}
+          ${titleBlock}
+          ${resumeBlock}
+          ${metaBlock}
         </div>
-      `;
-    }
-
-    slide.innerHTML = `
-      <div class="carousel-text">
-        <span class="actu-tag">${item.tag}</span>
-        <h3>${item.titre}</h3>
-        <p>${item.resume || ''}</p>
-        <span class="carousel-link">En savoir plus →</span>
-      </div>
-      ${imgBlock}
-    `;
-    track.appendChild(slide);
-  });
-
-  const slides = track.querySelectorAll('.carousel-slide');
-  let current = 0, timer;
-
-  slides.forEach((_, i) => {
-    const d = document.createElement('button');
-    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-    d.setAttribute('aria-label', `Slide ${i + 1}`);
-    d.addEventListener('click', () => goTo(i));
-    dotsContainer.appendChild(d);
-  });
-
-  function fixHeight() {
-    track.style.height = '';
-    slides.forEach(s => {
-      s.style.position = 'relative'; s.style.opacity = '1'; s.style.pointerEvents = 'auto'; s.style.height = 'auto';
-    });
-    const maxH = Math.max(...Array.from(slides).map(s => s.offsetHeight));
-    track.style.height = maxH + 'px';
-    slides.forEach(s => {
-      s.style.position = ''; s.style.opacity = ''; s.style.pointerEvents = ''; s.style.height = maxH + 'px';
-    });
-  }
-
-  function goTo(n) {
-    slides[current].classList.remove('active');
-    dotsContainer.querySelectorAll('.carousel-dot')[current].classList.remove('active');
-    current = (n + slides.length) % slides.length;
-    slides[current].classList.add('active');
-    dotsContainer.querySelectorAll('.carousel-dot')[current].classList.add('active');
-    resetTimer();
-  }
-
-  function resetTimer() {
-    clearInterval(timer);
-    timer = setInterval(() => goTo(current + 1), 5000);
-  }
-
-  document.querySelector('.carousel-prev').addEventListener('click', () => goTo(current - 1));
-  document.querySelector('.carousel-next').addEventListener('click', () => goTo(current + 1));
-
-  slides[0].classList.add('active');
-  resetTimer();
-
-  if (document.readyState === 'complete') { fixHeight(); } 
-  else { window.addEventListener('load', fixHeight); }
-  window.addEventListener('resize', fixHeight);
-  
+      </a>`;
+  }).join('');
+ 
+  // Déclencher les reveal si le système est disponible
   if (typeof bindNewReveals === 'function') {
-    document.querySelectorAll('.carousel-section .reveal').forEach(el => bindNewReveals(el.parentElement || el));
+    bindNewReveals(container);
   }
 }
-
-function renderHomeLatestArticles(articles) {
-  const gridContainer = document.querySelector('#actualites .actu-grid');
-  if (!gridContainer) return;
-
-  const mainArticle = articles[0];
-  
-  // MODIFICATION : Gestion conditionnelle de l'image principale des dernières actualités
-  let mainImgBlock = '';
-  if (mainArticle.image_url) {
-    mainImgBlock = `<div class="actu-main-img" style="background: url('${mainArticle.image_url}') center/cover;"></div>`;
-  } else {
-    mainImgBlock = `
-      <div class="actu-main-img actu-main-img-placeholder">
-        <svg width="40" height="40" fill="none" stroke-width="1.5" viewBox="0 0 24 24">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <circle cx="8.5" cy="8.5" r="1.5"/>
-          <polyline points="21 15 16 10 5 21"/>
-        </svg>
-      </div>
-    `;
-  }
-  
-  let listHTML = '';
-  const listArticles = articles.slice(1);
-  
-  listArticles.forEach((item, index) => {
-    const displayNum = String(index + 1).padStart(2, '0');
-    const dateStr = typeof formatDate === 'function' ? formatDate(item.created_at) : new Date(item.created_at).toLocaleDateString('fr-FR');
-    
-    listHTML += `
-      <a href="/la-commune/actualites/article.html?id=${item.id}" class="actu-item">
-        <div class="actu-item-num">${displayNum}</div>
-        <div class="actu-item-body">
-          <div class="actu-item-title">${item.titre}</div>
-          <div class="actu-item-date">${dateStr} — ${item.tag}</div>
+ 
+ 
+/**
+ * Construit les 3 cards "articles récents" sous le bento.
+ * @param {Array} articles — 3 derniers articles non-featured
+ */
+function renderRecentArticles(articles) {
+  const wrapper = document.getElementById('actu-recents');
+  const grid    = document.getElementById('actu-recents-grid');
+  if (!wrapper || !grid) return;
+ 
+  grid.innerHTML = articles.map(art => {
+    const hasImage = !!art.image_url;
+    const dateStr  = _fmtDate(art.created_at);
+    const url      = `/la-commune/actualites/article.html?id=${art.id}`;
+ 
+    const imgContent = hasImage
+      ? `<div class="actu-recent-img" style="background-image:url('${art.image_url}')"></div>`
+      : `<div class="actu-recent-img actu-recent-noimg">
+           <svg width="32" height="32" fill="none" stroke-width="1.5" viewBox="0 0 24 24" stroke="currentColor">
+             <rect x="3" y="3" width="18" height="18" rx="2"/>
+             <circle cx="8.5" cy="8.5" r="1.5"/>
+             <polyline points="21 15 16 10 5 21"/>
+           </svg>
+         </div>`;
+ 
+    const resumeBlock = art.resume
+      ? `<p class="actu-recent-desc">${art.resume}</p>`
+      : '';
+ 
+    return `
+      <a href="${url}" class="actu-recent-card">
+        ${imgContent}
+        <div class="actu-recent-body">
+          <span class="actu-tag">${art.tag}</span>
+          <h3 class="actu-recent-title">${art.titre}</h3>
+          ${resumeBlock}
+          <div class="actu-recent-meta">${dateStr}</div>
         </div>
-      </a>
-    `;
-  });
-
-  const mainDateStr = typeof formatDate === 'function' ? formatDate(mainArticle.created_at) : new Date(mainArticle.created_at).toLocaleDateString('fr-FR');
-
-  gridContainer.innerHTML = `
-    <a href="/la-commune/actualites/article.html?id=${mainArticle.id}" class="actu-main">
-      ${mainImgBlock}
-      <div class="actu-main-body">
-        <span class="actu-tag">${mainArticle.tag}</span>
-        <div class="actu-main-title">${mainArticle.titre}</div>
-        <p class="actu-main-text">${mainArticle.resume || ''}</p>
-        <div class="actu-date">${mainDateStr}</div>
-      </div>
-    </a>
-    <div class="actu-list">
-      ${listHTML}
-    </div>
-  `;
-
+      </a>`;
+  }).join('');
+ 
+  wrapper.style.display = '';
+ 
   if (typeof bindNewReveals === 'function') {
-    gridContainer.querySelectorAll('.reveal').forEach(el => bindNewReveals(el));
-    const parentReveal = gridContainer.closest('.reveal') || gridContainer;
-    bindNewReveals(parentReveal);
+    bindNewReveals(wrapper);
   }
+}
+ 
+ 
+/**
+ * Formateur de date — utilise formatDate() si défini globalement, sinon fallback.
+ */
+function _fmtDate(iso) {
+  if (typeof formatDate === 'function') return formatDate(iso);
+  return new Date(iso).toLocaleDateString('fr-FR', {
+    day: 'numeric', month: 'long', year: 'numeric',
+  });
 }
 
 /**

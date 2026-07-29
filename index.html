@@ -112,26 +112,6 @@
   </div>
 </div>
 
-<!-- ─── CAROUSEL "EN CE MOMENT" ─── -->
-<section class="carousel-section">
-  <div class="carousel-inner reveal">
-    <div class="section-label" style="margin-bottom:1.2rem">En ce moment à Saint-Cyr-sur-Morin</div>
-    <div class="carousel-track-wrapper">
-      <button class="carousel-arrow carousel-prev" aria-label="Précédent">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      
-      <!-- Géré dynamiquement par /js/home.js -->
-      <div class="carousel-track"></div>
-      
-      <button class="carousel-arrow carousel-next" aria-label="Suivant">
-        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-    </div>
-    <div class="carousel-dots"></div>
-  </div>
-</section>
-
 
 <!-- ─── ACCÈS RAPIDES ─── -->
 <section class="section" id="services">
@@ -194,23 +174,33 @@
   </div>
 </section>
 
-<!-- ─── ACTUALITÉS ─── -->
+<!-- ─── ACTUALITÉS (fusionnées) ─── -->
 <section class="section actu-section" id="actualites">
   <div class="section-inner">
+
     <div class="reveal">
       <div class="section-label">Vie locale</div>
-      <h2 class="section-title">Dernières actualités</h2>
+      <h2 class="section-title">Actualités de la commune</h2>
     </div>
-    
-    <!-- Géré dynamiquement par /js/home.js (Affiche 1 grand article + 4 en liste latérale) -->
-    <div class="actu-grid reveal"></div>
-    
+
+    <!-- Bento "À la une" — injecté par site-content-loader.js -->
+    <div class="bento-une reveal" id="bento-une" style="display:none"></div>
+
+    <!-- Récents — injecté par site-content-loader.js -->
+    <div class="actu-recents reveal" id="actu-recents" style="display:none">
+      <div class="actu-recents-label-wrap">
+        <span class="actu-recents-label">Articles récents</span>
+      </div>
+      <div class="actu-recents-grid" id="actu-recents-grid"></div>
+    </div>
+
     <div class="actu-footer reveal">
       <a href="/la-commune/actualites.html" class="btn btn-primary actu-footer-btn">
         Toutes les actualités
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
       </a>
     </div>
+
   </div>
 </section>
 

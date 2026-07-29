@@ -881,6 +881,386 @@ img {
 .actu-footer-btn { border: 1.5px solid var(--pierre); color: var(--texte); }
 
 
+/* ─── BENTO "À LA UNE" ──────────────────────────────────── */
+ 
+.bento-une {
+  display: grid;
+  gap: .9rem;
+  margin-bottom: 2.8rem;
+}
+ 
+/* ── Carte de base ── */
+.bento-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--blanc);
+  display: block;
+  transition: transform .28s ease;
+}
+.bento-card:hover { transform: translateY(-4px); }
+ 
+/* Image de fond — absolue, remplit toute la carte */
+.bento-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+}
+ 
+/* Dégradé lisibilité */
+.bento-card:not(.bento-noimg)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(12,20,10,.92) 0%,
+    rgba(12,20,10,.48) 45%,
+    rgba(12,20,10,.04) 100%
+  );
+  pointer-events: none;
+}
+ 
+/* Fallback sans image */
+.bento-noimg {
+  background: linear-gradient(135deg, var(--vert) 0%, var(--vert-clair) 100%);
+}
+.bento-noimg::after { display: none; }
+ 
+/* ── Corps texte — positionné en absolu en bas de carte ── */
+.bento-body {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  padding: 1.4rem 1.6rem;
+}
+ 
+.bento-tag {
+  display: inline-block;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.22);
+  color: rgba(255,255,255,.92);
+  font-size: .63rem; font-weight: 500;
+  letter-spacing: .09em; text-transform: uppercase;
+  padding: .18rem .7rem; border-radius: 100px;
+  margin-bottom: .2rem;
+  width: fit-content;
+}
+ 
+.bento-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--blanc);
+}
+.bento-hero .bento-title { font-size: clamp(1.25rem, 2.2vw, 1.7rem); }
+.bento-item .bento-title { font-size: clamp(.9rem, 1.35vw, 1.08rem); }
+ 
+.bento-resume {
+  font-size: .87rem;
+  color: rgba(255,255,255,.78);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+ 
+.bento-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .8rem;
+  margin-top: .3rem;
+}
+.bento-date { font-size: .72rem; color: rgba(255,255,255,.55); }
+.bento-link {
+  font-size: .8rem; font-weight: 500;
+  color: rgba(255,255,255,.88);
+  white-space: nowrap;
+  transition: color .2s;
+}
+.bento-card:hover .bento-link { color: var(--vert-pale); }
+ 
+ 
+/* ── LAYOUTS DESKTOP par nombre d'articles ─────────────── */
+/* Les hauteurs en px des rangées définissent la hauteur des cartes.
+   bento-body étant en position:absolute, ça ne crée aucun conflit. */
+ 
+/* 1 */
+.bento-une[data-count="1"] {
+  grid-template-columns: 1fr;
+  grid-template-rows: 420px;
+}
+.bento-une[data-count="1"] .bento-title { font-size: clamp(1.5rem, 3vw, 2.2rem); }
+ 
+/* 2 */
+.bento-une[data-count="2"] {
+  grid-template-columns: 3fr 2fr;
+  grid-template-rows: 360px;
+}
+ 
+/* 3 */
+.bento-une[data-count="3"] {
+  grid-template-columns: 3fr 2fr;
+  grid-template-rows: 230px 185px;
+  grid-template-areas:
+    "hero s1"
+    "hero s2";
+}
+.bento-une[data-count="3"] .bento-hero              { grid-area: hero; }
+.bento-une[data-count="3"] .bento-card:nth-child(2) { grid-area: s1; }
+.bento-une[data-count="3"] .bento-card:nth-child(3) { grid-area: s2; }
+ 
+/* 4 — validé "très joli" */
+.bento-une[data-count="4"] {
+  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-rows: 255px 185px;
+  grid-template-areas:
+    "hero s1 s1"
+    "hero s2 s3";
+}
+.bento-une[data-count="4"] .bento-hero              { grid-area: hero; }
+.bento-une[data-count="4"] .bento-card:nth-child(2) { grid-area: s1; }
+.bento-une[data-count="4"] .bento-card:nth-child(3) { grid-area: s2; }
+.bento-une[data-count="4"] .bento-card:nth-child(4) { grid-area: s3; }
+ 
+/* 5 — hero large + S2 pilier vertical droit + S3 large */
+.bento-une[data-count="5"] {
+  grid-template-columns: 2fr 2fr 2fr 1.5fr;
+  grid-template-rows: 255px 190px;
+  grid-template-areas:
+    "hero hero s1 s2"
+    "s3   s3   s4 s2";
+}
+.bento-une[data-count="5"] .bento-hero              { grid-area: hero; }
+.bento-une[data-count="5"] .bento-card:nth-child(2) { grid-area: s1; }
+.bento-une[data-count="5"] .bento-card:nth-child(3) { grid-area: s2; }
+.bento-une[data-count="5"] .bento-card:nth-child(4) { grid-area: s3; }
+.bento-une[data-count="5"] .bento-card:nth-child(5) { grid-area: s4; }
+ 
+/* 6 — 3 colonnes inégales (hero plus large que S2) */
+.bento-une[data-count="6"] {
+  grid-template-columns: 3fr 2fr 2fr;
+  grid-template-rows: 220px 165px 155px;
+  grid-template-areas:
+    "hero s1 s2"
+    "hero s3 s2"
+    "s4   s4 s5";
+}
+.bento-une[data-count="6"] .bento-hero              { grid-area: hero; }
+.bento-une[data-count="6"] .bento-card:nth-child(2) { grid-area: s1; }
+.bento-une[data-count="6"] .bento-card:nth-child(3) { grid-area: s2; }
+.bento-une[data-count="6"] .bento-card:nth-child(4) { grid-area: s3; }
+.bento-une[data-count="6"] .bento-card:nth-child(5) { grid-area: s4; }
+.bento-une[data-count="6"] .bento-card:nth-child(6) { grid-area: s5; }
+ 
+/* 7 — même structure + S6 pleine largeur en bas */
+.bento-une[data-count="7"] {
+  grid-template-columns: 3fr 2fr 2fr;
+  grid-template-rows: 210px 160px 148px 148px;
+  grid-template-areas:
+    "hero s1 s2"
+    "hero s3 s2"
+    "s4   s4 s5"
+    "s6   s6 s6";
+}
+.bento-une[data-count="7"] .bento-hero              { grid-area: hero; }
+.bento-une[data-count="7"] .bento-card:nth-child(2) { grid-area: s1; }
+.bento-une[data-count="7"] .bento-card:nth-child(3) { grid-area: s2; }
+.bento-une[data-count="7"] .bento-card:nth-child(4) { grid-area: s3; }
+.bento-une[data-count="7"] .bento-card:nth-child(5) { grid-area: s4; }
+.bento-une[data-count="7"] .bento-card:nth-child(6) { grid-area: s5; }
+.bento-une[data-count="7"] .bento-card:nth-child(7) { grid-area: s6; }
+ 
+/* 8 — S6 normal, S7 large droite (diagonale inversée) */
+.bento-une[data-count="8"] {
+  grid-template-columns: 3fr 2fr 2fr;
+  grid-template-rows: 215px 160px 148px 148px;
+  grid-template-areas:
+    "hero s1 s2"
+    "hero s3 s2"
+    "s4   s4 s5"
+    "s6   s7 s7";
+}
+.bento-une[data-count="8"] .bento-hero              { grid-area: hero; }
+.bento-une[data-count="8"] .bento-card:nth-child(2) { grid-area: s1; }
+.bento-une[data-count="8"] .bento-card:nth-child(3) { grid-area: s2; }
+.bento-une[data-count="8"] .bento-card:nth-child(4) { grid-area: s3; }
+.bento-une[data-count="8"] .bento-card:nth-child(5) { grid-area: s4; }
+.bento-une[data-count="8"] .bento-card:nth-child(6) { grid-area: s5; }
+.bento-une[data-count="8"] .bento-card:nth-child(7) { grid-area: s6; }
+.bento-une[data-count="8"] .bento-card:nth-child(8) { grid-area: s7; }
+ 
+ 
+/* ─── RÉCENTS ────────────────────────────────────────────── */
+ 
+.actu-recents {
+  padding-top: 2.2rem;
+  border-top: 1px solid rgba(200,191,176,.38);
+}
+.actu-recents-label-wrap { margin-bottom: 1.2rem; }
+.actu-recents-label {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .72rem; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--pierre-dark);
+}
+.actu-recents-label::before {
+  content: ''; display: block;
+  width: 18px; height: 1.5px; background: var(--pierre);
+}
+ 
+.actu-recents-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.1rem;
+}
+ 
+.actu-recent-card {
+  background: var(--creme);
+  border-radius: 18px; overflow: hidden;
+  text-decoration: none; color: var(--texte);
+  display: flex; flex-direction: column;
+  border: 1px solid rgba(200,191,176,.32);
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.actu-recent-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(42,37,32,.09);
+  border-color: rgba(200,191,176,.65);
+}
+ 
+.actu-recent-img {
+  height: 158px;
+  background-size: cover; background-position: center;
+  flex-shrink: 0;
+}
+.actu-recent-noimg {
+  background: var(--vert-pale);
+  display: flex; align-items: center; justify-content: center;
+}
+.actu-recent-noimg svg { stroke: var(--vert); opacity: .22; }
+ 
+.actu-recent-body {
+  padding: 1.1rem 1.2rem 1.3rem;
+  flex: 1; display: flex; flex-direction: column; gap: .35rem;
+}
+.actu-recent-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem; font-weight: 600; line-height: 1.3;
+}
+.actu-recent-desc {
+  font-size: .83rem; color: var(--gris); line-height: 1.55;
+  display: -webkit-box; -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical; overflow: hidden; flex: 1;
+}
+.actu-recent-meta { font-size: .72rem; color: var(--pierre-dark); margin-top: .3rem; }
+ 
+ 
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+ 
+/* ═══════════════════════════════════════════════════════════
+   TABLETTE / LAPTOP ÉTROIT — 960px
+   ───────────────────────────────────────────────────────────
+   Stratégie :
+   • Réinitialisation totale des zones nommées (grid-template-areas: none)
+   • Grille 2 colonnes, hauteurs en px explicites → pas de dépendance circulaire
+   • Hero pleine largeur, items secondaires en 2 col
+   • Fix orphelin pour les counts pairs (dernier item seul → pleine largeur)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+ 
+  /* Réinitialisation complète du conteneur
+     L'attribut [data-count] sans valeur = tout élément ayant cet attribut */
+  .bento-une[data-count] {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: none;         /* reset des rangées desktop */
+    grid-template-areas: none;        /* supprime les zones nommées */
+  }
+ 
+  /* Effacer les placements nommés des enfants (toujours moins spécifique
+     que les règles desktop avec data-count + nth-child → on force !important) */
+  .bento-une[data-count] .bento-card {
+    grid-area: auto !important;
+    grid-column: auto !important;
+    grid-row: auto !important;
+    height: 160px;   /* hauteur explicite car bento-body est en position:absolute */
+  }
+ 
+  /* Hero : pleine largeur + hauteur généreuse */
+  .bento-une[data-count] .bento-hero {
+    grid-column: 1 / -1 !important;
+    height: 285px;
+  }
+ 
+  /* Fix orphelin : count pair = nb. secondaires impair = dernier seul.
+     On lui donne la pleine largeur pour éviter la case vide. */
+  .bento-une[data-count="2"] .bento-card:last-child,
+  .bento-une[data-count="4"] .bento-card:last-child,
+  .bento-une[data-count="6"] .bento-card:last-child,
+  .bento-une[data-count="8"] .bento-card:last-child {
+    grid-column: 1 / -1 !important;
+    height: 175px;
+  }
+ 
+  /* Récents : 2 colonnes */
+  .actu-recents-grid { grid-template-columns: 1fr 1fr; }
+}
+ 
+ 
+/* ═══════════════════════════════════════════════════════════
+   MOBILE MOYEN — 640px
+   On reste en 2 colonnes, on réduit les hauteurs
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .bento-une[data-count] .bento-hero { height: 250px; }
+  .bento-une[data-count] .bento-card { height: 140px; }
+ 
+  .bento-une[data-count="2"] .bento-card:last-child,
+  .bento-une[data-count="4"] .bento-card:last-child,
+  .bento-une[data-count="6"] .bento-card:last-child,
+  .bento-une[data-count="8"] .bento-card:last-child {
+    height: 158px;
+  }
+ 
+  .bento-resume { display: none; }
+  .bento-link   { display: none; }
+ 
+  /* Récents : 1 colonne */
+  .actu-recents-grid { grid-template-columns: 1fr; }
+  .actu-recent-img   { height: 175px; }
+}
+ 
+ 
+/* ═══════════════════════════════════════════════════════════
+   MOBILE STRICT — 480px
+   1 colonne, tout empilé
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .bento-une[data-count] {
+    grid-template-columns: 1fr;
+  }
+  /* Reset de l'orphelin full-width (déjà full si 1 col) */
+  .bento-une[data-count="2"] .bento-card:last-child,
+  .bento-une[data-count="4"] .bento-card:last-child,
+  .bento-une[data-count="6"] .bento-card:last-child,
+  .bento-une[data-count="8"] .bento-card:last-child {
+    height: 145px;
+  }
+ 
+  .bento-une[data-count] .bento-hero { height: 230px; }
+  .bento-une[data-count] .bento-card { height: 145px; }
+  .bento-une { gap: .65rem; }
+  .bento-body { padding: 1rem 1.1rem; }
+}
+ 
+
 /* ─── VILLAGE ─────────────────────────────── */
 
 .village-section { background: var(--texte); }
