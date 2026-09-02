@@ -1902,42 +1902,51 @@ async function initMediathequeEvents() {
  * Point d'entrée — charge les articles en parallèle et orchestre le rendu.
  */
 export async function initHomeArticles() {
-  const [featuredRes, latestRes] = await Promise.all([
-    supabase
-      .from('articles')
-      .select('*')
-      .eq('is_draft', false)
-      .eq('is_featured', true)
-      .order('created_at', { ascending: false }),
-    supabase
-      .from('articles')
-      .select('*')
-      .eq('is_draft', false)
-      .order('created_at', { ascending: false })
-      .limit(6),
-  ]);
- 
-  const featured = featuredRes.data || [];
-  const latest   = latestRes.data  || [];
- 
-  // IDs des articles déjà affichés dans le bento → à exclure des récents
-  const featuredIds = new Set(featured.map(a => a.id));
- 
-  // ── Bento "À la une" ──────────────────────────────────────
-  if (featured.length > 0) {
-    renderBentoUne(featured.slice(0, 8)); // max 8 tuiles
-  } else {
-    const el = document.getElementById('bento-une');
-    if (el) el.style.display = 'none';
-  }
- 
-  // ── Articles récents (excluant ceux déjà dans le bento) ──
-  const recents = latest.filter(a => !featuredIds.has(a.id)).slice(0, 3);
-  if (recents.length > 0) {
-    renderRecentArticles(recents);
-  } else {
-    const el = document.getElementById('actu-recents');
-    if (el) el.style.display = 'none';
+  // Sélectionne uniquement les colonnes indispensables aux aperçus (pas le corps de l'article)
+  const FIELDS = 'id, titre, tag, resume, image_url, created_at';
+
+  try {
+    const [featuredRes, latestRes] = await Promise.all([
+      supabase
+        .from('articles')
+        .select(FIELDS)
+        .eq('is_draft', false)
+        .eq('is_featured', true)
+        .order('created_at', { ascending: false })
+        .limit(8), // Limite appliquée directement en SQL
+
+      supabase
+        .from('articles')
+        .select(FIELDS)
+        .eq('is_draft', false)
+        .order('created_at', { ascending: false })
+        .limit(9) // Marge suffisante pour filtrer les doublons du bento
+    ]);
+
+    const featured = featuredRes.data || [];
+    const latest   = latestRes.data  || [];
+
+    // IDs déjà affichés dans le bento
+    const featuredIds = new Set(featured.map(a => a.id));
+
+    // Bento "À la une"
+    if (featured.length > 0) {
+      renderBentoUne(featured);
+    } else {
+      const el = document.getElementById('bento-une');
+      if (el) el.style.display = 'none';
+    }
+
+    // Articles récents (excluant ceux du bento)
+    const recents = latest.filter(a => !featuredIds.has(a.id)).slice(0, 3);
+    if (recents.length > 0) {
+      renderRecentArticles(recents);
+    } else {
+      const el = document.getElementById('actu-recents');
+      if (el) el.style.display = 'none';
+    }
+  } catch (err) {
+    console.error("Erreur lors du chargement des articles :", err.message);
   }
 }
  
