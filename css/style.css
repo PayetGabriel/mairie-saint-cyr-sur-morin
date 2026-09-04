@@ -1113,9 +1113,6 @@ img {
     grid-column: 1 / -1 !important;
     height: 175px;
   }
- 
-  /* Récents : 2 colonnes */
-  .actu-recents-grid { grid-template-columns: 1fr 1fr; }
 }
  
  
