@@ -1983,6 +1983,8 @@ async function initHeroEventCard() {
     const formattedDate = `${day} ${month}`
 
     // Injection des données
+    const articleUrl = `/la-commune/actualites/article.html?id=${event.id}`
+
     const dateEl = card.querySelector('.hero-event-date')
     const titleEl = card.querySelector('.hero-event-title')
     const descEl = card.querySelector('.hero-event-desc')
@@ -1991,7 +1993,12 @@ async function initHeroEventCard() {
     if (dateEl) dateEl.textContent = formattedDate
     if (titleEl) titleEl.textContent = event.titre || ''
     if (descEl) descEl.textContent = event.resume || ''
-    if (linkEl) linkEl.href = `/la-commune/actualites/article.html?id=${event.id}`
+    if (linkEl) linkEl.href = articleUrl
+
+    // Rend toute la carte cliquable
+    card.onclick = () => {
+      window.location.href = articleUrl
+    }
 
     // Affichage de la carte
     card.style.display = ''
