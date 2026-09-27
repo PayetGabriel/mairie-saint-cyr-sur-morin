@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // À AJOUTER : Détection de la page d'accueil
   if (path === '/' || path === '/index.html' || path.endsWith('/')) {
     initHomeArticles();
+    initHeroEventCard();
   }
 
   initCommissions()
@@ -1947,6 +1948,56 @@ export async function initHomeArticles() {
     }
   } catch (err) {
     console.error("Erreur lors du chargement des articles :", err.message);
+  }
+}
+
+/**
+ * Initialise la carte événement "À la une" du Hero
+ */
+async function initHeroEventCard() {
+  const card = document.getElementById('hero-event-card')
+  if (!card) return
+
+  try {
+    const { data: event, error } = await supabase
+      .from('articles')
+      .select('id, titre, resume, created_at')
+      .eq('is_draft', false)
+      .eq('is_featured', true)
+      .eq('tag', 'Événements')
+      .order('created_at', { ascending: true }) // Le plus ancien si plusieurs
+      .limit(1)
+      .maybeSingle()
+
+    // Si erreur ou aucun événement trouvé, on laisse la carte masquée
+    if (error || !event) {
+      card.style.display = 'none'
+      return
+    }
+
+    // Formatage de la date (ex: "20 Sept.")
+    const dateObj = new Date(event.created_at)
+    const day = dateObj.getDate()
+    let month = dateObj.toLocaleDateString('fr-FR', { month: 'short' })
+    month = month.charAt(0).toUpperCase() + month.slice(1)
+    const formattedDate = `${day} ${month}`
+
+    // Injection des données
+    const dateEl = card.querySelector('.hero-event-date')
+    const titleEl = card.querySelector('.hero-event-title')
+    const descEl = card.querySelector('.hero-event-desc')
+    const linkEl = card.querySelector('.hero-event-link')
+
+    if (dateEl) dateEl.textContent = formattedDate
+    if (titleEl) titleEl.textContent = event.titre || ''
+    if (descEl) descEl.textContent = event.resume || ''
+    if (linkEl) linkEl.href = `/la-commune/actualites/article.html?id=${event.id}`
+
+    // Affichage de la carte
+    card.style.display = ''
+  } catch (err) {
+    console.error("Erreur lors du chargement de l'événement hero :", err.message)
+    card.style.display = 'none'
   }
 }
  
