@@ -668,32 +668,61 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 }
 
 @media (max-width: 600px) {
-  /* La carte devient un simple badge horizontal */
+  /* Vraie carte d'information sombre en verre (plus de faux bouton) */
   .hero-event-card {
-    padding: 0.5rem 0.85rem;
-    border-radius: 100px; /* Forme pilule */
-    margin-top: 1rem;
-    background: rgba(247, 244, 239, 0.95);
-    backdrop-filter: blur(8px);
+    background: rgba(20, 30, 18, 0.82) !important; /* Ton vert très sombre */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 14px !important; /* Shape rectangulaire douce, plus du tout pilule */
+    padding: 0.85rem 1rem !important;
+    margin-top: 1.25rem !important;
+    text-align: left;
   }
 
-  /* On masque tout sauf le titre et la date en inline */
-  .hero-event-desc,
+  /* Entête propre : Badge + Date */
   .hero-event-head {
-    display: none;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
   }
 
+  .hero-event-tag {
+    background: var(--vert-clair) !important;
+    color: #ffffff !important;
+    font-size: 0.6rem !important;
+    padding: 0.15rem 0.5rem !important;
+  }
+
+  .hero-event-date {
+    color: rgba(255, 255, 255, 0.65) !important;
+    font-size: 0.72rem !important;
+  }
+
+  /* Titre blanc lisible */
   .hero-event-title {
-    font-size: 0.82rem;
-    font-family: 'DM Sans', sans-serif; /* Plus lisible en petit */
-    font-weight: 500;
-    margin: 0;
-    display: inline-block;
+    color: var(--blanc) !important;
+    font-size: 0.92rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 0.35rem !important;
+    line-height: 1.3 !important;
   }
 
+  /* Masque le paragraphe pour faire respirer l'image */
+  .hero-event-desc {
+    display: none !important;
+  }
+
+  /* Lien vert clair fluide */
   .hero-event-link {
-    font-size: 0.8rem;
-    margin-left: 0.5rem;
+    color: var(--vert-pale) !important;
+    font-size: 0.78rem !important;
+    font-weight: 500 !important;
+  }
+
+  .hero-event-link svg {
+    stroke: var(--vert-pale) !important;
   }
 }
 
