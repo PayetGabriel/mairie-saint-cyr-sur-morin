@@ -668,12 +668,32 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
 }
 
 @media (max-width: 600px) {
+  /* La carte devient un simple badge horizontal */
   .hero-event-card {
-    padding: 1rem 1.1rem;
+    padding: 0.5rem 0.85rem;
+    border-radius: 100px; /* Forme pilule */
     margin-top: 1rem;
+    background: rgba(247, 244, 239, 0.95);
+    backdrop-filter: blur(8px);
   }
+
+  /* On masque tout sauf le titre et la date en inline */
+  .hero-event-desc,
+  .hero-event-head {
+    display: none;
+  }
+
   .hero-event-title {
-    font-size: 1.05rem;
+    font-size: 0.82rem;
+    font-family: 'DM Sans', sans-serif; /* Plus lisible en petit */
+    font-weight: 500;
+    margin: 0;
+    display: inline-block;
+  }
+
+  .hero-event-link {
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
   }
 }
 
