@@ -513,16 +513,45 @@ nav.scrolled { box-shadow: 0 2px 20px rgba(42,37,32,0.08); }
   display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;
   animation: fadeUp .8s ease .45s both;
 }
+/* ─── INDICATEUR DE DÉFILEMENT (HERO) ─────────────── */
+
 .hero-scroll {
-  position: absolute; bottom: 2rem; right: 2.5rem; z-index: 2;
-  display: flex; flex-direction: column; align-items: center; gap: .4rem;
-  color: rgba(255,255,255,.5); font-size: .7rem; letter-spacing: .08em;
+  position: absolute;
+  bottom: 1.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: .7rem;
+  letter-spacing: .08em;
   text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.25s ease;
   animation: fadeIn 1.2s ease 1s both;
 }
-.hero-scroll-line {
-  width: 1px; height: 40px; background: rgba(255,255,255,.3);
-  animation: scrollPulse 2s ease-in-out infinite;
+
+.hero-scroll:hover {
+  color: var(--blanc);
+}
+
+.hero-scroll svg {
+  animation: bounceDown 2s infinite;
+}
+
+@keyframes bounceDown {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(5px);
+  }
+  60% {
+    transform: translateY(2px);
+  }
 }
 
 /* ─── HERO & CONTENU PLAQUÉS EN BAS ─────────────── */
@@ -2447,7 +2476,6 @@ footer {
   .section         { padding: 3.5rem 1.4rem; }
   .first-section   { padding-top: calc(3.5rem + 68px) !important; }
   .hero-content    { padding: 0 1.4rem 4rem; }
-  .hero-scroll     { display: none; }
   .hero-actions    { flex-direction: column; }
   .hero-actions .btn { justify-content: center; }
   .actu-main-body  { padding: 1.2rem; }
