@@ -119,26 +119,22 @@ async function fetchAndRender() {
   let articlesForGrid = [...articles];
 
   // Gestion spécifique de la Page 1 (Rendu de l'article à la Une)
-  // Gestion spécifique de la Page 1 (Rendu de l'article à la Une)
   if (currentPage === 1) {
     const uneArticle = articles[0];
     articlesForGrid = articles.slice(1);
 
-    // Correction du chemin vers /la-commune/actualites/article.html
     uneContainer.href = `/la-commune/actualites/article.html?id=${uneArticle.id}`;
     document.getElementById('actu-une-tag').textContent = uneArticle.tag;
-    document.getElementById('actu-une-date').textContent = formatDate(uneArticle.created_at);
+    document.getElementById('actu-une-date').textContent = formatArticleDate(uneArticle);
     document.getElementById('actu-une-title').textContent = uneArticle.titre;
     document.getElementById('actu-une-text').textContent = uneArticle.resume;
     
     const imgElement = document.getElementById('actu-une-img');
     
     if (uneArticle.image_url) {
-      // S'il y a une image : on l'applique en fond et on nettoie l'intérieur (au cas où un placeholder s'y trouvait)
       imgElement.style.background = `url('${uneArticle.image_url}') center/cover`;
       imgElement.innerHTML = ''; 
     } else {
-      // S'il n'y a PAS d'image : on retire le fond et on injecte le bloc placeholder adapté
       imgElement.style.background = ''; 
       imgElement.innerHTML = `
         <div class="actu-une-img-placeholder">
@@ -158,7 +154,6 @@ async function fetchAndRender() {
   // Rendu de la grille d'articles résiduels
   articlesForGrid.forEach(item => {
     const card = document.createElement('a');
-    // Correction du chemin vers /la-commune/actualites/article.html
     card.href = `/la-commune/actualites/article.html?id=${item.id}`;
     card.className = 'actu-card reveal';
     card.dataset.cat = Object.keys(categoryMapping).find(key => categoryMapping[key] === item.tag) || 'all';
@@ -185,7 +180,7 @@ async function fetchAndRender() {
       <div class="actu-card-body">
         <div class="actu-card-meta">
           <span class="actu-tag">${item.tag}</span>
-          <span class="actu-card-date">${formatDate(item.created_at)}</span>
+          <span class="actu-card-date">${formatArticleDate(item)}</span>
         </div>
         <div class="actu-card-title">${item.titre}</div>
         <div class="actu-card-excerpt">${item.resume}</div>
@@ -196,7 +191,6 @@ async function fetchAndRender() {
 
   renderPagination(count);
   
-  // Correction de l'affichage via l'utilitaire reveal global
   bindNewReveals(gridContainer);
 }
 
@@ -204,11 +198,10 @@ function renderPagination(totalCount) {
   const paginationContainer = document.getElementById('actu-pagination');
   paginationContainer.innerHTML = '';
 
-  if (totalCount <= 10) return; // Pas besoin de pagination si tout tient sur la p.1
+  if (totalCount <= 10) return;
 
   const totalPages = 1 + Math.ceil((totalCount - 10) / 12);
 
-  // Flèche Précédent (affichée uniquement si on n'est pas sur la page 1)
   if (currentPage > 1) {
     const prevBtn = document.createElement('a');
     prevBtn.href = '#';
@@ -225,7 +218,6 @@ function renderPagination(totalCount) {
     paginationContainer.appendChild(prevBtn);
   }
 
-  // Boucle d'affichage des numéros de pages
   for (let i = 1; i <= totalPages; i++) {
     const btn = document.createElement('a');
     btn.href = '#';
@@ -242,7 +234,6 @@ function renderPagination(totalCount) {
     paginationContainer.appendChild(btn);
   }
 
-  // Flèche Suivant (affichée uniquement si on n'est pas sur la dernière page)
   if (currentPage < totalPages) {
     const nextBtn = document.createElement('a');
     nextBtn.href = '#';
@@ -260,10 +251,24 @@ function renderPagination(totalCount) {
   }
 }
 
-function formatDate(isoString) {
-  return new Date(isoString).toLocaleDateString('fr-FR', {
+function formatArticleDate(art) {
+  if (!art) return '';
+  const isEvent = art.tag === 'Événements';
+  const targetDate = (isEvent && art.date_evenement) ? art.date_evenement : art.created_at;
+  if (!targetDate) return '';
+
+  const [yyyy, mm, dd] = targetDate.split('T')[0].split('-');
+  const dateObj = new Date(yyyy, mm - 1, dd);
+  
+  let formatted = dateObj.toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
   });
+
+  if (isEvent && art.horaires_evenement) {
+    formatted += ` · ${art.horaires_evenement}`;
+  }
+
+  return formatted;
 }

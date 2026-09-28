@@ -978,7 +978,7 @@ async function initScolaritePeriscolaire() {
           <span>Familles Rurales</span>
         </div>
         <div class="periscolaire-card-body">
-          <h4>Accueil de loisirs (St Cyr / St Ouen)</h4>
+          <h4>Accueil de loisirs</h4>
           <p>${fr.adresse} — ${fr.description}</p>
           <p><strong>Périscolaire :</strong> ${fr.horaires_perisco}</p>
           <p><strong>Mercredis et vacances scolaires :</strong> ${fr.horaires_mercredis_vacances}</p>
@@ -1904,7 +1904,7 @@ async function initMediathequeEvents() {
  */
 export async function initHomeArticles() {
   // Sélectionne uniquement les colonnes indispensables aux aperçus (pas le corps de l'article)
-  const FIELDS = 'id, titre, tag, resume, image_url, created_at';
+  const FIELDS = 'id, titre, tag, resume, image_url, created_at, date_evenement, horaires_evenement';
 
   try {
     const [featuredRes, latestRes] = await Promise.all([
@@ -1952,37 +1952,44 @@ export async function initHomeArticles() {
 }
 
 /**
- * Initialise la carte événement "À la une" du Hero
+ * Initialise la carte événement "À la une" du Hero (prochain événement à venir)
  */
 async function initHeroEventCard() {
   const card = document.getElementById('hero-event-card')
   if (!card) return
 
   try {
+    // Récupère la date du jour au format YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0]
+
     const { data: event, error } = await supabase
       .from('articles')
-      .select('id, titre, resume, created_at')
+      .select('id, titre, resume, created_at, date_evenement, horaires_evenement')
       .eq('is_draft', false)
-      .eq('is_featured', true)
       .eq('tag', 'Événements')
-      .order('created_at', { ascending: true }) // Le plus ancien si plusieurs
+      .gte('date_evenement', today)
+      .order('date_evenement', { ascending: true })
       .limit(1)
       .maybeSingle()
 
-    // Si erreur ou aucun événement trouvé, on laisse la carte masquée
     if (error || !event) {
       card.style.display = 'none'
       return
     }
 
-    // Formatage de la date (ex: "20 Sept.")
-    const dateObj = new Date(event.created_at)
+    // Priorité à date_evenement si renseignée, sinon created_at
+    const rawDate = event.date_evenement ? event.date_evenement : event.created_at
+    const [yyyy, mm, dd] = rawDate.split('T')[0].split('-')
+    const dateObj = new Date(yyyy, mm - 1, dd)
     const day = dateObj.getDate()
     let month = dateObj.toLocaleDateString('fr-FR', { month: 'short' })
     month = month.charAt(0).toUpperCase() + month.slice(1)
-    const formattedDate = `${day} ${month}`
+    
+    let formattedDate = `${day} ${month}`
+    if (event.horaires_evenement) {
+      formattedDate += ` · ${event.horaires_evenement}`
+    }
 
-    // Injection des données
     const articleUrl = `/la-commune/actualites/article.html?id=${event.id}`
 
     const dateEl = card.querySelector('.hero-event-date')
@@ -1995,12 +2002,10 @@ async function initHeroEventCard() {
     if (descEl) descEl.textContent = event.resume || ''
     if (linkEl) linkEl.href = articleUrl
 
-    // Rend toute la carte cliquable
     card.onclick = () => {
       window.location.href = articleUrl
     }
 
-    // Affichage de la carte
     card.style.display = ''
   } catch (err) {
     console.error("Erreur lors du chargement de l'événement hero :", err.message)
@@ -2011,7 +2016,6 @@ async function initHeroEventCard() {
  
 /**
  * Construit le bento asymétrique selon le nombre d'articles.
- * @param {Array} articles — articles is_featured (max 6)
  */
 function renderBentoUne(articles) {
   const container = document.getElementById('bento-une');
@@ -2024,7 +2028,7 @@ function renderBentoUne(articles) {
   container.innerHTML = articles.map((art, i) => {
     const isHero    = i === 0;
     const hasImage  = !!art.image_url;
-    const dateStr   = _fmtDate(art.created_at);
+    const dateStr   = _fmtDate(art); // FIX : Passe l'objet art entier
     const url       = `/la-commune/actualites/article.html?id=${art.id}`;
  
     const imgBlock  = hasImage
@@ -2032,7 +2036,6 @@ function renderBentoUne(articles) {
       : '';
  
     const tagBlock  = `<span class="bento-tag">${art.tag}</span>`;
- 
     const titleBlock = `<h3 class="bento-title">${art.titre}</h3>`;
  
     const resumeBlock = (isHero && art.resume)
@@ -2067,16 +2070,13 @@ function renderBentoUne(articles) {
       </a>`;
   }).join('');
  
-  // Déclencher les reveal si le système est disponible
   if (typeof bindNewReveals === 'function') {
     bindNewReveals(container);
   }
 }
  
- 
 /**
  * Construit les 3 cards "articles récents" sous le bento.
- * @param {Array} articles — 3 derniers articles non-featured
  */
 function renderRecentArticles(articles) {
   const wrapper = document.getElementById('actu-recents');
@@ -2085,7 +2085,7 @@ function renderRecentArticles(articles) {
  
   grid.innerHTML = articles.map(art => {
     const hasImage = !!art.image_url;
-    const dateStr  = _fmtDate(art.created_at);
+    const dateStr  = _fmtDate(art); // FIX : Passe l'objet art entier
     const url      = `/la-commune/actualites/article.html?id=${art.id}`;
  
     const imgContent = hasImage
@@ -2120,16 +2120,35 @@ function renderRecentArticles(articles) {
     bindNewReveals(wrapper);
   }
 }
- 
- 
+
 /**
- * Formateur de date — utilise formatDate() si défini globalement, sinon fallback.
+ * Formateur de date robuste
  */
-function _fmtDate(iso) {
-  if (typeof formatDate === 'function') return formatDate(iso);
-  return new Date(iso).toLocaleDateString('fr-FR', {
-    day: 'numeric', month: 'long', year: 'numeric',
-  });
+function _fmtDate(art) {
+  if (!art) return ''
+  if (typeof art === 'string') {
+    const [yyyy, mm, dd] = art.split('T')[0].split('-')
+    return new Date(yyyy, mm - 1, dd).toLocaleDateString('fr-FR', {
+      day: 'numeric', month: 'long', year: 'numeric'
+    })
+  }
+
+  const isEvent = art.tag === 'Événements'
+  const targetDate = (isEvent && art.date_evenement) ? art.date_evenement : art.created_at
+  if (!targetDate) return ''
+
+  const [yyyy, mm, dd] = targetDate.split('T')[0].split('-')
+  const dateObj = new Date(yyyy, mm - 1, dd)
+  
+  let formatted = dateObj.toLocaleDateString('fr-FR', {
+    day: 'numeric', month: 'long', year: 'numeric'
+  })
+
+  if (isEvent && art.horaires_evenement) {
+    formatted += ` (${art.horaires_evenement})`
+  }
+
+  return formatted
 }
 
 /**

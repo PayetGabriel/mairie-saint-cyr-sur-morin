@@ -240,6 +240,18 @@
                   <input type="text" id="art-auteur" class="form-input" placeholder="La Mairie">
                 </div>
               </div>
+
+              <!-- PLACÉ ICI (En dehors du premier grid-2) -->
+              <div class="grid-2" id="art-event-fields" style="display:none;">
+                <div class="form-group">
+                  <label class="form-label" for="art-date-evenement">Date de l'événement</label>
+                  <input type="date" id="art-date-evenement" class="form-input">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="art-horaires-evenement">Horaires (optionnel)</label>
+                  <input type="text" id="art-horaires-evenement" class="form-input" placeholder="ex : 14h00 – 18h00">
+                </div>
+              </div>
               <div class="form-group">
                 <label class="form-label" for="art-image">URL de l'image de couverture</label>
                 <input type="url" id="art-image" class="form-input" placeholder="https://…">
@@ -734,6 +746,16 @@
         document.getElementById('tdu-numero-group').style.display =
           e.target.value === 'Standard' ? 'block' : 'none'
       })
+
+      document.getElementById('art-tag').addEventListener('change', e => {
+        const isEvent = e.target.value === 'Événements'
+        const container = document.getElementById('art-event-fields')
+        container.style.display = isEvent ? 'grid' : 'none'
+        if (!isEvent) {
+          document.getElementById('art-date-evenement').value = ''
+          document.getElementById('art-horaires-evenement').value = ''
+        }
+      })
     }
 
     /* ════════════════════════════════════════════════════════
@@ -954,6 +976,11 @@
       document.getElementById('art-featured').checked = !!art?.is_featured
       document.getElementById('art-draft').checked    = art ? !!art.is_draft : true
 
+      const isEvent = (art?.tag || TAGS[0]) === 'Événements'
+      document.getElementById('art-event-fields').style.display = isEvent ? 'grid' : 'none'
+      document.getElementById('art-date-evenement').value = art?.date_evenement || ''
+      document.getElementById('art-horaires-evenement').value = art?.horaires_evenement || ''
+
       /* RTE */
       if (!rte) rte = new MiniRTE('art-rte-wrap')
       rte.setValue(art?.contenu || '')
@@ -973,15 +1000,20 @@
       const titre    = document.getElementById('art-titre').value.trim()
       if (!titre) { showToast('Le titre est obligatoire.', 'error'); return }
 
+      const tag = document.getElementById('art-tag').value
+      const isEvent = tag === 'Événements'
+
       const payload = {
         titre,
-        tag:         document.getElementById('art-tag').value,
-        image_url:   document.getElementById('art-image').value.trim(),
-        resume:      document.getElementById('art-resume').value.trim(),
-        auteur:      document.getElementById('art-auteur').value.trim() || 'La Mairie',
-        is_featured: document.getElementById('art-featured').checked,
-        is_draft:    isDraft,
-        contenu:     rte?.getValue() || '',
+        tag,
+        image_url:          document.getElementById('art-image').value.trim(),
+        resume:             document.getElementById('art-resume').value.trim(),
+        auteur:             document.getElementById('art-auteur').value.trim() || 'La Mairie',
+        is_featured:        document.getElementById('art-featured').checked,
+        is_draft:           isDraft,
+        contenu:            rte?.getValue() || '',
+        date_evenement:     isEvent ? (document.getElementById('art-date-evenement').value || null) : null,
+        horaires_evenement: isEvent ? (document.getElementById('art-horaires-evenement').value.trim() || null) : null
       }
 
       const saveLbl = isDraft ? 'Brouillon enregistré.' : 'Article publié.'

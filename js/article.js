@@ -60,7 +60,7 @@ function renderArticle(data) {
   }
 
   document.getElementById('art-tag').textContent = data.tag || 'Actualité';
-  document.getElementById('art-date').textContent = formatDate(data.created_at);
+  document.getElementById('art-date').textContent = formatArticleDate(data);
   document.getElementById('art-title').textContent = data.titre;
   document.getElementById('art-body').innerHTML = data.contenu;
   document.getElementById('art-auteur').textContent = data.auteur || 'La Mairie';
@@ -80,7 +80,6 @@ function setupShareButton() {
   const shareBtn = document.getElementById('share-link-btn');
   if (!shareBtn) return;
 
-  // Ajuste l'infobulle native selon la compatibilité
   shareBtn.setAttribute('title', navigator.share ? 'Partager cet article' : 'Copier le lien');
 
   shareBtn.addEventListener('click', async () => {
@@ -125,10 +124,12 @@ async function fetchAndRenderRelated(currentArticle) {
   const grid = document.getElementById('related-grid');
   const section = document.getElementById('related-section');
   
+  const FIELDS = 'id, titre, tag, created_at, date_evenement, horaires_evenement';
+
   // Étape A : On cherche jusqu'à 3 articles récents de la même catégorie (tag), hors article actuel
   let { data: related, error: err1 } = await supabase
     .from('articles')
-    .select('id, titre, tag, created_at')
+    .select(FIELDS)
     .eq('is_draft', false)
     .eq('tag', currentArticle.tag)
     .neq('id', currentArticle.id)
@@ -143,10 +144,9 @@ async function fetchAndRenderRelated(currentArticle) {
     
     let query = supabase
       .from('articles')
-      .select('id, titre, tag, created_at')
+      .select(FIELDS)
       .eq('is_draft', false);
       
-    // Évite les erreurs de syntaxe SQL si le tableau d'exclusion ne contient qu'un ID numérique ou UUID
     if (excludedIds.length > 0) {
       query = query.not('id', 'in', `(${excludedIds.join(',')})`);
     }
@@ -168,7 +168,7 @@ async function fetchAndRenderRelated(currentArticle) {
         <a href="/la-commune/actualites/article.html?id=${a.id}" class="related-card">
           <div class="related-card-tag">${a.tag || 'Actualité'}</div>
           <div class="related-card-title">${a.titre}</div>
-          <div class="related-card-date">${formatDate(a.created_at)}</div>
+          <div class="related-card-date">${formatArticleDate(a)}</div>
         </a>
       `;
     });
@@ -184,10 +184,24 @@ function showNotFound() {
   document.getElementById('article-not-found').style.display = 'block';
 }
 
-function formatDate(isoString) {
-  return new Date(isoString).toLocaleDateString('fr-FR', {
+function formatArticleDate(art) {
+  if (!art) return '';
+  const isEvent = art.tag === 'Événements';
+  const targetDate = (isEvent && art.date_evenement) ? art.date_evenement : art.created_at;
+  if (!targetDate) return '';
+
+  const [yyyy, mm, dd] = targetDate.split('T')[0].split('-');
+  const dateObj = new Date(yyyy, mm - 1, dd);
+  
+  let formatted = dateObj.toLocaleDateString('fr-FR', {
     day: 'numeric',
     month: 'long',
     year: 'numeric'
   });
+
+  if (isEvent && art.horaires_evenement) {
+    formatted += ` · ${art.horaires_evenement}`;
+  }
+
+  return formatted;
 }

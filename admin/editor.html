@@ -481,7 +481,7 @@
     }
 
     /* ── 3. Permanences ── */
-    const PERM_SECTIONS = [{key:'mairie',label:'Mairie'},{key:'secretariat',label:'Secrétariat'},{key:'urbanisme',label:'Urbanisme'},{key:'ccas',label:'CCAS'}]
+    const PERM_SECTIONS = [{key:'mairie',label:'Mairie'},{key:'urbanisme',label:'Urbanisme'},{key:'ccas',label:'CCAS'}]
     function renderPermanences(d) {
       return PERM_SECTIONS.map(s => {
         const sec = d[s.key] || {note:null,rows:[]}
