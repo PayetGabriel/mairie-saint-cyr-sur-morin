@@ -67,7 +67,7 @@ module.exports = async (req, res) => {
     const sujetPropre = sujetsTraduits[sujet] || sujet;
 
     // --- CONFIGURATION DYNAMIQUE DU THÈME & ROUTAGE ---
-    let destinataire = 'gabrielpayet@hotmail.com, mairie.stcyrsurmorin@orange.fr'; // Mairie par défaut
+    let destinataire = 'gabrielpayet@hotmail.com, contact@saint-cyr-sur-morin.fr'; // Mairie par défaut
     
     // Définition des couleurs du thème Mairie (Par défaut)
     let theme = {
@@ -121,7 +121,7 @@ module.exports = async (req, res) => {
     const htmlContent = `
     <div style="font-family: 'Segoe UI', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e0dbd5;">
         <div style="background: ${theme.primary}; padding: 30px; text-align: center;">
-            <img src="https://mairie-saint-cyr-sur-morin.vercel.app/assets/img/logoSaintCyr_2020_web.png" style="height: 70px; object-fit: contain; margin-bottom: 10px;" alt="Saint-Cyr-sur-Morin">
+            <img src="https://saint-cyr-sur-morin.fr/assets/img/logoSaintCyr_2020_web.png" style="height: 70px; object-fit: contain; margin-bottom: 10px;" alt="Saint-Cyr-sur-Morin">
             <h2 style="color: #ffffff; margin: 0; font-size: 20px; font-weight: 600; letter-spacing: 0.5px;">${theme.enteteText}</h2>
             <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 5px 0 0;">${theme.subText}</p>
         </div>
