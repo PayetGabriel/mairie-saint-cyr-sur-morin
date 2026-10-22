@@ -587,7 +587,15 @@ async function initPLU() {
     if (zones) {
       Object.keys(zones).forEach(zoneKey => {
         const linkEl = container.querySelector(`a[data-zone="${zoneKey}"]`)
-        if (linkEl) linkEl.href = zones[zoneKey] || '#'
+        if (!linkEl) return
+        const url = zones[zoneKey]
+        if (url) {
+          linkEl.href = url
+        } else {
+          // Pas d'URL → masquer le zone-body (lien + contenu)
+          const zoneBody = linkEl.closest('.zone-body')
+          if (zoneBody) zoneBody.style.display = 'none'
+        }
       })
     }
 
@@ -1072,9 +1080,12 @@ async function initTransportsEtudes() {
     const pageData = data.value
 
     // --- 1. RENDU DES DOCUMENTS DES TRANSPORTS ---
+    // documents est stocké à la racine de pageData (géré par l'éditeur via te-docs)
+    // Fallback sur transports_scolaires.documents pour compatibilité avec d'anciennes données
     const docsContainer = document.getElementById('transports-docs-container')
-    if (docsContainer && pageData.transports_scolaires?.documents) {
-      docsContainer.innerHTML = pageData.transports_scolaires.documents.map(doc => {
+    const docsSource = pageData.documents || pageData.transports_scolaires?.documents || []
+    if (docsContainer && docsSource.length > 0) {
+      docsContainer.innerHTML = docsSource.map(doc => {
         const btnClass = doc.primary ? 'btn btn-primary' : 'btn btn-outline'
         return `
           <a href="${doc.url}" class="${btnClass}" target="_blank" rel="noopener">
@@ -1945,6 +1956,12 @@ export async function initHomeArticles() {
     } else {
       const el = document.getElementById('actu-recents');
       if (el) el.style.display = 'none';
+    }
+
+    // Si aucun article du tout, masquer toute la section "Actualités"
+    if (featured.length === 0 && recents.length === 0) {
+      const section = document.getElementById('actualites');
+      if (section) section.style.display = 'none';
     }
   } catch (err) {
     console.error("Erreur lors du chargement des articles :", err.message);

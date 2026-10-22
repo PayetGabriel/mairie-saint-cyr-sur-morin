@@ -685,7 +685,14 @@
                   <button type="button" class="btn btn-secondary btn-sm" id="ec-pieces-${key}-add" style="margin-top:12px">+ Ajouter</button>`:''}
                 ${hasNote?`
                   ${edHd('Note')}
-                  ${ta(`ec-note-text-${key}`,'Texte de la note', note.text||'')}
+                  <div class="form-group">
+                    <label class="form-label">Texte de la note</label>
+                    <div class="para-mini-toolbar">
+                      <button type="button" class="rte-btn" onmousedown="event.preventDefault()" onclick="document.execCommand('bold')" style="height:24px;min-width:24px"><b>G</b></button>
+                      <button type="button" class="rte-btn" onmousedown="event.preventDefault()" onclick="document.execCommand('italic')" style="height:24px;min-width:24px"><em>I</em></button>
+                    </div>
+                    <div id="ec-note-text-${key}" class="form-input para-item" contenteditable="true" style="min-height:60px">${note.text||''}</div>
+                  </div>
                   ${toggleRow(`ec-note-alert-${key}`,'Afficher comme alerte (fond jaune)', !!note.is_alert)}`:''}
                 ${key==='cni'?fld('ec-bio-cni','Mairies équipées biométrie', sec.biometrie||''):''}
                 ${key==='mariage'?`
@@ -724,7 +731,7 @@
         const hasPieces = ['recensement','parrainage','listes-electorales','procuration','attestation-accueil'].includes(key)
         if (hasPieces) sec.pieces = [...document.querySelectorAll(`#ec-pieces-${key} .list-item`)].map(el => el.querySelector('[data-field="val"]')?.value || '')
         const hasNote = ['mariage','sortie-territoire','listes-electorales','procuration'].includes(key)
-        if (hasNote) sec.note = {text: fVal(`ec-note-text-${key}`), is_alert: fChk(`ec-note-alert-${key}`)}
+        if (hasNote) sec.note = {text: fHTML(`ec-note-text-${key}`), is_alert: fChk(`ec-note-alert-${key}`)}
         if (key === 'cni') sec.biometrie = fVal('ec-bio-cni')
         if (key === 'mariage') {
           sec.main_btn   = {url: fVal('ec-main-btn-url-mariage'), label: fVal('ec-main-btn-label-mariage')}
@@ -1021,7 +1028,7 @@
       return {
         etudes_surveillees:{...et,jours:fVal('te-jours'),horaires:fVal('te-horaires'),tarif:fVal('te-tarif'),etablissement:fVal('te-etab'),reglement_url:fVal('te-reg-url'),pedibus_details:fVal('te-pedibus'),inscription_details:fVal('te-inscription')},
         documents:collectList('te-docs',TE_DOC_FIELDS),
-        transports_scolaires:{...(currentData?.transports_scolaires||{}),lignes},
+        transports_scolaires:{...(({documents:_d,...r})=>r)(currentData?.transports_scolaires||{}),lignes},
       }
     }
 
