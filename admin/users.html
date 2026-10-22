@@ -449,7 +449,7 @@
     const { data: { session } } = await supabase.auth.getSession()
 
     try {
-      const res = await fetch('/api/admin-users', {
+      const res = await fetch('/api/admin-users.php', {
         method: 'POST',
         headers: {
           'Content-Type':  'application/json',
@@ -599,7 +599,7 @@
     const { data: { session } } = await supabase.auth.getSession()
 
     try {
-      const res = await fetch('/api/admin-users', {
+      const res = await fetch('/api/admin-users.php', {
         method: 'POST',
         headers: {
           'Content-Type':  'application/json',

@@ -108,10 +108,12 @@ if (!$body) {
 }
 
 // ── Vérification du token Bearer ─────────────────────────────────────────────
-$authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+$authHeader = $_SERVER['HTTP_AUTHORIZATION']
+           ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION']
+           ?? '';
 if (!$authHeader && function_exists('apache_request_headers')) {
     $reqHeaders = apache_request_headers();
-    $authHeader = $reqHeaders['Authorization'] ?? '';
+    $authHeader = $reqHeaders['Authorization'] ?? $reqHeaders['authorization'] ?? '';
 }
 
 $token = '';
@@ -182,19 +184,24 @@ if ($action === 'invite') {
 
     $inviteRes = supabase_request(
         'POST',
-        '/auth/v1/admin/invite',
+        '/auth/v1/invite?redirect_to=' . rawurlencode($redirectTo),
         [],
         [
-            'email'       => $emailInvite,
-            'redirect_to' => $redirectTo,
-            'data'        => ['prenom' => $prenom, 'nom' => $nom],
+            'email' => $emailInvite,
+            'data'  => ['prenom' => $prenom, 'nom' => $nom],
         ]
     );
 
-    if ($inviteRes['status'] !== 200) {
-        $errMsg = $inviteRes['body']['msg'] ?? $inviteRes['body']['message'] ?? 'Erreur lors de l\'invitation.';
+    if (!in_array($inviteRes['status'], [200, 201], true)) {
+        $errBody = $inviteRes['body'] ?? [];
+        $errMsg  = $errBody['msg']
+                ?? $errBody['message']
+                ?? $errBody['error_description']
+                ?? $errBody['error']
+                ?? 'Erreur lors de l\'invitation (HTTP ' . $inviteRes['status'] . ').';
         $alreadyExists = str_contains(strtolower($errMsg), 'already registered')
-                      || str_contains(strtolower($errMsg), 'already been registered');
+                      || str_contains(strtolower($errMsg), 'already been registered')
+                      || str_contains(strtolower($errMsg), 'user already exists');
         http_response_code(400);
         echo json_encode([
             'error' => $alreadyExists
