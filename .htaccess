@@ -5,6 +5,10 @@
 
 RewriteEngine On
 
+# Désactive la négociation de contenu MultiViews (évite qu'Apache serve navbar.js
+# à la place de navbar.html quand l'extension est absente de l'URL)
+Options -MultiViews
+
 # ── 0. Transmission du header Authorization à PHP ────────────────────────────
 #    OVH/Apache mutualisé supprime ce header par défaut.
 #    Cette règle le copie dans la variable d'environnement HTTP_AUTHORIZATION
@@ -15,9 +19,17 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
-# ── 2. URLs propres : servir les fichiers .html sans extension ────────────────
-#    /la-commune/conseil  →  /la-commune/conseil.html
-#    Ne s'applique pas si le fichier/dossier existe déjà tel quel
+# ── 2. URLs propres ──────────────────────────────────────────────────────────
+# 2a. Si la barre d'adresse contient .html, rediriger vers l'URL propre (301)
+#     Exception : /components/ — ces fichiers sont chargés par fetch() côté JS ;
+#     les rediriger casse navbar.html, footer.html, etc.
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteCond %{REQUEST_URI} !^/components/ [NC]
+RewriteRule ^ /%1 [R=301,L]
+
+# 2b. Servir le fichier .html en arrière-plan sans afficher l'extension
+#     /la-commune/conseil  →  /la-commune/conseil.html
+#     Ne s'applique pas si le fichier/dossier existe déjà tel quel
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.html -f
