@@ -253,9 +253,27 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="form-label" for="art-image">URL de l'image de couverture</label>
-                <input type="url" id="art-image" class="form-input" placeholder="https://…">
-                <p class="form-hint">Lien direct vers l'image (Unsplash, Drive, etc.)</p>
+                <label class="form-label">Image de couverture</label>
+                <div class="upload-zone" data-upload-type="image">
+                  <input type="hidden" id="art-image" value="">
+                  <div class="uz-empty">
+                    <div class="uz-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>
+                    <p class="uz-label">Glisser-déposer ou <span class="uz-link">importer</span></p>
+                    <p class="uz-hint">JPG, PNG, WebP · Max 5 Mo</p>
+                  </div>
+                  <div class="uz-filled">
+                    <div class="uz-file-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                    <div class="uz-file-info">
+                      <span class="uz-file-name"></span>
+                      <span class="uz-file-meta">Fichier enregistré</span>
+                    </div>
+                    <div class="uz-actions">
+                      <button class="uz-replace" type="button">Remplacer</button>
+                      <button class="uz-remove" type="button" title="Supprimer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                    </div>
+                  </div>
+                  <div class="uz-progress"><div class="uz-progress-bar"></div></div>
+                </div>
               </div>
               <div class="form-group">
                 <label class="form-label" for="art-resume">Résumé</label>
@@ -318,9 +336,27 @@
                   placeholder="Résumé affiché dans les listings…" style="min-height:72px"></textarea>
               </div>
               <div class="form-group">
-                <label class="form-label" for="med-image">URL de l'image (optionnelle)</label>
-                <input type="url" id="med-image" class="form-input"
-                  placeholder="/assets/img/mediatheque_affiche_x.jpg">
+                <label class="form-label">Image (optionnelle)</label>
+                <div class="upload-zone" data-upload-type="image">
+                  <input type="hidden" id="med-image" value="">
+                  <div class="uz-empty">
+                    <div class="uz-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>
+                    <p class="uz-label">Glisser-déposer ou <span class="uz-link">importer</span></p>
+                    <p class="uz-hint">JPG, PNG, WebP · Max 5 Mo</p>
+                  </div>
+                  <div class="uz-filled">
+                    <div class="uz-file-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                    <div class="uz-file-info">
+                      <span class="uz-file-name"></span>
+                      <span class="uz-file-meta">Fichier enregistré</span>
+                    </div>
+                    <div class="uz-actions">
+                      <button class="uz-replace" type="button">Remplacer</button>
+                      <button class="uz-remove" type="button" title="Supprimer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+                    </div>
+                  </div>
+                  <div class="uz-progress"><div class="uz-progress-bar"></div></div>
+                </div>
               </div>
             </div>
             <div class="art-edit-sidebar">
@@ -375,8 +411,27 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label" for="ar-url">Lien du document (PDF)</label>
-          <input type="url" id="ar-url" class="form-input" placeholder="/assets/docs/arretes/...">
+          <label class="form-label">Document (PDF)</label>
+          <div class="upload-zone" data-upload-type="pdf">
+            <input type="hidden" id="ar-url" value="">
+            <div class="uz-empty">
+              <div class="uz-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>
+              <p class="uz-label">Glisser-déposer ou <span class="uz-link">importer</span></p>
+              <p class="uz-hint">PDF · Max 10 Mo</p>
+            </div>
+            <div class="uz-filled">
+              <div class="uz-file-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div class="uz-file-info">
+                <span class="uz-file-name"></span>
+                <span class="uz-file-meta">Fichier enregistré</span>
+              </div>
+              <div class="uz-actions">
+                <button class="uz-replace" type="button">Remplacer</button>
+                <button class="uz-remove" type="button" title="Supprimer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+            </div>
+            <div class="uz-progress"><div class="uz-progress-bar"></div></div>
+          </div>
         </div>
         <div class="grid-2">
           <div class="form-group">
@@ -416,8 +471,27 @@
           <input type="date" id="cr-date" class="form-input">
         </div>
         <div class="form-group">
-          <label class="form-label" for="cr-url">Lien du compte-rendu (PDF) <span style="color:#dc2626">*</span></label>
-          <input type="url" id="cr-url" class="form-input" placeholder="/documents/comptes-rendus/...">
+          <label class="form-label">Compte-rendu (PDF) <span style="color:#dc2626">*</span></label>
+          <div class="upload-zone" data-upload-type="pdf">
+            <input type="hidden" id="cr-url" value="">
+            <div class="uz-empty">
+              <div class="uz-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>
+              <p class="uz-label">Glisser-déposer ou <span class="uz-link">importer</span></p>
+              <p class="uz-hint">PDF · Max 10 Mo</p>
+            </div>
+            <div class="uz-filled">
+              <div class="uz-file-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div class="uz-file-info">
+                <span class="uz-file-name"></span>
+                <span class="uz-file-meta">Fichier enregistré</span>
+              </div>
+              <div class="uz-actions">
+                <button class="uz-replace" type="button">Remplacer</button>
+                <button class="uz-remove" type="button" title="Supprimer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+            </div>
+            <div class="uz-progress"><div class="uz-progress-bar"></div></div>
+          </div>
         </div>
         <div class="permission-row">
           <span class="permission-label">Brouillon (non visible)</span>
@@ -459,8 +533,27 @@
           <input type="date" id="tdu-date" class="form-input">
         </div>
         <div class="form-group">
-          <label class="form-label" for="tdu-url">Lien du document (PDF) <span style="color:#dc2626">*</span></label>
-          <input type="url" id="tdu-url" class="form-input" placeholder="/assets/docs/TDU/...">
+          <label class="form-label">Document (PDF) <span style="color:#dc2626">*</span></label>
+          <div class="upload-zone" data-upload-type="pdf">
+            <input type="hidden" id="tdu-url" value="">
+            <div class="uz-empty">
+              <div class="uz-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>
+              <p class="uz-label">Glisser-déposer ou <span class="uz-link">importer</span></p>
+              <p class="uz-hint">PDF · Max 10 Mo</p>
+            </div>
+            <div class="uz-filled">
+              <div class="uz-file-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div class="uz-file-info">
+                <span class="uz-file-name"></span>
+                <span class="uz-file-meta">Fichier enregistré</span>
+              </div>
+              <div class="uz-actions">
+                <button class="uz-replace" type="button">Remplacer</button>
+                <button class="uz-remove" type="button" title="Supprimer"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+            </div>
+            <div class="uz-progress"><div class="uz-progress-bar"></div></div>
+          </div>
         </div>
         <div class="permission-row">
           <span class="permission-label">Brouillon (non visible)</span>
@@ -970,7 +1063,7 @@
       /* Pré-remplir */
       document.getElementById('art-titre').value    = art?.titre    || ''
       document.getElementById('art-tag').value      = art?.tag      || TAGS[0]
-      document.getElementById('art-image').value    = art?.image_url|| ''
+      setZoneById('art-image', art?.image_url|| '')
       document.getElementById('art-resume').value   = art?.resume   || ''
       document.getElementById('art-auteur').value   = art?.auteur   || 'La Mairie'
       document.getElementById('art-featured').checked = !!art?.is_featured
@@ -1056,7 +1149,7 @@
       document.getElementById('med-titre').value  = evt?.titre               || ''
       document.getElementById('med-date').value   = toDatetimeLocal(evt?.date_evenement)
       document.getElementById('med-desc').value   = evt?.description_courte  || ''
-      document.getElementById('med-image').value  = evt?.image_url           || ''
+      setZoneById('med-image', evt?.image_url || '')
       document.getElementById('med-contenu').value= evt?.contenu_complet     || ''
       document.getElementById('med-draft').checked = evt ? !!evt.is_draft : true
     }
@@ -1206,7 +1299,7 @@
         document.getElementById('arrete-modal-title').textContent = 'Modifier l\'arrêté'
         document.getElementById('ar-numero').value    = item.numero      || ''
         document.getElementById('ar-titre').value     = item.titre       || ''
-        document.getElementById('ar-url').value       = item.document_url|| ''
+        setZoneById('ar-url', item.document_url || '')
         document.getElementById('ar-pris-le').value   = item.pris_le     || ''
         document.getElementById('ar-vigueur').value   = item.en_vigueur_le || ''
         document.getElementById('ar-draft').checked   = !!item.is_draft
@@ -1217,7 +1310,7 @@
       if (table === 'cr') {
         document.getElementById('cr-modal-title').textContent = 'Modifier le compte-rendu'
         document.getElementById('cr-date').value  = item.date_conseil || ''
-        document.getElementById('cr-url').value   = item.document_url || ''
+        setZoneById('cr-url', item.document_url || '')
         document.getElementById('cr-draft').checked = !!item.is_draft
         document.getElementById('cr-alert').style.display = 'none'
         openModal('modal-cr')
@@ -1228,7 +1321,7 @@
         document.getElementById('tdu-type').value   = item.type_special || 'Standard'
         document.getElementById('tdu-numero').value = item.numero       || ''
         document.getElementById('tdu-date').value   = item.date_publication || ''
-        document.getElementById('tdu-url').value    = item.document_url || ''
+        setZoneById('tdu-url', item.document_url || '')
         document.getElementById('tdu-draft').checked = !!item.is_draft
         document.getElementById('tdu-numero-group').style.display =
           item.type_special === 'Standard' ? 'block' : 'none'
@@ -1309,7 +1402,21 @@
         const btn = document.getElementById('btn-confirm-delete')
         btn.disabled = true; btn.textContent = 'Suppression…'
 
-        const tableMap = { articles: 'articles', arretes: 'arretes', cr: 'comptes_rendus', tdu: 'traits_union', media: 'mediatheque_events' }
+        const tableMap    = { articles: 'articles', arretes: 'arretes', cr: 'comptes_rendus', tdu: 'traits_union', media: 'mediatheque_events' }
+        const fileFieldMap = { articles: 'image_url', arretes: 'document_url', cr: 'document_url', tdu: 'document_url', media: 'image_url' }
+
+        /* ── Cas 2 : supprimer le fichier /uploads/ associé avant la ligne Supabase ── */
+        const fileField = fileFieldMap[table]
+        if (fileField) {
+          const { data: row } = await supabase
+            .from(tableMap[table]).select(fileField).eq('id', id).single()
+          const filePath = row?.[fileField]
+          if (filePath?.startsWith('/uploads/')) {
+            const { data: { session } } = await supabase.auth.getSession()
+            if (session) await deleteUploadedFile(filePath, session.access_token)
+          }
+        }
+
         const { error } = await supabase.from(tableMap[table]).delete().eq('id', id)
 
         btn.disabled = false; btn.textContent = 'Supprimer'
@@ -1329,6 +1436,123 @@
         container.addEventListener('input', () => { isDirty = true })
         container.addEventListener('change', () => { isDirty = true })
       }
+    })
+
+    /* ═══════════════════════════════════════════════════════
+       UPLOAD ZONES — composant glisser-déposer
+       ═══════════════════════════════════════════════════════ */
+
+    function getUploadZoneFileName(path) {
+      if (!path) return ''
+      try { return decodeURIComponent(path.split('/').pop()) } catch { return path.split('/').pop() }
+    }
+
+    function setUploadZoneState(zone, path) {
+      const hasFile = !!(path && path.trim())
+      zone.classList.toggle('has-file', hasFile)
+      const nameEl = zone.querySelector('.uz-file-name')
+      if (nameEl) nameEl.textContent = hasFile ? getUploadZoneFileName(path) : ''
+    }
+
+    function setZoneById(id, path) {
+      const input = document.getElementById(id)
+      if (!input) return
+      input.value = path || ''
+      const zone = input.closest('.upload-zone')
+      if (zone) setUploadZoneState(zone, path)
+    }
+
+    async function deleteUploadedFile(path, token) {
+      try {
+        await fetch('/api/delete-file.php', {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path }),
+        })
+      } catch (e) {
+        console.warn('Impossible de supprimer l\'ancien fichier :', e)
+      }
+    }
+
+    async function handleFileUpload(file, zone) {
+      if (!file) return
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { showToast('Session expirée. Reconnectez-vous.', 'error'); return }
+
+      const hiddenInput = zone.querySelector('input[type="hidden"]')
+      if (!hiddenInput) return
+
+      /* Cas 1 : remplacer un fichier existant — supprimer l'ancien */
+      const oldPath = hiddenInput.value?.trim()
+      if (oldPath?.startsWith('/uploads/')) {
+        await deleteUploadedFile(oldPath, session.access_token)
+      }
+
+      zone.classList.add('uploading')
+      const bar = zone.querySelector('.uz-progress-bar')
+      if (bar) bar.style.width = '30%'
+      const fd = new FormData()
+      fd.append('file', file)
+
+      try {
+        if (bar) bar.style.width = '60%'
+        const res = await fetch('/api/upload.php', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${session.access_token}` },
+          body: fd,
+        })
+        const json = await res.json()
+        if (!res.ok) throw new Error(json.error || 'Erreur upload')
+        if (bar) { bar.style.width = '100%'; setTimeout(() => { zone.classList.remove('uploading') }, 300) }
+        else zone.classList.remove('uploading')
+        hiddenInput.value = json.path
+        setUploadZoneState(zone, json.path)
+        isDirty = true
+        showToast('Fichier envoyé ✓')
+      } catch (e) {
+        zone.classList.remove('uploading')
+        showToast('Erreur : ' + e.message, 'error')
+      }
+    }
+
+    function triggerFileUpload(zone) {
+      const uploadType = zone.dataset.uploadType || 'pdf'
+      const accept = uploadType === 'image' ? 'image/jpeg,image/png,image/webp,image/gif' : 'application/pdf'
+      const fi = document.createElement('input')
+      fi.type = 'file'; fi.accept = accept; fi.style.display = 'none'
+      document.body.appendChild(fi)
+      fi.click()
+      fi.addEventListener('change', () => { if (fi.files[0]) handleFileUpload(fi.files[0], zone); fi.remove() }, { once: true })
+    }
+
+    /* Délégation — couvre toutes les zones de la page */
+    document.body.addEventListener('click', e => {
+      const replBtn = e.target.closest('.uz-replace')
+      if (replBtn) { const z = replBtn.closest('.upload-zone'); if (z) triggerFileUpload(z); return }
+
+      const remBtn = e.target.closest('.uz-remove')
+      if (remBtn) {
+        const z = remBtn.closest('.upload-zone')
+        if (z) { const inp = z.querySelector('input[type="hidden"]'); if (inp) inp.value = ''; setUploadZoneState(z, ''); isDirty = true }
+        return
+      }
+
+      const zone = e.target.closest('.upload-zone')
+      if (zone && !zone.classList.contains('has-file') && !zone.classList.contains('uploading')) triggerFileUpload(zone)
+    })
+
+    /* Drag & drop */
+    document.body.addEventListener('dragover', e => { const z = e.target.closest('.upload-zone'); if (z) { e.preventDefault(); z.classList.add('drag-over') } })
+    document.body.addEventListener('dragleave', e => { const z = e.target.closest('.upload-zone'); if (z && !z.contains(e.relatedTarget)) z.classList.remove('drag-over') })
+    document.body.addEventListener('drop', e => {
+      const z = e.target.closest('.upload-zone')
+      if (z) { e.preventDefault(); z.classList.remove('drag-over'); const f = e.dataTransfer.files[0]; if (f) handleFileUpload(f, z) }
+    })
+
+    /* Restaurer l'état visuel des zones déjà pré-remplies (modal edit) */
+    document.querySelectorAll('.upload-zone').forEach(zone => {
+      const input = zone.querySelector('input[type="hidden"]')
+      if (input?.value) setUploadZoneState(zone, input.value)
     })
 
     init()

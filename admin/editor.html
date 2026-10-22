@@ -152,8 +152,10 @@
     const fld = (id, label, val='', opts={}) => `
       <div class="form-group" style="${opts.style||''}">
         <label class="form-label">${label}</label>
+        ${opts.upload ? uploadZoneHTML(id, val, opts.upload) : `
         <input type="${opts.type||'text'}" id="${id}" class="form-input" value="${escAttr(val)}"
           placeholder="${escAttr(opts.ph||'')}" ${opts.readonly?'readonly style="opacity:.55;background:var(--creme)"':''}>
+        `}
         ${opts.hint?`<p class="form-hint">${opts.hint}</p>`:''}
       </div>`
 
@@ -207,7 +209,9 @@
       return `
         <div class="fi-g">
           <label class="form-label">${f.label}</label>
+          ${f.upload ? uploadZoneHTML(f.key, String(v), f.upload, true, true) : `
           <input type="${f.type||'text'}" data-field="${f.key}" class="form-input" value="${escAttr(String(v))}">
+          `}
         </div>`
     }
 
@@ -224,6 +228,40 @@
     const listHTML = (id, items, fields, addLabel='Ajouter') => `
       <div class="list-editor" id="${id}">${(items||[]).map(item=>itemHTML(fields,item)).join('')}</div>
       <button type="button" class="btn btn-secondary btn-sm" id="${id}-add" style="margin-top:12px">+ ${addLabel}</button>`
+
+    /* ── Upload zone HTML ── */
+    const UZ_UPLOAD_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>`
+    const UZ_PDF_SVG   = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`
+    const UZ_IMG_SVG   = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>`
+    const UZ_CLOSE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
+
+    function uploadZoneHTML(id, val, type='pdf', compact=false, asDataField=false) {
+      const isImg     = type === 'image'
+      const inputAttr = asDataField ? `data-field="${escAttr(id)}"` : `id="${escAttr(id)}"`
+      const hasFile   = !!(val && String(val).trim())
+      const fileName  = hasFile ? (() => { try { return decodeURIComponent(String(val).split('/').pop()) } catch { return String(val).split('/').pop() } })() : ''
+      const hint      = isImg ? 'JPG, PNG, WebP · Max 5 Mo' : 'PDF · Max 10 Mo'
+      return `<div class="upload-zone${compact?' uz-compact':''}${hasFile?' has-file':''}" data-upload-type="${type}">
+        <input type="hidden" ${inputAttr} value="${escAttr(String(val||''))}">
+        <div class="uz-empty">
+          <div class="uz-icon">${UZ_UPLOAD_SVG}</div>
+          <p class="uz-label">Glisser-déposer ou <span class="uz-link">importer</span></p>
+          <p class="uz-hint">${hint}</p>
+        </div>
+        <div class="uz-filled">
+          <div class="uz-file-icon">${isImg ? UZ_IMG_SVG : UZ_PDF_SVG}</div>
+          <div class="uz-file-info">
+            <span class="uz-file-name">${escH(fileName)}</span>
+            <span class="uz-file-meta">Fichier enregistré</span>
+          </div>
+          <div class="uz-actions">
+            <button class="uz-replace" type="button">Remplacer</button>
+            <button class="uz-remove" type="button" title="Supprimer">${UZ_CLOSE_SVG}</button>
+          </div>
+        </div>
+        <div class="uz-progress"><div class="uz-progress-bar"></div></div>
+      </div>`
+    }
 
     /* ── List management ── */
     function initListEditor(id, fields, defaultData={}) {
@@ -375,7 +413,7 @@
     const DOC_FIELDS  = [
       {key:'title',    label:'Titre',      type:'text'},
       {key:'subtitle', label:'Sous-titre', type:'text'},
-      {key:'url',      label:'Lien (URL)', type:'url'},
+      {key:'url',      label:'Lien (URL)', type:'url', upload:'pdf'},
     ]
     const VQ_FIELDS   = [
       {key:'name',         label:'Nom / Service', type:'text'},
@@ -529,7 +567,7 @@
     }
 
     /* ── 4. Cantine ── */
-    const MENU_FIELDS = [{key:'title',label:'Titre',type:'text'},{key:'url',label:'URL du PDF',type:'url'}]
+    const MENU_FIELDS = [{key:'title',label:'Titre',type:'text'},{key:'url',label:'URL du PDF',type:'url',upload:'pdf'}]
     function renderCantine(d) {
       const tarifs = d.tarifs || {}
       const items  = tarifs.items || []
@@ -546,7 +584,7 @@
           </div>`).join('')}
         ${edHd('Règlement intérieur')}
         ${fld('cantine-reg-label','Libellé du lien', d.reglement?.label||'')}
-        ${fld('cantine-reg-url','URL (PDF)', d.reglement?.url||'', {type:'url'})}`
+        ${fld('cantine-reg-url','URL (PDF)', d.reglement?.url||'', {type:'url', upload:'pdf'})}`
     }
     function serializeCantine() {
       const items = (currentData?.tarifs?.items||[]).map((item,i)=>({label:item.label, price:fVal(`cantine-price-${i}`)}))
@@ -566,12 +604,12 @@
         ${edHd('Fiches de tri (liens PDF uniquement)')}
         ${fiches.map((f,i)=>`
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
-            <span style="min-width:130px;font-size:13px;font-weight:500">${escH(f.name)}</span>
-            <input type="url" id="dechet-pdf-${i}" class="form-input" value="${escAttr(f.pdf_url||'')}" placeholder="/assets/docs/dechets/...">
+            <span style="min-width:130px;font-size:13px;font-weight:500;flex-shrink:0">${escH(f.name)}</span>
+            <div style="flex:1">${uploadZoneHTML(`dechet-pdf-${i}`, f.pdf_url||'', 'pdf', true)}</div>
           </div>`).join('')}
         ${edHd('Calendrier de collecte')}
         ${fld('dechet-cal-title','Titre principal', cal.main_title||'')}
-        ${fld('dechet-cal-url','URL du PDF', cal.pdf_url||'', {type:'url'})}
+        ${fld('dechet-cal-url','URL du PDF', cal.pdf_url||'', {type:'url', upload:'pdf'})}
         ${edHd('Organismes')}
         ${listHTML('dechet-orgs', d.organismes||[], ORG_FIELDS, 'Ajouter un organisme')}`
     }
@@ -652,13 +690,13 @@
                 ${key==='cni'?fld('ec-bio-cni','Mairies équipées biométrie', sec.biometrie||''):''}
                 ${key==='mariage'?`
                   ${edHd('Bouton principal (dossier mariage)')}
-                  ${fld('ec-main-btn-url-mariage','URL du PDF', sec.main_btn?.url||'', {type:'url'})}
+                  ${fld('ec-main-btn-url-mariage','URL du PDF', sec.main_btn?.url||'', {type:'url', upload:'pdf'})}
                   ${fld('ec-main-btn-label-mariage','Libellé', sec.main_btn?.label||'')}
                   ${edHd('Liens PACS (3 fixes — URL uniquement)')}
                   ${(sec.pacs_links||[]).map((l,i)=>`
                     <div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
-                      <span style="min-width:130px;font-size:12.5px;color:var(--pierre-dark)">${escH(l.label)}</span>
-                      <input type="url" id="ec-pacs-${i}" class="form-input" value="${escAttr(l.url||'')}">
+                      <span style="min-width:130px;font-size:12.5px;color:var(--pierre-dark);flex-shrink:0">${escH(l.label)}</span>
+                      <div style="flex:1">${uploadZoneHTML(`ec-pacs-${i}`, l.url||'', 'pdf', true)}</div>
                     </div>`).join('')}`:''}
                 ${hasLinks && key!=='mariage'?`
                   ${edHd('Liens')}
@@ -720,7 +758,7 @@
     function renderPermisTravaux(d) {
       const cards = d.cards_links || {}
       return `
-        ${fld('pt-voirie-url','Document voirie communale (URL)', d.voirie_document_url||'', {type:'url'})}
+        ${fld('pt-voirie-url','Document voirie communale (URL)', d.voirie_document_url||'', {type:'url', upload:'pdf'})}
         ${Object.entries(PERM_LINK_CARDS).map(([key,label])=>`
           ${edHd(label)}
           ${listHTML(`pt-card-${key}`, cards[key]||[], PT_LINK_FIELDS, 'Ajouter un lien')}`).join('')}`
@@ -732,7 +770,7 @@
     }
 
     /* ── 10. PLU ── */
-    const PLU_DOC_FIELDS = [{key:'label',label:'Libellé',type:'text'},{key:'url',label:'URL',type:'url'}]
+    const PLU_DOC_FIELDS = [{key:'label',label:'Libellé',type:'text'},{key:'url',label:'URL',type:'url',upload:'pdf'}]
     function renderPlu(d) {
       const zones  = d.zones  || {}
       const groups = d.groups || []
@@ -741,7 +779,7 @@
       return `
         ${fld('plu-date','Date d\'application', d.applicable_date||'')}
         ${edHd('Zones (liens vers PDF)')}
-        ${['A','N','U','AUX'].map(z=>`${fld(`plu-zone-${z}`,'Zone '+z, zones[z]||'', {type:'url'})}`).join('')}
+        ${['A','N','U','AUX'].map(z=>`${fld(`plu-zone-${z}`,'Zone '+z, zones[z]||'', {type:'url', upload:'pdf'})}`).join('')}
         ${edHd('Documents graphiques — sections fixes')}
         ${(g0.sections||[]).map((sec,si)=>`
           <div class="plu-section-card">
@@ -826,7 +864,7 @@
     }
 
     /* ── 12. Scolarité & Périscolaire ── */
-    const SCOL_LIGNE_FIELDS=[{key:'id',label:'N° ligne',type:'text'},{key:'name',label:'Nom',type:'text'},{key:'dessert',label:'Desserte',type:'text'},{key:'url',label:'Lien',type:'url'},{key:'img_url',label:'Image',type:'url'}]
+    const SCOL_LIGNE_FIELDS=[{key:'id',label:'N° ligne',type:'text'},{key:'name',label:'Nom',type:'text'},{key:'dessert',label:'Desserte',type:'text'},{key:'url',label:'Lien',type:'url'},{key:'img_url',label:'Image',type:'url',upload:'image'}]
     function renderScolarite(d) {
       const ec = d.ecoles || {}; const mat = ec.maternelle||{}; const elem = ec.elementaire||{}
       const fr = d.familles_rurales || {}
@@ -928,7 +966,7 @@
     function serializeSivuPractical() { return {docs: collectList('sivup-docs', DOC_FIELDS)} }
 
     /* ── 15. Transports & Études ── */
-    const TE_DOC_FIELDS=[{key:'label',label:'Libellé',type:'text'},{key:'url',label:'URL',type:'url'},{key:'primary',label:'Principal',type:'checkbox'}]
+    const TE_DOC_FIELDS=[{key:'label',label:'Libellé',type:'text'},{key:'url',label:'URL',type:'url',upload:'pdf'},{key:'primary',label:'Principal',type:'checkbox'}]
     function renderTransportsEtudes(d) {
       const et = d.etudes_surveillees || {}
       const lignes = d.transports_scolaires?.lignes || []
@@ -938,7 +976,7 @@
         ${fld('te-horaires','Horaires', et.horaires||'')}
         ${fld('te-tarif','Tarif', et.tarif||'')}
         ${fld('te-etab','Établissement', et.etablissement||'')}
-        ${fld('te-reg-url','URL règlement intérieur', et.reglement_url||'', {type:'url'})}
+        ${fld('te-reg-url','URL règlement intérieur', et.reglement_url||'', {type:'url', upload:'pdf'})}
         ${ta('te-pedibus','Informations pedibus', et.pedibus_details||'')}
         ${ta('te-inscription','Informations inscription', et.inscription_details||'')}
         ${edHd('Documents')}
@@ -993,7 +1031,7 @@
       {key:'name',label:'Nom',type:'text'},
       {key:'dessert',label:'Desserte',type:'text'},
       {key:'url',label:'Lien officiel',type:'url'},
-      {key:'img_url',label:'Image plan',type:'url'},
+      {key:'img_url',label:'Image plan',type:'url',upload:'image'},
       {key:'badge_type',label:'Type',type:'select',opts:[{v:'reguliere',l:'Régulière'},{v:'scolaire',l:'Scolaire'}]},
     ]
     function renderTransportsLignes(d) {
@@ -1371,6 +1409,107 @@
 
       await loadAllContent()
     }
+
+    /* ═══════════════════════════════════════════════════════
+       UPLOAD ZONES — composant glisser-déposer
+       ═══════════════════════════════════════════════════════ */
+
+    function uzGetFileName(path) {
+      if (!path) return ''
+      try { return decodeURIComponent(String(path).split('/').pop()) } catch { return String(path).split('/').pop() }
+    }
+
+    function uzSetState(zone, path) {
+      const hasFile = !!(path && String(path).trim())
+      zone.classList.toggle('has-file', hasFile)
+      const nameEl = zone.querySelector('.uz-file-name')
+      if (nameEl) nameEl.textContent = hasFile ? uzGetFileName(path) : ''
+    }
+
+    async function uzDeleteFile(path, token) {
+      try {
+        await fetch('/api/delete-file.php', {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ path }),
+        })
+      } catch (e) {
+        console.warn('Impossible de supprimer l\'ancien fichier :', e)
+      }
+    }
+
+    async function uzUpload(file, zone) {
+      if (!file) return
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) { showToast('Session expirée. Reconnectez-vous.', 'error'); return }
+
+      const hiddenInput = zone.querySelector('input[type="hidden"]')
+      if (!hiddenInput) return
+
+      /* Cas 1 : remplacer un fichier existant — supprimer l'ancien */
+      const oldPath = hiddenInput.value?.trim()
+      if (oldPath?.startsWith('/uploads/')) await uzDeleteFile(oldPath, session.access_token)
+
+      zone.classList.add('uploading')
+      const bar = zone.querySelector('.uz-progress-bar')
+      if (bar) bar.style.width = '30%'
+      const fd = new FormData()
+      fd.append('file', file)
+
+      try {
+        if (bar) bar.style.width = '60%'
+        const res = await fetch('/api/upload.php', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${session.access_token}` },
+          body: fd,
+        })
+        const json = await res.json()
+        if (!res.ok) throw new Error(json.error || 'Erreur upload')
+        if (bar) { bar.style.width = '100%'; setTimeout(() => zone.classList.remove('uploading'), 300) }
+        else zone.classList.remove('uploading')
+        hiddenInput.value = json.path
+        uzSetState(zone, json.path)
+        isDirty = true
+        showToast('Fichier envoyé ✓')
+      } catch (e) {
+        zone.classList.remove('uploading')
+        showToast('Erreur : ' + e.message, 'error')
+      }
+    }
+
+    function uzTrigger(zone) {
+      const type   = zone.dataset.uploadType || 'pdf'
+      const accept = type === 'image' ? 'image/jpeg,image/png,image/webp,image/gif' : 'application/pdf'
+      const fi = document.createElement('input')
+      fi.type = 'file'; fi.accept = accept; fi.style.display = 'none'
+      document.body.appendChild(fi)
+      fi.click()
+      fi.addEventListener('change', () => { if (fi.files[0]) uzUpload(fi.files[0], zone); fi.remove() }, { once: true })
+    }
+
+    /* Délégation unique — couvre champs statiques ET items dynamiques dans les listes */
+    document.getElementById('editor-form-body')?.addEventListener('click', e => {
+      const replBtn = e.target.closest('.uz-replace')
+      if (replBtn) { const z = replBtn.closest('.upload-zone'); if (z) uzTrigger(z); return }
+
+      const remBtn = e.target.closest('.uz-remove')
+      if (remBtn) {
+        const z = remBtn.closest('.upload-zone')
+        if (z) { const inp = z.querySelector('input[type="hidden"]'); if (inp) inp.value = ''; uzSetState(z, ''); isDirty = true }
+        return
+      }
+
+      const zone = e.target.closest('.upload-zone')
+      if (zone && !zone.classList.contains('has-file') && !zone.classList.contains('uploading')) uzTrigger(zone)
+    })
+
+    /* Drag & drop sur le formulaire */
+    document.getElementById('editor-form-body')?.addEventListener('dragover', e => { const z = e.target.closest('.upload-zone'); if (z) { e.preventDefault(); z.classList.add('drag-over') } })
+    document.getElementById('editor-form-body')?.addEventListener('dragleave', e => { const z = e.target.closest('.upload-zone'); if (z && !z.contains(e.relatedTarget)) z.classList.remove('drag-over') })
+    document.getElementById('editor-form-body')?.addEventListener('drop', e => {
+      const z = e.target.closest('.upload-zone')
+      if (z) { e.preventDefault(); z.classList.remove('drag-over'); const f = e.dataTransfer.files[0]; if (f) uzUpload(f, z) }
+    })
 
     // ─── CAPTURE DES MODIFICATIONS GLOBALISÉE ───
     const formWrap = document.getElementById('editor-form-wrap')

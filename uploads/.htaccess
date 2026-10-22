@@ -1,0 +1,18 @@
+# /uploads/.htaccess
+# Désactive l'exécution PHP dans ce dossier (protection anti-webshell)
+# Les fichiers uploadés (PDF, images) restent accessibles en lecture.
+
+<FilesMatch "\.(php|php3|php4|php5|php7|php8|phtml|phar|pl|py|sh|cgi)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Désactiver le CGI & les scripts côté serveur
+Options -ExecCGI
+RemoveHandler .php .php3 .php4 .php5 .php7 .php8 .phtml .phar
+RemoveType application/x-httpd-php .php .phtml .phar

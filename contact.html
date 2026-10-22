@@ -326,7 +326,7 @@
     responseDiv.innerHTML = '<div class="form-loading">Envoi en cours...</div>';
     
     // Appel au backend
-    fetch('/api/contact', {
+    fetch('/api/send-email.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

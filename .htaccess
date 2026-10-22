@@ -1,12 +1,47 @@
-# 1. On active le moteur de réécriture
+# ══════════════════════════════════════════════════════════════
+#  saint-cyr-sur-morin.fr — Apache .htaccess
+#  Hébergement OVH (mutualisé)
+# ══════════════════════════════════════════════════════════════
+
 RewriteEngine On
 
-# 2. Si l'utilisateur demande une URL sans .html
-# Et qu'il existe un fichier .html correspondant
-# Alors on sert le fichier .html sans changer l'URL dans la barre d'adresse
+# ── 0. Transmission du header Authorization à PHP ────────────────────────────
+#    OVH/Apache mutualisé supprime ce header par défaut.
+#    Cette règle le copie dans la variable d'environnement HTTP_AUTHORIZATION
+#    que PHP lit ensuite via $_SERVER['REDIRECT_HTTP_AUTHORIZATION'].
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# ── 1. Force HTTPS (301 permanent) ───────────────────────────────────────────
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# ── 2. URLs propres : servir les fichiers .html sans extension ────────────────
+#    /la-commune/conseil  →  /la-commune/conseil.html
+#    Ne s'applique pas si le fichier/dossier existe déjà tel quel
 RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^([^\.]+)$ $1.html [NC,L]
 
-# 3. Equivalent de ta règle 404 personnalisée
+# ── 3. Réécriture des endpoints API sans extension ───────────────────────────
+#    Permet d'appeler /api/admin-users au lieu de /api/admin-users.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^api/([^/]+)$ /api/$1.php [L]
+
+# ── 4. Protection de /api/config.php contre l'accès direct ───────────────────
+#    Tout accès direct → 403 Forbidden
+<Files "config.php">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</Files>
+
+# ── 5. Blocage de l'exécution PHP dans /uploads/ ─────────────────────────────
+#    Appliqué uniquement via le sous-fichier /uploads/.htaccess
+
+# ── 6. Page d'erreur 404 personnalisée ───────────────────────────────────────
 ErrorDocument 404 /404.html
