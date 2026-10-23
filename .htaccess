@@ -68,5 +68,7 @@ RewriteRule ^api/([^/]+)$ /api/$1.php [L]
 # ── 5. Blocage de l'exécution PHP dans /uploads/ ─────────────────────────────
 #    Appliqué uniquement via le sous-fichier /uploads/.htaccess
 
-# ── 6. Page d'erreur 404 personnalisée ───────────────────────────────────────
+# ── 6. Pages d'erreur personnalisées ─────────────────────────────────────────
+# Redirige les erreurs 403 (Interdit) et 404 (Non trouvé) vers ta page 404.html
+ErrorDocument 403 /404.html
 ErrorDocument 404 /404.html
