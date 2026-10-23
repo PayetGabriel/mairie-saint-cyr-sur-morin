@@ -18,7 +18,7 @@ require_once __DIR__ . '/config.php';
 // ── CORS ─────────────────────────────────────────────────────────────────────
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: ' . ALLOWED_ORIGIN);
-header('Access-Control-Allow-Methods: POST, OPTIONS');
+header('Access-Control-Allow-Methods: DELETE, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -26,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+// Accepte DELETE (méthode sémantiquement correcte) et POST (rétrocompat.)
+if (!in_array($_SERVER['REQUEST_METHOD'], ['DELETE', 'POST'], true)) {
     http_response_code(405);
     echo json_encode(['error' => 'Méthode non autorisée']);
     exit;
@@ -69,6 +70,49 @@ curl_close($ch);
 if ($userStatus !== 200) {
     http_response_code(401);
     echo json_encode(['error' => 'Token invalide ou expiré.']);
+    exit;
+}
+
+$userJson = json_decode($userRes, true);
+$userId   = $userJson['id'] ?? null;
+
+// ── Vérification des droits : admin OU au moins une permission de gestion ──────
+$userJson = json_decode($userRes, true);
+$userId   = $userJson['id'] ?? null;
+
+if (!$userId) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Token invalide ou expiré.']);
+    exit;
+}
+
+$permFields = implode(',', [
+    'role',
+    'can_manage_publications', 'can_manage_mediatheque',
+    'can_manage_commune', 'can_manage_vie_pratique',
+    'can_manage_urbanisme', 'can_manage_sivu',
+    'can_manage_vie_locale', 'can_manage_decouvrir',
+]);
+$ch2 = curl_init(SUPABASE_URL . '/rest/v1/profiles?id=eq.' . urlencode($userId) . '&select=' . $permFields);
+curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+    'apikey: '       . SUPABASE_SERVICE_ROLE_KEY,
+    'Authorization: Bearer ' . SUPABASE_SERVICE_ROLE_KEY,
+]);
+$profileRes = curl_exec($ch2);
+curl_close($ch2);
+
+$p = (json_decode($profileRes, true)[0] ?? []);
+
+$isAdmin    = in_array($p['role'] ?? '', ['admin', 'super_admin'], true);
+$hasAnyPerm = false;
+foreach ($p as $k => $v) {
+    if (str_starts_with($k, 'can_manage_') && $v === true) { $hasAnyPerm = true; break; }
+}
+
+if (!$isAdmin && !$hasAnyPerm) {
+    http_response_code(403);
+    echo json_encode(['error' => 'Accès refusé : aucune permission de gestion de contenu.']);
     exit;
 }
 

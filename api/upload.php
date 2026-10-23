@@ -75,9 +75,45 @@ if ($userStatus !== 200) {
     exit;
 }
 
+// ── Droits : admin OU au moins une permission de gestion de contenu ───────────
+$userId = (json_decode($userRes, true)['id'] ?? null);
+if (!$userId) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Token invalide ou expiré.']);
+    exit;
+}
+
+$ch2 = curl_init(SUPABASE_URL . '/rest/v1/profiles?id=eq.' . urlencode($userId)
+    . '&select=role,can_manage_publications,can_manage_mediatheque,can_manage_commune,can_manage_vie_pratique,can_manage_urbanisme,can_manage_sivu,can_manage_vie_locale,can_manage_decouvrir');
+curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch2, CURLOPT_HTTPHEADER, [
+    'apikey: '       . SUPABASE_SERVICE_ROLE_KEY,
+    'Authorization: Bearer ' . SUPABASE_SERVICE_ROLE_KEY,
+]);
+$profileRes = curl_exec($ch2);
+curl_close($ch2);
+
+$p = (json_decode($profileRes, true)[0] ?? []);
+$isAdmin    = in_array($p['role'] ?? '', ['admin', 'super_admin'], true);
+$hasAnyPerm = false;
+foreach ($p as $k => $v) {
+    if (str_starts_with($k, 'can_manage_') && $v === true) { $hasAnyPerm = true; break; }
+}
+if (!$isAdmin && !$hasAnyPerm) {
+    http_response_code(403);
+    echo json_encode(['error' => 'Accès refusé : aucune permission de gestion de contenu.']);
+    exit;
+}
+
 // ── Pas de fichier → retour null (champ optionnel) ────────────────────────────
 if (!isset($_FILES['file']) || $_FILES['file']['error'] === UPLOAD_ERR_NO_FILE) {
     echo json_encode(['path' => null]);
+    exit;
+}
+
+if ($_FILES['file']['error'] === UPLOAD_ERR_INI_SIZE || $_FILES['file']['error'] === UPLOAD_ERR_FORM_SIZE) {
+    http_response_code(413);
+    echo json_encode(['error' => 'Fichier trop volumineux (limite : 5 Mo pour une image, 10 Mo pour un PDF).']);
     exit;
 }
 
@@ -105,6 +141,16 @@ if (!array_key_exists($mimeType, $allowedMimes)) {
 }
 
 $ext = $allowedMimes[$mimeType];
+
+// ── Limite de taille selon le type : 5 Mo (images) / 10 Mo (PDF) ──────────────
+$maxBytes = ($mimeType === 'application/pdf') ? 10 * 1024 * 1024 : 5 * 1024 * 1024;
+if ($_FILES['file']['size'] > $maxBytes) {
+    http_response_code(413);
+    echo json_encode(['error' => $mimeType === 'application/pdf'
+        ? 'PDF trop volumineux (max 10 Mo).'
+        : 'Image trop volumineuse (max 5 Mo).']);
+    exit;
+}
 
 // ── Assainissement du nom ─────────────────────────────────────────────────────
 $originalName = pathinfo($_FILES['file']['name'], PATHINFO_FILENAME);

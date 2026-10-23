@@ -283,17 +283,18 @@
         btn.disabled    = true
         btn.textContent = 'Vérification…'
 
-        /* Vérifier l'ancien mot de passe de manière propre */
-        const { error: verifyErr } = await supabase.auth.reauthenticate({ 
-        password: current 
-        });
+        /* Vérifier l'ancien mot de passe (reauthenticate() ne vérifie rien : on retente une connexion) */
+        const { error: verifyErr } = await supabase.auth.signInWithPassword({
+          email:    currentProfile.email,
+          password: current
+        })
 
         if (verifyErr) {
-        alertEl.textContent   = 'Mot de passe actuel incorrect.';
-        alertEl.style.display = 'flex';
-        btn.disabled          = false;
-        btn.textContent       = 'Modifier le mot de passe';
-        return;
+          alertEl.textContent   = 'Mot de passe actuel incorrect.'
+          alertEl.style.display = 'flex'
+          btn.disabled          = false
+          btn.textContent       = 'Modifier le mot de passe'
+          return
         }
 
         btn.textContent = 'Modification…'
@@ -308,6 +309,8 @@
           alertEl.style.display = 'flex'
           return
         }
+
+        await supabase.auth.signOut({ scope: 'others' })
 
         document.getElementById('pwd-form').reset()
         successEl.textContent  = 'Mot de passe modifié. Vos autres appareils ont été déconnectés.'

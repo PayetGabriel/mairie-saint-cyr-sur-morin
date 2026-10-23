@@ -1239,7 +1239,7 @@ async function initCantine() {
           </svg>
           <div class="doc-info">
             <strong>${menu.title}</strong>
-            <span>${menu.subtitle}</span>
+            ${menu.subtitle ? `<span>${menu.subtitle}</span>` : ''}
           </div>
         </a>`.trim()).join('\n')
     }
@@ -1332,7 +1332,7 @@ async function initInscriptions() {
             </svg>
             <div class="doc-info">
               <strong>${doc.title}</strong>
-              <span>${doc.subtitle}</span>
+              ${doc.subtitle ? `<span>${doc.subtitle}</span>` : ''}
             </div>
           </a>`.trim()
       }).join('\n')
@@ -1395,7 +1395,7 @@ async function initSivuPracticalDocs() {
             </svg>
             <div class="doc-info">
               <strong>${doc.title}</strong>
-              <span>${doc.subtitle}</span>
+              ${doc.subtitle ? `<span>${doc.subtitle}</span>` : ''}
             </div>
           </a>`.trim()
       }).join('\n')

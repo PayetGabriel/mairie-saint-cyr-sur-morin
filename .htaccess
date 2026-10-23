@@ -21,8 +21,11 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # ── 2. URLs propres ──────────────────────────────────────────────────────────
 # 2a. Si la barre d'adresse contient .html, rediriger vers l'URL propre (301)
-#     Exception : /components/ — ces fichiers sont chargés par fetch() côté JS ;
-#     les rediriger casse navbar.html, footer.html, etc.
+#     Exceptions : /components/ (fetch JS) et les pages qui ont un dossier
+#     du même nom (actualites.html + actualites/) : on garde le .html
+RewriteCond %{REQUEST_FILENAME} ^(.+)\.html$
+RewriteCond %1 -d
+RewriteRule ^ - [S=1]
 RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
 RewriteCond %{REQUEST_URI} !^/components/ [NC]
 RewriteRule ^ /%1 [R=301,L]
@@ -34,6 +37,11 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^([^\.]+)$ $1.html [NC,L]
+
+# 2c. Page + dossier du même nom : /la-commune/actualites → actualites.html
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+[^/])$ $1.html [NC,L]
 
 # ── 3. Réécriture des endpoints API sans extension ───────────────────────────
 #    Permet d'appeler /api/admin-users au lieu de /api/admin-users.php

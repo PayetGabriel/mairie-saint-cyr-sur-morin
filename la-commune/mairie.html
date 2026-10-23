@@ -1233,6 +1233,25 @@
   fetch('/components/footer.html')
     .then(r => r.text())
     .then(d => { document.getElementById('footer-placeholder').innerHTML = d; });
+
+  // Recale l'ancre une fois le contenu dynamique chargé
+  (function () {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    var userScrolled = false;
+    ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (evt) {
+      window.addEventListener(evt, function () { userScrolled = true; }, { once: true, passive: true });
+    });
+    function realign() {
+      if (userScrolled) return;
+      var target = document.getElementById(id);
+      if (target) target.scrollIntoView({ block: "start", behavior: "instant" });
+    }
+    var ro = new ResizeObserver(realign);
+    ro.observe(document.body);
+    window.addEventListener("load", realign);
+    setTimeout(function () { ro.disconnect(); }, 8000);
+  })();
 </script>
 
 </body>

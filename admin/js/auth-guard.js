@@ -22,6 +22,17 @@ export const PERMISSIONS = {
 
 export const PERM_KEYS = Object.keys(PERMISSIONS)
 
+/* ── escHtml : échappe tout texte venant de la base avant injection dans innerHTML ── */
+export function escHtml(str) {
+  if (str == null) return ''
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 /* ── requireAuth ──────────────────────────────────────────
  * Vérifie la session Supabase et charge le profil.
  * Redirige vers login.html si non authentifié.
@@ -103,6 +114,7 @@ export function buildSidebar(profile, activePage) {
   const initials = getInitials(profile)
   const roleLabel = getRoleLabel(profile.role)
   const displayName = [profile.prenom, profile.nom].filter(Boolean).join(' ') || profile.email
+  const safeRole = String(profile.role || '').replace(/[^a-z_]/g, '')
 
   /* ── Définition des items de navigation ── */
   const navItems = [
@@ -200,10 +212,10 @@ export function buildSidebar(profile, activePage) {
 
     <div class="sidebar-footer">
       <div class="sidebar-user">
-        <div class="user-avatar avatar-${profile.role}">${initials}</div>
+        <div class="user-avatar avatar-${safeRole}">${escHtml(initials)}</div>
         <div class="sidebar-user-info">
-          <span class="sidebar-user-name">${displayName}</span>
-          <span class="sidebar-user-role role-${profile.role}">${roleLabel}</span>
+          <span class="sidebar-user-name">${escHtml(displayName)}</span>
+          <span class="sidebar-user-role role-${safeRole}">${escHtml(roleLabel)}</span>
         </div>
       </div>
       <button class="btn-logout" id="btn-logout" aria-label="Se déconnecter">

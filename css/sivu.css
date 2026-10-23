@@ -155,6 +155,10 @@
   margin-top: 0;
 }
 
+.docs-grid.sur-creme .doc-card {
+  background: var(--blanc);
+}
+
 .doc-info {
   flex: 1;
 }

@@ -402,7 +402,7 @@
         <div id="arrete-alert" class="alert alert-error" style="display:none"></div>
         <div class="grid-2">
           <div class="form-group">
-            <label class="form-label" for="ar-numero">N° de l'arrêté</label>
+            <label class="form-label" for="ar-numero">N° de l'arrêté <span style="color:#dc2626">*</span></label>
             <input type="text" id="ar-numero" class="form-input" placeholder="2026-001">
           </div>
           <div class="form-group">
@@ -625,6 +625,36 @@
       }
     })
 
+    /* ── Sécurité : nettoyage HTML + validation des liens ── */
+    function cleanHTML(html) {
+      const doc  = new DOMParser().parseFromString('<div>' + (html || '') + '</div>', 'text/html')
+      const root = doc.body.firstChild
+      root.querySelectorAll('script,style,iframe,object,embed,link,meta,form,base,svg,math').forEach(n => n.remove())
+      root.querySelectorAll('*').forEach(el => {
+        ;[...el.attributes].forEach(a => {
+          const n = a.name.toLowerCase()
+          const v = a.value.replace(/[\s\u0000-\u001f]/g, '').toLowerCase()
+          if (n.startsWith('on')) el.removeAttribute(a.name)
+          else if (['href','src','xlink:href','action','formaction'].includes(n) && /^(javascript|data|vbscript):/.test(v)) el.removeAttribute(a.name)
+        })
+        if (el.tagName === 'A' && el.getAttribute('href')) el.setAttribute('rel', 'noopener noreferrer')
+      })
+      return root.innerHTML
+    }
+
+    function safeLinkUrl(raw) {
+      const u = (raw || '').trim()
+      if (!u) return null
+      if (/^(https?:\/\/|mailto:|tel:)/i.test(u)) return u
+      if (/^[\/#]/.test(u)) return u
+      if (/^[a-z][a-z0-9+.-]*:/i.test(u)) return null
+      return 'https://' + u
+    }
+
+    function safeFileHref(u) {
+      return (typeof u === 'string' && (u.startsWith('/uploads/') || /^https?:\/\//i.test(u))) ? u : '#'
+    }
+
     /* ════════════════════════════════════════════════════════
     MINI RICH TEXT EDITOR (Avec Modale de Lien Intégrée)
     ════════════════════════════════════════════════════════ */
@@ -751,8 +781,14 @@
         }
 
         _confirmLink() {
-            const url = this.modalBackdrop.querySelector('.rte-link-input').value.trim()
-            
+            const rawUrl = this.modalBackdrop.querySelector('.rte-link-input').value.trim()
+            const url    = safeLinkUrl(rawUrl)
+
+            if (rawUrl && !url) {
+                showToast('Lien non autorisé. Utilisez une adresse http(s), mailto: ou tel:.', 'error')
+                return
+            }
+
             if (url) {
                 if (this.savedRange) {
                     const sel = window.getSelection()
@@ -789,7 +825,7 @@
             })
         }
 
-        getValue() { return this.editor?.innerHTML || '' }
+        getValue() { return cleanHTML(this.editor?.innerHTML || '') }
         setValue(html) { if (this.editor) this.editor.innerHTML = html || '' }
         clear()    { if (this.editor) this.editor.innerHTML = '' }
     }
@@ -935,7 +971,7 @@
       return `
         <div style="display:flex;justify-content:flex-end;gap:6px">
           <button class="btn btn-secondary btn-sm" onclick="editItem('${table}',${id})">Modifier</button>
-          <button class="btn btn-danger btn-sm" onclick="deleteItem('${table}',${id},'${escH(label)}')">Supprimer</button>
+          <button class="btn btn-danger btn-sm" data-table="${table}" data-label="${escH(label)}" onclick="deleteItem(this.dataset.table,${id},this.dataset.label)">Supprimer</button>
         </div>`
     }
 
@@ -995,7 +1031,7 @@
           <td style="font-weight:500">${fmtDate(c.date_conseil)}</td>
           <td class="hide-mobile">
             ${c.document_url
-              ? `<a href="${escH(c.document_url)}" target="_blank" rel="noopener" style="color:var(--vert-clair);font-size:13px">Voir le document ↗</a>`
+              ? `<a href="${escH(safeFileHref(c.document_url))}" target="_blank" rel="noopener" style="color:var(--vert-clair);font-size:13px">Voir le document ↗</a>`
               : '<span class="text-muted text-sm">—</span>'}
           </td>
           <td>${statusBadge(c.is_draft)}</td>
@@ -1205,14 +1241,17 @@
        AUTRES TYPES : SAVE VIA MODALS
     ════════════════════════════════════════════════════════ */
     async function saveArrete() {
-      const titre = document.getElementById('ar-titre').value.trim()
-      if (!titre) {
-        document.getElementById('arrete-alert').textContent = 'Le titre est obligatoire.'
+      const titre  = document.getElementById('ar-titre').value.trim()
+      const numero = document.getElementById('ar-numero').value.trim()
+      if (!numero || !titre) {
+        document.getElementById('arrete-alert').textContent = !numero
+          ? "Le numéro de l'arrêté est obligatoire."
+          : 'Le titre est obligatoire.'
         document.getElementById('arrete-alert').style.display = 'flex'
         return
       }
       const payload = {
-        numero:        document.getElementById('ar-numero').value.trim() || null,
+        numero,
         titre,
         document_url:  document.getElementById('ar-url').value.trim() || null,
         pris_le:       document.getElementById('ar-pris-le').value || null,
@@ -1252,7 +1291,7 @@
       } else {
         ;({ error } = await supabase.from('comptes_rendus').insert(payload))
       }
-      if (error) { showToast('Erreur.', 'error'); return }
+      if (error) { showToast('Erreur : ' + error.message, 'error'); return }
       closeModal('modal-cr')
       showToast('Compte-rendu enregistré.')
       await loadAll()
@@ -1281,7 +1320,7 @@
       } else {
         ;({ error } = await supabase.from('traits_union').insert(payload))
       }
-      if (error) { showToast('Erreur.', 'error'); return }
+      if (error) { showToast('Erreur : ' + error.message, 'error'); return }
       closeModal('modal-tdu')
       showToast("Trait d'Union enregistré.")
       await loadAll()
@@ -1487,11 +1526,14 @@
       const hiddenInput = zone.querySelector('input[type="hidden"]')
       if (!hiddenInput) return
 
-      /* Cas 1 : remplacer un fichier existant — supprimer l'ancien */
-      const oldPath = hiddenInput.value?.trim()
-      if (oldPath?.startsWith('/uploads/')) {
-        await deleteUploadedFile(oldPath, session.access_token)
+      const isImage = (zone.dataset.uploadType || 'pdf') === 'image'
+      const maxMo   = isImage ? 5 : 10
+      if (file.size > maxMo * 1024 * 1024) {
+        showToast(`Fichier trop volumineux (max ${maxMo} Mo).`, 'error')
+        return
       }
+
+      const oldPath = hiddenInput.value?.trim()
 
       zone.classList.add('uploading')
       const bar = zone.querySelector('.uz-progress-bar')
@@ -1510,6 +1552,10 @@
         if (!res.ok) throw new Error(json.error || 'Erreur upload')
         if (bar) { bar.style.width = '100%'; setTimeout(() => { zone.classList.remove('uploading') }, 300) }
         else zone.classList.remove('uploading')
+        /* Remplacement : l'ancien fichier n'est supprimé qu'une fois le nouveau bien envoyé */
+        if (oldPath?.startsWith('/uploads/') && oldPath !== json.path) {
+          await deleteUploadedFile(oldPath, session.access_token)
+        }
         hiddenInput.value = json.path
         setUploadZoneState(zone, json.path)
         isDirty = true
