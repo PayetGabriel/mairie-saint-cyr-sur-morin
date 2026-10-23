@@ -7,7 +7,8 @@ RewriteEngine On
 
 # Désactive la négociation de contenu MultiViews (évite qu'Apache serve navbar.js
 # à la place de navbar.html quand l'extension est absente de l'URL)
-Options -MultiViews
+# et désactive l'affichage du contenu des dossiers (Index of)
+Options -MultiViews -Indexes
 
 # ── 0. Transmission du header Authorization à PHP ────────────────────────────
 #    OVH/Apache mutualisé supprime ce header par défaut.
@@ -20,9 +21,13 @@ RewriteCond %{HTTPS} off
 RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # ── 2. URLs propres ──────────────────────────────────────────────────────────
-# 2a. Si la barre d'adresse contient .html, rediriger vers l'URL propre (301)
+# 2a. Redirection ciblée : du dossier /actualite vers la page /actualites
+#     Ex : /la-commune/actualite ou /la-commune/actualite/ → /la-commune/actualites
+RewriteRule ^la-commune/actualite/?$ /la-commune/actualites [R=301,L]
+
+# 2b. Si la barre d'adresse contient .html, rediriger vers l'URL propre (301)
 #     Exceptions : /components/ (fetch JS) et les pages qui ont un dossier
-#     du même nom (actualites.html + actualites/) : on garde le .html
+#     du même nom (actualites.html + actualite/) : on garde le .html
 RewriteCond %{REQUEST_FILENAME} ^(.+)\.html$
 RewriteCond %1 -d
 RewriteRule ^ - [S=1]
@@ -30,7 +35,7 @@ RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
 RewriteCond %{REQUEST_URI} !^/components/ [NC]
 RewriteRule ^ /%1 [R=301,L]
 
-# 2b. Servir le fichier .html en arrière-plan sans afficher l'extension
+# 2c. Servir le fichier .html en arrière-plan sans afficher l'extension
 #     /la-commune/conseil  →  /la-commune/conseil.html
 #     Ne s'applique pas si le fichier/dossier existe déjà tel quel
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -38,7 +43,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^([^\.]+)$ $1.html [NC,L]
 
-# 2c. Page + dossier du même nom : /la-commune/actualites → actualites.html
+# 2d. Page + dossier du même nom : /la-commune/actualites → actualites.html
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.+[^/])$ $1.html [NC,L]

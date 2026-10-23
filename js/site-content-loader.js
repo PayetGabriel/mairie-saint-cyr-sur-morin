@@ -2007,7 +2007,7 @@ async function initHeroEventCard() {
       formattedDate += ` · ${event.horaires_evenement}`
     }
 
-    const articleUrl = `/la-commune/actualites/article.html?id=${event.id}`
+    const articleUrl = `/la-commune/actualite/article.html?id=${event.id}`
 
     const dateEl = card.querySelector('.hero-event-date')
     const titleEl = card.querySelector('.hero-event-title')
@@ -2046,7 +2046,7 @@ function renderBentoUne(articles) {
     const isHero    = i === 0;
     const hasImage  = !!art.image_url;
     const dateStr   = _fmtDate(art); // FIX : Passe l'objet art entier
-    const url       = `/la-commune/actualites/article.html?id=${art.id}`;
+    const url       = `/la-commune/actualite/article.html?id=${art.id}`;
  
     const imgBlock  = hasImage
       ? `<div class="bento-img" style="background-image:url('${art.image_url}')"></div>`
@@ -2103,7 +2103,7 @@ function renderRecentArticles(articles) {
   grid.innerHTML = articles.map(art => {
     const hasImage = !!art.image_url;
     const dateStr  = _fmtDate(art); // FIX : Passe l'objet art entier
-    const url      = `/la-commune/actualites/article.html?id=${art.id}`;
+    const url      = `/la-commune/actualite/article.html?id=${art.id}`;
  
     const imgContent = hasImage
       ? `<div class="actu-recent-img" style="background-image:url('${art.image_url}')"></div>`

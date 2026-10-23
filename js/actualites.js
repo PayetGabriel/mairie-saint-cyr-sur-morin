@@ -123,7 +123,7 @@ async function fetchAndRender() {
     const uneArticle = articles[0];
     articlesForGrid = articles.slice(1);
 
-    uneContainer.href = `/la-commune/actualites/article.html?id=${uneArticle.id}`;
+    uneContainer.href = `/la-commune/actualite/article.html?id=${uneArticle.id}`;
     document.getElementById('actu-une-tag').textContent = uneArticle.tag;
     document.getElementById('actu-une-date').textContent = formatArticleDate(uneArticle);
     document.getElementById('actu-une-title').textContent = uneArticle.titre;
@@ -154,7 +154,7 @@ async function fetchAndRender() {
   // Rendu de la grille d'articles résiduels
   articlesForGrid.forEach(item => {
     const card = document.createElement('a');
-    card.href = `/la-commune/actualites/article.html?id=${item.id}`;
+    card.href = `/la-commune/actualite/article.html?id=${item.id}`;
     card.className = 'actu-card reveal';
     card.dataset.cat = Object.keys(categoryMapping).find(key => categoryMapping[key] === item.tag) || 'all';
 

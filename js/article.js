@@ -165,7 +165,7 @@ async function fetchAndRenderRelated(currentArticle) {
     grid.innerHTML = '';
     related.forEach(a => {
       grid.innerHTML += `
-        <a href="/la-commune/actualites/article.html?id=${a.id}" class="related-card">
+        <a href="/la-commune/actualite/article.html?id=${a.id}" class="related-card">
           <div class="related-card-tag">${a.tag || 'Actualité'}</div>
           <div class="related-card-title">${a.titre}</div>
           <div class="related-card-date">${formatArticleDate(a)}</div>
