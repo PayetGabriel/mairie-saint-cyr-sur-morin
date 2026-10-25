@@ -5,6 +5,9 @@
 
 RewriteEngine On
 
+# Force le navigateur à mémoriser le HTTPS
+Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
 # Désactive la négociation de contenu MultiViews (évite qu'Apache serve navbar.js
 # à la place de navbar.html quand l'extension est absente de l'URL)
 # et désactive l'affichage du contenu des dossiers (Index of)
