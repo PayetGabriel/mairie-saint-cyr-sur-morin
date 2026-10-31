@@ -146,6 +146,24 @@ $telBlock = $safeTelephone
 
 $logoUrl = 'https://saint-cyr-sur-morin.fr/assets/img/logoSaintCyr_2020_web.png';
 
+// Lien « Répondre » : objet + rappel du message d'origine façon Outlook
+$jours  = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+$moisFr = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+$d = new DateTime('now', new DateTimeZone('Europe/Paris'));
+$dateMail = $jours[(int)$d->format('w')] . ' ' . $d->format('j') . ' '
+          . $moisFr[(int)$d->format('n') - 1] . ' ' . $d->format('Y H:i');
+
+$corpsReponse = "Bonjour,\n\n\n\n"
+    . "________________________________\n"
+    . 'De : ' . $prenom . ' ' . $nom . ' <' . $email . ">\n"
+    . 'Envoyé : ' . $dateMail . "\n"
+    . 'À : ' . MAIL_FROM . "\n"
+    . 'Objet : ' . $sujetPropre . "\n\n"
+    . mb_substr($message, 0, 600);
+
+$lienReponse = esc('mailto:' . $email
+    . '?subject=' . rawurlencode('Re: ' . $sujetPropre)
+    . '&body=' . rawurlencode($corpsReponse));
 $htmlContent = '
 <div style="font-family: \'Segoe UI\', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e0dbd5;">
     <div style="background: ' . $theme['primary'] . '; padding: 30px; text-align: center;">
@@ -173,7 +191,7 @@ $htmlContent = '
             </div>
         </div>
         <div style="text-align: center;">
-            <a href="mailto:' . $safeEmail . '?subject=' . rawurlencode('Re: ' . $sujetPropre) . '" style="display: inline-block; background: ' . $theme['primary'] . '; color: #ffffff; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none;">Répondre à ' . $safePrenom . ' ' . $safeNom . '</a>
+            <a href="' . $lienReponse . '" style="display: inline-block; background: ' . $theme['primary'] . '; color: #ffffff; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none;">Répondre à ' . $safePrenom . ' ' . $safeNom . '</a>
         </div>
     </div>
     <div style="background: #f4f1ec; padding: 20px; text-align: center; border-top: 1px solid #e0dbd5;">
