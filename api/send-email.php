@@ -49,8 +49,8 @@ if (!$body) {
     exit;
 }
 
-$prenom    = $body['prenom']    ?? '';
-$nom       = $body['nom']       ?? '';
+$prenom    = trim(preg_replace('/[\r\n]+/', ' ', $body['prenom'] ?? ''));
+$nom       = trim(preg_replace('/[\r\n]+/', ' ', $body['nom']    ?? ''));
 $email     = $body['email']     ?? '';
 $telephone = $body['telephone'] ?? '';
 $sujet     = $body['sujet']     ?? '';
@@ -159,6 +159,7 @@ $htmlContent = '
             <p style="margin: 0; color: #2a2520; font-size: 16px; font-weight: 500;">' . $safePrenom . ' ' . $safeNom . '</p>
             <p style="margin: 5px 0 0; color: ' . $theme['primary'] . '; font-size: 14px;"><a href="mailto:' . $safeEmail . '" style="color: ' . $theme['primary'] . '; text-decoration: none;">' . $safeEmail . '</a></p>
             ' . $telBlock . '
+            <a href="mailto:' . $safeEmail . '?subject=' . rawurlencode('Re: ' . $sujetPropre) . '" style="display: inline-block; margin-top: 15px; background: ' . $theme['primary'] . '; color: #ffffff; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none;">Répondre à ' . $safePrenom . '</a>
         </div>
         <div style="margin-bottom: 25px;">
             <p style="margin: 0 0 5px; font-size: 12px; color: #888078; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Sujet de la demande</p>
@@ -200,11 +201,11 @@ try {
     }
 
     // Reply-To = l'adresse du visiteur
-    $mail->addReplyTo($email, $safePrenom . ' ' . $safeNom);
+    $mail->addReplyTo($email, $prenom . ' ' . $nom);
 
     // Objet & corps
     $mail->isHTML(true);
-    $mail->Subject = '[Contact Site] ' . $sujetPropre . ' - ' . $safePrenom . ' ' . $safeNom;
+    $mail->Subject = '[Contact Site] ' . $sujetPropre . ' - ' . $prenom . ' ' . $nom;
     $mail->Body    = $htmlContent;
     $mail->AltBody = strip_tags(str_replace('<br>', "\n", $htmlContent));
 
