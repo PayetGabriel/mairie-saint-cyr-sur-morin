@@ -159,7 +159,6 @@ $htmlContent = '
             <p style="margin: 0; color: #2a2520; font-size: 16px; font-weight: 500;">' . $safePrenom . ' ' . $safeNom . '</p>
             <p style="margin: 5px 0 0; color: ' . $theme['primary'] . '; font-size: 14px;"><a href="mailto:' . $safeEmail . '" style="color: ' . $theme['primary'] . '; text-decoration: none;">' . $safeEmail . '</a></p>
             ' . $telBlock . '
-            <a href="mailto:' . $safeEmail . '?subject=' . rawurlencode('Re: ' . $sujetPropre) . '" style="display: inline-block; margin-top: 15px; background: ' . $theme['primary'] . '; color: #ffffff; padding: 10px 18px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none;">Répondre à ' . $safePrenom . '</a>
         </div>
         <div style="margin-bottom: 25px;">
             <p style="margin: 0 0 5px; font-size: 12px; color: #888078; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">Sujet de la demande</p>
@@ -172,6 +171,9 @@ $htmlContent = '
             <div style="background: #fcfbf9; border: 1px solid #f0ece6; border-radius: 8px; padding: 20px; color: #2a2520; font-size: 15px; line-height: 1.6;">
                 ' . nl2br($safeMessage) . '
             </div>
+        </div>
+        <div style="text-align: center;">
+            <a href="mailto:' . $safeEmail . '?subject=' . rawurlencode('Re: ' . $sujetPropre) . '" style="display: inline-block; background: ' . $theme['primary'] . '; color: #ffffff; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 600; text-decoration: none;">Répondre à ' . $safePrenom . ' ' . $safeNom . '</a>
         </div>
     </div>
     <div style="background: #f4f1ec; padding: 20px; text-align: center; border-top: 1px solid #e0dbd5;">
