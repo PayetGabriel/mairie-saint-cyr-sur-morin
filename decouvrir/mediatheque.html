@@ -49,6 +49,73 @@
       --texte: #2d281c;
     }
 
+    /* ── INTRO + HORAIRES ───────────────────── */
+
+    .intro-cols {
+      column-count: 2;
+      column-gap: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .intro-cols p { break-inside: avoid; }
+
+    .mediatheque-horaires { margin-bottom: 3.5rem; }
+
+    .mediatheque-horaires .perm-card:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: rgba(200,191,176,0.4);
+    }
+
+    .mediatheque-horaires .perm-horaires {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.6rem;
+    }
+
+    .mediatheque-horaires .perm-horaire-row,
+    .mediatheque-horaires .perm-horaire-row:last-child {
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 0.3rem;
+      background: var(--creme);
+      border: 1px solid rgba(200,191,176,0.35);
+      border-radius: 10px;
+      padding: 0.75rem 0.8rem;
+    }
+
+    .mediatheque-horaires .perm-day {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--vert);
+      font-weight: 600;
+    }
+
+    .mediatheque-horaires .perm-hours {
+      text-align: left;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--texte);
+    }
+
+    @media (max-width: 1000px) {
+      .mediatheque-horaires .perm-horaires { grid-template-columns: repeat(4, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .intro-cols { column-count: 1; }
+      .mediatheque-horaires .perm-horaires { grid-template-columns: 1fr; gap: 0.5rem; }
+      .mediatheque-horaires .perm-horaire-row,
+      .mediatheque-horaires .perm-horaire-row:last-child {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .mediatheque-horaires .perm-hours { text-align: right; }
+    }
+
     /* ── CONTACT BAR ─────────────────────────── */
 
     .contact-bar {
@@ -640,18 +707,24 @@
     </div>
 
     <!-- Intro -->
-    <div class="content-grid reveal" style="margin-bottom: 3rem;">
-      <div class="content-block">
-        <p>La médiathèque <strong>Au Moulin de Terwagne</strong> se trouve dans le bourg de Saint-Cyr-sur-Morin. Installée dans un bâtiment chargé d'histoire, elle accueille habitants et visiteurs dans un cadre chaleureux.</p>
-        <p>Elle fait partie du réseau <strong>Biblio' 2 Morin</strong>, qui rassemble les bibliothèques et médiathèques de la communauté de communes des deux Morin, et propose un catalogue en ligne partagé.</p>
-      </div>
-      <div class="alert-box" style="background: var(--vert-pale); border-color: var(--vert);">
-        <svg width="22" height="22" fill="none" stroke="var(--vert)" stroke-width="2" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
-        </svg>
-        <div>
-          <strong style="color: var(--texte);">Ouverture au public</strong>
-          <p style="color: var(--texte);">Consultez la page Facebook de la médiathèque ou appelez le <a href="tel:0160016425" style="color: var(--vert); font-weight: 600;">01 60 01 64 25</a> pour connaître les horaires actualisés.</p>
+    <div class="content-block intro-cols reveal">
+      <p>La médiathèque <strong>Au Moulin de Terwagne</strong> se trouve dans le bourg de Saint-Cyr-sur-Morin. Installée dans un bâtiment chargé d'histoire, elle accueille habitants et visiteurs dans un cadre chaleureux.</p>
+      <p>Elle fait partie du réseau <strong>Biblio' 2 Morin</strong>, qui rassemble les bibliothèques et médiathèques de la communauté de communes des deux Morin, et propose un catalogue en ligne partagé.</p>
+    </div>
+
+    <!-- Horaires -->
+    <div id="permanences-container" class="mediatheque-horaires reveal">
+      <div class="perm-card" data-perm-id="mediatheque">
+        <div class="perm-card-head">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <span>Ouverture au public</span>
+        </div>
+        <div class="perm-card-body">
+          <div class="perm-horaires">
+            <!-- Injecté par JS -->
+          </div>
         </div>
       </div>
     </div>
